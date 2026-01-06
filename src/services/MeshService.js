@@ -1,6 +1,7 @@
 /**
  * MeshService.js
  * Tripo3D (또는 Meshy) API와 통신하여 3D 모델을 생성하는 서비스 모듈입니다.
+ * 폴링(Polling) 로직과 지수 백오프(Exponential Backoff)를 포함합니다.
  */
 
 class MeshService {
@@ -20,6 +21,11 @@ class MeshService {
         };
     }
 
+    /**
+     * 3D 모델 생성을 요청합니다.
+     * @param {string} prompt - 모델 생성 프롬프트
+     * @returns {Promise<string>} - Task ID 반환
+     */
     async generateModel(prompt) {
         try {
             console.log(`[MeshService] 3D 모델 생성 요청: "${prompt}"`);
@@ -46,6 +52,10 @@ class MeshService {
         }
     }
 
+    /**
+     * Task ID로 상태를 확인합니다.
+     * @param {string} taskId
+     */
     async getTaskStatus(taskId) {
         try {
             const response = await fetch(`${this.baseUrl}/task/${taskId}`, {
@@ -64,34 +74,45 @@ class MeshService {
         }
     }
 
+    /**
+     * 작업이 완료될 때까지 폴링합니다. (지수 백오프 적용)
+     * @param {string} taskId
+     * @param {number} maxAttempts - 최대 시도 횟수
+     * @param {number} initialDelay - 초기 대기 시간 (ms)
+     */
     async pollResult(taskId, maxAttempts = 20, initialDelay = 2000) {
         let delay = initialDelay;
         let attempts = 0;
+
         const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
         while (attempts < maxAttempts) {
             attempts++;
             try {
                 const result = await this.getTaskStatus(taskId);
-                const status = result.data.status;
+                const status = result.data.status; // success, running, queued, failed
 
                 console.log(`[MeshService] 폴링 시도 ${attempts}/${maxAttempts} - 상태: ${status}`);
 
                 if (status === 'success') {
                     console.log(`[MeshService] 생성 완료!`);
-                    return result.data.result;
+                    return result.data.result; // 모델 URL 등 결과 데이터 반환
                 } else if (status === 'failed' || status === 'cancelled') {
                     throw new Error(`Task Failed or Cancelled: ${taskId}`);
                 }
 
+                // 아직 진행 중이면 대기
                 await wait(delay);
+
+                // 지수 백오프: 대기 시간 1.5배 증가 (최대 10초 제한)
                 delay = Math.min(delay * 1.5, 10000);
 
             } catch (error) {
                 console.error(`[MeshService] 폴링 중 에러 발생:`, error);
-                throw error;
+                throw error; // 에러 발생 시 즉시 중단할지, 재시도할지 결정 필요. 여기선 중단.
             }
         }
+
         throw new Error(`[MeshService] 시간 초과: ${maxAttempts}회 시도 후에도 완료되지 않음.`);
     }
 }
