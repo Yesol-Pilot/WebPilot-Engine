@@ -19,15 +19,15 @@ class SkyboxService {
     /**
      * 새로운 스카이박스 생성을 요청합니다.
      */
-    async generateSkybox(prompt) {
+    async generateSkybox(prompt, options = {}) {
         console.log(`[SkyboxService] 스카이박스 생성 요청: "${prompt}"`);
         const response = await fetch(`${this.baseUrl}/skybox`, {
             method: 'POST',
             headers: this._getHeaders(),
             body: JSON.stringify({
                 prompt: prompt,
-                skybox_style_id: 3, // Realistic Style
-                return_depth: true  // Depth Map 요청
+                skybox_style_id: options.skybox_style_id || 20, // Default to Nebula/Stylized if not specified
+                return_depth: options.return_depth !== false  // Default to true
             })
         });
 
