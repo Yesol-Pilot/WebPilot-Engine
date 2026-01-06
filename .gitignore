@@ -1,5 +1,33 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# =============================================
+# 🔒 보안: 절대 커밋하면 안 되는 파일들
+# =============================================
+
+# 환경 변수 (API 키 포함)
+.env
+.env.*
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+*.env
+
+# API 키가 포함될 수 있는 설정 파일
+secrets.json
+credentials.json
+*.secret
+*.secrets
+*.key
+*.pem
+
+# =============================================
+# 일반 무시 항목
+# =============================================
+
 # dependencies
 /node_modules
 /.pnp
@@ -19,10 +47,11 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
-*.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -30,12 +59,26 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
 # vercel
 .vercel
+# Windows metadata
+desktop.ini
+Thumbs.db
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Legacy folders (if any)
+/Visual-Core/node_modules
+/Logic-Weaver/node_modules

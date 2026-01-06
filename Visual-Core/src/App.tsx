@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SceneGenerator from './components/scene/SceneGenerator';
 import Overlay from './components/ui/Overlay';
 import GameOverlay from './components/ui/GameOverlay';
-import { InteractionManager } from './components/interaction/InteractionManager';
+import { InteractionProvider as InteractionManager } from './components/interaction/InteractionManager';
 
 // 초기 더미 데이터
 const INITIAL_SCENE = {

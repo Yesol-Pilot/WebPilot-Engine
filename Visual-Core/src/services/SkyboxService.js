@@ -69,6 +69,33 @@ class SkyboxService {
             throw error;
         }
     }
+    /**
+     * Skybox 생성이 완료될 때까지 대기합니다 (Polling).
+     * @param {number} id - 스카이박스 ID
+     * @param {number} interval - 폴링 간격 (ms, 기본값 2000)
+     * @param {number} timeout - 최대 대기 시간 (ms, 기본값 60000)
+     */
+    async waitForCompletion(id, interval = 2000, timeout = 60000) {
+        const startTime = Date.now();
+        console.log(`[SkyboxService] 폴링 시작 (ID: ${id})`);
+
+        while (Date.now() - startTime < timeout) {
+            const statusData = await this.checkStatus(id);
+            const status = statusData.status;
+
+            console.log(`[SkyboxService] 상태 확인 (ID: ${id}): ${status}`);
+
+            if (status === 'complete') {
+                return statusData;
+            }
+            if (status === 'error' || status === 'abort') {
+                throw new Error(`Generation failed with status: ${status}`);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, interval));
+        }
+        throw new Error('Timeout waiting for skybox generation');
+    }
 }
 
 export default new SkyboxService();
