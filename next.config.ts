@@ -1,14 +1,9 @@
-// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  basePath: '/WebPilot-Engine',
-  images: {
-    unoptimized: true,
-  },
-  // API rewrites are not supported in static export (GitHub Pages)
-  /*
+  // Output: 'export' removed to enable Server Side Rendering and API Routes for backend integration
+  // basePath removed for standard root deployment
+
   async rewrites() {
     return [
       {
@@ -21,7 +16,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  */
 };
 
 export default nextConfig;
