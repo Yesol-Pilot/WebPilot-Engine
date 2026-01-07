@@ -2,6 +2,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'export',
+  basePath: '/WebPilot-Engine',
+  images: {
+    unoptimized: true,
+  },
+  // API rewrites are not supported in static export (GitHub Pages)
+  /*
   async rewrites() {
     return [
       {
@@ -14,6 +21,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  */
 };
 
 export default nextConfig;

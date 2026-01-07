@@ -66,16 +66,17 @@ export default function GamePage() {
     }, [sceneData]);
 
     const [scenario, setScenario] = useState<Scenario>(initialScenario);
+
+    // Editor State
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [transformMode, setTransformMode] = useState<'translate' | 'rotate' | 'scale'>('translate');
-    // [NEW]
     const [isInputFocused, setIsInputFocused] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false); // [NEW] Mode State
 
     // Auto-unlock pointer when selecting object or focusing input
+    // Also unlock if entering Edit Mode? Maybe let user decide via controls.
     useEffect(() => {
         if (selectedId || isInputFocused) {
-            // We can't directly unlock from here easily without ref to controls, 
-            // but we can signal it. The FirstPersonController will handle it via prop.
             document.exitPointerLock();
         }
     }, [selectedId, isInputFocused]);
@@ -85,9 +86,56 @@ export default function GamePage() {
         return StateMachineFactory.createScenarioMachine(scenario);
     }, [scenario]);
     const [state, send] = useMachine(machine);
+
     const [hoverText, setHoverText] = useState<string | null>(null);
 
-    // ...
+    // --- Editor Handlers ---
+    const handleAddObject = (prompt: string) => {
+        const newNode = {
+            id: `node-${uuidv4().slice(0, 4)}`,
+            type: 'interactive_prop', // Default type
+            description: prompt,
+            transform: { position: [0, 1, -2], rotation: [0, 0, 0], scale: [1, 1, 1] }, // Spawn in front
+            affordances: []
+        };
+        setScenario(prev => ({
+            ...prev,
+            nodes: [...prev.nodes, newNode as any]
+        }));
+        console.log(`[Editor] Added object: ${prompt}`);
+    };
+
+    const handleUpdateSkybox = (prompt: string) => {
+        setScenario(prev => ({ ...prev, theme: prompt }));
+        console.log(`[Editor] Updated skybox: ${prompt}`);
+    };
+
+    const handleDeleteObject = (id: string) => {
+        setScenario(prev => ({
+            ...prev,
+            nodes: prev.nodes.filter(n => n.id !== id)
+        }));
+        setSelectedId(null);
+        console.log(`[Editor] Deleted object: ${id}`);
+    };
+
+    const handleInteraction = useCallback((id: string, type: string) => {
+        console.log(`User interaction: ${id} [${type}]`);
+        // We assume the machine handles events by ID or global type
+    }, []);
+
+    // Toggle Mode Handler
+    const toggleMode = () => {
+        setIsEditMode(prev => {
+            if (!prev) {
+                // Determine what happens on switch to edit
+            } else {
+                // Switching to Play
+                setSelectedId(null);
+            }
+            return !prev;
+        });
+    };
 
     return (
         <div className="relative w-full h-full">
@@ -98,48 +146,70 @@ export default function GamePage() {
                 nodes={scenario.nodes}
                 onInteraction={handleInteraction}
                 onHover={setHoverText}
-                onObjectSelect={setSelectedId}
+
+                // Only pass selection handler if in Edit Mode
+                onObjectSelect={isEditMode ? setSelectedId : undefined}
                 selectedId={selectedId}
+
                 transformMode={transformMode}
-                // [NEW]
-                disableControl={isInputFocused || !!selectedId}
+                // Disable WASD/Look if input focused or object selected in Edit Mode
+                disableControl={isInputFocused || (isEditMode && !!selectedId)}
+
+                isEditMode={isEditMode}
             />
 
-
             {/* UI Overlay */}
-            <div className="absolute top-0 left-0 w-full p-4 pointer-events-none flex justify-between">
-                <div className="bg-black/50 text-white p-4 rounded backdrop-blur-sm">
+            <div className="absolute top-0 left-0 w-full p-4 pointer-events-none flex justify-between items-start">
+                <div className="bg-black/50 text-white p-4 rounded backdrop-blur-sm pointer-events-auto">
                     <h1 className="text-xl font-bold">{scenario.title}</h1>
                     <p className="opacity-80 text-sm max-w-md mt-2">{scenario.narrative_arc.intro}</p>
                 </div>
 
-                {/* State Debug UI */}
-                <div className="bg-black/50 text-green-400 p-2 rounded text-xs font-mono backdrop-blur-sm">
-                    State: {JSON.stringify(state.value)}
+                {/* Mode Toggle & Debug */}
+                <div className="flex flex-col gap-2 items-end pointer-events-auto">
+                    <button
+                        onClick={toggleMode}
+                        className={`px-4 py-2 rounded font-bold transition-all shadow-lg text-sm
+                            ${isEditMode
+                                ? 'bg-blue-600 text-white ring-2 ring-blue-400'
+                                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                            }
+                        `}
+                    >
+                        {isEditMode ? '🛠️ Editing Mode' : '🎮 Play Mode'}
+                    </button>
+
+                    <div className="bg-black/50 text-green-400 p-2 rounded text-xs font-mono backdrop-blur-sm">
+                        State: {JSON.stringify(state.value)}
+                    </div>
                 </div>
             </div>
 
-            {/* Reticle / Cursor */}
-            <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50 mixing-blend-difference" />
+            {/* Reticle / Cursor - Hide in Edit Mode when selecting? Keep simple for now */}
+            {!isEditMode && (
+                <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50 mixing-blend-difference" />
+            )}
 
-            {/* Interaction Hint */}
-            {hoverText && (
+            {/* Interaction Hint - Only in Play Mode */}
+            {!isEditMode && hoverText && (
                 <div className="absolute top-[55%] left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded text-sm pointer-events-none animate-fade-in">
                     Interact with {hoverText} (Press E)
                 </div>
             )}
 
-            {/* Editor Toolbar */}
-            <CreativeToolbar
-                onAddObject={handleAddObject}
-                onUpdateSkybox={handleUpdateSkybox}
-                onDeleteObject={handleDeleteObject}
-                selectedId={selectedId}
-                transformMode={transformMode}
-                onSetTransformMode={setTransformMode}
-                onInputFocus={() => setIsInputFocused(true)}
-                onInputBlur={() => setIsInputFocused(false)}
-            />
+            {/* Editor Toolbar - Only in Edit Mode */}
+            {isEditMode && (
+                <CreativeToolbar
+                    onAddObject={handleAddObject}
+                    onUpdateSkybox={handleUpdateSkybox}
+                    onDeleteObject={handleDeleteObject}
+                    selectedId={selectedId}
+                    transformMode={transformMode}
+                    onSetTransformMode={setTransformMode}
+                    onInputFocus={() => setIsInputFocused(true)}
+                    onInputBlur={() => setIsInputFocused(false)}
+                />
+            )}
         </div>
     );
 }

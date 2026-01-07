@@ -18,10 +18,11 @@ interface GameCanvasProps {
     nodes: SceneNode[];
     onInteraction: (id: string, type: string) => void;
     onHover: (text: string | null) => void;
-    // [NEW]
-    onObjectSelect?: (id: string | null) => void;
+    onObjectSelect?: (id: string | null) => void; // Optional: Only provided in Edit Mode
     selectedId?: string | null;
     transformMode?: 'translate' | 'rotate' | 'scale';
+    disableControl?: boolean;
+    isEditMode?: boolean;
 }
 
 export const GameCanvas = ({
@@ -32,37 +33,55 @@ export const GameCanvas = ({
     onHover,
     onObjectSelect,
     selectedId,
-    transformMode = 'translate'
+    transformMode = 'translate',
+    disableControl = false,
+    isEditMode = false
 }: GameCanvasProps) => {
 
     const resolvedNodes = useMemo(() => {
         return AutoLayoutResolver.resolveLayout(nodes);
     }, [nodes]);
 
-    // ... state ...
+    // Track the actual 3D Object for the TransformControls
     const [selectedMesh, setSelectedMesh] = useState<THREE.Object3D | null>(null);
+
     const handleSelect = (nodeId: string, object: THREE.Object3D) => {
-        console.log("Selected:", nodeId);
-        setSelectedMesh(object);
-        if (onObjectSelect) onObjectSelect(nodeId);
+        // Only allow internal selection logic if a handler is provided (i.e., Edit Mode)
+        if (onObjectSelect) {
+            console.log("Selected:", nodeId);
+            setSelectedMesh(object);
+            onObjectSelect(nodeId);
+        }
     };
 
     return (
         <div className="w-full h-screen bg-black">
             <Canvas camera={{ position: [0, 1.5, 5], fov: 75 }} shadows frameloop="demand">
-                {/* ... existing code ... */}
+                {/* Lights */}
+                <ambientLight intensity={0.4} />
+                <directionalLight
+                    position={[10, 20, 10]}
+                    intensity={1.5}
+                    castShadow
+                    shadow-mapSize={[2048, 2048]}
+                />
 
                 {/* Dynamic Skybox */}
                 <SkyboxManager prompt={theme} />
 
                 <Physics gravity={[0, -9.81, 0]}>
-                    {/* ... existing physics setup ... */}
-                    <FirstPersonController onHoverChange={onHover} />
+                    <FirstPersonController onHoverChange={onHover} disableControl={disableControl} />
 
                     {/* Floor */}
                     <RigidBody type="fixed" friction={1}>
                         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow
-                            onClick={(e) => { e.stopPropagation(); if (onObjectSelect) onObjectSelect(null); setSelectedMesh(null); }}>
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (isEditMode && onObjectSelect) {
+                                    onObjectSelect(null);
+                                    setSelectedMesh(null);
+                                }
+                            }}>
                             <planeGeometry args={[100, 100]} />
                             <meshStandardMaterial color="#222" roughness={0.8} />
                         </mesh>
@@ -96,8 +115,8 @@ export const GameCanvas = ({
 
                 </Physics>
 
-                {/* Editor Gizmo with Mode */}
-                {selectedId && selectedMesh && (
+                {/* Editor Gizmo with Mode - Only render if isEditMode is true */}
+                {isEditMode && selectedId && selectedMesh && (
                     <EditorControls
                         selectedObject={selectedMesh}
                         mode={transformMode}
