@@ -68,49 +68,26 @@ export default function GamePage() {
     const [scenario, setScenario] = useState<Scenario>(initialScenario);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [transformMode, setTransformMode] = useState<'translate' | 'rotate' | 'scale'>('translate');
+    // [NEW]
+    const [isInputFocused, setIsInputFocused] = useState(false);
+
+    // Auto-unlock pointer when selecting object or focusing input
+    useEffect(() => {
+        if (selectedId || isInputFocused) {
+            // We can't directly unlock from here easily without ref to controls, 
+            // but we can signal it. The FirstPersonController will handle it via prop.
+            document.exitPointerLock();
+        }
+    }, [selectedId, isInputFocused]);
 
     // Initialize XState machine using the factory
     const machine = useMemo(() => {
         return StateMachineFactory.createScenarioMachine(scenario);
     }, [scenario]);
     const [state, send] = useMachine(machine);
-
     const [hoverText, setHoverText] = useState<string | null>(null);
 
-    // --- Editor Handlers ---
-    const handleAddObject = (prompt: string) => {
-        const newNode = {
-            id: `node-${uuidv4().slice(0, 4)}`,
-            type: 'interactive_prop', // Default type
-            description: prompt,
-            transform: { position: [0, 1, -2], rotation: [0, 0, 0], scale: [1, 1, 1] }, // Spawn in front
-            affordances: []
-        };
-        setScenario(prev => ({
-            ...prev,
-            nodes: [...prev.nodes, newNode as any]
-        }));
-        console.log(`[Editor] Added object: ${prompt}`);
-    };
-
-    const handleUpdateSkybox = (prompt: string) => {
-        setScenario(prev => ({ ...prev, theme: prompt }));
-        console.log(`[Editor] Updated skybox: ${prompt}`);
-    };
-
-    const handleDeleteObject = (id: string) => {
-        setScenario(prev => ({
-            ...prev,
-            nodes: prev.nodes.filter(n => n.id !== id)
-        }));
-        setSelectedId(null);
-        console.log(`[Editor] Deleted object: ${id}`);
-    };
-
-    const handleInteraction = useCallback((id: string, type: string) => {
-        console.log(`User interaction: ${id} [${type}]`);
-        // We assume the machine handles events by ID or global type
-    }, []);
+    // ...
 
     return (
         <div className="relative w-full h-full">
@@ -124,7 +101,10 @@ export default function GamePage() {
                 onObjectSelect={setSelectedId}
                 selectedId={selectedId}
                 transformMode={transformMode}
+                // [NEW]
+                disableControl={isInputFocused || !!selectedId}
             />
+
 
             {/* UI Overlay */}
             <div className="absolute top-0 left-0 w-full p-4 pointer-events-none flex justify-between">
@@ -157,6 +137,8 @@ export default function GamePage() {
                 selectedId={selectedId}
                 transformMode={transformMode}
                 onSetTransformMode={setTransformMode}
+                onInputFocus={() => setIsInputFocused(true)}
+                onInputBlur={() => setIsInputFocused(false)}
             />
         </div>
     );

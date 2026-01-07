@@ -9,6 +9,9 @@ interface CreativeToolbarProps {
     onDeleteObject: (id: string) => void;
     transformMode?: 'translate' | 'rotate' | 'scale';
     onSetTransformMode?: (mode: 'translate' | 'rotate' | 'scale') => void;
+    // [NEW]
+    onInputFocus?: () => void;
+    onInputBlur?: () => void;
 }
 
 export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
@@ -17,7 +20,9 @@ export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
     selectedId,
     onDeleteObject,
     transformMode = 'translate',
-    onSetTransformMode
+    onSetTransformMode,
+    onInputFocus,
+    onInputBlur
 }) => {
     const [skyboxPrompt, setSkyboxPrompt] = useState('');
     const [objectPrompt, setObjectPrompt] = useState('');
@@ -64,6 +69,8 @@ export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
                         type="text"
                         value={objectPrompt}
                         onChange={(e) => setObjectPrompt(e.target.value)}
+                        onFocus={onInputFocus}
+                        onBlur={onInputBlur}
                         placeholder="예: Golden Throne, Flying Car..."
                         className="flex-1 bg-white/10 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
@@ -82,6 +89,8 @@ export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
                         type="text"
                         value={skyboxPrompt}
                         onChange={(e) => setSkyboxPrompt(e.target.value)}
+                        onFocus={onInputFocus}
+                        onBlur={onInputBlur}
                         placeholder="예: Cyberpunk City, Mars..."
                         className="flex-1 bg-white/10 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
                     />

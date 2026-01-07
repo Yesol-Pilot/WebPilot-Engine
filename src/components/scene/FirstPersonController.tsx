@@ -4,7 +4,7 @@ import { RigidBody, RapierRigidBody, CapsuleCollider, CuboidCollider } from '@re
 import { PointerLockControls, KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-// 키보드 매핑 설정 (생략 없음)
+// 키보드 매핑 설정
 const keyboardMap = [
     { name: 'forward', keys: ['ArrowUp', 'w', 'W'] },
     { name: 'backward', keys: ['ArrowDown', 's', 'S'] },
@@ -17,6 +17,7 @@ const keyboardMap = [
 interface FirstPersonControllerProps {
     onHoverChange: (name: string | null) => void;
     onLockChange?: (isLocked: boolean) => void;
+    disableControl?: boolean;
 }
 
 /**
@@ -24,15 +25,15 @@ interface FirstPersonControllerProps {
  * 플레이어가 WASD로 이동하고 마우스로 시점을 조작하며,
  * 시선 기반 상호작용(Raycasting) 및 추락 방지(Respawn) 로직을 포함합니다.
  */
-export default function FirstPersonController({ onHoverChange, onLockChange }: FirstPersonControllerProps) {
+export default function FirstPersonController({ onHoverChange, onLockChange, disableControl = false }: FirstPersonControllerProps) {
     return (
         <KeyboardControls map={keyboardMap}>
-            <PlayerRig onHoverChange={onHoverChange} onLockChange={onLockChange} />
+            <PlayerRig onHoverChange={onHoverChange} onLockChange={onLockChange} disableControl={disableControl} />
         </KeyboardControls>
     );
 }
 
-function PlayerRig({ onHoverChange, onLockChange }: FirstPersonControllerProps) {
+function PlayerRig({ onHoverChange, onLockChange, disableControl }: FirstPersonControllerProps) {
     const rb = useRef<RapierRigidBody>(null);
     const { camera, scene } = useThree();
     const [, get] = useKeyboardControls();
@@ -52,6 +53,13 @@ function PlayerRig({ onHoverChange, onLockChange }: FirstPersonControllerProps) 
 
     useFrame(() => {
         if (!rb.current) return;
+
+        // [MODIFIED] 제어 비활성화 시 이동 로직 건너뛰기
+        if (disableControl) {
+            // 원한다면 속도를 0으로 줄일 수 있음
+            // rb.current.setLinvel({ x: 0, y: rb.current.linvel().y, z: 0 }, true);
+            return;
+        }
 
         const { forward, backward, left, right, jump } = get();
         const velocity = rb.current.linvel();
