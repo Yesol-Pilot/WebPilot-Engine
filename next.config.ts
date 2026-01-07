@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Output: 'export' removed to enable Server Side Rendering and API Routes for backend integration
   // basePath removed for standard root deployment
+  serverExternalPackages: ['@prisma/client'],
 
   async rewrites() {
     return [
