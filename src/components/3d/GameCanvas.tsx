@@ -1,8 +1,16 @@
+'use client';
+
+import { Suspense, useMemo, useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Grid } from '@react-three/drei';
+import { Physics, RigidBody } from '@react-three/rapier';
+import { SceneNode } from '@/types/schema';
+import { AutoLayoutResolver } from '@/utils/AutoLayout';
+import { SkyboxManager } from './SkyboxManager';
+import { AssetLoader } from './AssetLoader';
+import FirstPersonController from '../scene/FirstPersonController';
 import { EditorControls } from './EditorControls';
 import * as THREE from 'three';
-import { useState } from 'react';
-
-// ... (existing imports, but add EditorControls)
 
 interface GameCanvasProps {
     scenarioTitle: string;
