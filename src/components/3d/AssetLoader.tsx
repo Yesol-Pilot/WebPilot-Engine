@@ -62,7 +62,8 @@ const GeneratingPlaceholder = React.memo(({ position, scale }: { position: any, 
 
 // Real Model Loader
 const GeneratedModel = ({ url, ...props }: { url: string } & any) => {
-    const { scene } = useGLTF(url);
+    const gltf = useGLTF(url) as any;
+    const { scene } = gltf;
     // Clone scene to avoid sharing instances across multiple uses
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
     return <primitive object={clonedScene} {...props} />;
