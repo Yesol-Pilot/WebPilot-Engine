@@ -7,13 +7,17 @@ interface CreativeToolbarProps {
     onAddObject: (prompt: string) => void;
     selectedId: string | null;
     onDeleteObject: (id: string) => void;
+    transformMode?: 'translate' | 'rotate' | 'scale';
+    onSetTransformMode?: (mode: 'translate' | 'rotate' | 'scale') => void;
 }
 
 export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
     onUpdateSkybox,
     onAddObject,
     selectedId,
-    onDeleteObject
+    onDeleteObject,
+    transformMode = 'translate',
+    onSetTransformMode
 }) => {
     const [skyboxPrompt, setSkyboxPrompt] = useState('');
     const [objectPrompt, setObjectPrompt] = useState('');
@@ -90,13 +94,36 @@ export const CreativeToolbar: React.FC<CreativeToolbarProps> = ({
                 </form>
             )}
 
-            {/* Selection Info */}
+            {/* Selection Info & Tools */}
             {selectedId && (
-                <div className="mt-2 pt-2 border-t border-white/10 flex justify-between items-center animate-fade-in">
+                <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-2 animate-fade-in">
                     <span className="text-xs text-gray-400">선택됨: {selectedId}</span>
+
+                    {/* Transform Modes */}
+                    <div className="flex gap-1 bg-white/5 p-1 rounded">
+                        <button
+                            onClick={() => onSetTransformMode && onSetTransformMode('translate')}
+                            className={`flex-1 text-xs py-1 rounded ${transformMode === 'translate' ? 'bg-blue-600' : 'hover:bg-white/10'}`}
+                        >
+                            이동
+                        </button>
+                        <button
+                            onClick={() => onSetTransformMode && onSetTransformMode('rotate')}
+                            className={`flex-1 text-xs py-1 rounded ${transformMode === 'rotate' ? 'bg-green-600' : 'hover:bg-white/10'}`}
+                        >
+                            회전
+                        </button>
+                        <button
+                            onClick={() => onSetTransformMode && onSetTransformMode('scale')}
+                            className={`flex-1 text-xs py-1 rounded ${transformMode === 'scale' ? 'bg-orange-600' : 'hover:bg-white/10'}`}
+                        >
+                            크기
+                        </button>
+                    </div>
+
                     <button
                         onClick={() => onDeleteObject(selectedId)}
-                        className="bg-red-500/20 hover:bg-red-500/40 text-red-300 px-2 py-1 rounded text-xs transition-colors"
+                        className="bg-red-500/20 hover:bg-red-500/40 text-red-300 w-full py-1 rounded text-xs transition-colors"
                     >
                         삭제 (Delete)
                     </button>
