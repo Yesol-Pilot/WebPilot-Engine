@@ -1,27 +1,14 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-
-/**
- * Scene Graph 타입 정의
- * Gemini 분석 결과의 구조입니다.
- */
-export interface SceneObject {
-    name: string;
-    spatial_desc: string;
-}
-
-export interface AnalyzedScene {
-    atmosphere: string[];
-    objects: SceneObject[];
-}
+import { Scenario } from '@/types/schema';
 
 /**
  * Scene Context 타입
  */
 interface SceneContextType {
-    sceneData: AnalyzedScene | null;
-    setSceneData: (data: AnalyzedScene) => void;
+    sceneData: Scenario | null;
+    setSceneData: (data: Scenario) => void;
     clearSceneData: () => void;
 }
 
@@ -32,7 +19,7 @@ const SceneContext = createContext<SceneContextType | undefined>(undefined);
  * Landing Page에서 분석한 데이터를 Game Page로 넘겨주기 위한 전역 상태 저장소입니다.
  */
 export function SceneProvider({ children }: { children: ReactNode }) {
-    const [sceneData, setSceneData] = useState<AnalyzedScene | null>(null);
+    const [sceneData, setSceneData] = useState<Scenario | null>(null);
 
     const clearSceneData = () => setSceneData(null);
 

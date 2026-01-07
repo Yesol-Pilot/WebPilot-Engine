@@ -1,6 +1,5 @@
-'use client';
-
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useGameStore } from '@/store/useGameStore';
 
 interface GameUIProps {
     hoveredObject: string | null; // 현재 바라보고 있는 물체 이름
@@ -15,6 +14,18 @@ interface GameUIProps {
  * - 시스템 정보
  */
 export default function GameUI({ hoveredObject, isPointerLocked }: GameUIProps) {
+    const { inventory, message, resetMessage } = useGameStore();
+
+    // 메시지 자동 소멸 타이머
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                resetMessage();
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [message, resetMessage]);
+
     if (!isPointerLocked) {
         return (
             <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-all duration-300">
@@ -39,9 +50,20 @@ export default function GameUI({ hoveredObject, isPointerLocked }: GameUIProps) 
             {/* 2. 상호작용 정보 (물체를 바라볼 때 표시) */}
             <div className={`absolute left-1/2 -translate-x-1/2 top-[55%] transition-all duration-300 transform
                 ${hoveredObject ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                <div className="bg-black/70 backdrop-blur-md border border-cyan-500/40 text-cyan-400 px-6 py-2 rounded-lg font-bold shadow-xl flex items-center gap-3">
-                    <span className="text-xl">🔍</span>
-                    <span className="tracking-wide uppercase text-sm">{hoveredObject}</span>
+                <div className="bg-black/70 backdrop-blur-md border border-cyan-500/40 text-cyan-400 px-6 py-2 rounded-lg font-bold shadow-xl flex flex-col items-center gap-1">
+                    <div className="flex items-center gap-3">
+                        <span className="text-xl">🔍</span>
+                        <span className="tracking-wide uppercase text-sm">{hoveredObject}</span>
+                    </div>
+                    <div className="text-[10px] text-cyan-300/60 uppercase tracking-tighter">[E] key to interact</div>
+                </div>
+            </div>
+
+            {/* [NEW] 2-1. 알림 시스템 (아이템 획득 등) */}
+            <div className={`absolute left-1/2 -translate-x-1/2 top-[20%] transition-all duration-500 transform
+                ${message ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-4 scale-95'}`}>
+                <div className="bg-gradient-to-r from-cyan-600/80 to-blue-600/80 backdrop-blur-lg border border-white/20 px-8 py-3 rounded-full shadow-2xl">
+                    <span className="text-white font-medium tracking-tight text-sm whitespace-nowrap">{message}</span>
                 </div>
             </div>
 
@@ -49,9 +71,10 @@ export default function GameUI({ hoveredObject, isPointerLocked }: GameUIProps) 
             <div className="absolute top-6 left-6 font-mono text-[10px] tracking-widest text-cyan-500/60 leading-relaxed uppercase">
                 <div className="flex items-center gap-2 mb-1">
                     <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse" />
-                    <span>System: WebPilot v2.0</span>
+                    <span>System: WebPilot v2.1</span>
                 </div>
                 <div>Physics: Active / 60FPS</div>
+                <div className="text-white font-bold mt-1 text-xs">Inventory: {inventory.length} items</div>
                 <div className="mt-1 text-gray-500 tracking-normal italic normal-case">&quot;The world is yours to shape&quot;</div>
             </div>
 

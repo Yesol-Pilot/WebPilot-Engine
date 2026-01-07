@@ -1,126 +1,159 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-import { useSceneData, SceneObject } from '@/context/SceneContext';
-import { InteractionProvider } from '@/components/interaction/InteractionManager';
-import Overlay from '@/components/ui/Overlay';
-import GameUI from '@/components/ui/GameUI';
-import SkyboxService from '@/services/SkyboxService';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useMachine } from '@xstate/react';
+import { StateMachineFactory } from '@/services/StateMachineFactory';
+import { GameCanvas } from '@/components/3d/GameCanvas';
+import { Scenario } from '@/types/schema';
+import { useSceneData } from '@/context/SceneContext';
+import { CreativeToolbar } from '@/components/ui/CreativeToolbar';
+import { v4 as uuidv4 } from 'uuid';
 
-// SSR 비활성화
-const SceneGenerator = dynamic(() => import('@/components/scene/SceneGenerator'), { ssr: false });
-
-interface SceneObjectWithPosition extends SceneObject {
-    position: [number, number, number];
-}
-
-/**
- * GamePage - WebPilot 2.0 메인 게임 페이지 (Phase 5 통합)
- */
-export default function GamePage() {
-    const router = useRouter();
-    const { sceneData } = useSceneData();
-
-    // 상태 관리
-    const [objects, setObjects] = useState<SceneObjectWithPosition[]>([]);
-    const [skyboxUrl, setSkyboxUrl] = useState<string | null>(null);
-    const [hoveredObject, setHoveredObject] = useState<string | null>(null);
-    const [isLocked, setIsLocked] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [status, setStatus] = useState('');
-    const hasInitialized = useRef(false);
-
-    // 데이터가 없으면 리다이렉트
-    useEffect(() => {
-        if (!sceneData) {
-            setStatus('Scene 데이터가 없습니다. 메인 페이지로 이동합니다...');
-            const timer = setTimeout(() => {
-                router.push('/');
-            }, 2000);
-            return () => clearTimeout(timer);
+// Mock Data for initial testing if no data passed
+const MOCK_SCENARIO: Scenario = {
+    title: "Magic Classroom",
+    theme: "medieval fantasy classroom, magical runes, floating candles, wooden desks, sunlight through stained glass",
+    narrative_arc: {
+        intro: "You find yourself in an abandoned library.",
+        climax: "A book glows",
+        resolution: "Knowledge found"
+    },
+    nodes: [
+        {
+            id: "desk_01",
+            type: "static_mesh",
+            description: "Antique mahogany desk, heavy wood",
+            transform: { position: [0, 0, -3], rotation: [0, 0, 0], scale: [1, 1, 1] },
+            affordances: []
+        },
+        {
+            id: "lamp_01",
+            type: "interactive_prop",
+            description: "Old brass lamp, flickering",
+            transform: { position: [0, 1, -3], rotation: [0, 0, 0], scale: [0.3, 0.3, 0.3] },
+            affordances: ["turn_on"],
+            relationships: [{ targetId: "desk_01", type: "on_top_of" }]
+        },
+        {
+            id: "bookshelf_01",
+            type: "static_mesh",
+            description: "Tall bookshelf filled with old books",
+            transform: { position: [-3, 0, -2], rotation: [0, 0.5, 0], scale: [1, 2, 1] },
+            affordances: []
+        },
+        {
+            id: "harry_potter_01",
+            type: "interactive_prop",
+            description: "Harry Potter character wearing wizard robes holding a wand",
+            transform: { position: [2, 0, -2], rotation: [0, -0.5, 0], scale: [1, 1, 1] },
+            affordances: ["talk", "cast_spell"],
+            relationships: []
         }
-    }, [sceneData, router]);
+    ]
+};
 
-    // 최초 생성 로직
-    // 최초 생성 로직
+export default function GamePage() {
+    // Retrieve scenario from global context (populated by Gemini in Landing Page)
+    const { sceneData } = useSceneData();
+    // Validate sceneData structure
+    const initialScenario = (sceneData && sceneData.nodes) ? sceneData : MOCK_SCENARIO;
+
+    // Debug log
     useEffect(() => {
-        if (!sceneData || hasInitialized.current) return;
-        hasInitialized.current = true;
-
-        const autoGenerate = async () => {
-            setIsGenerating(true);
-            try {
-                const objectsToAdd: SceneObjectWithPosition[] = sceneData.objects.slice(0, 3).map((obj) => ({
-                    ...obj,
-                    position: [0, 5, 0] // 물리 낙하 확인을 위해 높이 상향
-                }));
-                setObjects(objectsToAdd);
-
-                if (sceneData.atmosphere && sceneData.atmosphere.length > 0) {
-                    setStatus('🌌 Skybox 생성 중...');
-                    const prompt = sceneData.atmosphere.join(', ');
-                    try {
-                        const result = await SkyboxService.generateSkybox(prompt, { skybox_style_id: 20 });
-                        const statusData = await SkyboxService.waitForCompletion(result.id);
-                        if (statusData.file_url) setSkyboxUrl(statusData.file_url);
-                    } catch (e) {
-                        console.error('Skybox 생성 실패:', e);
-                    }
-                }
-                setStatus('✅ 생성 완료! 탐험을 시작하세요.');
-            } catch (error) {
-                console.error('자동 생성 실패:', error);
-                setStatus('❌ 생성 중 오류 발생');
-            } finally {
-                setIsGenerating(false);
-            }
-        };
-
-        autoGenerate();
+        if (!sceneData) console.log("Using MOCK_SCENARIO (No Context)");
+        else if (!sceneData.nodes) console.warn("Using MOCK_SCENARIO (Start Context Malformed)", sceneData);
+        else console.log("Using GENERATED SCENARIO");
     }, [sceneData]);
 
-    if (!sceneData) {
-        return (
-            <div className="w-full h-screen bg-gray-900 text-white flex items-center justify-center">
-                <div className="text-center"><p className="text-xl animate-pulse">{status}</p></div>
-            </div>
-        );
-    }
+    const [scenario, setScenario] = useState<Scenario>(initialScenario);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    // Initialize XState machine using the factory
+    const machine = useMemo(() => {
+        return StateMachineFactory.createScenarioMachine(scenario);
+    }, [scenario]);
+    const [state, send] = useMachine(machine);
+
+    const [hoverText, setHoverText] = useState<string | null>(null);
+
+    // --- Editor Handlers ---
+    const handleAddObject = (prompt: string) => {
+        const newNode = {
+            id: `node-${uuidv4().slice(0, 4)}`,
+            type: 'interactive_prop', // Default type
+            description: prompt,
+            transform: { position: [0, 1, -2], rotation: [0, 0, 0], scale: [1, 1, 1] }, // Spawn in front
+            affordances: []
+        };
+        setScenario(prev => ({
+            ...prev,
+            nodes: [...prev.nodes, newNode as any]
+        }));
+        console.log(`[Editor] Added object: ${prompt}`);
+    };
+
+    const handleUpdateSkybox = (prompt: string) => {
+        setScenario(prev => ({ ...prev, theme: prompt }));
+        console.log(`[Editor] Updated skybox: ${prompt}`);
+    };
+
+    const handleDeleteObject = (id: string) => {
+        setScenario(prev => ({
+            ...prev,
+            nodes: prev.nodes.filter(n => n.id !== id)
+        }));
+        setSelectedId(null);
+        console.log(`[Editor] Deleted object: ${id}`);
+    };
+
+    const handleInteraction = useCallback((id: string, type: string) => {
+        console.log(`User interaction: ${id} [${type}]`);
+        // Send event to XState if needed
+    }, []);
 
     return (
-        <div className="w-full h-screen bg-gray-900 text-white relative overflow-hidden">
-            {/* 1. HUD & UI Layer */}
-            <GameUI hoveredObject={hoveredObject} isPointerLocked={isLocked} />
+        <div className="relative w-full h-full">
+            {/* 3D View */}
+            <GameCanvas
+                scenarioTitle={scenario.title}
+                theme={scenario.theme}
+                nodes={scenario.nodes}
+                onInteraction={handleInteraction}
+                onHover={setHoverText}
+                onObjectSelect={setSelectedId}
+                selectedId={selectedId}
+            />
 
-            {/* 2. 상단 헤더 (비상호작용) */}
-            <div className="absolute top-0 left-0 z-10 p-4 pointer-events-none">
-                <h1 className="text-2xl font-black italic text-cyan-500 drop-shadow-lg">WEBPILOT ENGINE</h1>
-                {status && (
-                    <p className={`text-[10px] uppercase tracking-widest mt-1 ${isGenerating ? 'text-cyan-400 animate-pulse' : 'text-gray-500'}`}>
-                        {status}
-                    </p>
-                )}
+            {/* UI Overlay */}
+            <div className="absolute top-0 left-0 w-full p-4 pointer-events-none flex justify-between">
+                <div className="bg-black/50 text-white p-4 rounded backdrop-blur-sm">
+                    <h1 className="text-xl font-bold">{scenario.title}</h1>
+                    <p className="opacity-80 text-sm max-w-md mt-2">{scenario.narrative_arc.intro}</p>
+                </div>
+
+                {/* State Debug UI */}
+                <div className="bg-black/50 text-green-400 p-2 rounded text-xs font-mono backdrop-blur-sm">
+                    State: {JSON.stringify(state.value)}
+                </div>
             </div>
 
-            {/* 3. 상호작용 레이어 */}
-            <div className="absolute top-4 right-4 z-50">
-                <Overlay
-                    onSkyboxGenerated={setSkyboxUrl}
-                    onModelGenerated={(obj) => setObjects(prev => [...prev, { ...obj, position: [0, 5, 0] }])}
-                />
-            </div>
+            {/* Reticle / Cursor */}
+            <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50 mixing-blend-difference" />
 
-            {/* 4. 3D Scene Layer */}
-            <InteractionProvider>
-                <SceneGenerator
-                    objects={objects}
-                    skyboxUrl={skyboxUrl}
-                    onHoverChange={setHoveredObject}
-                    onLockChange={setIsLocked}
-                />
-            </InteractionProvider>
+            {/* Interaction Hint */}
+            {hoverText && (
+                <div className="absolute top-[55%] left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded text-sm pointer-events-none animate-fade-in">
+                    Interact with {hoverText} (Press E)
+                </div>
+            )}
+
+            {/* Editor Toolbar */}
+            <CreativeToolbar
+                onAddObject={handleAddObject}
+                onUpdateSkybox={handleUpdateSkybox}
+                onDeleteObject={handleDeleteObject}
+                selectedId={selectedId}
+            />
         </div>
     );
 }

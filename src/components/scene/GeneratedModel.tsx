@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import { useMachine } from '@xstate/react';
 import { RigidBody } from '@react-three/rapier';
+import { useGameStore } from '@/store/useGameStore';
 import { useInteraction } from '@/components/interaction/InteractionManager';
 import { objectMachine } from '@/machines/objectMachine';
 
@@ -30,6 +31,7 @@ export default function GeneratedModel({ prompt, initialPosition, spatialDesc }:
 
     const { setActiveObject } = useInteraction();
     const [state, send] = useMachine(objectMachine);
+    const addItem = useGameStore((state) => state.addItem);
 
     // 호버 시 커서 변경 (PointerLock 상태가 아닐 때만 유효함)
     useEffect(() => {
@@ -45,7 +47,6 @@ export default function GeneratedModel({ prompt, initialPosition, spatialDesc }:
     // 로딩 상태 시뮬레이션 (Mock 모드)
     useEffect(() => {
         if (MOCK_MODE) {
-            // cascading render 방지를 위해 setTimeout 사용
             const timer = setTimeout(() => {
                 setIsLoaded(true);
             }, 0);
@@ -66,7 +67,17 @@ export default function GeneratedModel({ prompt, initialPosition, spatialDesc }:
             friction={0.5}
             restitution={0.2}
             // Raycasting 감지를 위한 userData 설정
-            userData={{ isInteractable: true, name: prompt, description: spatialDesc }}
+            userData={{
+                isInteractable: true,
+                name: prompt,
+                description: spatialDesc,
+                onAction: () => {
+                    send({ type: 'CLICK' });
+                    setActiveObject(prompt);
+                    addItem(prompt);
+                    console.log(`[Bible Interaction] "${prompt}" 획득 (Via Key)`);
+                }
+            }}
         >
             <group
                 ref={groupRef}
@@ -74,6 +85,9 @@ export default function GeneratedModel({ prompt, initialPosition, spatialDesc }:
                     e.stopPropagation();
                     send({ type: 'CLICK' });
                     setActiveObject(prompt);
+                    // [NEW] 인벤토리 시스템 연동
+                    addItem(prompt);
+                    console.log(`[Inventory] "${prompt}" 획득 완료.`);
                 }}
                 onPointerOver={(e) => {
                     e.stopPropagation();
@@ -85,7 +99,18 @@ export default function GeneratedModel({ prompt, initialPosition, spatialDesc }:
                 }}
             >
                 {/* 모델 본체 (메쉬 레벨에서도 userData를 넣어주어 레이캐스트가 하위 요소 탐지 가능하게 함) */}
-                <mesh castShadow userData={{ isInteractable: true, name: prompt }}>
+                <mesh
+                    castShadow
+                    userData={{
+                        isInteractable: true,
+                        name: prompt,
+                        onAction: () => {
+                            send({ type: 'CLICK' });
+                            setActiveObject(prompt);
+                            addItem(prompt);
+                        }
+                    }}
+                >
                     <boxGeometry args={[0.8, 0.8, 0.8]} />
                     <meshStandardMaterial
                         color={colors[colorIndex]}

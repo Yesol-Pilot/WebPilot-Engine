@@ -1,0 +1,96 @@
+import { EditorControls } from './EditorControls';
+import * as THREE from 'three';
+import { useState } from 'react';
+
+// ... (existing imports, but add EditorControls)
+
+interface GameCanvasProps {
+    scenarioTitle: string;
+    theme: string;
+    nodes: SceneNode[];
+    onInteraction: (id: string, type: string) => void;
+    onHover: (text: string | null) => void;
+    // [NEW]
+    onObjectSelect?: (id: string | null) => void;
+    selectedId?: string | null;
+}
+
+export const GameCanvas = ({ scenarioTitle, theme, nodes, onInteraction, onHover, onObjectSelect, selectedId }: GameCanvasProps) => {
+
+    const resolvedNodes = useMemo(() => {
+        return AutoLayoutResolver.resolveLayout(nodes);
+    }, [nodes]);
+
+    // Track the actual 3D Object for the TransformControls
+    const [selectedMesh, setSelectedMesh] = useState<THREE.Object3D | null>(null);
+
+    const handleSelect = (nodeId: string, object: THREE.Object3D) => {
+        console.log("Selected:", nodeId);
+        setSelectedMesh(object);
+        if (onObjectSelect) onObjectSelect(nodeId);
+    };
+
+    return (
+        <div className="w-full h-screen bg-black">
+            <Canvas camera={{ position: [0, 1.5, 5], fov: 75 }} shadows frameloop="demand">
+                {/* Lights */}
+                <ambientLight intensity={0.4} />
+                <directionalLight
+                    position={[10, 20, 10]}
+                    intensity={1.5}
+                    castShadow
+                    shadow-mapSize={[2048, 2048]}
+                />
+
+                {/* Dynamic Skybox */}
+                <SkyboxManager prompt={theme} />
+
+                <Physics gravity={[0, -9.81, 0]}>
+                    <FirstPersonController onHoverChange={onHover} />
+
+                    {/* Floor */}
+                    <RigidBody type="fixed" friction={1}>
+                        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow
+                            onClick={(e) => { e.stopPropagation(); if (onObjectSelect) onObjectSelect(null); setSelectedMesh(null); }}>
+                            <planeGeometry args={[100, 100]} />
+                            <meshStandardMaterial color="#222" roughness={0.8} />
+                        </mesh>
+                    </RigidBody>
+                    <Grid infiniteGrid fadeDistance={30} cellColor="#444" sectionColor="#666" />
+
+                    {/* Boundaries (omitted for brevity in diff, keep them) */}
+                    {[
+                        [20, 0, 0], [-20, 0, 0], [0, 0, 20], [0, 0, -20]
+                    ].map((pos, i) => (
+                        <RigidBody key={`wall-${i}`} type="fixed" position={pos as [number, number, number]}>
+                            <mesh visible={false}>
+                                <boxGeometry args={[i < 2 ? 1 : 40, 10, i < 2 ? 40 : 1]} />
+                            </mesh>
+                        </RigidBody>
+                    ))}
+
+                    {/* Generated Assets */}
+                    {resolvedNodes.map((node) => (
+                        <AssetLoader
+                            key={node.id}
+                            description={node.description}
+                            type={node.type as any}
+                            position={node.transform.position}
+                            rotation={node.transform.rotation}
+                            scale={node.transform.scale}
+                            onInteract={() => onInteraction(node.id, 'INTERACT')}
+                            onSelect={(obj) => handleSelect(node.id, obj)}
+                        />
+                    ))}
+
+                </Physics>
+
+                {/* Editor Gizmo */}
+                {selectedId && selectedMesh && (
+                    <EditorControls selectedObject={selectedMesh} />
+                )}
+
+            </Canvas>
+        </div>
+    );
+};

@@ -1,18 +1,17 @@
-'use client';
-
 import { useRef } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
-import { RigidBody, RapierRigidBody } from '@react-three/rapier';
+import { RigidBody, RapierRigidBody, CapsuleCollider, CuboidCollider } from '@react-three/rapier';
 import { PointerLockControls, KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-// 키보드 매핑 설정
+// 키보드 매핑 설정 (생략 없음)
 const keyboardMap = [
     { name: 'forward', keys: ['ArrowUp', 'w', 'W'] },
     { name: 'backward', keys: ['ArrowDown', 's', 'S'] },
     { name: 'left', keys: ['ArrowLeft', 'a', 'A'] },
     { name: 'right', keys: ['ArrowRight', 'd', 'D'] },
     { name: 'jump', keys: ['Space'] },
+    { name: 'interact', keys: ['keyE', 'e', 'E'] },
 ];
 
 interface FirstPersonControllerProps {
@@ -38,7 +37,10 @@ function PlayerRig({ onHoverChange, onLockChange }: FirstPersonControllerProps) 
     const { camera, scene } = useThree();
     const [, get] = useKeyboardControls();
 
-    // Raycaster 인스턴스 (메모리 최적화를 위해 내부에서 한 번만 생성)
+    // 접지 상태 확인을 위한 ref
+    const grounded = useRef(false);
+
+    // Raycaster 인스턴스
     const raycaster = useRef(new THREE.Raycaster());
 
     // 이동 및 점프 설정
@@ -74,26 +76,31 @@ function PlayerRig({ onHoverChange, onLockChange }: FirstPersonControllerProps) 
 
         rb.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z }, true);
 
-        if (jump && Math.abs(velocity.y) < 0.1) {
+        // 점프 로직 수정: 속도 대신 접지 센서(grounded) 확인
+        if (jump && grounded.current) {
             rb.current.setLinvel({ x: velocity.x, y: jumpForce, z: velocity.z }, true);
+            grounded.current = false; // 점프 즉시 접지 해제 (연타 방지)
         }
 
         // 카메라 위치 동기화
         camera.position.set(translation.x, translation.y + 1.2, translation.z);
 
         // 3. 시선 상호작용 (Raycasting)
-        // 화면 중앙(0, 0)에서 카메라 방향으로 레이저 발사
         raycaster.current.setFromCamera(new THREE.Vector2(0, 0), camera);
-
-        // 씬 내의 모든 객체와 충돌 검사
         const intersects = raycaster.current.intersectObjects(scene.children, true);
-
-        // interactable 태그가 있는 가장 가까운 물체 찾기
         const hit = intersects.find(i => i.object.userData && i.object.userData.isInteractable);
 
         if (hit) {
             const name = hit.object.userData.name || '알 수 없는 물체';
             onHoverChange(name);
+
+            const { interact } = get();
+            if (interact) {
+                console.log(`[Interaction] "${name}"와(과) 상호작용 시도!`);
+                if (hit.object.userData && hit.object.userData.onAction) {
+                    hit.object.userData.onAction();
+                }
+            }
         } else {
             onHoverChange(null);
         }
@@ -107,12 +114,24 @@ function PlayerRig({ onHoverChange, onLockChange }: FirstPersonControllerProps) 
             />
             <RigidBody
                 ref={rb}
-                colliders="hull"
+                colliders={false} // 수동 Collider 설정
                 mass={1}
                 type="dynamic"
                 position={[0, 2, 0]}
                 enabledRotations={[false, false, false]}
             >
+                {/* 몸체 Collider (Capsule) */}
+                <CapsuleCollider args={[0.35, 0.3]} />
+
+                {/* 발바닥 센서 (Ground Check) */}
+                <CuboidCollider
+                    args={[0.2, 0.1, 0.2]}
+                    position={[0, -0.65, 0]}
+                    sensor
+                    onIntersectionEnter={() => { grounded.current = true; }}
+                    onIntersectionExit={() => { grounded.current = false; }}
+                />
+
                 <mesh castShadow visible={false}>
                     <capsuleGeometry args={[0.3, 0.7]} />
                     <meshStandardMaterial color="orange" />

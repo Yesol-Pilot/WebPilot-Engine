@@ -3,7 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSceneData } from '@/context/SceneContext';
-import GeminiService from '@/services/GeminiService';
+import { GeminiService } from '@/services/GeminiService';
 
 /**
  * Landing Page - 이미지 업로드 및 분석 시작
