@@ -67,49 +67,9 @@ export default function GamePage() {
 
     const [scenario, setScenario] = useState<Scenario>(initialScenario);
     const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [transformMode, setTransformMode] = useState<'translate' | 'rotate' | 'scale'>('translate');
 
-    // Initialize XState machine using the factory
-    const machine = useMemo(() => {
-        return StateMachineFactory.createScenarioMachine(scenario);
-    }, [scenario]);
-    const [state, send] = useMachine(machine);
-
-    const [hoverText, setHoverText] = useState<string | null>(null);
-
-    // --- Editor Handlers ---
-    const handleAddObject = (prompt: string) => {
-        const newNode = {
-            id: `node-${uuidv4().slice(0, 4)}`,
-            type: 'interactive_prop', // Default type
-            description: prompt,
-            transform: { position: [0, 1, -2], rotation: [0, 0, 0], scale: [1, 1, 1] }, // Spawn in front
-            affordances: []
-        };
-        setScenario(prev => ({
-            ...prev,
-            nodes: [...prev.nodes, newNode as any]
-        }));
-        console.log(`[Editor] Added object: ${prompt}`);
-    };
-
-    const handleUpdateSkybox = (prompt: string) => {
-        setScenario(prev => ({ ...prev, theme: prompt }));
-        console.log(`[Editor] Updated skybox: ${prompt}`);
-    };
-
-    const handleDeleteObject = (id: string) => {
-        setScenario(prev => ({
-            ...prev,
-            nodes: prev.nodes.filter(n => n.id !== id)
-        }));
-        setSelectedId(null);
-        console.log(`[Editor] Deleted object: ${id}`);
-    };
-
-    const handleInteraction = useCallback((id: string, type: string) => {
-        console.log(`User interaction: ${id} [${type}]`);
-        // Send event to XState if needed
-    }, []);
+    // ...
 
     return (
         <div className="relative w-full h-full">
@@ -122,30 +82,10 @@ export default function GamePage() {
                 onHover={setHoverText}
                 onObjectSelect={setSelectedId}
                 selectedId={selectedId}
+                transformMode={transformMode}
             />
 
-            {/* UI Overlay */}
-            <div className="absolute top-0 left-0 w-full p-4 pointer-events-none flex justify-between">
-                <div className="bg-black/50 text-white p-4 rounded backdrop-blur-sm">
-                    <h1 className="text-xl font-bold">{scenario.title}</h1>
-                    <p className="opacity-80 text-sm max-w-md mt-2">{scenario.narrative_arc.intro}</p>
-                </div>
-
-                {/* State Debug UI */}
-                <div className="bg-black/50 text-green-400 p-2 rounded text-xs font-mono backdrop-blur-sm">
-                    State: {JSON.stringify(state.value)}
-                </div>
-            </div>
-
-            {/* Reticle / Cursor */}
-            <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-50 mixing-blend-difference" />
-
-            {/* Interaction Hint */}
-            {hoverText && (
-                <div className="absolute top-[55%] left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded text-sm pointer-events-none animate-fade-in">
-                    Interact with {hoverText} (Press E)
-                </div>
-            )}
+            {/* ... */}
 
             {/* Editor Toolbar */}
             <CreativeToolbar
@@ -153,6 +93,8 @@ export default function GamePage() {
                 onUpdateSkybox={handleUpdateSkybox}
                 onDeleteObject={handleDeleteObject}
                 selectedId={selectedId}
+                transformMode={transformMode}
+                onSetTransformMode={setTransformMode}
             />
         </div>
     );

@@ -21,17 +21,26 @@ interface GameCanvasProps {
     // [NEW]
     onObjectSelect?: (id: string | null) => void;
     selectedId?: string | null;
+    transformMode?: 'translate' | 'rotate' | 'scale';
 }
 
-export const GameCanvas = ({ scenarioTitle, theme, nodes, onInteraction, onHover, onObjectSelect, selectedId }: GameCanvasProps) => {
+export const GameCanvas = ({
+    scenarioTitle,
+    theme,
+    nodes,
+    onInteraction,
+    onHover,
+    onObjectSelect,
+    selectedId,
+    transformMode = 'translate'
+}: GameCanvasProps) => {
 
     const resolvedNodes = useMemo(() => {
         return AutoLayoutResolver.resolveLayout(nodes);
     }, [nodes]);
 
-    // Track the actual 3D Object for the TransformControls
+    // ... state ...
     const [selectedMesh, setSelectedMesh] = useState<THREE.Object3D | null>(null);
-
     const handleSelect = (nodeId: string, object: THREE.Object3D) => {
         console.log("Selected:", nodeId);
         setSelectedMesh(object);
@@ -41,19 +50,13 @@ export const GameCanvas = ({ scenarioTitle, theme, nodes, onInteraction, onHover
     return (
         <div className="w-full h-screen bg-black">
             <Canvas camera={{ position: [0, 1.5, 5], fov: 75 }} shadows frameloop="demand">
-                {/* Lights */}
-                <ambientLight intensity={0.4} />
-                <directionalLight
-                    position={[10, 20, 10]}
-                    intensity={1.5}
-                    castShadow
-                    shadow-mapSize={[2048, 2048]}
-                />
+                {/* ... existing code ... */}
 
                 {/* Dynamic Skybox */}
                 <SkyboxManager prompt={theme} />
 
                 <Physics gravity={[0, -9.81, 0]}>
+                    {/* ... existing physics setup ... */}
                     <FirstPersonController onHoverChange={onHover} />
 
                     {/* Floor */}
@@ -66,7 +69,7 @@ export const GameCanvas = ({ scenarioTitle, theme, nodes, onInteraction, onHover
                     </RigidBody>
                     <Grid infiniteGrid fadeDistance={30} cellColor="#444" sectionColor="#666" />
 
-                    {/* Boundaries (omitted for brevity in diff, keep them) */}
+                    {/* Boundaries */}
                     {[
                         [20, 0, 0], [-20, 0, 0], [0, 0, 20], [0, 0, -20]
                     ].map((pos, i) => (
@@ -93,9 +96,12 @@ export const GameCanvas = ({ scenarioTitle, theme, nodes, onInteraction, onHover
 
                 </Physics>
 
-                {/* Editor Gizmo */}
+                {/* Editor Gizmo with Mode */}
                 {selectedId && selectedMesh && (
-                    <EditorControls selectedObject={selectedMesh} />
+                    <EditorControls
+                        selectedObject={selectedMesh}
+                        mode={transformMode}
+                    />
                 )}
 
             </Canvas>
