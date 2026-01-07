@@ -116,10 +116,12 @@ function PlayerRig({ onHoverChange, onLockChange, disableControl }: FirstPersonC
 
     return (
         <>
-            <PointerLockControls
-                onLock={() => onLockChange?.(true)}
-                onUnlock={() => onLockChange?.(false)}
-            />
+            {!disableControl && (
+                <PointerLockControls
+                    onLock={() => onLockChange?.(true)}
+                    onUnlock={() => onLockChange?.(false)}
+                />
+            )}
             <RigidBody
                 ref={rb}
                 colliders={false} // 수동 Collider 설정

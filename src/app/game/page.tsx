@@ -90,11 +90,28 @@ export default function GamePage() {
     const [hoverText, setHoverText] = useState<string | null>(null);
 
     // --- Editor Handlers ---
-    const handleAddObject = (prompt: string) => {
+    const handleAddObject = async (prompt: string) => {
+        console.log(`[Editor] Refining object prompt: ${prompt}...`);
+        let finalPrompt = prompt;
+        try {
+            const res = await fetch('/api/refine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, type: 'object', context: scenario.theme })
+            });
+            const data = await res.json();
+            if (data.enhanced) {
+                console.log(`[Editor] Enhanced Prompt: "${data.enhanced}"`);
+                finalPrompt = data.enhanced;
+            }
+        } catch (e) {
+            console.error("Prompt refinement failed, using original.", e);
+        }
+
         const newNode = {
             id: `node-${uuidv4().slice(0, 4)}`,
             type: 'interactive_prop', // Default type
-            description: prompt,
+            description: finalPrompt,
             transform: { position: [0, 1, -2], rotation: [0, 0, 0], scale: [1, 1, 1] }, // Spawn in front
             affordances: []
         };
@@ -102,12 +119,27 @@ export default function GamePage() {
             ...prev,
             nodes: [...prev.nodes, newNode as any]
         }));
-        console.log(`[Editor] Added object: ${prompt}`);
     };
 
-    const handleUpdateSkybox = (prompt: string) => {
-        setScenario(prev => ({ ...prev, theme: prompt }));
-        console.log(`[Editor] Updated skybox: ${prompt}`);
+    const handleUpdateSkybox = async (prompt: string) => {
+        console.log(`[Editor] Refining skybox prompt: ${prompt}...`);
+        let finalPrompt = prompt;
+        try {
+            const res = await fetch('/api/refine', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, type: 'skybox', context: scenario.theme })
+            });
+            const data = await res.json();
+            if (data.enhanced) {
+                console.log(`[Editor] Enhanced Prompt: "${data.enhanced}"`);
+                finalPrompt = data.enhanced;
+            }
+        } catch (e) {
+            console.error("Prompt refinement failed, using original.", e);
+        }
+
+        setScenario(prev => ({ ...prev, theme: finalPrompt }));
     };
 
     const handleDeleteObject = (id: string) => {
