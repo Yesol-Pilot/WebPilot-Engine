@@ -82,3 +82,5 @@ Thumbs.db
 # Legacy folders (if any)
 /Visual-Core/node_modules
 /Logic-Weaver/node_modules
+
+.vercel
