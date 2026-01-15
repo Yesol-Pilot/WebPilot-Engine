@@ -21,14 +21,24 @@ export const metadata: Metadata = {
 
 import Script from "next/script";
 
+'use client';
+import { usePathname } from 'next/navigation';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  // Don't play audio on reports pages
+  const isReportPage = pathname?.startsWith('/reports');
+
   return (
     <html lang="en">
-      <head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
+      >
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5874227298630347"
@@ -48,13 +58,9 @@ export default function RootLayout({
             gtag('config', 'G-SC85FLNV9T');
           `}
         </Script>
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning={true}
-      >
+
         <SceneProvider>
-          <AudioManager />
+          {!isReportPage && <AudioManager />}
           {children}
         </SceneProvider>
       </body>
