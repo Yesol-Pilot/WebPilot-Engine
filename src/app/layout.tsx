@@ -2,16 +2,19 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SceneProvider } from "@/context/SceneContext";
-import AudioManager from "@/components/audio/AudioManager";
+import AudioController from "@/components/audio/AudioController"; // Updated import
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: 'swap', // Optimization
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: 'swap', // Optimization
 });
 
 export const metadata: Metadata = {
@@ -19,20 +22,11 @@ export const metadata: Metadata = {
   description: "AI-powered Image to 3D World Generator",
 };
 
-import Script from "next/script";
-
-'use client';
-import { usePathname } from 'next/navigation';
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  // Don't play audio on reports pages
-  const isReportPage = pathname?.startsWith('/reports');
-
   return (
     <html lang="en">
       <body
@@ -60,7 +54,7 @@ export default function RootLayout({
         </Script>
 
         <SceneProvider>
-          {!isReportPage && <AudioManager />}
+          <AudioController />
           {children}
         </SceneProvider>
       </body>

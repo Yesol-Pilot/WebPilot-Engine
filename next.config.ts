@@ -10,9 +10,8 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // eslint config is handled via eslint.config.mjs in Next.js 15+ / Flat Config
+  // eslint: { ignoreDuringBuilds: true },
   // Output: 'export' removed to enable Server Side Rendering and API Routes for backend integration
   // basePath removed for standard root deployment
   serverExternalPackages: ['@prisma/client'],
