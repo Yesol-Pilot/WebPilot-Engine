@@ -1,0 +1,69 @@
+﻿
+=== Asset Audit Report ===
+Total Assets in DB: 62
+Unique Prompts: 62
+Duplicates: 0
+
+--- Asset List ---
+1. [interactive_prop] Warm candlelight coming from the wall sconces... -> /models/model-cf58049e8609fdd56f8abb9d90288b58.glb
+2. [interactive_prop] Location where the player enters the classroom... -> /models/model-81ff2a2324ff37d14036fcc181c99872.glb
+3. [interactive_prop] A golden statue of a dragon perched on the bookshe... -> /models/model-772160da90022058596c2541b361b24d.glb
+4. [interactive_prop] An aged wizard with a long white beard... -> /models/model-f488add88be36d77a17540038a7da663.glb
+5. [interactive_prop] Tall wooden bookshelf filled with ancient tomes... -> /models/model-87a3e9d0ced5e12ab0ef5d5bb234e498.glb
+6. [interactive_prop] A sturdy, wooden desk with carved details... -> /models/model-58d432118e854c8aed369fd314c5e2ad.glb
+7. [interactive_prop] Large chalkboard covered in glowing runes... -> /models/model-beb272c8126fe244028d1e26dd2f2eec.glb
+8. [interactive_prop] Tall wooden bookshelf filled with ancient tomes, p... -> /models/model-ef88e48f018d7416195e03dd2a492833.glb
+9. [interactive_prop] An aged wizard with a long white beard, wearing bl... -> /models/model-e232285c3f2e7cd10fd7b7e3b8255cdc.glb
+10. [interactive_prop] Large chalkboard covered in glowing runes and magi... -> /models/model-06c0c81ec4394cb2dbcde9b1d4125b49.glb
+11. [interactive_prop] A golden statue of a dragon perched on the bookshe... -> /models/model-12607940fac6736cf2ecab4e58ac779c.glb
+12. [interactive_prop] Antique mahogany desk, heavy wood... -> /models/model-eefe375c34d728fd3cc5fda3c3af9b0a.glb
+13. [interactive_prop] Tall bookshelf filled with old books... -> /models/model-b1bc320568192f6750ccda1079a3ff73.glb
+14. [interactive_prop] Old brass lamp, flickering... -> /models/model-3dabcfee598d71b10a9a093864a8dce7.glb
+15. [model/gltf-binary] angelic child 3d model... -> /models/angelic child 3d model.glb
+16. [model/gltf-binary] a food truck project... -> /models/a_food_truck_project.glb
+17. [model/gltf-binary] basic pc monitors... -> /models/basic_pc_monitors.glb
+18. [model/gltf-binary] cartoon 3d cat... -> /models/cartoon_3d_cat.glb
+19. [model/gltf-binary] cartoon bedroom... -> /models/cartoon_bedroom.glb
+20. [model/gltf-binary] cartoon character... -> /models/cartoon_character.glb
+21. [model/gltf-binary] cartoon house... -> /models/cartoon_house.glb
+22. [model/gltf-binary] cartoon rifle... -> /models/cartoon_rifle.glb
+23. [model/gltf-binary] cartoon two story villa low polygon 3d model... -> /models/cartoon_two-story_villa_low_polygon_3d_model.glb
+24. [model/gltf-binary] cc0 axe... -> /models/cc0_axe.glb
+25. [model/gltf-binary] cc0 shovel... -> /models/cc0_shovel.glb
+26. [model/gltf-binary] cc0 wall lamp... -> /models/cc0_wall_lamp.glb
+27. [model/gltf-binary] cicada   retro cartoon car... -> /models/cicada_-_retro_cartoon_car.glb
+28. [model/gltf-binary] clock... -> /models/clock.glb
+29. [model/gltf-binary] dae blacksmith store... -> /models/dae_blacksmith_store.glb
+30. [model/gltf-binary] demon+girl+3d+model... -> /models/demon+girl+3d+model.glb
+31. [model/gltf-binary] demon+woman+3d+model... -> /models/demon+woman+3d+model.glb
+32. [model/gltf-binary] electrical wiring... -> /models/electrical_wiring.glb
+33. [model/gltf-binary] gramophone... -> /models/gramophone.glb
+34. [model/gltf-binary] hanging light... -> /models/hanging_light.glb
+35. [model/gltf-binary] hello there... -> /models/hello_there.glb
+36. [model/gltf-binary] keyboard... -> /models/keyboard.glb
+37. [model/gltf-binary] link cartoon... -> /models/link_cartoon.glb
+38. [model/gltf-binary] low poly  sofa... -> /models/low_poly__sofa.glb
+39. [model/gltf-binary] model 06c0c81ec4394cb2dbcde9b1d4125b49... -> /models/model-06c0c81ec4394cb2dbcde9b1d4125b49.glb
+40. [model/gltf-binary] model 12607940fac6736cf2ecab4e58ac779c... -> /models/model-12607940fac6736cf2ecab4e58ac779c.glb
+41. [model/gltf-binary] model 3dabcfee598d71b10a9a093864a8dce7... -> /models/model-3dabcfee598d71b10a9a093864a8dce7.glb
+42. [model/gltf-binary] model 58d432118e854c8aed369fd314c5e2ad... -> /models/model-58d432118e854c8aed369fd314c5e2ad.glb
+43. [model/gltf-binary] model 772160da90022058596c2541b361b24d... -> /models/model-772160da90022058596c2541b361b24d.glb
+44. [model/gltf-binary] model 81ff2a2324ff37d14036fcc181c99872... -> /models/model-81ff2a2324ff37d14036fcc181c99872.glb
+45. [model/gltf-binary] model 87a3e9d0ced5e12ab0ef5d5bb234e498... -> /models/model-87a3e9d0ced5e12ab0ef5d5bb234e498.glb
+46. [model/gltf-binary] model b1bc320568192f6750ccda1079a3ff73... -> /models/model-b1bc320568192f6750ccda1079a3ff73.glb
+47. [model/gltf-binary] model beb272c8126fe244028d1e26dd2f2eec... -> /models/model-beb272c8126fe244028d1e26dd2f2eec.glb
+48. [model/gltf-binary] model cf58049e8609fdd56f8abb9d90288b58... -> /models/model-cf58049e8609fdd56f8abb9d90288b58.glb
+49. [model/gltf-binary] model e232285c3f2e7cd10fd7b7e3b8255cdc... -> /models/model-e232285c3f2e7cd10fd7b7e3b8255cdc.glb
+50. [model/gltf-binary] model eefe375c34d728fd3cc5fda3c3af9b0a... -> /models/model-eefe375c34d728fd3cc5fda3c3af9b0a.glb
+51. [model/gltf-binary] model ef88e48f018d7416195e03dd2a492833... -> /models/model-ef88e48f018d7416195e03dd2a492833.glb
+52. [model/gltf-binary] model f488add88be36d77a17540038a7da663... -> /models/model-f488add88be36d77a17540038a7da663.glb
+53. [model/gltf-binary] modern clothes dryer... -> /models/modern_clothes_dryer.glb
+54. [model/gltf-binary] moped... -> /models/moped.glb
+55. [model/gltf-binary] mouse and keyboard... -> /models/mouse_and_keyboard.glb
+56. [model/gltf-binary] onigiri... -> /models/onigiri.glb
+57. [model/gltf-binary] pettersson  findus... -> /models/pettersson__findus.glb
+58. [model/gltf-binary] pony cartoon... -> /models/pony_cartoon.glb
+59. [model/gltf-binary] stylised sky player home dioroma... -> /models/stylised_sky_player_home_dioroma.glb
+60. [model/gltf-binary] tyrant king   tyrannosaurus... -> /models/tyrant_king_-_tyrannosaurus.glb
+61. [model/gltf-binary] ultrawide monitor... -> /models/ultrawide_monitor.glb
+62. [model/gltf-binary] volumetric light lamp for any 3d scene... -> /models/volumetric_light_lamp_for_any_3d_scene.glb

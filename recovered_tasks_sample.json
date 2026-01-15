@@ -1,0 +1,22 @@
+[
+    {
+        "task_id": "dd444913-9e64-4bc0-905d-d7248fe27667",
+        "prompt": "A detailed, realistic 3D model of GrandOakTable. Solid physical object with proper proportions and materials."
+    },
+    {
+        "task_id": "583480d3-1648-476a-b2af-86c1b70b2d92",
+        "prompt": "A detailed, realistic 3D model of floating_candles. Solid physical object with proper proportions and materials."
+    },
+    {
+        "task_id": "713b947f-d545-4f5e-bd88-89c0d17ea56a",
+        "prompt": "A detailed, realistic 3D model of large_oak_table. Solid physical object with proper proportions and materials."
+    },
+    {
+        "task_id": "031bb66f-a001-400d-b4cc-84fae77e9bc8",
+        "prompt": "A modern office chair with padded seat, armrests, and rolling wheels. Ergonomic furniture design."
+    },
+    {
+        "task_id": "a23b51f5-e643-4264-9641-e4a6acf2e563",
+        "prompt": "A detailed, realistic 3D model of Antique_Bookshelf. Solid physical object with proper proportions and materials."
+    }
+]

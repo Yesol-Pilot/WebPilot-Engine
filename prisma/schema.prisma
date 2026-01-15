@@ -30,6 +30,7 @@ model Scenario {
   user          User?    @relation(fields: [userId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  audios        Audio[]
 }
 
 model Skybox {
@@ -46,10 +47,43 @@ model Skybox {
 
 model Asset {
   id          String   @id @default(uuid())
-  prompt      String   @unique
-  filePath    String
+  name        String?  // Display Name (e.g. 'hogwarts_great_hall')
+  taskId      String?  // Optional: Generated Task ID
+  prompt      String?  // Optional: Generation Prompt or Description
+  filePath    String   @unique // Physical path must be unique
   type        String   // 'static_mesh', 'interactive_prop'
   userId      String?
   user        User?    @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
 }
+
+model Audio {
+  id          String   @id @default(uuid())
+  type        String   // 'bgm', 'sfx', 'voice'
+  prompt      String   // 생성 프롬프트 or 대사
+  filePath    String   // 로컬 파일 경로
+  duration    Float?   // 재생 시간 (초)
+  scenarioId  String?
+  scenario    Scenario? @relation(fields: [scenarioId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Texture {
+  id          String   @id @default(uuid())
+  type        String   // 'albedo', 'normal', 'roughness', 'metalness', 'emission'
+  materialName String? // 'wood_dark', 'marvel_floor' 등 그룹핑을 위한 이름
+  prompt      String
+  filePath    String
+  createdAt   DateTime @default(now())
+}
+
+model ApiUsage {
+  id        String   @id @default(uuid())
+  date      String   // YYYY-MM-DD
+  provider  String   // 'tripo', 'hyper3d'
+  count     Int      @default(0)
+  
+  @@unique([date, provider])
+}
+
+

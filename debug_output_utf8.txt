@@ -1,0 +1,37 @@
+﻿Testing Gemini API at http://localhost:8081/api/analyze ...
+node : ??Failed!
+위치 줄:1 문자:1
++ node scripts/test-ge
+mini.js > debug_output
+.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (??Failed!:   
+ String) [], Remot    
+eException
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+Status: 500
+Data: {
+  "error": "[GoogleGen
+erativeAI Error]: Erro
+r fetching from https:
+//generativelanguage.g
+oogleapis.com/v1beta/m
+odels/gemini-1.5-flash
+:generateContent: [404
+ Not Found] models/gem
+ini-1.5-flash is not f
+ound for API version v
+1beta, or is not suppo
+rted for generateConte
+nt. Call ListModels to
+ see the list of avail
+able models and their 
+supported methods."
+}

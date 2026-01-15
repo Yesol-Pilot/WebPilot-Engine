@@ -41,6 +41,10 @@
     "Logic-Weaver",
     "QA-Pilot",
     "Visual-Core",
-    ".agent"
+    ".agent",
+    "public",
+    ".next",
+    "dist",
+    "build"
   ]
 }

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  webpilot-engine:
+    build: .
+    container_name: webpilot-engine
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    volumes:
+      - ./.env.local:/app/.env.local
+    # Increase shared memory size to prevent browser crashes
+    shm_size: '2gb'

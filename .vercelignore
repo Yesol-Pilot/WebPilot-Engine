@@ -1,0 +1,99 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# =============================================
+# 🔒 보안: 절대 커밋하면 안 되는 파일들
+# =============================================
+
+# 환경 변수 (API 키 포함)
+.env
+.env.*
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+*.env
+
+# API 키가 포함될 수 있는 설정 파일
+secrets.json
+credentials.json
+*.secret
+*.secrets
+*.key
+*.pem
+
+# =============================================
+# 일반 무시 항목
+# =============================================
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+/dist
+
+# misc
+.DS_Store
+Thumbs.db
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+.vercel
+# Windows metadata
+desktop.ini
+Thumbs.db
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Legacy folders (if any)
+/Visual-Core/node_modules
+/Logic-Weaver/node_modules
+
+.vercel
+
+# Large Files (>100MB) - GitHub 제한
+public/models/dae_blacksmith_store.glb
+public/models/cartoon_bedroom.glb
+
+# Large Files (>50MB) - 배포 안정성 및 Vercel 용량 확보
+public/models/cartoon_two-story_villa_low_polygon_3d_model.glb
+public/models/low_poly__sofa.glb
+public/models/onigiri.glb
+public/models/tyrant_king_-_tyrannosaurus.glb
+public/models/cc0_axe.glb
+public/models/angelic child 3d model.glb
+.git

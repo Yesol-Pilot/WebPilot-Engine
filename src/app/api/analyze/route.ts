@@ -1,20 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ScenarioSchema } from '@/types/schema';
+import { prisma } from '@/lib/prisma';
+import { formatErrorResponse } from '@/lib/errorMessages';
 
 // Gemini API Client Init
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(req: NextRequest) {
   try {
-    const { image, prompt } = await req.json();
+    const { image, prompt, genre, gameType } = await req.json();
 
     if (!image) {
-      return NextResponse.json({ error: 'Image data is required' }, { status: 400 });
+      return NextResponse.json({
+        error: '❌ 이미지가 필요합니다.',
+        message: '분석할 이미지를 업로드해 주세요.',
+        suggestion: '이미지 파일을 선택하거나 드래그 앤 드롭으로 업로드하세요.'
+      }, { status: 400 });
     }
 
     const apiKey = process.env.GEMINI_API_KEY || '';
-    console.log('Gemini API Key loaded:', apiKey ? `Yes (${apiKey.substring(0, 4)}...)` : 'No');
+    if (!apiKey) {
+      return NextResponse.json({
+        error: '🔑 API 키가 설정되지 않았습니다.',
+        message: 'Gemini API 키가 누락되었습니다.',
+        suggestion: '.env.local 파일에 GEMINI_API_KEY를 추가해 주세요.'
+      }, { status: 500 });
+    }
+    console.log('Gemini API Key loaded:', `Yes (${apiKey.substring(0, 4)}...)`);
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
@@ -23,46 +36,96 @@ export async function POST(req: NextRequest) {
       }
     });
 
+    // [Feature] Genre-Specific Deep System Prompts (Visual Literalism)
+    // Minimizes hallucinations by enforcing strict visual constraints.
+    const GENRE_PROMPTS: Record<string, string> = {
+      fantasy: `
+**CRITICAL ROLE: FANTASY ENVIRONMENT ARTIST**
+OBJECTIVE: Create a magical, medieval fantasy scene.
+VISUAL STYLE:
+- Materials: Stone, wood, gold, crystal, parchment.
+- Lighting: Warm candlelight, magical glow, sunlight through leaves.
+- Atmosphere: Mystical, ancient, wondrous.
+MANDATORY ELEMENTS: If the image is abstract, interpret it as a magical artifact or location.
+`,
+      scifi: `
+**CRITICAL ROLE: SCI-FI CONCEPT ARTIST**
+OBJECTIVE: Create a futuristic, high-tech sci-fi scene.
+VISUAL STYLE:
+- Materials: Metal, glass, neon, synthetics, holograms.
+- Lighting: Cool blue/cyan, artificial strips, stark contrast.
+- Atmosphere: Sterile, advanced, industrial or cyberpunk.
+MANDATORY ELEMENTS: Interpret objects as machinery, terminals, or space-age tech.
+`,
+      horror: `
+**CRITICAL ROLE: HORROR LEVEL DESIGNER**
+OBJECTIVE: Create a terrifying, abandoned horror scene.
+VISUAL STYLE:
+- Materials: Rusted metal, rotting wood, stained fabric, grime.
+- Lighting: Dim, flickering, heavy shadows, cold flashlight beam.
+- Atmosphere: Oppressive, dangerous, abandoned.
+MANDATORY ELEMENTS: Highlight decay, danger, and clues.
+`,
+      mystery: `
+**CRITICAL ROLE: ESCAPE ROOM DESIGNER**
+OBJECTIVE: Create a mysterious puzzle room full of secrets.
+VISUAL STYLE:
+- Materials: Polished wood, brass, velvet, old paper.
+- Lighting: Dim but focused, noir style, dusty rays.
+- Atmosphere: Intriguing, secretive, silent.
+MANDATORY ELEMENTS: Focus on interactable objects, keys, and codes.
+`,
+      modern: `
+**CRITICAL ROLE: INTERIOR DESIGNER**
+OBJECTIVE: Create a realistic modern space.
+VISUAL STYLE:
+- Materials: Concrete, fabric, clean wood, glass.
+- Lighting: Natural daylight, soft ambient.
+- Atmosphere: Clean, functional, comfortable.
+`
+    };
+
+    // [Feature] Game Type Logic
+    const GAME_TYPE_INSTRUCTIONS: Record<string, string> = {
+      escape: "**GAME MODE: ESCAPE ROOM**\n- Focus on hidden keys, locked containers, and puzzles.\n- Objects should be 'interactable' and contain clues.",
+      roleplay: "**GAME MODE: STORY RPG**\n- Focus on environmental storytelling, lore, and atmosphere.\n- Objects should reveal history or character backing.",
+      casual: "**GAME MODE: CASUAL VIEWING**\n- Focus on aesthetics and comfort.\n- Objects should be decorative and fun to look at."
+    };
+
+    const selectedGenrePrompt = GENRE_PROMPTS[genre?.toLowerCase() || 'modern'] || GENRE_PROMPTS['modern'];
+    const selectedGameTypeInstruction = GAME_TYPE_INSTRUCTIONS[gameType?.toLowerCase() || 'escape'] || GAME_TYPE_INSTRUCTIONS['escape'];
+
     const systemPrompt = `
-      당신은 전문 시나리오 작가이자 3D 공간 디자이너(Spatial Architect)입니다.
-      제공된 이미지를 '시각적 기호학(Visual Semiotics)' 관점에서 심층 분석하여,
-      그 안에 숨겨진 서사(Narrative)와 3D 공간으로 구현할 수 있는 객체(Object)들의 정보를 추출해 주세요.
+      ${selectedGenrePrompt}
+      ${selectedGameTypeInstruction}
 
-      **분석 원칙:**
-      1. **행동 유도성(Affordance):** 각 객체가 사용자에게 어떤 행동을 유도하는지 파악하세요 (예: 문 -> 열기, 책 -> 읽기).
-      2. **분위기(Mood):** 조명, 색감, 배치를 통해 공간의 분위기를 파악하고 Skybox 생성을 위한 프롬프트를 만드세요.
-      3. **특이점(Anomaly):** 평범하지 않은 요소를 찾아 시나리오의 훅(Hook)으로 삼으세요.
+      **TASK:**
+      Analyze the provided image and generate a 3D scenario JSON.
 
-      **출력 형식:**
-      다음 JSON 스키마를 정확히 따라주세요:
+      **CONSTRAINTS:**
+      **CONSTRAINTS:**
+      1. **User Prompt:** "${prompt || 'None'}" - Prioritize this if present.
+      2. **Objects:** Identify **10-15** physical objects. Mix **Large Furniture** (tables, shelves) with **Small Clutter** (books, tools, debris) to prevent emptiness.
+      3. **Spatial Layout:** distribute objects WIDELY. Do not cluster them. Fill corners and walls.
+      4. **Visual Literalism:** Describe objects EXACTLY as they should look in 3D.
+      5. **Positioning:** Ensure objects are spaced out (Transform).
+
+      **OUTPUT FORMAT (JSON ONLY):**
       {
-        "title": "시나리오 제목",
-        "theme": "Skybox 생성을 위한 상세한 영어 프롬프트 (예: Victorian library, moonlight, dust particles...)",
-        "narrative_arc": {
-          "intro": "도입부 스토리",
-          "climax": "갈등/클라이막스",
-          "resolution": "결말/해결"
-        },
+        "title": "Korean Title",
+        "theme": "English detailed Skybox prompt aligned with the Genre Style",
+        "narrative_arc": { "intro": "Korean", "climax": "Korean", "resolution": "Korean" },
         "nodes": [
           {
-            "id": "unique_id",
-            "type": "static_mesh" | "interactive_prop" | "light" | "spawn_point",
-            "description": "3D 모델 생성을 위한 영어 프롬프트 (예: A dusty wooden desk, antique style)",
-            "transform": {
-              "position": [x, y, z],
-              "rotation": [x, y, z],
-              "scale": [x, y, z]
-            },
-            "affordances": ["open", "inspect", "pickup" 등],
-            "relationships": [
-              { "targetId": "other_node_id", "type": "on_top_of" | "next_to" }
-            ]
+            "id": "obj_1",
+            "type": "interactive_prop",
+            "description": "Visual description in English",
+            "transform": { "position": [x, y, z], "rotation": [0, 0, 0], "scale": [1, 1, 1] },
+            "affordances": ["action1", "inspect"]
           }
         ]
       }
-      
-      사용자 추가 요청: ${prompt || '없음'}
-    `;
+`;
 
     // Handle Base64 image
     const mimeType = image.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/)?.[1] || 'image/jpeg';
@@ -75,23 +138,38 @@ export async function POST(req: NextRequest) {
 
     const result = await model.generateContent([systemPrompt, imagePart]);
     const responseText = result.response.text();
-    const scenarioData = JSON.parse(responseText);
 
-    // Validate with Zod
-    // const validation = ScenarioSchema.safeParse(scenarioData);
-    // if (!validation.success) {
-    //   console.error("Schema Validation Failed", validation.error);
-    //   // Return generated data anyway but warn? Or fail? 
-    //   // For now, let's return data but log error.
-    // }
+    // [FIX] Strip Markdown code blocks if present (Gemini often wraps JSON in ```json ... ```)
+    const cleanedText = responseText.replace(/```json | ```/g, '').trim();
+
+    console.log('[Analyze] Raw Response:', cleanedText.substring(0, 100) + '...');
+
+    let scenarioData;
+    try {
+      scenarioData = JSON.parse(cleanedText);
+    } catch (parseError) {
+      console.error("JSON Parse Error:", parseError, "Response:", responseText);
+      throw new Error("Gemini response was not valid JSON");
+    }
+
+    // [Usage Tracking] Log usage to Prisma
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      await prisma.apiUsage.upsert({
+        where: { date_provider: { date: today, provider: 'gemini' } },
+        update: { count: { increment: 1 } },
+        create: { date: today, provider: 'gemini', count: 1 }
+      });
+      console.log('[API] Gemini Usage Logged: +1');
+    } catch (dbErr) {
+      console.warn("Usage logging failed:", dbErr);
+    }
 
     return NextResponse.json(scenarioData);
 
   } catch (error: any) {
     console.error('Gemini API Error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal Server Error' },
-      { status: 500 }
-    );
+    const userError = formatErrorResponse(error, 'gemini');
+    return NextResponse.json(userError, { status: 500 });
   }
 }

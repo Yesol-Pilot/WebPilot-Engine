@@ -84,3 +84,15 @@ Thumbs.db
 /Logic-Weaver/node_modules
 
 .vercel
+
+# Large Files (>100MB) - GitHub 제한
+public/models/dae_blacksmith_store.glb
+public/models/cartoon_bedroom.glb
+
+# Large Files (>50MB) - 배포 안정성 및 Vercel 용량 확보
+public/models/cartoon_two-story_villa_low_polygon_3d_model.glb
+public/models/low_poly__sofa.glb
+public/models/onigiri.glb
+public/models/tyrant_king_-_tyrannosaurus.glb
+public/models/cc0_axe.glb
+public/models/angelic child 3d model.glb

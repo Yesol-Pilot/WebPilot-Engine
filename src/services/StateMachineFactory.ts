@@ -44,7 +44,7 @@ export const StateMachineFactory = {
         // 3. Define the root machine structure
         return createMachine({
             id: 'scenario-machine',
-            initial: 'intro',
+            initial: 'playing',
             context: {
                 lastInteraction: null as string | null,
                 activeNodeId: null as string | null,

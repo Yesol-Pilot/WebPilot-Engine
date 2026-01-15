@@ -1,0 +1,34 @@
+{
+    "models": [
+        {
+            "prompt": "Antique mahogany desk, heavy wood",
+            "filePath": "/models/model-06c0c81ec4394cb2dbcde9b1d4125b49.glb"
+        },
+        {
+            "prompt": "Old brass lamp, flickering",
+            "filePath": "/models/model-12607940fac6736cf2ecab4e58ac779c.glb"
+        },
+        {
+            "prompt": "Tall bookshelf filled with old books",
+            "filePath": "/models/model-3dabcfee598d71b10a9a093864a8dce7.glb"
+        },
+        {
+            "prompt": "Harry Potter character wearing wizard robes holding a wand",
+            "filePath": "/models/model-58d432118e854c8aed369fd314c5e2ad.glb"
+        }
+    ],
+    "skyboxes": [
+        {
+            "prompt": "medieval fantasy classroom, magical runes, floating candles, wooden desks, sunlight through stained glass",
+            "filePath": "/skyboxes/medieval_classroom.jpg"
+        },
+        {
+            "prompt": "A cozy, warmly lit birthday party scene with muted colors and a slightly surreal atmosphere, 8k",
+            "filePath": "/skyboxes/skybox-3bd78200d845fc5338e16ef7c178f083.jpg"
+        },
+        {
+            "prompt": "Clean, minimalist modern apartment interior. Subtle warm lighting, soft shadows, 8k",
+            "filePath": "/skyboxes/skybox-4ac04721f3c0e867e2cbe377a1bd5bb1.jpg"
+        }
+    ]
+}

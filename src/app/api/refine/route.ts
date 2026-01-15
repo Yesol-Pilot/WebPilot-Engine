@@ -1,15 +1,31 @@
-
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+import { formatErrorResponse } from '@/lib/errorMessages';
 
 export async function POST(req: Request) {
     try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        // 디버그: API 키 로딩 확인
+        console.log('[Refine] GEMINI_API_KEY loaded:', apiKey ? `Yes (${apiKey.slice(0, 10)}...)` : 'NO - KEY MISSING!');
+
+        if (!apiKey) {
+            return NextResponse.json({
+                code: "AUTH_ERROR",
+                message: "Server Config Error: GEMINI_API_KEY is missing.",
+                suggestion: "Please check .env file."
+            }, { status: 500 });
+        }
+
+        const genAI = new GoogleGenerativeAI(apiKey);
+
         const { prompt, type, context } = await req.json();
 
         if (!prompt) {
-            return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
+            return NextResponse.json({
+                code: "BAD_REQUEST",
+                message: "❌ 프롬프트가 필요합니다.",
+                suggestion: "오브젝트나 배경을 설명하는 간단한 키워드를 입력하세요."
+            }, { status: 400 });
         }
 
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -57,8 +73,22 @@ export async function POST(req: Request) {
             enhanced: enhancedPrompt
         });
 
-    } catch (error) {
-        console.error("Refine API Error:", error);
-        return NextResponse.json({ error: "Failed to refine prompt" }, { status: 500 });
+    } catch (error: any) {
+        console.error("Refine API Error Detail:", error);
+
+        // GoogleGenerativeAI Error Handling
+        if (error.message?.includes('API key')) {
+            return NextResponse.json({
+                code: "AUTH_ERROR",
+                message: "Gemini API 키 오류입니다.",
+                details: error.message
+            }, { status: 500 });
+        }
+
+        const userError = formatErrorResponse(error, 'gemini');
+        return NextResponse.json({
+            ...userError,
+            debug: error.message || String(error)
+        }, { status: 500 });
     }
 }
