@@ -24,14 +24,21 @@ export default function Mermaid({ chart }: MermaidProps) {
             mermaid.render(id, chart).then((result) => {
                 if (ref.current) {
                     ref.current.innerHTML = result.svg;
+                    // Force SVG to take full width while maintaining aspect ratio
+                    const svg = ref.current.querySelector('svg');
+                    if (svg) {
+                        svg.style.width = '100%';
+                        svg.style.height = 'auto';
+                        svg.style.maxWidth = '100%';
+                    }
                 }
             });
         }
     }, [chart]);
 
     return (
-        <div className="my-8 flex justify-center bg-gray-50 dark:bg-zinc-800/50 p-6 rounded-xl border border-gray-100 dark:border-zinc-700 overflow-x-auto">
-            <div ref={ref} className="mermaid-diagram" />
+        <div className="mermaid-container my-10 flex flex-col items-center bg-white dark:bg-zinc-900 p-8 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-x-auto">
+            <div ref={ref} className="mermaid-diagram w-full flex justify-center" />
         </div>
     );
 }

@@ -2,6 +2,10 @@
 
 ## 1. Executive Summary
 
+- **Title**: "Mission Control 대시보드 API 연동"
+- **Date**: "2026-01-14"
+- **Tags**: ["Dashboard", "API", "Prisma"]
+- **Cover**: "/images/reports/dashboard_metrics_1768520991482.png"
 - **Targets**: Mission Control 대시보드에 실시간 API 사용량 연동.
 - **Results**: Mock Data 제거 및 Prisma 기반 실데이터 파이프라인 구축.
 
@@ -9,9 +13,10 @@
 
 ```mermaid
 graph LR
-    DB[(Prisma DB)] -->|Query| API[/api/usage]
-    API -->|Fetch| FE[Dashboard UI]
-    FE -->|Render| Chart[Usage Graph]
+    CLIENT["Dashboard UI"] -->|Fetch| API["/api/usage"]
+    API -->|Query| DB["Prisma (PostgreSQL)"]
+    DB -->|Return| DATA["Usage Logs"]
+    DATA -->|Render| Chart[Usage Graph]
 ```
 
 ## 2. 상세 작업 내용 (Details)

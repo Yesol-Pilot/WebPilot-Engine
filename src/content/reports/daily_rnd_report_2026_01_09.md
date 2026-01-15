@@ -1,4 +1,12 @@
-# [R&D] WebPilot Engine 아키텍처 및 Vercel 배포 환경 구성 (2026-01-09)
+```
+---
+title: "Vercel 배포 한계점 분석 및 MCP 아키텍처 설계"
+date: "2026-01-09"
+tags: ["Architecture", "MCP", "Vercel"]
+cover: "/images/reports/architecture_mcp_1768520958963.png"
+---
+
+# [R&D] WebPilot Engine 아키텍처 및 Vercel 배포 환경 구성
 
 ## 1. Executive Summary
 

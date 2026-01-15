@@ -1,4 +1,9 @@
-# [R&D] Notion 자동화 리포팅 시스템 구축 (2026-01-15)
+# [R&D]
+
+title: "Notion 리포팅 자동화 및 보안 사고 대응"
+date: "2026-01-15"
+tags: ["Automation", "Security", "Slack"]
+cover: "/images/reports/automation_security_1768521010640.png"
 
 ## 1. Executive Summary
 
@@ -9,10 +14,10 @@
 
 ```mermaid
 graph LR
-    A[Git History] --> B(Antigravity Agent)
-    C[WebPilot Brain] --> B
-    B -->|Generate| D{Daily Report .md}
-    D -->|Browser Tool| E[Notion Page]
+    Log["Git History"] -->|Extract| MD["Markdown Report"]
+    MD -->|Parse| Spec["Skill Spec (.md)"]
+    Spec -->|Execute| Action["Browser Agent"]
+    Action -->|Refine| Final["Notion Page"]
     D -->|Generate Image| F[Cover Art]
     F --> E
 ```

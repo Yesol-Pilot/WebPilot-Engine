@@ -1,6 +1,9 @@
-# [R&D] WebPilot Engine 프로젝트 킥오프 (2026-01-06)
+# [R&D]title: "WebPilot Engine 개발 착수 및 초기 아키텍처 수립"
 
-## 1. Executive Summary
+date: "2026-01-06"
+tags: ["Kickoff", "Next.js", "Setup"]
+cover: "/images/reports/kickoff_structure_1768520941042.png"
+summary
 
 - **Targets**: Next.js 14 기반의 확장 가능한 브라우저 에이전트 엔진 구축.
 - **Results**: 프로젝트 스캐폴딩 완료 및 Git 저장소 초기화.
@@ -9,11 +12,11 @@
 
 ```mermaid
 graph TD
-    Root[WebPilot-Engine] --> Src[src]
-    Root --> App[app]
-    Src --> Lib[lib]
-    Lib --> Core[BrowserCore]
-    App --> API[api/agent]
+    SRC["src (App Router)"] --> ASSETS["assets (Models/Textures)"]
+    SRC --> LIB["lib (Utilities)"]
+    LIB --> API["api (External Integrations)"]
+    SRC --> DOCS["docs (Knowledge Base)"]
+    SRC --> TESTS["tests (E2E/Unit)"]
 ```
 
 ## 2. 상세 작업 내용 (Details)

@@ -10,6 +10,7 @@ export type Report = {
     date: string;
     tags?: string[];
     content: string;
+    cover?: string;
 };
 
 export function getReportSlugs() {
@@ -52,6 +53,7 @@ export function getReportBySlug(slug: string): Report {
         date,
         tags: data.tags || ['R&D'],
         content,
+        cover: data.cover,
     };
 }
 

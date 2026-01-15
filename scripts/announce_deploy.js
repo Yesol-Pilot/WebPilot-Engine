@@ -15,7 +15,7 @@ const payload = {
             type: "header",
             text: {
                 type: "plain_text",
-                text: "🚀 R&D Archive Deployed (Securely)",
+                text: "✅ R&D Archive Restored",
                 emoji: true
             }
         },
@@ -23,24 +23,22 @@ const payload = {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: "WebPilot Engine의 R&D 아카이브가 업데이트되었습니다."
+                text: "R&D 리포트 페이지가 정상적으로 복구되었습니다."
             }
         },
         {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `👉 *<${DEPLOY_URL}|View R&D Archive>*`
+                text: "모든 리포트와 다이어그램을 확인하실 수 있습니다."
             }
         },
         {
-            type: "context",
-            elements: [
-                {
-                    type: "mrkdwn",
-                    text: "🔒 Secured by Environment Variables"
-                }
-            ]
+            type: "section",
+            text: {
+                type: "mrkdwn",
+                text: `👉 *<${DEPLOY_URL}|View Reports>*`
+            }
         }
     ]
 };

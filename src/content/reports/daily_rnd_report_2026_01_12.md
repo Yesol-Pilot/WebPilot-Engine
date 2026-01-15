@@ -1,3 +1,9 @@
+---
+title: "Docker 인프라 구축 및 오디오 시스템 최적화"
+date: "2026-01-12"
+tags: ["Docker", "Infrastructure", "Audio"]
+cover: "/images/reports/docker_infra_1768520975850.png"
+---
 # [R&D] 컨테이너 기반 운영 환경 및 배포 검증 (2026-01-12)
 
 ## 1. Executive Summary
@@ -8,19 +14,10 @@
 ### 1.1. Docker Layer Strategy
 
 ```mermaid
-classDiagram
-    class BaseImage {
-        node:slim
-    }
-    class Dependencies {
-        google-chrome-stable
-        fonts-noto-cjk
-    }
-    class Application {
-        Next.js Build
-    }
-    BaseImage <|-- Dependencies
-    Dependencies <|-- Application
+graph TD
+    BUILD["Build Stage (Node:20-slim)"] -->|Copy Artifacts| RUN["Runtime Stage (Node:20-alpine)"]
+    RUN -->|Volume Mount| ASSETS["/app/public/models"]
+    RUN -->|Expose| PORT["Port 3000"]
 ```
 
 ## 2. 상세 기획 및 검증 (Details & Verification)
