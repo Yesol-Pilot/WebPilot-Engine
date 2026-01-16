@@ -19,15 +19,15 @@ graph TD
     CDN -->|Routing| App[Next.js App Router]
     
     subgraph "Frontend Layer"
-        App -->|Render| UI[React Components]
-        App -->|Visualize| Three[Three.js / R3F Canvas]
-        App -->|Style| TW[Tailwind CSS]
+        App -->|Render| UI["React Components"]
+        App -->|Visualize| Three["Three.js / R3F Canvas"]
+        App -->|Style| TW["Tailwind CSS"]
     end
 
     subgraph "Data Layer"
-        App -->|Read| FS[Local File System (Markdown)]
-        App -->|Fetch| API[External APIs (Notion/Slack)]
-        App -->|State| Context[React Context (Audio/Scene)]
+        App -->|Read| FS["Local File System (Markdown)"]
+        App -->|Fetch| API["External APIs (Notion/Slack)"]
+        App -->|State| Context["React Context (Audio/Scene)"]
     end
 
     subgraph "DevOps & CI/CD"
