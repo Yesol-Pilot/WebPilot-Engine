@@ -1,14 +1,15 @@
-import { getDailyReports, getDocReports } from '@/lib/reports';
+import { getDailyReports, getDocReports, getDeploymentReports } from '@/lib/reports';
 import ReportsView from '@/components/ReportsView';
 
 export const metadata = {
     title: 'R&D Archive | WebPilot Engine',
-    description: 'Engineering documentation and daily R&D logs.',
+    description: 'Engineering documentation, daily logs, and deployment history.',
 };
 
 export default function ReportsPage() {
     const dailyReports = getDailyReports();
     const docReports = getDocReports();
+    const deploymentReports = getDeploymentReports();
 
     return (
         <div className="min-h-screen bg-[#FAFAFA] dark:bg-black pb-24">
@@ -23,7 +24,7 @@ export default function ReportsPage() {
                 </div>
             </div>
 
-            <ReportsView dailyReports={dailyReports} docReports={docReports} />
+            <ReportsView dailyReports={dailyReports} docReports={docReports} deploymentReports={deploymentReports} />
         </div>
     );
 }

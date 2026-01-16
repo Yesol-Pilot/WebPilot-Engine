@@ -51,31 +51,48 @@ function ReportCard({ report }: { report: Report }) {
     );
 }
 
-export default function ReportsView({ dailyReports, docReports }: { dailyReports: Report[], docReports: Report[] }) {
-    const [activeTab, setActiveTab] = useState<'docs' | 'daily'>('docs');
+export default function ReportsView({ dailyReports, docReports, deploymentReports }: { dailyReports: Report[], docReports: Report[], deploymentReports: Report[] }) {
+    const [activeTab, setActiveTab] = useState<'docs' | 'daily' | 'deployment'>('docs');
+
+    const getActiveReports = () => {
+        switch (activeTab) {
+            case 'docs': return docReports;
+            case 'daily': return dailyReports;
+            case 'deployment': return deploymentReports;
+        }
+    };
 
     return (
         <div className="container mx-auto px-4 max-w-6xl -mt-12 relative z-10">
             {/* Tab Navigation */}
             <div className="flex justify-center mb-12">
-                <div className="bg-white dark:bg-zinc-900 p-1.5 rounded-full shadow-lg border border-gray-100 dark:border-zinc-800 inline-flex">
+                <div className="bg-white dark:bg-zinc-900 p-1.5 rounded-full shadow-lg border border-gray-100 dark:border-zinc-800 inline-flex flex-wrap justify-center gap-1">
                     <button
                         onClick={() => setActiveTab('docs')}
-                        className={`px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'docs'
-                                ? 'bg-blue-600 text-white shadow-md'
-                                : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'docs'
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                             }`}
                     >
                         Engineering Docs
                     </button>
                     <button
                         onClick={() => setActiveTab('daily')}
-                        className={`px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'daily'
-                                ? 'bg-green-600 text-white shadow-md'
-                                : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'daily'
+                            ? 'bg-green-600 text-white shadow-md'
+                            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                             }`}
                     >
                         Daily R&D Logs
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('deployment')}
+                        className={`px-6 py-3 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'deployment'
+                            ? 'bg-purple-600 text-white shadow-md'
+                            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                            }`}
+                    >
+                        Deployment History
                     </button>
                 </div>
             </div>
@@ -90,14 +107,14 @@ export default function ReportsView({ dailyReports, docReports }: { dailyReports
                     transition={{ duration: 0.2 }}
                     className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
                 >
-                    {(activeTab === 'docs' ? docReports : dailyReports).map((report) => (
+                    {getActiveReports().map((report) => (
                         <ReportCard key={report.slug} report={report} />
                     ))}
                 </motion.div>
             </AnimatePresence>
 
             {/* Empty State */}
-            {(activeTab === 'docs' ? docReports : dailyReports).length === 0 && (
+            {getActiveReports().length === 0 && (
                 <div className="text-center py-20">
                     <p className="text-gray-500 dark:text-gray-400 text-lg">No reports found in this section.</p>
                 </div>

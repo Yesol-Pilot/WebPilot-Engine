@@ -5,8 +5,9 @@ import matter from 'gray-matter';
 const contentDir = path.join(process.cwd(), 'src/content');
 const dailyDir = path.join(contentDir, 'daily');
 const docsDir = path.join(contentDir, 'docs');
+const deploymentsDir = path.join(contentDir, 'deployments');
 
-export type ReportType = 'daily' | 'doc';
+export type ReportType = 'daily' | 'doc' | 'deployment';
 
 export type Report = {
     slug: string;
@@ -27,9 +28,14 @@ function getSlugs(dir: string) {
 export function getReportBySlug(slug: string): Report {
     const realSlug = slug.replace(/\.md$/, '');
 
-    // Try daily first, then docs
+    // Search priority: daily -> deployment -> docs
     let fullPath = path.join(dailyDir, `${realSlug}.md`);
     let type: ReportType = 'daily';
+
+    if (!fs.existsSync(fullPath)) {
+        fullPath = path.join(deploymentsDir, `${realSlug}.md`);
+        type = 'deployment';
+    }
 
     if (!fs.existsSync(fullPath)) {
         fullPath = path.join(docsDir, `${realSlug}.md`);
@@ -37,7 +43,7 @@ export function getReportBySlug(slug: string): Report {
     }
 
     if (!fs.existsSync(fullPath)) {
-        console.error(`[ERROR] File not found: ${fullPath} (searched in daily and docs)`);
+        console.error(`[ERROR] File not found: ${fullPath} (searched in daily, deployments, and docs)`);
         throw new Error(`Report not found: ${realSlug}`);
     }
 
@@ -63,7 +69,7 @@ export function getReportBySlug(slug: string): Report {
         type,
         title,
         date,
-        tags: data.tags || (type === 'daily' ? ['R&D', 'Log'] : ['Architecture']),
+        tags: data.tags || (type === 'daily' ? ['R&D', 'Log'] : type === 'deployment' ? ['Deployment', 'DevOps'] : ['Architecture']),
         content,
         cover: data.cover,
     };
@@ -83,6 +89,13 @@ export function getDocReports(): Report[] {
         .sort((a, b) => (a.date > b.date ? -1 : 1));
 }
 
+export function getDeploymentReports(): Report[] {
+    const slugs = getSlugs(deploymentsDir);
+    return slugs
+        .map((slug) => getReportBySlug(slug))
+        .sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
 export function getAllReports(): Report[] {
-    return [...getDailyReports(), ...getDocReports()].sort((a, b) => (a.date > b.date ? -1 : 1));
+    return [...getDailyReports(), ...getDeploymentReports(), ...getDocReports()].sort((a, b) => (a.date > b.date ? -1 : 1));
 }
