@@ -1,4 +1,4 @@
-import { getReportBySlug, getReportSlugs } from '@/lib/reports';
+import { getReportBySlug, getAllReports } from '@/lib/reports';
 import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import Mermaid from '@/components/Mermaid';
@@ -6,9 +6,9 @@ import GeneratedCover from '@/components/GeneratedCover';
 
 // Generate static params so the page can be static
 export async function generateStaticParams() {
-    const slugs = getReportSlugs();
-    return slugs.map((file) => ({
-        slug: file.replace(/\.md$/, ''),
+    const reports = getAllReports();
+    return reports.map((report) => ({
+        slug: report.slug,
     }));
 }
 

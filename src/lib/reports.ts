@@ -2,10 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const reportDirectory = path.join(process.cwd(), 'src/content/reports');
+const contentDir = path.join(process.cwd(), 'src/content');
+const dailyDir = path.join(contentDir, 'daily');
+const docsDir = path.join(contentDir, 'docs');
+
+export type ReportType = 'daily' | 'doc';
 
 export type Report = {
     slug: string;
+    type: ReportType;
     title: string;
     date: string;
     tags?: string[];
@@ -13,27 +18,33 @@ export type Report = {
     cover?: string;
 };
 
-export function getReportSlugs() {
-    if (!fs.existsSync(reportDirectory)) {
-        return [];
-    }
-    return fs.readdirSync(reportDirectory).filter((file) => file.endsWith('.md'));
+// Helper to get slugs from a directory
+function getSlugs(dir: string) {
+    if (!fs.existsSync(dir)) return [];
+    return fs.readdirSync(dir).filter((file) => file.endsWith('.md'));
 }
 
 export function getReportBySlug(slug: string): Report {
     const realSlug = slug.replace(/\.md$/, '');
-    const fullPath = path.join(reportDirectory, `${realSlug}.md`);
-    console.log(`[DEBUG] Processing slug: ${realSlug}, Path: ${fullPath}`);
+
+    // Try daily first, then docs
+    let fullPath = path.join(dailyDir, `${realSlug}.md`);
+    let type: ReportType = 'daily';
 
     if (!fs.existsSync(fullPath)) {
-        console.error(`[ERROR] File not found: ${fullPath}`);
+        fullPath = path.join(docsDir, `${realSlug}.md`);
+        type = 'doc';
+    }
+
+    if (!fs.existsSync(fullPath)) {
+        console.error(`[ERROR] File not found: ${fullPath} (searched in daily and docs)`);
         throw new Error(`Report not found: ${realSlug}`);
     }
 
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
 
-    // Fallback metadata extraction from filename or content if frontmatter is missing
+    // Metadata extraction
     let title = data.title;
     let date = data.date;
 
@@ -49,19 +60,29 @@ export function getReportBySlug(slug: string): Report {
 
     return {
         slug: realSlug,
+        type,
         title,
         date,
-        tags: data.tags || ['R&D'],
+        tags: data.tags || (type === 'daily' ? ['R&D', 'Log'] : ['Architecture']),
         content,
         cover: data.cover,
     };
 }
 
-export function getAllReports(): Report[] {
-    const slugs = getReportSlugs();
-    const reports = slugs
+export function getDailyReports(): Report[] {
+    const slugs = getSlugs(dailyDir);
+    return slugs
         .map((slug) => getReportBySlug(slug))
-        // sort posts by date in descending order
-        .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
-    return reports;
+        .sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
+export function getDocReports(): Report[] {
+    const slugs = getSlugs(docsDir);
+    return slugs
+        .map((slug) => getReportBySlug(slug))
+        .sort((a, b) => (a.date > b.date ? -1 : 1));
+}
+
+export function getAllReports(): Report[] {
+    return [...getDailyReports(), ...getDocReports()].sort((a, b) => (a.date > b.date ? -1 : 1));
 }
