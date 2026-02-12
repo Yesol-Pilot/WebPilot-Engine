@@ -1,0 +1,10 @@
+{
+  "id": "mood_underwater",
+  "styleId": 5,
+  "prompt": "Deep ocean underwater scene, coral reef, bioluminescent jellyfish, sunlight rays from surface, tropical fish, serene blue",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Digital_Painting_equirectangular-jpg_VR360_deep_ocean_fantasy_6317045339_14965072.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Digital_Painting_depth-map-png_VR360_deep_ocean_fantasy_5659534917_14965072.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Digital_Painting_thumb_VR360_deep_ocean_fantasy_3683213076_14965072.jpg?ver=1",
+  "fileSize": 7817912,
+  "createdAt": "2026-02-11T03:13:11.819Z"
+}

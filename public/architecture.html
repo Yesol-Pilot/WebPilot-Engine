@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebPilot-Engine Architecture Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .section-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #1f2937;
+        }
+
+        h2 {
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f9fafb;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-2">WebPilot-Engine 프로젝트 아키텍처</h1>
+            <p class="text-gray-600">AI-Native 3D Web Engine & Storyverse Integration</p>
+        </header>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">1. 전체 시스템 아키텍처</h2>
+            <div class="mermaid">
+                graph TB
+                subgraph "사용자 인터페이스 레이어"
+                UI[UI Components<br />게임 HUD, 메뉴, 오버레이]
+                BrainSim[Brain Simulator<br />시나리오 주입 UI]
+                end
+
+                subgraph "애플리케이션 레이어"
+                NextApp[Next.js App Router<br />페이지 라우팅]
+                GameClient[Game Client<br />게임 로직 관리]
+                end
+
+                subgraph "3D 렌더링 레이어"
+                R3F[React Three Fiber<br />선언적 3D 렌더링]
+                ThreeJS[Three.js<br />WebGL 엔진]
+                Canvas[Scene Canvas<br />3D 씬 컨테이너]
+                end
+
+                subgraph "AI 코어 레이어"
+                Gemini[Google Gemini API<br />멀티모달 AI]
+                WorldGen[World Generator<br />프롬프트→3D 변환]
+                NPCBrain[NPC Brain<br />LLM 기반 대화]
+                end
+
+                subgraph "콘텐츠 생성 레이어"
+                AssetLoader[Asset Loader<br />3D 모델 로딩]
+                AtmosphereManager[Atmosphere Manager<br />분위기 조성]
+                SceneGenerator[Scene Generator<br />씬 구성]
+                end
+
+                subgraph "상태 관리 레이어"
+                Zustand[Zustand Store<br />전역 상태]
+                XState[XState Machines<br />상태 머신]
+                SceneContext[Scene Context<br />씬 컨텍스트]
+                end
+
+                subgraph "데이터 레이어"
+                Prisma[Prisma ORM<br />데이터베이스]
+                AssetDB[Asset Database<br />3D 에셋 저장소]
+                ContentDB[Content DB<br />스토리/시나리오]
+                end
+
+                subgraph "외부 서비스"
+                MCP[MCP Protocol<br />에이전트 통신]
+                Notion[Notion API<br />리포트 업로드]
+                ElevenLabs[ElevenLabs<br />음성 합성]
+                end
+
+                UI --> NextApp
+                BrainSim --> NextApp
+                NextApp --> GameClient
+                GameClient --> R3F
+                R3F --> ThreeJS
+                R3F --> Canvas
+
+                GameClient --> Gemini
+                Gemini --> WorldGen
+                Gemini --> NPCBrain
+
+                WorldGen --> SceneGenerator
+                SceneGenerator --> AssetLoader
+                SceneGenerator --> AtmosphereManager
+
+                AssetLoader --> Canvas
+                AtmosphereManager --> Canvas
+
+                GameClient --> Zustand
+                GameClient --> XState
+                Canvas --> SceneContext
+
+                WorldGen --> Prisma
+                AssetLoader --> AssetDB
+                SceneGenerator --> ContentDB
+
+                GameClient --> MCP
+                GameClient --> Notion
+                NPCBrain --> ElevenLabs
+
+                style Gemini fill:#4285f4,color:#fff
+                style R3F fill:#61dafb,color:#000
+                style NextApp fill:#000,color:#fff
+                style MCP fill:#ff6b6b,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">2. 핵심 컴포넌트 계층 구조</h2>
+            <div class="mermaid">
+                graph LR
+                subgraph "src/app (페이지)"
+                GamePage["/game<br />게임 메인"]
+                AdminPage["/admin<br />관리자"]
+                ReportsPage["/reports<br />리포트"]
+                end
+
+                subgraph "src/components (컴포넌트)"
+                subgraph "3D 컴포넌트"
+                GameCanvas[GameCanvas]
+                SceneCanvas[SceneCanvas]
+                Experience[Experience]
+                end
+
+                subgraph "UI 컴포넌트"
+                GameHUD[GameHUD]
+                DialogueOverlay[DialogueOverlay]
+                MainMenu[MainMenu]
+                end
+
+                subgraph "씬 컴포넌트"
+                SceneGenerator2[SceneGenerator]
+                SmartNPC[SmartNPC]
+                RoomGenerator[RoomGenerator]
+                end
+
+                subgraph "디버그 컴포넌트"
+                BrainSimulator[BrainSimulator]
+                end
+                end
+
+                subgraph "src/services (서비스)"
+                AIService[AI Service]
+                AssetService[Asset Service]
+                AudioService[Audio Service]
+                end
+
+                subgraph "src/store (상태)"
+                GameStore[Game Store]
+                SceneStore[Scene Store]
+                end
+
+                GamePage --> GameCanvas
+                GamePage --> GameHUD
+                GameCanvas --> SceneCanvas
+                SceneCanvas --> Experience
+                Experience --> SceneGenerator2
+                SceneGenerator2 --> SmartNPC
+
+                BrainSimulator --> AIService
+                SceneGenerator2 --> AssetService
+                SmartNPC --> AIService
+
+                GameCanvas --> GameStore
+                SceneGenerator2 --> SceneStore
+
+                style GameCanvas fill:#61dafb,color:#000
+                style AIService fill:#4285f4,color:#fff
+                style BrainSimulator fill:#ff6b6b,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">3. AI 파이프라인 상세 구조</h2>
+            <div class="mermaid">
+                flowchart TD
+                Start[사용자 프롬프트 입력] --> Analyze[Gemini AI 분석]
+
+                Analyze --> Parse{프롬프트 타입 분류}
+
+                Parse -->|씬 생성| SceneGen[Scene Generator]
+                Parse -->|NPC 대화| NPCGen[NPC Brain]
+                Parse -->|분위기 조정| AtmoGen[Atmosphere Manager]
+
+                SceneGen --> AssetSelect[에셋 선택<br />GLB/GLTF 모델]
+                SceneGen --> LayoutCalc[공간 배치 계산<br />Y-up 좌표계]
+                SceneGen --> LightSetup[조명 설정<br />방향/색상/강도]
+
+                AtmoGen --> FogSetup[안개 설정]
+                AtmoGen --> ColorGrade[색상 보정]
+                AtmoGen --> PostFX[포스트 프로세싱]
+
+                NPCGen --> ContextLoad[컨텍스트 로드]
+                NPCGen --> LLMCall[LLM 호출]
+                NPCGen --> ResponseGen[응답 생성]
+                NPCGen --> TTS[음성 합성<br />ElevenLabs]
+
+                AssetSelect --> Render[3D 렌더링]
+                LayoutCalc --> Render
+                LightSetup --> Render
+                FogSetup --> Render
+                ColorGrade --> Render
+                PostFX --> Render
+
+                ResponseGen --> Display[UI 표시]
+                TTS --> Display
+
+                Render --> Output[최종 출력<br />브라우저]
+                Display --> Output
+
+                style Analyze fill:#4285f4,color:#fff
+                style Render fill:#61dafb,color:#000
+                style Output fill:#34a853,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">4. 데이터 흐름 다이어그램</h2>
+            <div class="mermaid">
+                flowchart LR
+                subgraph "입력"
+                UserInput[사용자 입력<br />텍스트/음성]
+                BrainInput[Brain Simulator<br />시나리오 JSON]
+                end
+
+                subgraph "처리"
+                AIProcessor[AI 프로세서<br />Gemini]
+                StateManager[상태 관리<br />Zustand/XState]
+                SceneBuilder[씬 빌더<br />R3F]
+                end
+
+                subgraph "저장소"
+                AssetRepo[에셋 저장소<br />public/models]
+                Database[데이터베이스<br />Prisma]
+                ContentRepo[콘텐츠 저장소<br />src/content]
+                end
+
+                subgraph "출력"
+                WebGL[WebGL 렌더링]
+                Audio[오디오 출력]
+                UI2[UI 업데이트]
+                end
+
+                UserInput --> AIProcessor
+                BrainInput --> AIProcessor
+
+                AIProcessor --> StateManager
+                StateManager --> SceneBuilder
+
+                SceneBuilder --> AssetRepo
+                AIProcessor --> Database
+                SceneBuilder --> ContentRepo
+
+                SceneBuilder --> WebGL
+                AIProcessor --> Audio
+                StateManager --> UI2
+
+                style AIProcessor fill:#4285f4,color:#fff
+                style StateManager fill:#fbbc04,color:#000
+                style WebGL fill:#61dafb,color:#000
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">5. MCP 기반 스토리버스 통합 아키텍처</h2>
+            <div class="mermaid">
+                graph TB
+                subgraph "Storyverse Brain (오케스트레이터)"
+                UserIntent[사용자 의도 분석]
+                Ontology[세계관 온톨로지]
+                AgentRouter[에이전트 라우터]
+                end
+
+                subgraph "MCP Protocol Layer"
+                MCPClient[MCP Client<br />요청 전송]
+                MCPServer[MCP Server<br />WebPilot Wrapper]
+                A2A[Agent-to-Agent<br />통신 프로토콜]
+                end
+
+                subgraph "WebPilot-Engine (렌더러)"
+                SceneDescriptor[Scene Descriptor<br />JSON 파싱]
+                WorldBuilder[World Builder<br />3D 구성]
+                Renderer[Toon Shader<br />렌더링]
+                end
+
+                subgraph "출력 포맷"
+                Webtoon[영상형 웹툰<br />연속 프레임]
+                Audiobook[시각화 오디오북<br />오디오 반응형]
+                Metaverse[메타버스<br />실시간 인터랙션]
+                end
+
+                UserIntent --> Ontology
+                Ontology --> AgentRouter
+                AgentRouter --> MCPClient
+
+                MCPClient --> A2A
+                A2A --> MCPServer
+
+                MCPServer --> SceneDescriptor
+                SceneDescriptor --> WorldBuilder
+                WorldBuilder --> Renderer
+
+                Renderer --> Webtoon
+                Renderer --> Audiobook
+                Renderer --> Metaverse
+
+                Renderer -.피드백.-> MCPServer
+                MCPServer -.상태 보고.-> A2A
+                A2A -.검증 결과.-> MCPClient
+
+                style Ontology fill:#4285f4,color:#fff
+                style A2A fill:#ff6b6b,color:#fff
+                style Renderer fill:#61dafb,color:#000
+                style Webtoon fill:#34a853,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">5.1 A2A 프로토콜 실제 소통 로그</h2>
+            <p class="text-gray-600 mb-4">사용자가 "마법의 숲을 만들어줘"라고 입력했을 때의 에이전트 간 통신 흐름:</p>
+
+            <div class="bg-gray-900 rounded-lg p-4 mb-6 overflow-x-auto">
+                <pre class="text-green-400 text-sm font-mono leading-relaxed"><code>[Blackboard] 초기화 완료
+[ControlUnit] 초기화 완료
+
+[ControlUnit] 에이전트 등록: DIRECTOR (트리거: USER_REQUEST)
+[ControlUnit] 에이전트 등록: ARCHITECT (트리거: SCENARIO)
+[ControlUnit] 에이전트 등록: VISUAL_CORE (트리거: LAYOUT)
+[ControlUnit] 에이전트 등록: VALIDATOR (트리거: LAYOUT, RENDER_REQUEST)
+[ControlUnit] 에이전트 등록: VISUAL_CRITIC (트리거: FEEDBACK)
+
+[Blackboard] 구독 등록: DIRECTOR → ["USER_REQUEST"]
+[Blackboard] 구독 등록: ARCHITECT → ["SCENARIO"]
+[Blackboard] 구독 등록: VISUAL_CORE → ["LAYOUT"]
+[Blackboard] 구독 등록: VALIDATOR → ["LAYOUT","RENDER_REQUEST"]
+[Blackboard] 구독 등록: VISUAL_CRITIC → ["FEEDBACK"]
+
+─────────── 사용자 입력: "마법의 숲을 만들어줘" ───────────
+
+[Blackboard] 기록: SCENARIO by DIRECTOR (v1)
+[Blackboard] 3개 구독자에게 알림
+[ControlUnit] 큐에 추가: ARCHITECT (우선순위: 15)
+[ControlUnit] 큐에 추가: VALIDATOR (우선순위: 10)
+
+[ControlUnit] 실행: ARCHITECT
+[ARCHITECT] VectorSearchService.findBestMatch("magical oak tree") 
+    → /models/Environment/tree_magical.glb (score: 0.92)
+[ARCHITECT] VectorSearchService.findBestMatch("enchanted mushroom") 
+    → /models/Nature/mushroom_glowing.glb (score: 0.88)
+[ARCHITECT] MCTSPlacementService.findOptimalPosition() → {x: 0, y: 0, z: -5}
+[ARCHITECT] MCTSPlacementService.findOptimalPosition() → {x: 2.3, y: 0, z: -3.1}
+
+[Blackboard] 기록: LAYOUT by ARCHITECT (v1)
+[Blackboard] 2개 구독자에게 알림
+[ControlUnit] 완료: ARCHITECT
+[ControlUnit] 큐에 추가: VISUAL_CORE (우선순위: 12)
+[ControlUnit] 큐에 추가: VALIDATOR (우선순위: 8)
+
+[ControlUnit] 실행: VISUAL_CORE
+[VISUAL_CORE] SSOT.setAIScene() 호출 → 5개 오브젝트 배치
+[Blackboard] 기록: RENDER_REQUEST by VISUAL_CORE (v1)
+[ControlUnit] 완료: VISUAL_CORE
+
+[ControlUnit] 실행: VALIDATOR
+[VALIDATOR] 검증 결과: ✅ 충돌 없음, 경계 내 배치 확인
+[Blackboard] 기록: CRITIQUE by VALIDATOR (v1)
+[ControlUnit] 완료: VALIDATOR
+
+[Blackboard] 기록: FEEDBACK by VISUAL_CRITIC (v1)
+[VISUAL_CRITIC] Gemini Vision 평가: 0.85 (양호)
+
+─────────── 파이프라인 완료 (1,234ms) ───────────</code></pre>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-3">📊 Blackboard 엔트리 예시</h3>
+            <div class="grid md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-blue-800 mb-2">SCENARIO 엔트리 (Director)</h4>
+                    <pre class="text-xs bg-white p-3 rounded overflow-x-auto"><code>{
+  "id": "bb_scenario_1707208841234_a3f2",
+  "type": "SCENARIO",
+  "data": {
+    "description": "마법의 숲 - 빛나는 버섯과 고대 나무들",
+    "theme": "fantasy",
+    "mood": "mysterious",
+    "objects": [
+      { "concept": "거대한 마법 나무", "role": "FOCAL_POINT" },
+      { "concept": "빛나는 버섯", "role": "ACCENT", "count": 5 },
+      { "concept": "이끼 낀 바위", "role": "FILLER", "count": 3 }
+    ]
+  },
+  "author": "DIRECTOR",
+  "timestamp": 1707208841234,
+  "version": 1,
+  "priority": "HIGH",
+  "tags": ["fantasy", "forest", "magic"]
+}</code></pre>
+                </div>
+                <div class="bg-green-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-green-800 mb-2">LAYOUT 엔트리 (Architect)</h4>
+                    <pre class="text-xs bg-white p-3 rounded overflow-x-auto"><code>{
+  "id": "bb_layout_1707208842567_b4c3",
+  "type": "LAYOUT",
+  "data": {
+    "sceneObjects": [
+      { 
+        "modelPath": "/models/tree_magical.glb",
+        "position": { "x": 0, "y": 0, "z": -5 },
+        "scale": { "x": 2.5, "y": 2.5, "z": 2.5 },
+        "rotation": { "x": 0, "y": 0.3, "z": 0 }
+      },
+      { 
+        "modelPath": "/models/mushroom_glowing.glb",
+        "position": { "x": 2.3, "y": 0, "z": -3.1 },
+        "scale": { "x": 0.5, "y": 0.5, "z": 0.5 }
+      }
+    ]
+  },
+  "author": "ARCHITECT",
+  "version": 1,
+  "parentId": "bb_scenario_..._a3f2",
+  "priority": "MEDIUM"
+}</code></pre>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-semibold mb-3">🔑 A2A 핵심 프로토콜 특징</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>특징</th>
+                        <th>설명</th>
+                        <th>구현 위치</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>조건 기반 구독</strong></td>
+                        <td>에이전트가 관심 있는 EntryType만 구독</td>
+                        <td><code>Blackboard.subscribe()</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>우선순위 큐</strong></td>
+                        <td>HIGH(+10), MEDIUM(+5), LOW(+0) 보너스</td>
+                        <td><code>ControlUnit.enqueueActivation()</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>버전 추적</strong></td>
+                        <td>parentId로 이전 버전 참조, version 자동 증가</td>
+                        <td><code>BlackboardEntry.version</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>병렬 실행</strong></td>
+                        <td>maxConcurrent: 2 설정으로 동시 실행</td>
+                        <td><code>ControlUnit.processQueue()</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>자동 활성화</strong></td>
+                        <td>Blackboard 기록 시 구독자에게 자동 알림</td>
+                        <td><code>Blackboard.notifySubscribers()</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mermaid mt-6">
+                sequenceDiagram
+                participant U as User
+                participant D as Director
+                participant BB as Blackboard
+                participant CU as ControlUnit
+                participant A as Architect
+                participant V as VisualCore
+                participant VL as Validator
+
+                U->>D: "마법의 숲을 만들어줘"
+                D->>BB: write(SCENARIO)
+                BB->>CU: notify subscribers
+                CU->>A: activate (priority: 15)
+                A->>BB: write(LAYOUT)
+                BB->>CU: notify subscribers
+                CU->>V: activate (priority: 12)
+                CU->>VL: activate (priority: 8)
+                V->>BB: write(RENDER_REQUEST)
+                VL->>BB: write(CRITIQUE)
+                BB-->>U: 씬 렌더링 완료
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">6. 기술 스택 맵</h2>
+            <div class="mermaid">
+                mindmap
+                root((WebPilot Engine))
+                프론트엔드
+                Next.js 16
+                App Router
+                Server Components
+                React 19
+                Hooks
+                Context API
+                TypeScript 5
+                엄격한 타입 체크
+                3D 렌더링
+                Three.js 0.182
+                WebGL
+                Shader
+                React Three Fiber
+                선언적 3D
+                Hooks 통합
+                React Three Drei
+                헬퍼 컴포넌트
+                React Three Rapier
+                물리 엔진
+                AI/ML
+                Google Gemini
+                Pro 모델
+                Flash 모델
+                ElevenLabs
+                음성 합성
+                MCP SDK
+                에이전트 통신
+                상태 관리
+                Zustand
+                전역 상태
+                XState
+                상태 머신
+                React Context
+                로컬 상태
+                데이터베이스
+                Prisma ORM
+                타입 안전성
+                PostgreSQL
+                관계형 DB
+                스타일링
+                TailwindCSS 4
+                유틸리티 우선
+                Framer Motion
+                애니메이션
+                도구
+                Playwright
+                브라우저 자동화
+                GLTF Transform
+                3D 최적화
+                Sharp
+                이미지 처리
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">7. 폴더 구조 다이어그램</h2>
+            <div class="mermaid">
+                graph TD
+                Root[WebPilot-Engine/]
+
+                Root --> Src[src/]
+                Root --> Public[public/]
+                Root --> Scripts[scripts/]
+                Root --> Prisma[prisma/]
+                Root --> Agent[.agent/]
+
+                Src --> App[app/<br />페이지 라우팅]
+                Src --> Components[components/<br />재사용 컴포넌트]
+                Src --> Services[services/<br />비즈니스 로직]
+                Src --> Store[store/<br />상태 관리]
+                Src --> Types[types/<br />타입 정의]
+                Src --> Utils[utils/<br />유틸리티]
+                Src --> AI[ai/<br />AI 로직]
+                Src --> MCP[mcp/<br />MCP 서버]
+
+                Components --> 3D[3d/<br />3D 컴포넌트]
+                Components --> UI[ui/<br />UI 컴포넌트]
+                Components --> Scene[scene/<br />씬 컴포넌트]
+                Components --> Debug[debug/<br />디버그 도구]
+                Components --> Audio[audio/<br />오디오]
+
+                Public --> Models[models/<br />3D 에셋]
+                Public --> Textures[textures/<br />텍스처]
+                Public --> Audio2[audio/<br />사운드]
+
+                Scripts --> Download[download_resources.js]
+                Scripts --> Classify[classify_assets.js]
+                Scripts --> Deploy[deploy_*.js]
+
+                Agent --> Skills[skills/<br />에이전트 스킬]
+                Agent --> Workflows[workflows/<br />워크플로우]
+
+                style Root fill:#000,color:#fff
+                style Src fill:#4285f4,color:#fff
+                style Components fill:#61dafb,color:#000
+                style AI fill:#fbbc04,color:#000
+                style MCP fill:#ff6b6b,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">8. 주요 기능별 컴포넌트 매핑</h2>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>기능 영역</th>
+                            <th>핵심 컴포넌트</th>
+                            <th>기술 스택</th>
+                            <th>역할</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>AI 월드 생성</strong></td>
+                            <td><code>SceneGenerator.tsx</code></td>
+                            <td>Gemini + R3F</td>
+                            <td>프롬프트를 3D 씬으로 변환</td>
+                        </tr>
+                        <tr>
+                            <td><strong>분위기 엔진</strong></td>
+                            <td><code>AtmosphereManager.tsx</code></td>
+                            <td>Three.js Fog/Lights</td>
+                            <td>조명, 안개, 색상 조정</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NPC 대화</strong></td>
+                            <td><code>SmartNPC.tsx</code></td>
+                            <td>Gemini + ElevenLabs</td>
+                            <td>LLM 기반 대화 + TTS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>에셋 로딩</strong></td>
+                            <td><code>AssetLoader.tsx</code></td>
+                            <td>GLTF Transform</td>
+                            <td>3D 모델 동적 로딩</td>
+                        </tr>
+                        <tr>
+                            <td><strong>게임 로직</strong></td>
+                            <td><code>GameClient.tsx</code></td>
+                            <td>XState</td>
+                            <td>게임 상태 머신 관리</td>
+                        </tr>
+                        <tr>
+                            <td><strong>시나리오 주입</strong></td>
+                            <td><code>BrainSimulator.tsx</code></td>
+                            <td>React + Zustand</td>
+                            <td>테스트용 시나리오 UI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3D 렌더링</strong></td>
+                            <td><code>GameCanvas.tsx</code></td>
+                            <td>R3F + Three.js</td>
+                            <td>WebGL 렌더링 컨테이너</td>
+                        </tr>
+                        <tr>
+                            <td><strong>상태 관리</strong></td>
+                            <td><code>store/*.ts</code></td>
+                            <td>Zustand</td>
+                            <td>전역 상태 저장소</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MCP 서버</strong></td>
+                            <td><code>mcp/server.ts</code></td>
+                            <td>MCP SDK</td>
+                            <td>에이전트 통신 서버</td>
+                        </tr>
+                        <tr>
+                            <td><strong>데이터베이스</strong></td>
+                            <td><code>prisma/schema.prisma</code></td>
+                            <td>Prisma + PostgreSQL</td>
+                            <td>데이터 영속성</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="text-2xl font-bold">9. 배포 및 인프라 구조</h2>
+            <div class="mermaid">
+                graph LR
+                subgraph "개발 환경"
+                Dev[로컬 개발<br />localhost:8090]
+                DevDB[(개발 DB)]
+                end
+
+                subgraph "CI/CD"
+                Git[Git Repository]
+                Actions[GitHub Actions]
+                end
+
+                subgraph "프로덕션"
+                Vercel[Vercel<br />프론트엔드 호스팅]
+                ProdDB[(프로덕션 DB<br />PostgreSQL)]
+                CDN[Vercel CDN<br />에셋 배포]
+                end
+
+                subgraph "외부 API"
+                GeminiAPI[Gemini API]
+                ElevenAPI[ElevenLabs API]
+                NotionAPI[Notion API]
+                end
+
+                Dev --> Git
+                Git --> Actions
+                Actions --> Vercel
+
+                Dev --> DevDB
+                Vercel --> ProdDB
+                Vercel --> CDN
+
+                Vercel --> GeminiAPI
+                Vercel --> ElevenAPI
+                Vercel --> NotionAPI
+
+                style Vercel fill:#000,color:#fff
+                style GeminiAPI fill:#4285f4,color:#fff
+                style CDN fill:#34a853,color:#fff
+            </div>
+        </section>
+
+        <section class="section-card bg-blue-50 border-l-4 border-blue-500">
+            <h2 class="text-2xl font-bold text-blue-900 border-none mb-4">요약</h2>
+            <p class="mb-4 text-gray-700 leading-relaxed">
+                WebPilot-Engine은 <strong>AI-Native 3D 웹 엔진</strong>으로, 다음과 같은 계층 구조를 가집니다:
+            </p>
+            <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4 ml-2">
+                <li><strong class="text-gray-900">UI 레이어:</strong> Next.js 기반 웹 인터페이스</li>
+                <li><strong class="text-gray-900">애플리케이션 레이어:</strong> 게임 로직 및 상태 관리</li>
+                <li><strong class="text-gray-900">AI 코어 레이어:</strong> Gemini API를 활용한 프롬프트→3D 변환</li>
+                <li><strong class="text-gray-900">렌더링 레이어:</strong> React Three Fiber + Three.js</li>
+                <li><strong class="text-gray-900">데이터 레이어:</strong> Prisma ORM + PostgreSQL</li>
+                <li><strong class="text-gray-900">통합 레이어:</strong> MCP 프로토콜을 통한 외부 에이전트 연동</li>
+            </ol>
+            <p class="text-gray-700 leading-relaxed">
+                이 구조는 <strong>스토리버스 프로젝트</strong>와의 융합을 위해 MCP 기반 아키텍처로 설계되어 있으며, 텍스트 프롬프트만으로 일관된 3D 세계를 생성하고 NPC와 상호작용할
+                수 있는 차세대 콘텐츠 제작 플랫폼입니다.
+            </p>
+        </section>
+
+        <section class="section-card bg-purple-50 border-l-4 border-purple-500">
+            <h2 class="text-2xl font-bold text-purple-900 border-none mb-4">📚 Engineering Docs</h2>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-purple-800 mb-3">📅 2026-01-19 Progress Report</h3>
+                <p class="text-gray-700 mb-4"><strong>생성형 UI 상호작용 시스템 완성</strong></p>
+
+                <div class="bg-white rounded-lg p-4 mb-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">✅ 완료된 작업</h4>
+                    <ul class="list-disc list-inside text-gray-700 space-y-1">
+                        <li><strong>퀴즈 상호작용 개선:</strong> 피드백 API, 효과음, CSS 애니메이션</li>
+                        <li><strong>3D 시각화 연동:</strong> VisualEventBridge, 학습 환경 프리셋, FeedbackEffects</li>
+                        <li><strong>캐릭터 대화 시스템:</strong> DialogueManager, CharacterPersonas, TTS 통합</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-4">
+                    <h4 class="font-semibold text-gray-800 mb-2">📁 주요 결과물</h4>
+                    <table class="text-sm">
+                        <thead>
+                            <tr>
+                                <th>파일</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>src/app/api/quiz/feedback/route.ts</code></td>
+                                <td>퀴즈 피드백 API</td>
+                            </tr>
+                            <tr>
+                                <td><code>src/lib/bridge/VisualEventBridge.ts</code></td>
+                                <td>UI→3D 이벤트 브릿지</td>
+                            </tr>
+                            <tr>
+                                <td><code>src/lib/dialogue/DialogueManager.ts</code></td>
+                                <td>대화 매니저</td>
+                            </tr>
+                            <tr>
+                                <td><code>src/data/CharacterPersonas.ts</code></td>
+                                <td>6종 캐릭터 페르소나</td>
+                            </tr>
+                            <tr>
+                                <td><code>src/components/3d/FeedbackEffects.tsx</code></td>
+                                <td>3D 피드백 이펙트</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-500 mt-10 mb-6">
+            <p>Generated by Gemini | WebPilot-Engine Architecture</p>
+        </footer>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true },
+            fontFamily: 'Noto Sans KR'
+        });
+    </script>
+</body>
+
+</html>

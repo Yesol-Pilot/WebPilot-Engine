@@ -1,0 +1,15 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <pattern id="blades" patternUnits="userSpaceOnUse" width="20" height="30">
+   <path d="M10 30 Q8 15 10 0" stroke="#2d5a27" stroke-width="2" fill="none"/>
+   <path d="M5 30 Q7 18 5 5" stroke="#3d7a37" stroke-width="1.5" fill="none"/>
+   <path d="M15 30 Q13 20 15 8" stroke="#4d8a47" stroke-width="1.5" fill="none"/>
+  </pattern>
+  <filter id="noise">
+   <feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="3" stitchTiles="stitch"/>
+  </filter>
+ </defs>
+ <rect width="512" height="512" fill="#3a6b35"/>
+ <rect width="512" height="512" fill="url(#blades)" opacity="0.6"/>
+ <rect width="512" height="512" filter="url(#noise)" opacity="0.25"/>
+</svg>

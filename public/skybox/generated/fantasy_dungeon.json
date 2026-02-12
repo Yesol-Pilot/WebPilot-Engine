@@ -1,0 +1,10 @@
+{
+  "id": "fantasy_dungeon",
+  "styleId": 20,
+  "prompt": "Dark underground dungeon with flickering torches, stone corridors, mysterious shadows, cobwebs, ancient ruins",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Kids_CGI_Animation_equirectangular-jpg_VR360_view_dark_stone_5834931200_14965056.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Kids_CGI_Animation_depth-map-png_VR360_view_dark_stone_6253162842_14965056.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Kids_CGI_Animation_thumb_VR360_view_dark_stone_6777116787_14965056.jpg?ver=1",
+  "fileSize": 6698368,
+  "createdAt": "2026-02-11T03:07:43.741Z"
+}

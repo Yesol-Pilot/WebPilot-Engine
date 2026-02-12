@@ -1,0 +1,570 @@
+{
+  "generatedAt": "2026-02-12T01:18:25.248Z",
+  "totalFiles": 94,
+  "entries": [
+    {
+      "id": "crowd_murmur",
+      "url": "/sounds/sfx/character/crowd_murmur.mp3",
+      "category": "character",
+      "filename": "crowd_murmur.mp3"
+    },
+    {
+      "id": "footstep_grass",
+      "url": "/sounds/sfx/character/footstep_grass.mp3",
+      "category": "character",
+      "filename": "footstep_grass.mp3"
+    },
+    {
+      "id": "footstep_stone",
+      "url": "/sounds/sfx/character/footstep_stone.mp3",
+      "category": "character",
+      "filename": "footstep_stone.mp3"
+    },
+    {
+      "id": "footstep_wood",
+      "url": "/sounds/sfx/character/footstep_wood.mp3",
+      "category": "character",
+      "filename": "footstep_wood.mp3"
+    },
+    {
+      "id": "armor_move",
+      "url": "/sounds/sfx/combat/armor_move.mp3",
+      "category": "combat",
+      "filename": "armor_move.mp3"
+    },
+    {
+      "id": "arrow_fly",
+      "url": "/sounds/sfx/combat/arrow_fly.mp3",
+      "category": "combat",
+      "filename": "arrow_fly.mp3"
+    },
+    {
+      "id": "arrow_hit",
+      "url": "/sounds/sfx/combat/arrow_hit.mp3",
+      "category": "combat",
+      "filename": "arrow_hit.mp3"
+    },
+    {
+      "id": "critical_hit",
+      "url": "/sounds/sfx/combat/critical_hit.mp3",
+      "category": "combat",
+      "filename": "critical_hit.mp3"
+    },
+    {
+      "id": "death_defeat",
+      "url": "/sounds/sfx/combat/death_defeat.mp3",
+      "category": "combat",
+      "filename": "death_defeat.mp3"
+    },
+    {
+      "id": "explosion_small",
+      "url": "/sounds/sfx/combat/explosion_small.mp3",
+      "category": "combat",
+      "filename": "explosion_small.mp3"
+    },
+    {
+      "id": "punch_hit",
+      "url": "/sounds/sfx/combat/punch_hit.mp3",
+      "category": "combat",
+      "filename": "punch_hit.mp3"
+    },
+    {
+      "id": "shield_block",
+      "url": "/sounds/sfx/combat/shield_block.mp3",
+      "category": "combat",
+      "filename": "shield_block.mp3"
+    },
+    {
+      "id": "sword_clash",
+      "url": "/sounds/sfx/combat/sword_clash.mp3",
+      "category": "combat",
+      "filename": "sword_clash.mp3"
+    },
+    {
+      "id": "sword_swing",
+      "url": "/sounds/sfx/combat/sword_swing.mp3",
+      "category": "combat",
+      "filename": "sword_swing.mp3"
+    },
+    {
+      "id": "door_open",
+      "url": "/sounds/sfx/door_open.mp3",
+      "category": "sfx",
+      "filename": "door_open.mp3"
+    },
+    {
+      "id": "campfire",
+      "url": "/sounds/sfx/environment/campfire.mp3",
+      "category": "environment",
+      "filename": "campfire.mp3"
+    },
+    {
+      "id": "cave_drip",
+      "url": "/sounds/sfx/environment/cave_drip.mp3",
+      "category": "environment",
+      "filename": "cave_drip.mp3"
+    },
+    {
+      "id": "city_traffic",
+      "url": "/sounds/sfx/environment/city_traffic.mp3",
+      "category": "environment",
+      "filename": "city_traffic.mp3"
+    },
+    {
+      "id": "crystal_resonance",
+      "url": "/sounds/sfx/environment/crystal_resonance.mp3",
+      "category": "environment",
+      "filename": "crystal_resonance.mp3"
+    },
+    {
+      "id": "fire_crackle",
+      "url": "/sounds/sfx/environment/fire_crackle.mp3",
+      "category": "environment",
+      "filename": "fire_crackle.mp3"
+    },
+    {
+      "id": "forest_birds",
+      "url": "/sounds/sfx/environment/forest_birds.mp3",
+      "category": "environment",
+      "filename": "forest_birds.mp3"
+    },
+    {
+      "id": "jungle_ambiance",
+      "url": "/sounds/sfx/environment/jungle_ambiance.mp3",
+      "category": "environment",
+      "filename": "jungle_ambiance.mp3"
+    },
+    {
+      "id": "ocean_waves",
+      "url": "/sounds/sfx/environment/ocean_waves.mp3",
+      "category": "environment",
+      "filename": "ocean_waves.mp3"
+    },
+    {
+      "id": "rain_light",
+      "url": "/sounds/sfx/environment/rain_light.mp3",
+      "category": "environment",
+      "filename": "rain_light.mp3"
+    },
+    {
+      "id": "river_flow",
+      "url": "/sounds/sfx/environment/river_flow.mp3",
+      "category": "environment",
+      "filename": "river_flow.mp3"
+    },
+    {
+      "id": "snow_crunch",
+      "url": "/sounds/sfx/environment/snow_crunch.mp3",
+      "category": "environment",
+      "filename": "snow_crunch.mp3"
+    },
+    {
+      "id": "storm_rain",
+      "url": "/sounds/sfx/environment/storm_rain.mp3",
+      "category": "environment",
+      "filename": "storm_rain.mp3"
+    },
+    {
+      "id": "swamp_bubbles",
+      "url": "/sounds/sfx/environment/swamp_bubbles.mp3",
+      "category": "environment",
+      "filename": "swamp_bubbles.mp3"
+    },
+    {
+      "id": "tavern_crowd",
+      "url": "/sounds/sfx/environment/tavern_crowd.mp3",
+      "category": "environment",
+      "filename": "tavern_crowd.mp3"
+    },
+    {
+      "id": "thunder_distant",
+      "url": "/sounds/sfx/environment/thunder_distant.mp3",
+      "category": "environment",
+      "filename": "thunder_distant.mp3"
+    },
+    {
+      "id": "volcano_rumble",
+      "url": "/sounds/sfx/environment/volcano_rumble.mp3",
+      "category": "environment",
+      "filename": "volcano_rumble.mp3"
+    },
+    {
+      "id": "water_stream",
+      "url": "/sounds/sfx/environment/water_stream.mp3",
+      "category": "environment",
+      "filename": "water_stream.mp3"
+    },
+    {
+      "id": "wind_gentle",
+      "url": "/sounds/sfx/environment/wind_gentle.mp3",
+      "category": "environment",
+      "filename": "wind_gentle.mp3"
+    },
+    {
+      "id": "wind_howling",
+      "url": "/sounds/sfx/environment/wind_howling.mp3",
+      "category": "environment",
+      "filename": "wind_howling.mp3"
+    },
+    {
+      "id": "fire_crackle",
+      "url": "/sounds/sfx/fire_crackle.mp3",
+      "category": "sfx",
+      "filename": "fire_crackle.mp3"
+    },
+    {
+      "id": "curse_dark",
+      "url": "/sounds/sfx/magic/curse_dark.mp3",
+      "category": "magic",
+      "filename": "curse_dark.mp3"
+    },
+    {
+      "id": "enchant_weapon",
+      "url": "/sounds/sfx/magic/enchant_weapon.mp3",
+      "category": "magic",
+      "filename": "enchant_weapon.mp3"
+    },
+    {
+      "id": "heal_spell",
+      "url": "/sounds/sfx/magic/heal_spell.mp3",
+      "category": "magic",
+      "filename": "heal_spell.mp3"
+    },
+    {
+      "id": "magic_sparkle",
+      "url": "/sounds/sfx/magic/magic_sparkle.mp3",
+      "category": "magic",
+      "filename": "magic_sparkle.mp3"
+    },
+    {
+      "id": "portal_open",
+      "url": "/sounds/sfx/magic/portal_open.mp3",
+      "category": "magic",
+      "filename": "portal_open.mp3"
+    },
+    {
+      "id": "potion_bubble",
+      "url": "/sounds/sfx/magic/potion_bubble.mp3",
+      "category": "magic",
+      "filename": "potion_bubble.mp3"
+    },
+    {
+      "id": "spell_cast",
+      "url": "/sounds/sfx/magic/spell_cast.mp3",
+      "category": "magic",
+      "filename": "spell_cast.mp3"
+    },
+    {
+      "id": "spell_fire",
+      "url": "/sounds/sfx/magic/spell_fire.mp3",
+      "category": "magic",
+      "filename": "spell_fire.mp3"
+    },
+    {
+      "id": "spell_heal",
+      "url": "/sounds/sfx/magic/spell_heal.mp3",
+      "category": "magic",
+      "filename": "spell_heal.mp3"
+    },
+    {
+      "id": "spell_ice",
+      "url": "/sounds/sfx/magic/spell_ice.mp3",
+      "category": "magic",
+      "filename": "spell_ice.mp3"
+    },
+    {
+      "id": "spell_lightning",
+      "url": "/sounds/sfx/magic/spell_lightning.mp3",
+      "category": "magic",
+      "filename": "spell_lightning.mp3"
+    },
+    {
+      "id": "spell_shield",
+      "url": "/sounds/sfx/magic/spell_shield.mp3",
+      "category": "magic",
+      "filename": "spell_shield.mp3"
+    },
+    {
+      "id": "spell_summon",
+      "url": "/sounds/sfx/magic/spell_summon.mp3",
+      "category": "magic",
+      "filename": "spell_summon.mp3"
+    },
+    {
+      "id": "spell_teleport",
+      "url": "/sounds/sfx/magic/spell_teleport.mp3",
+      "category": "magic",
+      "filename": "spell_teleport.mp3"
+    },
+    {
+      "id": "magic_sparkle",
+      "url": "/sounds/sfx/magic_sparkle.mp3",
+      "category": "sfx",
+      "filename": "magic_sparkle.mp3"
+    },
+    {
+      "id": "campfire",
+      "url": "/sounds/sfx/nature/campfire.mp3",
+      "category": "nature",
+      "filename": "campfire.mp3"
+    },
+    {
+      "id": "leaves_rustle",
+      "url": "/sounds/sfx/nature/leaves_rustle.mp3",
+      "category": "nature",
+      "filename": "leaves_rustle.mp3"
+    },
+    {
+      "id": "book_flip",
+      "url": "/sounds/sfx/object/book_flip.mp3",
+      "category": "object",
+      "filename": "book_flip.mp3"
+    },
+    {
+      "id": "bottle_break",
+      "url": "/sounds/sfx/object/bottle_break.mp3",
+      "category": "object",
+      "filename": "bottle_break.mp3"
+    },
+    {
+      "id": "chain_rattle",
+      "url": "/sounds/sfx/object/chain_rattle.mp3",
+      "category": "object",
+      "filename": "chain_rattle.mp3"
+    },
+    {
+      "id": "chest_open",
+      "url": "/sounds/sfx/object/chest_open.mp3",
+      "category": "object",
+      "filename": "chest_open.mp3"
+    },
+    {
+      "id": "coins_pile",
+      "url": "/sounds/sfx/object/coins_pile.mp3",
+      "category": "object",
+      "filename": "coins_pile.mp3"
+    },
+    {
+      "id": "coin_drop",
+      "url": "/sounds/sfx/object/coin_drop.mp3",
+      "category": "object",
+      "filename": "coin_drop.mp3"
+    },
+    {
+      "id": "door_close",
+      "url": "/sounds/sfx/object/door_close.mp3",
+      "category": "object",
+      "filename": "door_close.mp3"
+    },
+    {
+      "id": "door_open",
+      "url": "/sounds/sfx/object/door_open.mp3",
+      "category": "object",
+      "filename": "door_open.mp3"
+    },
+    {
+      "id": "gate_open",
+      "url": "/sounds/sfx/object/gate_open.mp3",
+      "category": "object",
+      "filename": "gate_open.mp3"
+    },
+    {
+      "id": "gem_pickup",
+      "url": "/sounds/sfx/object/gem_pickup.mp3",
+      "category": "object",
+      "filename": "gem_pickup.mp3"
+    },
+    {
+      "id": "glass_clink",
+      "url": "/sounds/sfx/object/glass_clink.mp3",
+      "category": "object",
+      "filename": "glass_clink.mp3"
+    },
+    {
+      "id": "key_unlock",
+      "url": "/sounds/sfx/object/key_unlock.mp3",
+      "category": "object",
+      "filename": "key_unlock.mp3"
+    },
+    {
+      "id": "lever_pull",
+      "url": "/sounds/sfx/object/lever_pull.mp3",
+      "category": "object",
+      "filename": "lever_pull.mp3"
+    },
+    {
+      "id": "scroll_open",
+      "url": "/sounds/sfx/object/scroll_open.mp3",
+      "category": "object",
+      "filename": "scroll_open.mp3"
+    },
+    {
+      "id": "sword_draw",
+      "url": "/sounds/sfx/object/sword_draw.mp3",
+      "category": "object",
+      "filename": "sword_draw.mp3"
+    },
+    {
+      "id": "torch_ignite",
+      "url": "/sounds/sfx/object/torch_ignite.mp3",
+      "category": "object",
+      "filename": "torch_ignite.mp3"
+    },
+    {
+      "id": "220187_loosedeny_casual_1",
+      "url": "/sounds/sfx/ui/220187_loosedeny_casual_1.mp3",
+      "category": "ui",
+      "filename": "220187_loosedeny_casual_1.mp3"
+    },
+    {
+      "id": "220197_click_-_basic",
+      "url": "/sounds/sfx/ui/220197_click_-_basic.mp3",
+      "category": "ui",
+      "filename": "220197_click_-_basic.mp3"
+    },
+    {
+      "id": "343003_ui_correct_button2wav",
+      "url": "/sounds/sfx/ui/343003_ui_correct_button2wav.mp3",
+      "category": "ui",
+      "filename": "343003_ui_correct_button2wav.mp3"
+    },
+    {
+      "id": "425550_select_-_seleccionmp3",
+      "url": "/sounds/sfx/ui/425550_select_-_seleccionmp3.mp3",
+      "category": "ui",
+      "filename": "425550_select_-_seleccionmp3.mp3"
+    },
+    {
+      "id": "459771_select_denied_02wav",
+      "url": "/sounds/sfx/ui/459771_select_denied_02wav.mp3",
+      "category": "ui",
+      "filename": "459771_select_denied_02wav.mp3"
+    },
+    {
+      "id": "460481_chimes-overheads_006flac",
+      "url": "/sounds/sfx/ui/460481_chimes-overheads_006flac.mp3",
+      "category": "ui",
+      "filename": "460481_chimes-overheads_006flac.mp3"
+    },
+    {
+      "id": "488381_uihover1wav",
+      "url": "/sounds/sfx/ui/488381_uihover1wav.mp3",
+      "category": "ui",
+      "filename": "488381_uihover1wav.mp3"
+    },
+    {
+      "id": "536748_phoneogg",
+      "url": "/sounds/sfx/ui/536748_phoneogg.mp3",
+      "category": "ui",
+      "filename": "536748_phoneogg.mp3"
+    },
+    {
+      "id": "625753_onoff_sounds_with_variation",
+      "url": "/sounds/sfx/ui/625753_onoff_sounds_with_variation.mp3",
+      "category": "ui",
+      "filename": "625753_onoff_sounds_with_variation.mp3"
+    },
+    {
+      "id": "644963_quiz_gameshow_correct_ping_14mp3",
+      "url": "/sounds/sfx/ui/644963_quiz_gameshow_correct_ping_14mp3.mp3",
+      "category": "ui",
+      "filename": "644963_quiz_gameshow_correct_ping_14mp3.mp3"
+    },
+    {
+      "id": "651590_ding_station_annoucement_notificationwav",
+      "url": "/sounds/sfx/ui/651590_ding_station_annoucement_notificationwav.mp3",
+      "category": "ui",
+      "filename": "651590_ding_station_annoucement_notificationwav.mp3"
+    },
+    {
+      "id": "703000_uiclick_clay_plop_various_positive_ui_fu",
+      "url": "/sounds/sfx/ui/703000_uiclick_clay_plop_various_positive_ui_fu.mp3",
+      "category": "ui",
+      "filename": "703000_uiclick_clay_plop_various_positive_ui_fu.mp3"
+    },
+    {
+      "id": "731993_click_1",
+      "url": "/sounds/sfx/ui/731993_click_1.mp3",
+      "category": "ui",
+      "filename": "731993_click_1.mp3"
+    },
+    {
+      "id": "827123_startup_sound_computer",
+      "url": "/sounds/sfx/ui/827123_startup_sound_computer.mp3",
+      "category": "ui",
+      "filename": "827123_startup_sound_computer.mp3"
+    },
+    {
+      "id": "843781_neighborhood_cold_winter_sounds_january_",
+      "url": "/sounds/sfx/ui/843781_neighborhood_cold_winter_sounds_january_.mp3",
+      "category": "ui",
+      "filename": "843781_neighborhood_cold_winter_sounds_january_.mp3"
+    },
+    {
+      "id": "click_button",
+      "url": "/sounds/sfx/ui/click_button.mp3",
+      "category": "ui",
+      "filename": "click_button.mp3"
+    },
+    {
+      "id": "error",
+      "url": "/sounds/sfx/ui/error.mp3",
+      "category": "ui",
+      "filename": "error.mp3"
+    },
+    {
+      "id": "hover",
+      "url": "/sounds/sfx/ui/hover.mp3",
+      "category": "ui",
+      "filename": "hover.mp3"
+    },
+    {
+      "id": "item_equip",
+      "url": "/sounds/sfx/ui/item_equip.mp3",
+      "category": "ui",
+      "filename": "item_equip.mp3"
+    },
+    {
+      "id": "level_up",
+      "url": "/sounds/sfx/ui/level_up.mp3",
+      "category": "ui",
+      "filename": "level_up.mp3"
+    },
+    {
+      "id": "menu_close",
+      "url": "/sounds/sfx/ui/menu_close.mp3",
+      "category": "ui",
+      "filename": "menu_close.mp3"
+    },
+    {
+      "id": "menu_open",
+      "url": "/sounds/sfx/ui/menu_open.mp3",
+      "category": "ui",
+      "filename": "menu_open.mp3"
+    },
+    {
+      "id": "notification",
+      "url": "/sounds/sfx/ui/notification.mp3",
+      "category": "ui",
+      "filename": "notification.mp3"
+    },
+    {
+      "id": "quest_complete",
+      "url": "/sounds/sfx/ui/quest_complete.mp3",
+      "category": "ui",
+      "filename": "quest_complete.mp3"
+    },
+    {
+      "id": "success",
+      "url": "/sounds/sfx/ui/success.mp3",
+      "category": "ui",
+      "filename": "success.mp3"
+    },
+    {
+      "id": "transition",
+      "url": "/sounds/sfx/ui/transition.mp3",
+      "category": "ui",
+      "filename": "transition.mp3"
+    }
+  ]
+}

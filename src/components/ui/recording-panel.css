@@ -1,0 +1,145 @@
+/**
+ * recording-panel.css
+ */
+
+.recording-panel {
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 50, 50, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    min-width: 200px;
+}
+
+.recording-panel.compact {
+    padding: 8px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.rec-icon {
+    font-size: 18px;
+}
+
+.panel-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status-indicator {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-indicator.idle {
+    color: #888;
+}
+
+.status-indicator.recording {
+    color: #ff4444;
+    animation: pulse 1s infinite;
+}
+
+.status-indicator.stopped {
+    color: #44ff44;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.elapsed-time {
+    font-family: monospace;
+    font-size: 18px;
+    color: rgba(0, 200, 255, 0.9);
+}
+
+.control-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.control-buttons button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-record {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: #fff;
+}
+
+.btn-record:hover {
+    background: linear-gradient(135deg, #ff6666, #ee2222);
+}
+
+.btn-stop {
+    background: linear-gradient(135deg, #444, #222);
+    color: #fff;
+    border: 2px solid #ff4444 !important;
+}
+
+.btn-stop:hover {
+    background: #333;
+}
+
+.btn-download {
+    background: linear-gradient(135deg, #00c8ff, #0088cc);
+    color: #fff;
+}
+
+.btn-download:hover {
+    background: linear-gradient(135deg, #22ddff, #00aaee);
+}
+
+.btn-new {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-new:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.result-info {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.result-info div {
+    margin-bottom: 4px;
+}

@@ -1,0 +1,471 @@
+/**
+ * GenerativeUI 컴포넌트 스타일
+ */
+
+.generative-ui-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* 입력 폼 */
+.gui-input-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.gui-input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.gui-input:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+.gui-submit {
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.gui-submit:hover {
+    transform: scale(1.05);
+}
+
+.gui-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 서술 텍스트 */
+.gui-narrative {
+    padding: 1rem;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+/* 컴포넌트 컨테이너 */
+.gui-components {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* 퀴즈 */
+.gui-quiz {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.gui-quiz-question {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    color: #1e293b;
+}
+
+.gui-quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gui-quiz-option {
+    padding: 0.75rem 1rem;
+    background: #f1f5f9;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gui-quiz-option:hover:not(:disabled) {
+    background: #e0e7ff;
+    border-color: #6366f1;
+}
+
+.gui-quiz-option.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+}
+
+.gui-quiz-option.incorrect {
+    background: #fee2e2;
+    border-color: #ef4444;
+}
+
+/* 힌트 */
+.gui-hint {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.gui-hint-low {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 4px solid #3b82f6;
+}
+
+.gui-hint-medium {
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 4px solid #f59e0b;
+}
+
+.gui-hint-high {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid #ef4444;
+}
+
+.gui-hint-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.gui-hint-content h4 {
+    margin: 0 0 0.25rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.gui-hint-content p {
+    margin: 0;
+    color: #1e293b;
+}
+
+/* 진행도 */
+.gui-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.gui-progress-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    min-width: 60px;
+}
+
+.gui-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.gui-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    transition: width 0.5s;
+}
+
+.gui-progress-percent {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6366f1;
+}
+
+/* 피드백 */
+.gui-feedback {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+
+.gui-feedback-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.gui-feedback-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.gui-feedback-error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.gui-feedback-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* 선택지 */
+.gui-choice {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gui-choice-button {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gui-choice-button:hover {
+    border-color: #6366f1;
+    background: #f5f3ff;
+}
+
+.gui-choice-label {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.gui-choice-desc {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+/* 캐릭터 대화 */
+.gui-character {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+}
+
+.gui-character-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.gui-character-bubble {
+    flex: 1;
+    background: #f1f5f9;
+    border-radius: 16px;
+    padding: 1rem;
+    position: relative;
+}
+
+.gui-character-bubble::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 16px;
+    border: 8px solid transparent;
+    border-right-color: #f1f5f9;
+}
+
+.gui-character-name {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 0.25rem;
+}
+
+.gui-character-message {
+    margin: 0;
+    color: #1e293b;
+    line-height: 1.5;
+}
+
+.gui-character-emotion {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* 일반 텍스트 */
+.gui-text {
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+/* ===== 퀴즈 피드백 애니메이션 ===== */
+
+/* 정답 펄스 애니메이션 */
+@keyframes quiz-success-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+.gui-quiz-option.correct {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border-color: #22c55e;
+    animation: quiz-success-pulse 0.6s ease;
+}
+
+/* 오답 흔들림 애니메이션 */
+@keyframes quiz-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+.gui-quiz-option.incorrect {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border-color: #ef4444;
+    animation: quiz-shake 0.4s ease;
+}
+
+/* 페이드인 애니메이션 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 퀴즈 피드백 메시지 */
+.gui-quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    animation: fadeInUp 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.gui-quiz-feedback.success {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border-left: 4px solid #22c55e;
+    color: #166534;
+}
+
+.gui-quiz-feedback.encourage {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+}
+
+.gui-quiz-feedback.streak {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+}
+
+.gui-quiz-feedback-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.gui-quiz-feedback-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+/* 스트릭 배지 */
+.gui-quiz-streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* 정답 표시 (오답 시) */
+.gui-quiz-correct-answer {
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #166534;
+}
+
+/* 로딩 스피너 */
+.gui-quiz-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.gui-quiz-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}

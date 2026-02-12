@@ -1,0 +1,10 @@
+{
+  "id": "mood_horror_mansion",
+  "styleId": 15,
+  "prompt": "Abandoned haunted mansion interior at night, broken windows, moonlight, cobwebs, creepy shadows, gothic architecture",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Interiors_equirectangular-jpg_VR360_view_eerie_haunted_7410127913_14965071.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Interiors_depth-map-png_VR360_view_eerie_haunted_5404385956_14965071.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Interiors_thumb_VR360_view_eerie_haunted_9182381640_14965071.jpg?ver=1",
+  "fileSize": 6822891,
+  "createdAt": "2026-02-11T03:12:38.884Z"
+}

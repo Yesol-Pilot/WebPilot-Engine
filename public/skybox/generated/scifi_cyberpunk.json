@@ -1,0 +1,10 @@
+{
+  "id": "scifi_cyberpunk",
+  "styleId": 3,
+  "prompt": "Cyberpunk city at night, neon signs in Japanese and Korean, rain-slicked streets, flying vehicles, towering skyscrapers",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Anime_equirectangular-jpg_Cyberpunk_metropolis_under_starlit_2513227379_14965063.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Anime_depth-map-png_Cyberpunk_metropolis_under_starlit_8035785375_14965063.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Anime_thumb_Cyberpunk_metropolis_under_starlit_8752753211_14965063.jpg?ver=1",
+  "fileSize": 8074733,
+  "createdAt": "2026-02-11T03:09:43.835Z"
+}

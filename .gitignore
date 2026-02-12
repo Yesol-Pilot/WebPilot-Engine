@@ -1,0 +1,168 @@
+# =============================================
+# 🔒 보안
+# =============================================
+.env
+.env.*
+.env.local
+.env.development*
+.env.test*
+.env.production*
+*.env
+secrets.json
+credentials.json
+*.secret
+*.secrets
+*.key
+*.pem
+
+# =============================================
+# 🎮 대형 에셋 (GitHub 크기 제한)
+# =============================================
+*.glb
+public/models/
+public/skybox/**/*.hdr
+public/textures/*/**/*.jpg
+public/textures/*/**/*.png
+!public/textures/colormap.png
+public/textures/particles/kenney_particle-pack.zip
+public/textures/particles/kenney/
+public/sounds/**/*.mp3
+!public/skybox/_hdri_manifest.json
+!public/textures/_texture_manifest.json
+!public/sounds/_sfx_manifest.json
+public/models/_index.json
+
+# =============================================
+# 🧹 GitHub에서 숨기기 (로컬에는 유지)
+# =============================================
+
+# 에이전트 내부
+.agent/
+.antigravity/
+
+# 개발 유틸리티/스크립트
+scripts/
+tools/
+
+# 레거시/백업
+Visual-Core/
+_backup_legacy/
+temp_kenney_textures/
+temp_kenney/
+
+# 보고서/임시 컨텐츠
+reports/
+content/
+
+# 배포/도커 (선택적 숨김)
+DEPLOY.md
+Dockerfile
+docker-compose.yml
+
+# 보조 설정
+jsconfig.json
+tsconfig.scripts.json
+
+# =============================================
+# 🗑️ 개발 잔여물 (자동 생성)
+# =============================================
+*.log
+*.log.*
+test-result.*
+test_*.log
+test_*.txt
+tsc_errors*.txt
+verification_result*.txt
+validation_result*.txt
+compile_errors.txt
+build_error*.log
+build_log.txt
+typecheck.log
+lint-result*.txt
+lint-errors.txt
+lint_errors.log
+lint_log.txt
+lint_report.*
+eslint-autofix-result.txt
+coverage_report.txt
+missing_tasks.txt
+results.txt
+clean_boot*.log
+crash.log
+server_error.log
+server_log.txt
+seed_log.txt
+storyverse_spec*.txt
+git_history.txt
+debug_output*.txt
+debug_spatial.log
+tripo_history.log
+tripo_recovered_list.txt
+analyze_result.txt
+api_response.json
+asset_classification_map.json
+audit_result*
+db_status_report.txt
+failed_classification.json
+models_scan.txt
+recovered_tasks_sample.json
+collection-report-*.json
+themed-report-*.json
+slack_*.json
+*.pdf
+
+# 일회용 스크립트 (루트에 있는 것들)
+analyze_db_urls.js
+check_*.js
+check_*.ts
+compare_assets.js
+create_colormap.js
+download_*.js
+generate_*.js
+generate_*.mjs
+organize_assets.js
+reclassify_samples.js
+run_db_cleanup.mjs
+scan_and_update_registry.js
+test_poly_pizza.js
+verify_brain.js
+test-a2a.ts
+test-integration-e2e.ts
+test-phase3.ts
+test-phase4.ts
+
+# UUID 폴더
+7ffbf428-*
+
+# =============================================
+# 일반
+# =============================================
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+/.next/
+/out/
+/build
+/dist
+/coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+desktop.ini
+Thumbs.db
+.vercel
+/Visual-Core/node_modules
+/Logic-Weaver/node_modules

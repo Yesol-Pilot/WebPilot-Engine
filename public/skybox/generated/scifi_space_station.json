@@ -1,0 +1,10 @@
+{
+  "id": "scifi_space_station",
+  "styleId": 3,
+  "prompt": "Futuristic space station interior, large viewport showing nebula and stars, holographic displays, clean white and blue surfaces",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Anime_equirectangular-jpg_VR360_view_Futuristic_space_2949384453_14965060.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Anime_depth-map-png_VR360_view_Futuristic_space_4751798505_14965060.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Anime_thumb_VR360_view_Futuristic_space_2543752050_14965060.jpg?ver=1",
+  "fileSize": 5636595,
+  "createdAt": "2026-02-11T03:09:10.463Z"
+}

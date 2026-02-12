@@ -1,0 +1,10 @@
+{
+  "id": "mood_zen_garden",
+  "styleId": 2,
+  "prompt": "Japanese zen garden at dawn, raked sand patterns, stone lanterns, cherry blossom trees, misty mountains in background, peaceful",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Fantasy_equirectangular-jpg_Dawn-lit_Japanese_Zen_garden_5610450558_14965075.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Fantasy_depth-map-png_Dawn-lit_Japanese_Zen_garden_7598228438_14965075.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Fantasy_thumb_Dawn-lit_Japanese_Zen_garden_3359728890_14965075.jpg?ver=1",
+  "fileSize": 7399161,
+  "createdAt": "2026-02-11T03:13:46.203Z"
+}

@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebPilot Engine 프로젝트 기술 분석 보고서</title>
+    <!-- KaTeX for Math Formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body);"></script>
+    <!-- Mermaid for Diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #7c3aed;
+            --bg-light: #ffffff;
+            --bg-card: #f8fafc;
+            --bg-section: #f1f5f9;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #059669;
+            --warning: #d97706;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-light);
+            color: var(--text);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        header .date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 1rem;
+        }
+
+        .toc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .toc h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .toc ul {
+            list-style: none;
+            column-count: 2;
+            column-gap: 2rem;
+        }
+
+        .toc li {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        section {
+            margin: 2.5rem 0;
+        }
+
+        section h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        section h3 {
+            font-size: 1.15rem;
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            border: 1px solid #c7d2fe;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        th,
+        td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-section);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--bg-section);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: #dcfce7;
+            color: #059669;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .badge-purple {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .badge-orange {
+            background: #ffedd5;
+            color: #d97706;
+        }
+
+        .screenshot {
+            width: 100%;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .screenshot-caption {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        code {
+            background: #f1f5f9;
+            color: #b91c1c;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+        }
+
+        .tree {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            color: var(--text);
+        }
+
+        .highlight {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+            background: var(--bg-section);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        .flex {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .flex-1 {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        /* Mermaid 라이트 테마 설정 */
+        .mermaid {
+            background: white;
+        }
+
+        @media print {
+            body {
+                font-size: 12pt;
+            }
+
+            .toc ul {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>WebPilot Engine</h1>
+        <p class="subtitle">AI 기반 3D 웹 씬 생성 엔진 - 기술 분석 보고서</p>
+        <p class="date">보고일: 2026년 2월 4일 | 작성: AI 개발팀</p>
+    </header>
+
+    <div class="container">
+        <!-- 목차 -->
+        <nav class="toc">
+            <h2>📋 목차</h2>
+            <ul>
+                <li><a href="#summary">1. Executive Summary</a></li>
+                <li><a href="#metrics">2. 프로젝트 메트릭스</a></li>
+                <li><a href="#architecture">3. 시스템 아키텍처</a></li>
+                <li><a href="#structure">4. 디렉토리 구조</a></li>
+                <li><a href="#services">5. 핵심 서비스 분석</a></li>
+                <li><a href="#api">6. 외부 API 연동</a></li>
+                <li><a href="#roadmap">7. 개발 진행 현황</a></li>
+                <li><a href="#tech">8. 기술 스택 상세</a></li>
+                <li><a href="#screenshots">9. 화면 캡처</a></li>
+                <li><a href="#recommendations">10. 기술 제안 포인트</a></li>
+                <li><a href="#algorithms">11. 핵심 알고리즘 & 수식</a></li>
+                <li><a href="#ai-models">12. AI 모델 상세</a></li>
+                <li><a href="#pipeline">13. 8단계 파이프라인</a></li>
+            </ul>
+        </nav>
+
+        <!-- 1. Executive Summary -->
+        <section id="summary">
+            <h2>1. Executive Summary</h2>
+            <div class="card">
+                <p><strong>프로젝트 정의:</strong> 텍스트 프롬프트만으로 3D 웹 씬을 자동 생성하는 AI 기반 엔진</p>
+                <br>
+                <h3>🎯 핵심 성과</h3>
+                <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li>✅ <strong>Phase 1~4 로드맵 100% 완료</strong></li>
+                    <li>✅ 10개 핵심 서비스 모듈 구현</li>
+                    <li>✅ 103,847줄 프로덕션 코드</li>
+                    <li>✅ Vercel 배포 완료 (web-pilot-engine.vercel.app)</li>
+                </ul>
+                <br>
+                <h3>💡 기술적 차별점</h3>
+                <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li><span class="highlight">Director-Architect-VisualCore</span> 3계층 AI 에이전트 아키텍처</li>
+                    <li><span class="highlight">MCTS 기반</span> 최적 오브젝트 배치 알고리즘</li>
+                    <li><span class="highlight">Yjs CRDT</span> 실시간 멀티플레이어 동기화</li>
+                    <li><span class="highlight">WebGPU</span> 3D Gaussian Splatting 렌더링</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. 메트릭스 -->
+        <section id="metrics">
+            <h2>2. 프로젝트 메트릭스</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">446</div>
+                    <div class="stat-label">소스 파일 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">103,847</div>
+                    <div class="stat-label">코드 라인 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">46</div>
+                    <div class="stat-label">npm 의존성</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">14</div>
+                    <div class="stat-label">서비스 모듈</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">1,908</div>
+                    <div class="stat-label">정적 에셋</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">로드맵 완료율</div>
+                </div>
+            </div>
+
+            <!-- 차트: 코드 구성 비율 (파이 차트) -->
+            <div class="flex">
+                <div class="card flex-1">
+                    <h3>📊 코드 구성 비율</h3>
+                    <div class="mermaid">
+                        pie showData
+                        title 파일 타입별 분포
+                        "TypeScript (55%)" : 55
+                        "TSX/React (25%)" : 25
+                        "CSS/Styles (10%)" : 10
+                        "JSON/Config (7%)" : 7
+                        "기타 (3%)" : 3
+                    </div>
+                </div>
+                <div class="card flex-1">
+                    <h3>🧩 서비스 모듈 비중</h3>
+                    <div class="mermaid">
+                        pie showData
+                        title 14개 서비스 라인 수
+                        "AI Pipeline (28%)" : 28
+                        "Search Services (22%)" : 22
+                        "Generation (18%)" : 18
+                        "Rendering (15%)" : 15
+                        "Multiplayer (10%)" : 10
+                        "Utility (7%)" : 7
+                    </div>
+                </div>
+            </div>
+
+            <!-- 차트: 개발 진행률 (XY 곡선) -->
+            <div class="card">
+                <h3>📈 개발 진행 곡선 (2026년 1월~2월)</h3>
+                <div class="mermaid">
+                    xychart-beta
+                    title "Phase별 코드 라인 증가 추이"
+                    x-axis ["1/15", "1/20", "1/25", "1/30", "2/1", "2/4"]
+                    y-axis "코드 라인 수 (천)" 0 --> 110
+                    line [12, 28, 45, 68, 89, 104]
+                </div>
+                <p style="text-align:center; color:#64748b; margin-top:1rem;">
+                    <strong>Phase 1</strong> (1/15~1/20) → <strong>Phase 2</strong> (1/20~1/25) → <strong>Phase
+                        3</strong> (1/25~1/30) → <strong>Phase 4</strong> (1/30~2/4)
+                </p>
+            </div>
+        </section>
+
+        <!-- 3. 아키텍처 -->
+        <section id="architecture">
+            <h2>3. 시스템 아키텍처</h2>
+            <div class="card">
+                <h3>🏗 아키텍처 다이어그램</h3>
+                <img src="/report_architecture.png" alt="아키텍처 다이어그램" class="screenshot">
+                <p class="screenshot-caption">Director-Architect-VisualCore 3계층 AI 에이전트 + 서비스 레이어 + 데이터/외부 연동</p>
+            </div>
+            <div class="card">
+                <h3>🏗 레이어 구조</h3>
+                <div class="mermaid">
+                    flowchart TD
+                    subgraph L1["📱 PRESENTATION LAYER"]
+                    direction LR
+                    p1["Next.js 16"]
+                    p2["React 19"]
+                    p3["React Three Fiber"]
+                    p4["TailwindCSS"]
+                    end
+
+                    subgraph L2["🤖 AI AGENT LAYER"]
+                    direction LR
+                    Director["Director<br />(LLM)"] --> Architect["Architect<br />(MCTS)"]
+                    Architect --> VisualCore["VisualCore<br />(R3F)"]
+                    end
+
+                    subgraph L3["⚙️ SERVICE LAYER"]
+                    direction LR
+                    s1["VectorSearch"]
+                    s2["SemanticCache"]
+                    s3["Multiplayer"]
+                    s4["Economy"]
+                    s5["XR"]
+                    end
+
+                    subgraph L4["💾 DATA/STORAGE LAYER"]
+                    direction LR
+                    d1["Prisma + SQLite"]
+                    d2["Neo4j Graph"]
+                    d3["R2 Storage"]
+                    d4["Yjs CRDT"]
+                    end
+
+                    subgraph L5["🌐 EXTERNAL SERVICES"]
+                    direction LR
+                    e1["Gemini API"]
+                    e2["Replicate"]
+                    e3["Sketchfab"]
+                    e4["Story Protocol"]
+                    end
+
+                    L1 --> L2
+                    L2 --> L3
+                    L3 --> L4
+                    L4 --> L5
+
+                    style L1 fill:#dbeafe,stroke:#2563eb
+                    style L2 fill:#fef3c7,stroke:#d97706
+                    style L3 fill:#dcfce7,stroke:#059669
+                    style L4 fill:#ede9fe,stroke:#7c3aed
+                    style L5 fill:#fce7f3,stroke:#db2777
+                </div>
+            </div>
+            <div class="card">
+                <h3>🔄 데이터 흐름</h3>
+                <div class="mermaid">
+                    flowchart TB
+                    subgraph Input["📝 입력"]
+                    A["사용자 프롬프트"]
+                    end
+
+                    subgraph Director["🎬 Director Agent"]
+                    B1["시나리오 생성<br />(Gemini LLM)"]
+                    B2["Generator → Critic → Refiner<br />(Reflexion 패턴)"]
+                    end
+
+                    subgraph Architect["📐 Architect Agent"]
+                    C1["오브젝트 배치<br />(MCTS 알고리즘)"]
+                    C2["VectorSearch → CollisionCheck → Scoring"]
+                    end
+
+                    subgraph VisualCore["🎨 VisualCore"]
+                    D1["3D 렌더링<br />(React Three Fiber)"]
+                    D2["GLB 로드 → Physics → PostProcess"]
+                    end
+
+                    subgraph Output["🖥️ 출력"]
+                    E["3D 씬"]
+                    end
+
+                    A --> B1
+                    B1 --> B2
+                    B2 --> C1
+                    C1 --> C2
+                    C2 --> D1
+                    D1 --> D2
+                    D2 --> E
+
+                    style Input fill:#dbeafe,stroke:#2563eb
+                    style Director fill:#fef3c7,stroke:#d97706
+                    style Architect fill:#dcfce7,stroke:#059669
+                    style VisualCore fill:#ede9fe,stroke:#7c3aed
+                    style Output fill:#fce7f3,stroke:#db2777
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 디렉토리 구조 -->
+        <section id="structure">
+            <h2>4. 디렉토리 구조</h2>
+
+            <!-- 트리 다이어그램 -->
+            <div class="card">
+                <h3>📂 src/ 구조 다이어그램</h3>
+                <div class="mermaid">
+                    flowchart LR
+                    subgraph src["📁 src/ (446 파일)"]
+                    app["📁 app/<br />74 파일"]
+                    components["📁 components/<br />99 파일"]
+                    services["📁 services/<br />85 파일"]
+                    lib["📁 lib/<br />51 파일"]
+                    data["📁 data/<br />29 파일"]
+                    hooks["📁 hooks/<br />7 파일"]
+                    store["📁 store/<br />6 파일"]
+                    end
+
+                    app --> api["api/<br />58 엔드포인트"]
+                    app --> showcase["showcase/"]
+                    app --> landing["landing/"]
+
+                    components --> c3d["3d/"]
+                    components --> canvas["canvas/"]
+                    components --> scene["scene/<br />13 파일"]
+                    components --> ui["ui/<br />32 파일"]
+
+                    services --> a2a["a2a/"]
+                    services --> pipeline["ai-pipeline/"]
+                    services --> multi["multiplayer/"]
+                    services --> web3["web3/"]
+
+                    style src fill:#dbeafe,stroke:#2563eb
+                    style app fill:#dcfce7,stroke:#059669
+                    style components fill:#fef3c7,stroke:#d97706
+                    style services fill:#ede9fe,stroke:#7c3aed
+                </div>
+            </div>
+
+            <!-- 디렉토리 상세 테이블 -->
+            <div class="card">
+                <h3>📋 주요 디렉토리 상세</h3>
+                <table>
+                    <tr>
+                        <th>디렉토리</th>
+                        <th>파일 수</th>
+                        <th>역할</th>
+                        <th>주요 파일</th>
+                    </tr>
+                    <tr>
+                        <td><code>app/</code></td>
+                        <td>74</td>
+                        <td>Next.js App Router</td>
+                        <td>page.tsx, api/ (58개 엔드포인트)</td>
+                    </tr>
+                    <tr>
+                        <td><code>components/</code></td>
+                        <td>99</td>
+                        <td>React 컴포넌트</td>
+                        <td>3d/, canvas/, scene/, ui/</td>
+                    </tr>
+                    <tr>
+                        <td><code>services/</code></td>
+                        <td>85</td>
+                        <td>비즈니스 로직</td>
+                        <td>ai-pipeline/, multiplayer/, web3/</td>
+                    </tr>
+                    <tr>
+                        <td><code>lib/</code></td>
+                        <td>51</td>
+                        <td>유틸리티</td>
+                        <td>geometry/ (11), cognitive/ (5)</td>
+                    </tr>
+                    <tr>
+                        <td><code>data/</code></td>
+                        <td>29</td>
+                        <td>정적 데이터</td>
+                        <td>AssetRegistry (630KB), semanticAssets (750KB)</td>
+                    </tr>
+                    <tr>
+                        <td><code>hooks/</code></td>
+                        <td>7</td>
+                        <td>React 훅</td>
+                        <td>useMultiplayerState, useSafeGLTF</td>
+                    </tr>
+                    <tr>
+                        <td><code>store/</code></td>
+                        <td>6</td>
+                        <td>상태 관리</td>
+                        <td>useSceneStore (Zustand)</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. 핵심 서비스 -->
+        <section id="services">
+            <h2>5. 핵심 서비스 분석</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>서비스</th>
+                        <th>카테고리</th>
+                        <th>핵심 기술</th>
+                        <th>파일</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Director Agent</strong></td>
+                        <td><span class="badge badge-purple">AI</span></td>
+                        <td>Reflexion Pattern, Gemini LLM</td>
+                        <td>DirectorAgent.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Architect Agent</strong></td>
+                        <td><span class="badge badge-purple">AI</span></td>
+                        <td>MCTS 배치 알고리즘</td>
+                        <td>ArchitectAgent.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>VectorSearch</strong></td>
+                        <td><span class="badge badge-purple">AI</span></td>
+                        <td>Gemini Embedding, 시맨틱 검색</td>
+                        <td>VectorSearchService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3D Tiles Renderer</strong></td>
+                        <td><span class="badge badge-blue">렌더링</span></td>
+                        <td>OGC 3D Tiles, LOD</td>
+                        <td>TilesViewer.tsx</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3D Gaussian Splatting</strong></td>
+                        <td><span class="badge badge-blue">렌더링</span></td>
+                        <td>WebGPU, GPU Radix Sort</td>
+                        <td>GaussianSplatViewer.tsx</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>LoRA Pipeline</strong></td>
+                        <td><span class="badge badge-purple">AI</span></td>
+                        <td>Replicate API, 개인화 학습</td>
+                        <td>PersonaLoRAService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>LLM-as-a-Judge</strong></td>
+                        <td><span class="badge badge-purple">AI</span></td>
+                        <td>AI 품질 자동 평가</td>
+                        <td>LLMJudgeService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multiplayer CRDT</strong></td>
+                        <td><span class="badge badge-blue">멀티플레이어</span></td>
+                        <td>Yjs CRDT, y-websocket</td>
+                        <td>MultiplayerSyncService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Voronoi Partition</strong></td>
+                        <td><span class="badge badge-blue">멀티플레이어</span></td>
+                        <td>월드 분할, 동적 로드밸런싱</td>
+                        <td>VoronoiPartitionService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>ERC-6551 TBA</strong></td>
+                        <td><span class="badge badge-orange">블록체인</span></td>
+                        <td>Token Bound Account</td>
+                        <td>TokenBoundAccountService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Story Protocol</strong></td>
+                        <td><span class="badge badge-orange">블록체인</span></td>
+                        <td>IP 라이선싱, 로열티</td>
+                        <td>StoryProtocolService.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Economy Simulator</strong></td>
+                        <td><span class="badge badge-purple">시뮬레이션</span></td>
+                        <td>자율 에이전트 경제</td>
+                        <td>AgentEconomySimulator.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>MR Platform</strong></td>
+                        <td><span class="badge badge-blue">XR</span></td>
+                        <td>WebXR, 공간 앵커</td>
+                        <td>MRLifestylePlatform.ts</td>
+                        <td><span class="badge badge-green">완료</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 6. API 연동 -->
+        <section id="api">
+            <h2>6. 외부 API 연동 현황</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>API</th>
+                        <th>용도</th>
+                        <th>연동 파일</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Google Gemini</strong></td>
+                        <td>LLM 추론, 임베딩 생성</td>
+                        <td>GeminiService.ts, VectorSearchService.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Replicate</strong></td>
+                        <td>LoRA 학습, 이미지 생성</td>
+                        <td>PersonaLoRAService.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ElevenLabs</strong></td>
+                        <td>TTS 음성 합성</td>
+                        <td>ElevenLabsService.ts, TTSService.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sketchfab</strong></td>
+                        <td>3D 모델 검색/다운로드</td>
+                        <td>api/sketchfab/route.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tripo3D / Hyper3D</strong></td>
+                        <td>텍스트→3D 생성</td>
+                        <td>TripoService.ts, Hyper3DService.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neo4j</strong></td>
+                        <td>지식 그래프 저장</td>
+                        <td>Neo4jService.ts</td>
+                        <td>Mock 모드 지원</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cloudflare R2</strong></td>
+                        <td>에셋 스토리지</td>
+                        <td>R2StorageService.ts</td>
+                        <td>환경변수로 관리</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 7. 로드맵 -->
+        <section id="roadmap">
+            <h2>7. 개발 진행 현황</h2>
+            <div class="card">
+                <h3>Phase 1: 리소스 파운데이션</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">3D 모델 1,600+ 수집, SFX 62개 생성 완료</p>
+            </div>
+            <div class="card">
+                <h3>Phase 2: AI 에이전트 협업</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">A2A 프로토콜, Director/Architect/VisualCore 구현 완료
+                </p>
+            </div>
+            <div class="card">
+                <h3>Phase 3: 서사적 정합성</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">Neo4j 지식 그래프, NarrativeManager 구현 완료</p>
+            </div>
+            <div class="card">
+                <h3>Phase 4: 중장기 발전</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                <p style="margin-top: 0.5rem; color: var(--text-muted);">3D Tiles, 3DGS, CRDT, 블록체인, AI 경제, MR 플랫폼 완료
+                </p>
+            </div>
+        </section>
+
+        <!-- 8. 기술 스택 -->
+        <section id="tech">
+            <h2>8. 기술 스택 상세</h2>
+            <div class="flex">
+                <div class="card flex-1">
+                    <h3>🖥 Frontend</h3>
+                    <ul style="margin-left: 1rem;">
+                        <li>Next.js 16 (App Router)</li>
+                        <li>React 19</li>
+                        <li>React Three Fiber 9</li>
+                        <li>Three.js 0.160</li>
+                        <li>TailwindCSS 3.4</li>
+                        <li>Zustand 4.5 (상태관리)</li>
+                        <li>XState 5.6 (상태머신)</li>
+                        <li>Framer Motion 11 (애니메이션)</li>
+                    </ul>
+                </div>
+                <div class="card flex-1">
+                    <h3>🤖 AI/ML</h3>
+                    <ul style="margin-left: 1rem;">
+                        <li>Google Gemini (LLM)</li>
+                        <li>Vercel AI SDK 3.0</li>
+                        <li>Replicate (LoRA)</li>
+                        <li>Vector Embedding</li>
+                        <li>MCTS 알고리즘</li>
+                        <li>Reflexion Pattern</li>
+                    </ul>
+                </div>
+                <div class="card flex-1">
+                    <h3>🌐 3D/Graphics</h3>
+                    <ul style="margin-left: 1rem;">
+                        <li>3D Tiles Renderer</li>
+                        <li>Gaussian Splats 3D</li>
+                        <li>Rapier Physics</li>
+                        <li>Draco Compression</li>
+                        <li>PostProcessing</li>
+                    </ul>
+                </div>
+                <div class="card flex-1">
+                    <h3>🔧 Backend/Infra</h3>
+                    <ul style="margin-left: 1rem;">
+                        <li>Prisma + SQLite</li>
+                        <li>Neo4j (Graph DB)</li>
+                        <li>Yjs + y-websocket</li>
+                        <li>Vercel (배포)</li>
+                        <li>Cloudflare R2</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. 스크린샷 -->
+        <section id="screenshots">
+            <h2>9. 화면 캡처</h2>
+            <div class="card">
+                <h3>메인 3D 에디터</h3>
+                <img src="/report_main.png" alt="메인 페이지" class="screenshot">
+                <p class="screenshot-caption">Director Chat Panel을 통한 AI 기반 3D 씬 생성 인터페이스</p>
+            </div>
+            <div class="card">
+                <h3>🎬 Director Agent AI 씬 생성 시연</h3>
+                <img src="/report_director_demo.png" alt="Director 시연" class="screenshot">
+                <p class="screenshot-caption">"중세 성 앞에 기사와 드래곤이 대치하는 장면" 프롬프트로 13개 오브젝트 자동 생성</p>
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 0.5rem;">
+                    <h4 style="color: #10b981; margin-bottom: 0.5rem;">📋 주요 콘솔 로그</h4>
+                    <code style="display: block; white-space: pre-wrap; font-size: 0.8rem; color: #94a3b8;">
+[Studio] AI 생성 씬으로 진입: 13 개 오브젝트
+[AutoScale] dragon.glb → 1.3m → 3.2m (× 10.38배)
+[AutoScale] platformer-kit_flag.glb → 0.04m → 3.0m
+[Category] creatures | axis: Y
+[시나리오 분석 완료] 14개 요소 도출
+[공간 배치 완료] 13개 오브젝트
+[렌더링 완료] 13개 오브젝트
+                    </code>
+                </div>
+            </div>
+            <div class="card">
+                <h3>서비스 쇼케이스</h3>
+                <img src="/report_showcase.png" alt="쇼케이스" class="screenshot">
+                <p class="screenshot-caption">구현된 10개 핵심 서비스 대시보드 및 실시간 AI 경제 시뮬레이션</p>
+            </div>
+            <div class="card">
+                <h3>랜딩 페이지</h3>
+                <img src="/report_landing.png" alt="랜딩 페이지" class="screenshot">
+                <p class="screenshot-caption">사용자 온보딩을 위한 랜딩 페이지</p>
+            </div>
+
+            <!-- 2026-02-04 추가 스크린샷 -->
+            <div class="card">
+                <h3>🎮 Game 모드 - 3D 마을 씬</h3>
+                <img src="/screenshot_game_mode.png" alt="Game Mode" class="screenshot">
+                <p class="screenshot-caption">AI가 생성한 3D 마을 씬. 로봇 캐릭터, 건물, 조명이 포함된 인터랙티브 환경. WASD 이동, 시점 회전, 점프 등 컨트롤
+                    지원.</p>
+            </div>
+            <div class="card">
+                <h3>🎬 Studio 모드 - Director Agent</h3>
+                <img src="/screenshot_studio_mode.png" alt="Studio Mode" class="screenshot">
+                <p class="screenshot-caption">"판타지 레고 월드" 프롬프트로 14개 오브젝트를 자동 생성. Director Agent가 시나리오 분석 → 공간 배치 → 렌더링까지
+                    수행.</p>
+            </div>
+            <div class="card">
+                <h3>🏘️ Game 모드 - 마을 전경</h3>
+                <img src="/screenshot_game_view2.png" alt="Village Overview" class="screenshot">
+                <p class="screenshot-caption">다양한 각도에서 본 마을 전경. 실시간 조명, 그림자, 바운딩 박스 디버그 뷰 지원.</p>
+            </div>
+            <div class="card">
+                <h3>⚡ 로딩 화면</h3>
+                <img src="/screenshot_loading.png" alt="Loading Screen" class="screenshot">
+                <p class="screenshot-caption">WebPilot 엔진 로딩 화면. 에셋 로딩 진행률 표시 (88%).</p>
+            </div>
+        </section>
+
+        <!-- 10. 기술 제안 포인트 -->
+        <section id="recommendations">
+            <h2>10. 기술 제안 포인트</h2>
+            <div class="card">
+                <h3>🚀 핵심 경쟁력</h3>
+                <table>
+                    <tr>
+                        <td><strong>1. AI 에이전트 아키텍처</strong></td>
+                        <td>Director-Architect-VisualCore 3계층 구조로 복잡한 3D 씬 생성을 자동화. Reflexion Pattern으로 자기 개선.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. 시맨틱 에셋 검색</strong></td>
+                        <td>Gemini Embedding + 26만 라인 에셋 데이터베이스로 자연어 기반 3D 모델 검색 지원.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. 실시간 협업</strong></td>
+                        <td>Yjs CRDT 기반 충돌 없는 동시 편집. 오프라인 지원, 자동 동기화.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. 최신 렌더링 기술</strong></td>
+                        <td>WebGPU 기반 3D Gaussian Splatting으로 실사급 씬 렌더링. LOD 자동 품질 조절.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. 블록체인 통합</strong></td>
+                        <td>ERC-6551 Token Bound Account + Story Protocol로 디지털 자산 소유권 및 로열티 관리.</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <h3>📈 확장 가능성</h3>
+                <ul style="margin-left: 1rem;">
+                    <li><strong>메타버스 플랫폼:</strong> AI 경제 시뮬레이터를 통한 자율 NPC 생태계 구축</li>
+                    <li><strong>MR 라이프스타일:</strong> WebXR 기반 MR 경험 플랫폼</li>
+                    <li><strong>MMO 스케일링:</strong> Voronoi 파티셔닝으로 대규모 월드 지원</li>
+                    <li><strong>NPC 개인화:</strong> LoRA 파이프라인으로 캐릭터별 AI 모델 학습</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>⚠️ 향후 개선 사항</h3>
+                <ul style="margin-left: 1rem;">
+                    <li>테스트 커버리지 확대 (현재 E2E 테스트 중심)</li>
+                    <li>블록체인 테스트넷 실제 배포 및 검증</li>
+                    <li>성능 프로파일링 및 번들 사이즈 최적화</li>
+                    <li>사용자 인증 및 권한 관리 고도화</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 11. 핵심 알고리즘 & 수식 -->
+        <section id="algorithms">
+            <h2>11. 핵심 알고리즘 & 수식</h2>
+
+            <div class="card">
+                <h3>🔍 시맨틱 검색 - 코사인 유사도 (Cosine Similarity)</h3>
+                <p>768차원 임베딩 벡터 간의 의미적 유사도를 계산합니다. 값 범위는 -1 ~ 1이며, 1에 가까울수록 의미가 유사합니다.</p>
+                <div class="tree">
+                    $$\text{similarity}(A, B) = \cos(\theta) = \frac{A \cdot B}{\|A\| \|B\|} = \frac{\sum_{i=1}^{n} A_i
+                    B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \cdot \sqrt{\sum_{i=1}^{n} B_i^2}}$$
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 렉시컬 검색 - BM25 (Best Matching 25)</h3>
+                <p>키워드 기반 검색 알고리즘. TF-IDF의 개선 버전으로, 문서 길이 정규화를 적용합니다.</p>
+                <div class="tree">
+                    $$\text{score}(D, Q) = \sum_{i=1}^{n} \text{IDF}(q_i) \cdot \frac{f(q_i, D) \cdot (k_1 + 1)}{f(q_i,
+                    D) + k_1 \cdot (1 - b + b \cdot \frac{|D|}{\text{avgdl}})}$$
+                </div>
+                <table>
+                    <tr>
+                        <td><code>f(q_i, D)</code></td>
+                        <td>문서 D에서 쿼리 단어 q_i의 빈도</td>
+                    </tr>
+                    <tr>
+                        <td><code>|D|</code></td>
+                        <td>문서 길이</td>
+                    </tr>
+                    <tr>
+                        <td><code>avgdl</code></td>
+                        <td>평균 문서 길이</td>
+                    </tr>
+                    <tr>
+                        <td><code>k_1 = 1.5, b = 0.75</code></td>
+                        <td>튜닝 파라미터</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>🔀 하이브리드 검색 - RRF (Reciprocal Rank Fusion)</h3>
+                <p>Vector 검색과 BM25 검색 결과를 융합하여 최종 랭킹을 결정합니다.</p>
+                <div class="tree">
+                    $$\text{RRF}(d) = \sum_{r \in R} \frac{1}{k + r(d)}$$
+                </div>
+                <p><code>k = 60</code>은 상위 순위에 과도한 가중치를 방지합니다. Vector(70%) + BM25(30%) 가중치 결합.</p>
+            </div>
+
+            <div class="card">
+                <h3>🌲 공간 배치 - MCTS (Monte Carlo Tree Search)</h3>
+                <p>충돌 없는 최적 오브젝트 배치를 탐색합니다. 탐색(Exploration)과 활용(Exploitation)의 균형을 맞춥니다.</p>
+                <div class="tree">
+                    $$\text{UCB1} = \bar{X}_j + C \sqrt{\frac{\ln N}{n_j}}$$
+                </div>
+                <table>
+                    <tr>
+                        <td><code>X̄_j</code></td>
+                        <td>노드 j의 평균 보상 (배치 품질 점수)</td>
+                    </tr>
+                    <tr>
+                        <td><code>N</code></td>
+                        <td>부모 노드 방문 횟수</td>
+                    </tr>
+                    <tr>
+                        <td><code>n_j</code></td>
+                        <td>자식 노드 j 방문 횟수</td>
+                    </tr>
+                    <tr>
+                        <td><code>C = √2</code></td>
+                        <td>탐색 상수</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>📦 충돌 감지 - BVH (Bounding Volume Hierarchy)</h3>
+                <p>O(log n) 시간 복잡도로 충돌을 감지합니다. 모든 축(x, y, z)에서 AABB가 겹치면 충돌입니다.</p>
+                <div class="tree">
+                    $$\text{AABB Overlap} = (A_{min} \leq B_{max}) \land (A_{max} \geq B_{min})$$
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🛡️ 시맨틱 가드레일 - 중복 생성 방지</h3>
+                <p>쿼리 컨셉과 기존 에셋의 유사도가 임계값(θ = 90%) 이상이면 중복으로 판단하여 AI 생성을 차단합니다.</p>
+                <div class="tree">
+                    $$\text{isDuplicate} = \text{similarity}(q, \text{bestMatch}) \geq \theta_{threshold}$$
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. AI 모델 상세 -->
+        <section id="ai-models">
+            <h2>12. AI 모델 상세</h2>
+            <div class="flex">
+                <div class="card flex-1">
+                    <h3>🧠 언어 이해 & 임베딩</h3>
+                    <table>
+                        <tr>
+                            <th>모델</th>
+                            <td><code>Gemini 1.5 Flash</code></td>
+                        </tr>
+                        <tr>
+                            <th>용도</th>
+                            <td>프롬프트 분석, 씬 명세 생성</td>
+                        </tr>
+                        <tr>
+                            <th>출력</th>
+                            <td>JSON 형식 SceneSpecification</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card flex-1">
+                    <h3>🔢 벡터 임베딩</h3>
+                    <table>
+                        <tr>
+                            <th>모델</th>
+                            <td><code>text-embedding-004</code></td>
+                        </tr>
+                        <tr>
+                            <th>차원</th>
+                            <td>768차원 벡터</td>
+                        </tr>
+                        <tr>
+                            <th>제공사</th>
+                            <td>Google AI</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="card flex-1">
+                    <h3>🎨 3D 모델 생성</h3>
+                    <table>
+                        <tr>
+                            <th>모델</th>
+                            <td><code>Tripo3D v2.0</code></td>
+                        </tr>
+                        <tr>
+                            <th>용도</th>
+                            <td>Text-to-3D 모델 생성</td>
+                        </tr>
+                        <tr>
+                            <th>출력</th>
+                            <td>GLB 포맷 3D 모델</td>
+                        </tr>
+                        <tr>
+                            <th>소요</th>
+                            <td>약 30-60초/개</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card flex-1">
+                    <h3>⚡ 고품질 3D 생성</h3>
+                    <table>
+                        <tr>
+                            <th>모델</th>
+                            <td><code>Hyper3D (Rodin Gen-1)</code></td>
+                        </tr>
+                        <tr>
+                            <th>용도</th>
+                            <td>핵심 에셋 고품질 생성</td>
+                        </tr>
+                        <tr>
+                            <th>특징</th>
+                            <td>PBR 텍스처, LOD 지원</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card flex-1">
+                    <h3>🌅 Skybox 생성</h3>
+                    <table>
+                        <tr>
+                            <th>모델</th>
+                            <td><code>Blockade Labs Skybox AI</code></td>
+                        </tr>
+                        <tr>
+                            <th>용도</th>
+                            <td>360° HDR 스카이박스</td>
+                        </tr>
+                        <tr>
+                            <th>해상도</th>
+                            <td>4096×2048 Equirectangular</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. 8단계 파이프라인 -->
+        <section id="pipeline">
+            <h2>13. 8단계 AI 파이프라인</h2>
+            <div class="card">
+                <h3>⚙️ 전체 데이터 흐름</h3>
+                <div class="mermaid">
+                    sequenceDiagram
+                    participant U as 사용자
+                    participant G as Gemini
+                    participant V as VectorSearch
+                    participant T as Tripo3D
+                    participant M as MCTS
+                    participant R as Renderer
+
+                    U->>G: "호그와트 기숙사"
+                    G->>G: 프롬프트 분석
+                    G-->>V: {objects: [bed, candle, banner...]}
+
+                    loop 각 오브젝트
+                    V->>V: Embed(query) → 768D vector
+                    V->>V: CosineSim + BM25 → RRF
+                    alt 유사도 ≥ 90%
+                    V-->>M: 기존 에셋 URL
+                    else 유사도 < 90% V->>T: AI 생성 요청
+                        T-->>V: GLB URL
+                        V->>V: Upsert (런타임 색인)
+                        end
+                        end
+
+                        M->>M: MCTS 1000회 시뮬레이션
+                        M->>M: UCB1 Selection
+                        M->>M: BVH 충돌 검사
+                        M-->>R: PlacementResult[]
+
+                        R->>R: Three.js 씬 구성
+                        R-->>U: 3D 세계 렌더링
+                </div>
+            </div>
+            <div class="card">
+                <h3>📋 단계별 요약</h3>
+                <table>
+                    <tr>
+                        <th>단계</th>
+                        <th>이름</th>
+                        <th>설명</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Prompt Analysis</td>
+                        <td>Gemini Flash로 개념 추출</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Scene Spec</td>
+                        <td>JSON 명세, 오브젝트 정의</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Hybrid Search</td>
+                        <td>Vector+BM25, RRF 융합</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Guardrail</td>
+                        <td>90% 임계값, 중복 차단</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>AI Generate</td>
+                        <td>Tripo/Hyper3D GLB 생성</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>MCTS Place</td>
+                        <td>UCB1 탐색, BVH 충돌</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Scale Reason</td>
+                        <td>실제 크기 비율 계산</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Render</td>
+                        <td>Three.js, WebGL 2.0</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2026 WebPilot Engine | AI 기반 3D 웹 씬 생성 엔진</p>
+        <p style="margin-top: 0.5rem;">Generated: 2026-02-04 15:00 KST</p>
+    </footer>
+</body>
+
+</html>

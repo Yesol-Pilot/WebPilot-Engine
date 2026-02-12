@@ -1,0 +1,10 @@
+{
+  "id": "bgm_action_stealth",
+  "category": "action",
+  "type": "ambient_bgm",
+  "prompt": "Stealth mission ambient, soft electronic pulse, quiet tension, minimal piano notes, shadow infiltration atmosphere, careful and precise, seamless loop",
+  "durationTarget": 10,
+  "fileSize": 160958,
+  "loopable": true,
+  "createdAt": "2026-02-11T03:24:59.142Z"
+}

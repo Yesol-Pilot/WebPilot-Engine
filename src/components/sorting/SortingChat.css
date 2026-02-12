@@ -1,0 +1,338 @@
+/**
+ * SortingChat 컴포넌트 스타일
+ * 
+ * 소팅햇 채팅 UI - 화면 중앙 배치, Glassmorphism 스타일
+ */
+
+/* 채팅 컨테이너 - 중앙 배치 */
+.sorting-chat-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 650px;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    font-family: Georgia, serif;
+    z-index: 100;
+}
+
+/* 헤더 */
+.sorting-chat-header {
+    padding: 16px;
+    background: linear-gradient(90deg, #740001 0%, #ae0001 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sorting-chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sorting-chat-header-icon {
+    font-size: 28px;
+}
+
+.sorting-chat-header-title {
+    margin: 0;
+    color: #ffd700;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sorting-chat-header-subtitle {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+}
+
+.sorting-chat-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.sorting-chat-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 점수 바 */
+.sorting-chat-score-bar {
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.sorting-chat-score-track {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.sorting-chat-score-gryffindor {
+    background: #740001;
+    transition: width 0.5s ease;
+}
+
+.sorting-chat-score-slytherin {
+    background: #1a472a;
+    transition: width 0.5s ease;
+}
+
+.sorting-chat-score-ravenclaw {
+    background: #0e1a40;
+    transition: width 0.5s ease;
+}
+
+.sorting-chat-score-hufflepuff {
+    background: #ecb939;
+    transition: width 0.5s ease;
+}
+
+/* 메시지 영역 */
+.sorting-chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 시작 화면 */
+.sorting-chat-start-screen {
+    text-align: center;
+    color: #ffd700;
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.sorting-chat-start-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.sorting-chat-start-quote {
+    font-style: italic;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.sorting-chat-start-btn {
+    padding: 14px 36px;
+    background: linear-gradient(90deg, #740001, #ae0001);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sorting-chat-start-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(116, 0, 1, 0.4);
+}
+
+.sorting-chat-start-btn:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+/* 메시지 말풍선 */
+.sorting-chat-message {
+    max-width: 85%;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.sorting-chat-message-hat {
+    align-self: flex-start;
+    border-radius: 16px 16px 16px 4px;
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.sorting-chat-message-user {
+    align-self: flex-end;
+    border-radius: 16px 16px 4px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.sorting-chat-message-icon {
+    margin-right: 8px;
+}
+
+/* 로딩 */
+.sorting-chat-loading {
+    align-self: flex-start;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700;
+}
+
+/* 결과 화면 */
+.sorting-chat-result {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: sorting-fadeIn 0.5s ease;
+}
+
+.sorting-chat-result-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.sorting-chat-result-title {
+    color: white;
+    font-size: 36px;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sorting-chat-result-text {
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 16px;
+    text-align: center;
+    padding: 0 20px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.sorting-chat-result-btn {
+    margin-top: 30px;
+    padding: 12px 28px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.sorting-chat-result-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 입력 영역 */
+.sorting-chat-input-area {
+    padding: 16px;
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    display: flex;
+    gap: 10px;
+}
+
+.sorting-chat-input {
+    flex: 1;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.sorting-chat-input:focus {
+    border-color: rgba(255, 215, 0, 0.6);
+}
+
+.sorting-chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sorting-chat-send-btn {
+    padding: 14px 24px;
+    background: linear-gradient(90deg, #740001, #ae0001);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.sorting-chat-send-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.sorting-chat-send-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
+
+/* 애니메이션 */
+@keyframes sorting-fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 타이핑 애니메이션 */
+.sorting-typing-dots::after {
+    content: '';
+    animation: sorting-dots 1.5s infinite;
+}
+
+@keyframes sorting-dots {
+
+    0%,
+    20% {
+        content: '.';
+    }
+
+    40% {
+        content: '..';
+    }
+
+    60%,
+    100% {
+        content: '...';
+    }
+}
+
+/* 반응형 */
+@media (max-width: 600px) {
+    .sorting-chat-container {
+        width: 95%;
+        height: 85%;
+        border-radius: 16px;
+    }
+}

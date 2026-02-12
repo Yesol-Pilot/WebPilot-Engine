@@ -1,0 +1,9 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <rect width="512" height="512" fill="#5c4033"/>
+ <filter id="noise">
+  <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" stitchTiles="stitch"/>
+  <feColorMatrix type="saturate" values="0.2"/>
+ </filter>
+ <rect width="512" height="512" filter="url(#noise)" opacity="0.4"/>
+ <path d="M0 50h512M0 150h512M0 250h512M0 350h512M0 450h512" stroke="#3e2b22" stroke-width="3"/>
+</svg>

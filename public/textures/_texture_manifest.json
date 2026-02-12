@@ -1,0 +1,2400 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-11T02:14:38.357Z",
+  "totalEntries": 100,
+  "source": "Poly Haven (CC0)",
+  "resolution": "1k",
+  "entries": [
+    {
+      "id": "texture/concrete/aerial_asphalt_01",
+      "slug": "aerial_asphalt_01",
+      "materialType": "concrete",
+      "tags": [
+        "road",
+        "flat",
+        "cracked"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/aerial_asphalt_01",
+      "totalSize": 726883,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_01",
+      "slug": "aerial_beach_01",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "wavy",
+        "costal",
+        "ocean",
+        "seaside"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_01",
+      "totalSize": 453140,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_02",
+      "slug": "aerial_beach_02",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "flat",
+        "costal",
+        "ocean",
+        "seaside"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_02",
+      "totalSize": 245092,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_03",
+      "slug": "aerial_beach_03",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "seaside",
+        "sand",
+        "trampled",
+        "uneven",
+        "brown",
+        "footprints",
+        "costal",
+        "ocean"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_03",
+      "totalSize": 513186,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_grass_rock",
+      "slug": "aerial_grass_rock",
+      "materialType": "stone",
+      "tags": [
+        "moss",
+        "grass",
+        "cliff",
+        "cave",
+        "rock face"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_grass_rock",
+      "totalSize": 1121785,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/ground/aerial_ground_rock",
+      "slug": "aerial_ground_rock",
+      "materialType": "ground",
+      "tags": [
+        "mud",
+        "rocks",
+        "stones",
+        "dirt",
+        "dry"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/ground/aerial_ground_rock",
+      "totalSize": 800069,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/ground/aerial_mud_1",
+      "slug": "aerial_mud_1",
+      "materialType": "ground",
+      "tags": [
+        "mud",
+        "tracks",
+        "tire tracks",
+        "wet soil",
+        "uneven surface",
+        "ruts",
+        "surface depressions"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/ground/aerial_mud_1",
+      "totalSize": 1061733,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_01",
+      "slug": "aerial_rocks_01",
+      "materialType": "stone",
+      "tags": [
+        "rocks",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_01",
+      "totalSize": 1681673,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_02",
+      "slug": "aerial_rocks_02",
+      "materialType": "stone",
+      "tags": [
+        "rocks",
+        "rough",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_02",
+      "totalSize": 1389045,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_04",
+      "slug": "aerial_rocks_04",
+      "materialType": "stone",
+      "tags": [
+        "rough",
+        "rocks",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_04",
+      "totalSize": 1488547,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_sand",
+      "slug": "aerial_sand",
+      "materialType": "sand",
+      "tags": [
+        "sand",
+        "costal",
+        "seaside",
+        "ocean",
+        "sea"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_sand",
+      "totalSize": 850116,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/aerial_wood_snips",
+      "slug": "aerial_wood_snips",
+      "materialType": "wood",
+      "tags": [
+        "rough",
+        "wood",
+        "mud",
+        "dirt",
+        "wood chips",
+        "wood splinters",
+        "tire tracks",
+        "organic debris",
+        "earth"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/aerial_wood_snips",
+      "totalSize": 1461313,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/tile/anti_skid_tiles",
+      "slug": "anti_skid_tiles",
+      "materialType": "tile",
+      "tags": [
+        "antislip",
+        "antiskid",
+        "tiles",
+        "patio",
+        "nonslip",
+        "grip",
+        "slipresistant",
+        "durable"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/tile/anti_skid_tiles",
+      "totalSize": 1427878,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/anti_slip_concrete",
+      "slug": "anti_slip_concrete",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "concrete",
+        "antislip",
+        "outdoor",
+        "weathered",
+        "exterior",
+        "scuffed",
+        "chipped",
+        "scratched",
+        "nonslip",
+        "pavement",
+        "rough  ",
+        "coarse"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/anti_slip_concrete",
+      "totalSize": 1578132,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/asbestos_sheet",
+      "slug": "asbestos_sheet",
+      "materialType": "brick",
+      "tags": [
+        "asbestos",
+        "corrugated",
+        "dirty",
+        "sheet",
+        "corrugation",
+        "industrial",
+        "material",
+        "fireresistant"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/asbestos_sheet",
+      "totalSize": 1005958,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/asbestos_sheet_02",
+      "slug": "asbestos_sheet_02",
+      "materialType": "brick",
+      "tags": [
+        "asbestos",
+        "sheet",
+        "asbestos sheet",
+        "corrugated",
+        "dirty",
+        "fireresistant",
+        "building material",
+        "durable"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/asbestos_sheet_02",
+      "totalSize": 1051456,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_01",
+      "slug": "asphalt_01",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "dirty",
+        "asphalt",
+        "road",
+        "worn"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_01",
+      "totalSize": 2324004,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_02",
+      "slug": "asphalt_02",
+      "materialType": "concrete",
+      "tags": [
+        "asphalt",
+        "cracked",
+        "flat",
+        "road",
+        "asphalt road",
+        "tarmac road",
+        "gritty",
+        "weathered",
+        "grey",
+        "cracking",
+        "tar",
+        "cracks"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_02",
+      "totalSize": 1536892,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_03",
+      "slug": "asphalt_03",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "worn",
+        "dirty",
+        "floor",
+        "road",
+        "asphalt",
+        "city",
+        "urban"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_03",
+      "totalSize": 2028543,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_04",
+      "slug": "asphalt_04",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "weathered",
+        "dry",
+        "cracked",
+        "discolored",
+        "asphalt",
+        "road",
+        "street"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_04",
+      "totalSize": 1540821,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_05",
+      "slug": "asphalt_05",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "floor",
+        "road",
+        "asphalt",
+        "coarse",
+        "brown",
+        "street",
+        "roadway"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_05",
+      "totalSize": 2230236,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_06",
+      "slug": "asphalt_06",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "dirty",
+        "scuffed",
+        "driveway texture",
+        "sidewalk",
+        "hard surface",
+        "handmade",
+        "raw"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_06",
+      "totalSize": 1279332,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_07",
+      "slug": "asphalt_07",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "weathered",
+        "asphalt",
+        "chipped",
+        "granular",
+        "abrasive",
+        "road",
+        "paving"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_07",
+      "totalSize": 1783143,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_floor",
+      "slug": "asphalt_floor",
+      "materialType": "concrete",
+      "tags": [
+        "flat",
+        "asphalt",
+        "brown",
+        "even",
+        "dry",
+        "smooth",
+        "ground"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_floor",
+      "totalSize": 2144389,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_pit_lane",
+      "slug": "asphalt_pit_lane",
+      "materialType": "concrete",
+      "tags": [
+        "asphalt",
+        "asphalt road",
+        "road",
+        "roadway",
+        "tarmac road",
+        "race track",
+        "pit lane"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_pit_lane",
+      "totalSize": 1720911,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_snow",
+      "slug": "asphalt_snow",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "asphalt",
+        "road",
+        "snow",
+        "urban",
+        "floor"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_snow",
+      "totalSize": 2059180,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_track",
+      "slug": "asphalt_track",
+      "materialType": "concrete",
+      "tags": [
+        "track",
+        "asphalt",
+        "racing",
+        "road",
+        "speedway",
+        "asphalt road",
+        "race track",
+        "tarmac road"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_track",
+      "totalSize": 1362747,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_bluegum",
+      "slug": "bark_bluegum",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "tree bark",
+        "tree bark texture",
+        "tree trunk",
+        "nature",
+        "outdoor",
+        "bluegum",
+        "organic",
+        "environment",
+        "forest"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_bluegum",
+      "totalSize": 1712849,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_brown_01",
+      "slug": "bark_brown_01",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "forest",
+        "knots",
+        "bark grooves",
+        "tree bark",
+        "tree trunk"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_brown_01",
+      "totalSize": 1462823,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_brown_02",
+      "slug": "bark_brown_02",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "forest",
+        "knots",
+        "wooden knots",
+        "tree trunk"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_brown_02",
+      "totalSize": 1248365,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/aerial_asphalt_01",
+      "slug": "aerial_asphalt_01",
+      "materialType": "concrete",
+      "tags": [
+        "road",
+        "flat",
+        "cracked"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/aerial_asphalt_01",
+      "totalSize": 726883,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_01",
+      "slug": "aerial_beach_01",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "wavy",
+        "costal",
+        "ocean",
+        "seaside"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_01",
+      "totalSize": 453140,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_02",
+      "slug": "aerial_beach_02",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "flat",
+        "costal",
+        "ocean",
+        "seaside"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_02",
+      "totalSize": 245092,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_beach_03",
+      "slug": "aerial_beach_03",
+      "materialType": "sand",
+      "tags": [
+        "beach",
+        "seaside",
+        "sand",
+        "trampled",
+        "uneven",
+        "brown",
+        "footprints",
+        "costal",
+        "ocean"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_beach_03",
+      "totalSize": 513186,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_grass_rock",
+      "slug": "aerial_grass_rock",
+      "materialType": "stone",
+      "tags": [
+        "moss",
+        "grass",
+        "cliff",
+        "cave",
+        "rock face"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_grass_rock",
+      "totalSize": 1121785,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/ground/aerial_ground_rock",
+      "slug": "aerial_ground_rock",
+      "materialType": "ground",
+      "tags": [
+        "mud",
+        "rocks",
+        "stones",
+        "dirt",
+        "dry"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/ground/aerial_ground_rock",
+      "totalSize": 800069,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/ground/aerial_mud_1",
+      "slug": "aerial_mud_1",
+      "materialType": "ground",
+      "tags": [
+        "mud",
+        "tracks",
+        "tire tracks",
+        "wet soil",
+        "uneven surface",
+        "ruts",
+        "surface depressions"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/ground/aerial_mud_1",
+      "totalSize": 1061733,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_01",
+      "slug": "aerial_rocks_01",
+      "materialType": "stone",
+      "tags": [
+        "rocks",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_01",
+      "totalSize": 1681673,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_02",
+      "slug": "aerial_rocks_02",
+      "materialType": "stone",
+      "tags": [
+        "rocks",
+        "rough",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_02",
+      "totalSize": 1389045,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/aerial_rocks_04",
+      "slug": "aerial_rocks_04",
+      "materialType": "stone",
+      "tags": [
+        "rough",
+        "rocks",
+        "moss",
+        "cliff",
+        "rock face",
+        "cave"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/aerial_rocks_04",
+      "totalSize": 1488547,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/aerial_sand",
+      "slug": "aerial_sand",
+      "materialType": "sand",
+      "tags": [
+        "sand",
+        "costal",
+        "seaside",
+        "ocean",
+        "sea"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/aerial_sand",
+      "totalSize": 850116,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/aerial_wood_snips",
+      "slug": "aerial_wood_snips",
+      "materialType": "wood",
+      "tags": [
+        "rough",
+        "wood",
+        "mud",
+        "dirt",
+        "wood chips",
+        "wood splinters",
+        "tire tracks",
+        "organic debris",
+        "earth"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/aerial_wood_snips",
+      "totalSize": 1461313,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/tile/anti_skid_tiles",
+      "slug": "anti_skid_tiles",
+      "materialType": "tile",
+      "tags": [
+        "antislip",
+        "antiskid",
+        "tiles",
+        "patio",
+        "nonslip",
+        "grip",
+        "slipresistant",
+        "durable"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/tile/anti_skid_tiles",
+      "totalSize": 1427878,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/anti_slip_concrete",
+      "slug": "anti_slip_concrete",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "concrete",
+        "antislip",
+        "outdoor",
+        "weathered",
+        "exterior",
+        "scuffed",
+        "chipped",
+        "scratched",
+        "nonslip",
+        "pavement",
+        "rough  ",
+        "coarse"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/anti_slip_concrete",
+      "totalSize": 1578132,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/asbestos_sheet",
+      "slug": "asbestos_sheet",
+      "materialType": "brick",
+      "tags": [
+        "asbestos",
+        "corrugated",
+        "dirty",
+        "sheet",
+        "corrugation",
+        "industrial",
+        "material",
+        "fireresistant"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/asbestos_sheet",
+      "totalSize": 1005958,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/asbestos_sheet_02",
+      "slug": "asbestos_sheet_02",
+      "materialType": "brick",
+      "tags": [
+        "asbestos",
+        "sheet",
+        "asbestos sheet",
+        "corrugated",
+        "dirty",
+        "fireresistant",
+        "building material",
+        "durable"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/asbestos_sheet_02",
+      "totalSize": 1051456,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_01",
+      "slug": "asphalt_01",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "dirty",
+        "asphalt",
+        "road",
+        "worn"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_01",
+      "totalSize": 2324004,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_02",
+      "slug": "asphalt_02",
+      "materialType": "concrete",
+      "tags": [
+        "asphalt",
+        "cracked",
+        "flat",
+        "road",
+        "asphalt road",
+        "tarmac road",
+        "gritty",
+        "weathered",
+        "grey",
+        "cracking",
+        "tar",
+        "cracks"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_02",
+      "totalSize": 1536892,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_03",
+      "slug": "asphalt_03",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "worn",
+        "dirty",
+        "floor",
+        "road",
+        "asphalt",
+        "city",
+        "urban"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_03",
+      "totalSize": 2028543,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_04",
+      "slug": "asphalt_04",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "weathered",
+        "dry",
+        "cracked",
+        "discolored",
+        "asphalt",
+        "road",
+        "street"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_04",
+      "totalSize": 1540821,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_05",
+      "slug": "asphalt_05",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "floor",
+        "road",
+        "asphalt",
+        "coarse",
+        "brown",
+        "street",
+        "roadway"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_05",
+      "totalSize": 2230236,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_06",
+      "slug": "asphalt_06",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "dirty",
+        "scuffed",
+        "driveway texture",
+        "sidewalk",
+        "hard surface",
+        "handmade",
+        "raw"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_06",
+      "totalSize": 1279332,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_07",
+      "slug": "asphalt_07",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "weathered",
+        "asphalt",
+        "chipped",
+        "granular",
+        "abrasive",
+        "road",
+        "paving"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_07",
+      "totalSize": 1783143,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_floor",
+      "slug": "asphalt_floor",
+      "materialType": "concrete",
+      "tags": [
+        "flat",
+        "asphalt",
+        "brown",
+        "even",
+        "dry",
+        "smooth",
+        "ground"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_floor",
+      "totalSize": 2144389,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_pit_lane",
+      "slug": "asphalt_pit_lane",
+      "materialType": "concrete",
+      "tags": [
+        "asphalt",
+        "asphalt road",
+        "road",
+        "roadway",
+        "tarmac road",
+        "race track",
+        "pit lane"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_pit_lane",
+      "totalSize": 1720911,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_snow",
+      "slug": "asphalt_snow",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "asphalt",
+        "road",
+        "snow",
+        "urban",
+        "floor"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_snow",
+      "totalSize": 2059180,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/asphalt_track",
+      "slug": "asphalt_track",
+      "materialType": "concrete",
+      "tags": [
+        "track",
+        "asphalt",
+        "racing",
+        "road",
+        "speedway",
+        "asphalt road",
+        "race track",
+        "tarmac road"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/asphalt_track",
+      "totalSize": 1362747,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_bluegum",
+      "slug": "bark_bluegum",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "tree bark",
+        "tree bark texture",
+        "tree trunk",
+        "nature",
+        "outdoor",
+        "bluegum",
+        "organic",
+        "environment",
+        "forest"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_bluegum",
+      "totalSize": 1712849,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_brown_01",
+      "slug": "bark_brown_01",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "forest",
+        "knots",
+        "bark grooves",
+        "tree bark",
+        "tree trunk"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_brown_01",
+      "totalSize": 1462823,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_brown_02",
+      "slug": "bark_brown_02",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree",
+        "forest",
+        "knots",
+        "wooden knots",
+        "tree trunk"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_brown_02",
+      "totalSize": 1248365,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_platanus",
+      "slug": "bark_platanus",
+      "materialType": "wood",
+      "tags": [
+        "bark",
+        "tree bark",
+        "natural",
+        "bark texture",
+        "forestry",
+        "tree",
+        "tree trunk",
+        "tree texture",
+        "platanus",
+        "nature",
+        "organic"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_platanus",
+      "totalSize": 1944022,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_willow",
+      "slug": "bark_willow",
+      "materialType": "wood",
+      "tags": [
+        "willow",
+        "bark",
+        "tree",
+        "forest",
+        "nature",
+        "brown",
+        "uneven",
+        "sallow",
+        "osier",
+        "old",
+        "wood",
+        "woodland"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_willow",
+      "totalSize": 2417982,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/bark_willow_02",
+      "slug": "bark_willow_02",
+      "materialType": "wood",
+      "tags": [
+        "rough",
+        "dry",
+        "nature",
+        "tree",
+        "bark",
+        "wood",
+        "forest"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/bark_willow_02",
+      "totalSize": 2310089,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/ground/baseball_playground",
+      "slug": "baseball_playground",
+      "materialType": "ground",
+      "tags": [
+        "dirt",
+        "playground",
+        "sand",
+        "baseball",
+        "ground",
+        "brown",
+        "dry",
+        "trampled",
+        "footprints"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/ground/baseball_playground",
+      "totalSize": 1799618,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/beam_wall_01",
+      "slug": "beam_wall_01",
+      "materialType": "wood",
+      "tags": [
+        "wall",
+        "stacked",
+        "cabin",
+        "house",
+        "hut",
+        "forest"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/beam_wall_01",
+      "totalSize": 215036,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/beige_wall_001",
+      "slug": "beige_wall_001",
+      "materialType": "brick",
+      "tags": [
+        "beige",
+        "painted",
+        "smooth",
+        "suburb",
+        "house",
+        "home"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/beige_wall_001",
+      "totalSize": 240792,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/beige_wall_002",
+      "slug": "beige_wall_002",
+      "materialType": "brick",
+      "tags": [
+        "beige",
+        "painted",
+        "suburb",
+        "house",
+        "spikey",
+        "textured",
+        "home"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/beige_wall_002",
+      "totalSize": 101200,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/fabric/bi_stretch",
+      "slug": "bi_stretch",
+      "materialType": "fabric",
+      "tags": [
+        "yellow",
+        "fine",
+        "flexible",
+        "bi-stretch",
+        "polyester",
+        "textile ",
+        "woven"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/fabric/bi_stretch",
+      "totalSize": 1435020,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/sand/bicolour_gravel",
+      "slug": "bicolour_gravel",
+      "materialType": "sand",
+      "tags": [
+        "gravel",
+        "gravelly",
+        "driveway gravel",
+        "driveway stones",
+        "driveway",
+        "garden walkway",
+        "stones",
+        "garden path gravel"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/sand/bicolour_gravel",
+      "totalSize": 2530832,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/concrete/bitumen",
+      "slug": "bitumen",
+      "materialType": "concrete",
+      "tags": [
+        "rough",
+        "cracked",
+        "cracks",
+        "dirty",
+        "bitumen",
+        "asphalt",
+        "roofing material",
+        "tar",
+        "gritty",
+        "rough  "
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/concrete/bitumen",
+      "totalSize": 969244,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/black_painted_planks",
+      "slug": "black_painted_planks",
+      "materialType": "wood",
+      "tags": [
+        "painted",
+        "painted wood",
+        "wood",
+        "wooden planks",
+        "weathered",
+        "scratched",
+        "worn",
+        "grain",
+        "wood grain",
+        "distressed wood",
+        "timber",
+        "plank"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/black_painted_planks",
+      "totalSize": 1220906,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/blue_floor_tiles_01",
+      "slug": "blue_floor_tiles_01",
+      "materialType": "brick",
+      "tags": [
+        "floor",
+        "moss",
+        "damp",
+        "wet",
+        "bright",
+        "walkway",
+        "pavement"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/blue_floor_tiles_01",
+      "totalSize": 872438,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/metal/blue_metal_plate",
+      "slug": "blue_metal_plate",
+      "materialType": "metal",
+      "tags": [
+        "scratched",
+        "metal sheet",
+        "metal",
+        "painted",
+        "industrial",
+        "scratches",
+        "scuffed",
+        "steel panel",
+        "abrasion marks",
+        "blue",
+        "metal plate"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/metal/blue_metal_plate",
+      "totalSize": 657935,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/wood/blue_painted_planks",
+      "slug": "blue_painted_planks",
+      "materialType": "wood",
+      "tags": [
+        "planks",
+        "painted",
+        "house",
+        "wooden",
+        "peeling"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/wood/blue_painted_planks",
+      "totalSize": 811196,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/blue_plaster_weathered",
+      "slug": "blue_plaster_weathered",
+      "materialType": "brick",
+      "tags": [
+        "old",
+        "weathered",
+        "worn",
+        "discolored",
+        "chipped",
+        "damaged",
+        "wall",
+        "plaster",
+        "plastered",
+        "deteriorated",
+        "exterior",
+        "blue",
+        "peeling",
+        "timeworn"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/blue_plaster_weathered",
+      "totalSize": 1060033,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/fabric/book_pattern",
+      "slug": "book_pattern",
+      "materialType": "fabric",
+      "tags": [
+        "plain",
+        "book",
+        "cover",
+        "textile ",
+        "olive",
+        "olive green",
+        "woven"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/fabric/book_pattern",
+      "totalSize": 725942,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/metal/box_profile_metal_sheet",
+      "slug": "box_profile_metal_sheet",
+      "materialType": "metal",
+      "tags": [
+        "sheet",
+        "metal sheet",
+        "box profile",
+        "industrial",
+        "corrugated",
+        "steel",
+        "red",
+        "roofing material",
+        "metal roofing sheet",
+        "galvanized steel",
+        "corrugated iron"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/metal/box_profile_metal_sheet",
+      "totalSize": 1218499,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_4",
+      "slug": "brick_4",
+      "materialType": "brick",
+      "tags": [
+        "red",
+        "moss",
+        "urban",
+        "city",
+        "damp",
+        "wet"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_4",
+      "totalSize": 645417,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_crosswalk",
+      "slug": "brick_crosswalk",
+      "materialType": "brick",
+      "tags": [
+        "brick",
+        "bricks",
+        "multicoloured",
+        "pedestrian crossing ",
+        "crosswalk",
+        "street",
+        "sidewalk",
+        "urban"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_crosswalk",
+      "totalSize": 1251502,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_floor",
+      "slug": "brick_floor",
+      "materialType": "brick",
+      "tags": [
+        "herringbone",
+        "diagonal",
+        "brick",
+        "paving",
+        "repeat pattern",
+        "aged"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_floor",
+      "totalSize": 847048,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_floor_003",
+      "slug": "brick_floor_003",
+      "materialType": "brick",
+      "tags": [
+        "brown",
+        "floor",
+        "pavement"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_floor_003",
+      "totalSize": 416174,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_floor_02",
+      "slug": "brick_floor_02",
+      "materialType": "brick",
+      "tags": [
+        "weathered",
+        "worn",
+        "brick",
+        "bricks",
+        "red brick",
+        "outdoor",
+        "weatherbeaten",
+        "exterior"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_floor_02",
+      "totalSize": 1647524,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_moss_001",
+      "slug": "brick_moss_001",
+      "materialType": "brick",
+      "tags": [
+        "moss",
+        "pavement",
+        "dirty",
+        "discolored",
+        "damp",
+        "pattern"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_moss_001",
+      "totalSize": 437000,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/brick_pavement",
+      "slug": "brick_pavement",
+      "materialType": "stone",
+      "tags": [
+        "brick",
+        "pavement",
+        "sidewalk",
+        "bricks",
+        "red brick",
+        "interlocking bricks",
+        "pavement patterned",
+        "patterned",
+        "interlocking",
+        "pavers",
+        "building",
+        "sidewalk texture",
+        "roadway",
+        "concrete",
+        "urban",
+        "architecture",
+        "urban",
+        "city",
+        "street",
+        "walkway",
+        "pathway",
+        "stone pathway"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/brick_pavement",
+      "totalSize": 1637422,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_pavement_02",
+      "slug": "brick_pavement_02",
+      "materialType": "brick",
+      "tags": [
+        "old",
+        "rough",
+        "brick",
+        "bricks",
+        "pavement",
+        "gray",
+        "outdoor flooring",
+        "urban",
+        "sidewalk"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_pavement_02",
+      "totalSize": 1745475,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_villa_floor",
+      "slug": "brick_villa_floor",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "brick",
+        "bricks",
+        "interlocking bricks",
+        "pattern",
+        "patterned",
+        "floor",
+        "outdoor flooring",
+        "outdoor",
+        "rough  "
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_villa_floor",
+      "totalSize": 2134800,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_001",
+      "slug": "brick_wall_001",
+      "materialType": "brick",
+      "tags": [
+        "red",
+        "rough",
+        "industrial",
+        "plain",
+        "baked"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_001",
+      "totalSize": 418663,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_003",
+      "slug": "brick_wall_003",
+      "materialType": "brick",
+      "tags": [
+        "wall",
+        "modern",
+        "pavement"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_003",
+      "totalSize": 1463444,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_005",
+      "slug": "brick_wall_005",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "uneven",
+        "wall",
+        "chipped",
+        "damaged",
+        "concrete",
+        "brick",
+        "bricks"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_005",
+      "totalSize": 1802665,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_006",
+      "slug": "brick_wall_006",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "wall",
+        "chipped",
+        "worn",
+        "cracked",
+        "discolored",
+        "dry",
+        "red",
+        "brick",
+        "bricks",
+        "damaged",
+        "concrete",
+        "scratched",
+        "uneven"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_006",
+      "totalSize": 1778462,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_02",
+      "slug": "brick_wall_02",
+      "materialType": "brick",
+      "tags": [
+        "weathered",
+        "cracked",
+        "concrete",
+        "scratched",
+        "brick",
+        "bricks",
+        "wall",
+        "exterior",
+        "red brick"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_02",
+      "totalSize": 1948843,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/stone/brick_wall_04",
+      "slug": "brick_wall_04",
+      "materialType": "stone",
+      "tags": [
+        "rough",
+        "uneven",
+        "wall",
+        "chipped",
+        "damaged",
+        "rock",
+        "rocks",
+        "concrete",
+        "plaster",
+        "brick",
+        "bricks",
+        "cement",
+        "weathered",
+        "stones",
+        "cracked",
+        "worn"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/stone/brick_wall_04",
+      "totalSize": 2057157,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_07",
+      "slug": "brick_wall_07",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "old",
+        "brick",
+        "bricks",
+        "walling",
+        "coarse",
+        "outdoors",
+        "outdoor",
+        "wall",
+        "exterior",
+        "gritty",
+        "rough  "
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_07",
+      "totalSize": 1859892,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_08",
+      "slug": "brick_wall_08",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "mortar",
+        "raw",
+        "grey",
+        "coarse"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_08",
+      "totalSize": 1859578,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_09",
+      "slug": "brick_wall_09",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "wall",
+        "exterior",
+        "outdoor",
+        "brick",
+        "red brick",
+        "construction",
+        "building",
+        "structure"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_09",
+      "totalSize": 1702993,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_10",
+      "slug": "brick_wall_10",
+      "materialType": "brick",
+      "tags": [
+        "brick",
+        "bricks",
+        "wall",
+        "brick wall",
+        "dark",
+        "weathered",
+        "walling",
+        "rough surface",
+        "exterior wall",
+        "weather-beaten",
+        "dark brick",
+        "exposed brick"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_10",
+      "totalSize": 1542511,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_11",
+      "slug": "brick_wall_11",
+      "materialType": "brick",
+      "tags": [
+        "brick",
+        "wall",
+        "bricks",
+        "brick wall",
+        "walling",
+        "weathered",
+        "weatherbeaten",
+        "exterior"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_11",
+      "totalSize": 1519098,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_12",
+      "slug": "brick_wall_12",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "brick",
+        "wall",
+        "brick wall",
+        "coarse",
+        "outdoor",
+        "walling",
+        "masonry",
+        "bricks",
+        "exterior"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_12",
+      "totalSize": 1910496,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/brick_wall_13",
+      "slug": "brick_wall_13",
+      "materialType": "brick",
+      "tags": [
+        "rough",
+        "old",
+        "discolored",
+        "brick",
+        "bricks",
+        "brick wall",
+        "walling",
+        "wall"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/brick_wall_13",
+      "totalSize": 1451988,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "texture/brick/broken_brick_wall",
+      "slug": "broken_brick_wall",
+      "materialType": "brick",
+      "tags": [
+        "weathered",
+        "broken",
+        "brick",
+        "wall",
+        "bricks",
+        "crumbling",
+        "timeworn",
+        "exterior",
+        "red brick",
+        "deteriorating",
+        "damaged",
+        "aged"
+      ],
+      "resolution": "1k",
+      "maps": [
+        "nor_gl",
+        "arm"
+      ],
+      "basePath": "/textures/brick/broken_brick_wall",
+      "totalSize": 1871334,
+      "source": "polyhaven",
+      "license": "CC0"
+    }
+  ]
+}

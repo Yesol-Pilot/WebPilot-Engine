@@ -1,0 +1,10 @@
+{
+  "id": "interior_modern_studio",
+  "styleId": 10,
+  "prompt": "Modern minimalist studio apartment, large windows with city view at sunset, clean furniture, plants, warm lighting",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/SciFi_equirectangular-jpg_Sunset_cityscape_through_large_8645127572_14965076.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/SciFi_depth-map-png_Sunset_cityscape_through_large_2686560473_14965076.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_SciFi_thumb_Sunset_cityscape_through_large_3510687271_14965076.jpg?ver=1",
+  "fileSize": 5168376,
+  "createdAt": "2026-02-11T03:14:19.087Z"
+}

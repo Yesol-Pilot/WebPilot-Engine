@@ -1,0 +1,10 @@
+{
+  "id": "interior_library",
+  "styleId": 10,
+  "prompt": "Grand old library with floor-to-ceiling bookshelves, rolling ladders, warm golden lighting, reading chairs, ornate ceiling",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/SciFi_equirectangular-jpg_Expansive_VR360_library_towering_9724519212_14965077.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/SciFi_depth-map-png_Expansive_VR360_library_towering_5443311918_14965077.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_SciFi_thumb_Expansive_VR360_library_towering_2212862957_14965077.jpg?ver=1",
+  "fileSize": 8473433,
+  "createdAt": "2026-02-11T03:14:52.635Z"
+}

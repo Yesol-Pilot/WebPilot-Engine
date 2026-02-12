@@ -1,0 +1,728 @@
+{
+  "generatedAt": "2026-02-12T01:18:25.251Z",
+  "totalFiles": 60,
+  "entries": [
+    {
+      "id": "auto_fantasy_castle",
+      "name": "Fantasy Castle",
+      "url": "/skybox/generated/fantasy_castle.jpg",
+      "thumbnail": "/skybox/generated/fantasy_castle.jpg",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "castle"
+      ]
+    },
+    {
+      "id": "auto_fantasy_castle_depth",
+      "name": "Fantasy Castle Depth",
+      "url": "/skybox/generated/fantasy_castle_depth.png",
+      "thumbnail": "/skybox/generated/fantasy_castle_depth.png",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "castle",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_fantasy_dungeon",
+      "name": "Fantasy Dungeon",
+      "url": "/skybox/generated/fantasy_dungeon.jpg",
+      "thumbnail": "/skybox/generated/fantasy_dungeon.jpg",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "dungeon"
+      ]
+    },
+    {
+      "id": "auto_fantasy_dungeon_depth",
+      "name": "Fantasy Dungeon Depth",
+      "url": "/skybox/generated/fantasy_dungeon_depth.png",
+      "thumbnail": "/skybox/generated/fantasy_dungeon_depth.png",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "dungeon",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_fantasy_forest",
+      "name": "Fantasy Forest",
+      "url": "/skybox/generated/fantasy_forest.jpg",
+      "thumbnail": "/skybox/generated/fantasy_forest.jpg",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "forest"
+      ]
+    },
+    {
+      "id": "auto_fantasy_forest_depth",
+      "name": "Fantasy Forest Depth",
+      "url": "/skybox/generated/fantasy_forest_depth.png",
+      "thumbnail": "/skybox/generated/fantasy_forest_depth.png",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "forest",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_fantasy_tavern",
+      "name": "Fantasy Tavern",
+      "url": "/skybox/generated/fantasy_tavern.jpg",
+      "thumbnail": "/skybox/generated/fantasy_tavern.jpg",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "tavern"
+      ]
+    },
+    {
+      "id": "auto_fantasy_tavern_depth",
+      "name": "Fantasy Tavern Depth",
+      "url": "/skybox/generated/fantasy_tavern_depth.png",
+      "thumbnail": "/skybox/generated/fantasy_tavern_depth.png",
+      "category": "generated",
+      "tags": [
+        "fantasy",
+        "tavern",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_interior_library",
+      "name": "Interior Library",
+      "url": "/skybox/generated/interior_library.jpg",
+      "thumbnail": "/skybox/generated/interior_library.jpg",
+      "category": "generated",
+      "tags": [
+        "interior",
+        "library"
+      ]
+    },
+    {
+      "id": "auto_interior_library_depth",
+      "name": "Interior Library Depth",
+      "url": "/skybox/generated/interior_library_depth.png",
+      "thumbnail": "/skybox/generated/interior_library_depth.png",
+      "category": "generated",
+      "tags": [
+        "interior",
+        "library",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_interior_modern_studio",
+      "name": "Interior Modern Studio",
+      "url": "/skybox/generated/interior_modern_studio.jpg",
+      "thumbnail": "/skybox/generated/interior_modern_studio.jpg",
+      "category": "generated",
+      "tags": [
+        "interior",
+        "modern",
+        "studio"
+      ]
+    },
+    {
+      "id": "auto_interior_modern_studio_depth",
+      "name": "Interior Modern Studio Depth",
+      "url": "/skybox/generated/interior_modern_studio_depth.png",
+      "thumbnail": "/skybox/generated/interior_modern_studio_depth.png",
+      "category": "generated",
+      "tags": [
+        "interior",
+        "modern",
+        "studio",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_mood_horror_mansion",
+      "name": "Mood Horror Mansion",
+      "url": "/skybox/generated/mood_horror_mansion.jpg",
+      "thumbnail": "/skybox/generated/mood_horror_mansion.jpg",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "horror",
+        "mansion"
+      ]
+    },
+    {
+      "id": "auto_mood_horror_mansion_depth",
+      "name": "Mood Horror Mansion Depth",
+      "url": "/skybox/generated/mood_horror_mansion_depth.png",
+      "thumbnail": "/skybox/generated/mood_horror_mansion_depth.png",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "horror",
+        "mansion",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_mood_underwater",
+      "name": "Mood Underwater",
+      "url": "/skybox/generated/mood_underwater.jpg",
+      "thumbnail": "/skybox/generated/mood_underwater.jpg",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "underwater"
+      ]
+    },
+    {
+      "id": "auto_mood_underwater_depth",
+      "name": "Mood Underwater Depth",
+      "url": "/skybox/generated/mood_underwater_depth.png",
+      "thumbnail": "/skybox/generated/mood_underwater_depth.png",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "underwater",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_mood_zen_garden",
+      "name": "Mood Zen Garden",
+      "url": "/skybox/generated/mood_zen_garden.jpg",
+      "thumbnail": "/skybox/generated/mood_zen_garden.jpg",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "zen",
+        "garden"
+      ]
+    },
+    {
+      "id": "auto_mood_zen_garden_depth",
+      "name": "Mood Zen Garden Depth",
+      "url": "/skybox/generated/mood_zen_garden_depth.png",
+      "thumbnail": "/skybox/generated/mood_zen_garden_depth.png",
+      "category": "generated",
+      "tags": [
+        "mood",
+        "zen",
+        "garden",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_nature_autumn_forest",
+      "name": "Nature Autumn Forest",
+      "url": "/skybox/generated/nature_autumn_forest.jpg",
+      "thumbnail": "/skybox/generated/nature_autumn_forest.jpg",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "autumn",
+        "forest"
+      ]
+    },
+    {
+      "id": "auto_nature_autumn_forest_depth",
+      "name": "Nature Autumn Forest Depth",
+      "url": "/skybox/generated/nature_autumn_forest_depth.png",
+      "thumbnail": "/skybox/generated/nature_autumn_forest_depth.png",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "autumn",
+        "forest",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_nature_mountain_peak",
+      "name": "Nature Mountain Peak",
+      "url": "/skybox/generated/nature_mountain_peak.jpg",
+      "thumbnail": "/skybox/generated/nature_mountain_peak.jpg",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "mountain",
+        "peak"
+      ]
+    },
+    {
+      "id": "auto_nature_mountain_peak_depth",
+      "name": "Nature Mountain Peak Depth",
+      "url": "/skybox/generated/nature_mountain_peak_depth.png",
+      "thumbnail": "/skybox/generated/nature_mountain_peak_depth.png",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "mountain",
+        "peak",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_nature_sunset_beach",
+      "name": "Nature Sunset Beach",
+      "url": "/skybox/generated/nature_sunset_beach.jpg",
+      "thumbnail": "/skybox/generated/nature_sunset_beach.jpg",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "sunset",
+        "beach"
+      ]
+    },
+    {
+      "id": "auto_nature_sunset_beach_depth",
+      "name": "Nature Sunset Beach Depth",
+      "url": "/skybox/generated/nature_sunset_beach_depth.png",
+      "thumbnail": "/skybox/generated/nature_sunset_beach_depth.png",
+      "category": "generated",
+      "tags": [
+        "nature",
+        "sunset",
+        "beach",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_scifi_alien_planet",
+      "name": "Scifi Alien Planet",
+      "url": "/skybox/generated/scifi_alien_planet.jpg",
+      "thumbnail": "/skybox/generated/scifi_alien_planet.jpg",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "alien",
+        "planet"
+      ]
+    },
+    {
+      "id": "auto_scifi_alien_planet_depth",
+      "name": "Scifi Alien Planet Depth",
+      "url": "/skybox/generated/scifi_alien_planet_depth.png",
+      "thumbnail": "/skybox/generated/scifi_alien_planet_depth.png",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "alien",
+        "planet",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_scifi_cyberpunk",
+      "name": "Scifi Cyberpunk",
+      "url": "/skybox/generated/scifi_cyberpunk.jpg",
+      "thumbnail": "/skybox/generated/scifi_cyberpunk.jpg",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "cyberpunk"
+      ]
+    },
+    {
+      "id": "auto_scifi_cyberpunk_depth",
+      "name": "Scifi Cyberpunk Depth",
+      "url": "/skybox/generated/scifi_cyberpunk_depth.png",
+      "thumbnail": "/skybox/generated/scifi_cyberpunk_depth.png",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "cyberpunk",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_scifi_space_station",
+      "name": "Scifi Space Station",
+      "url": "/skybox/generated/scifi_space_station.jpg",
+      "thumbnail": "/skybox/generated/scifi_space_station.jpg",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "space",
+        "station"
+      ]
+    },
+    {
+      "id": "auto_scifi_space_station_depth",
+      "name": "Scifi Space Station Depth",
+      "url": "/skybox/generated/scifi_space_station_depth.png",
+      "thumbnail": "/skybox/generated/scifi_space_station_depth.png",
+      "category": "generated",
+      "tags": [
+        "scifi",
+        "space",
+        "station",
+        "depth"
+      ]
+    },
+    {
+      "id": "auto_abandoned_bakery",
+      "name": "Abandoned Bakery",
+      "url": "/skybox/indoor/abandoned_bakery.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_bakery.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "bakery"
+      ]
+    },
+    {
+      "id": "auto_abandoned_construction",
+      "name": "Abandoned Construction",
+      "url": "/skybox/indoor/abandoned_construction.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_construction.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "construction"
+      ]
+    },
+    {
+      "id": "auto_abandoned_factory_canteen_01",
+      "name": "Abandoned Factory Canteen 01",
+      "url": "/skybox/indoor/abandoned_factory_canteen_01.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_factory_canteen_01.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "factory",
+        "canteen",
+        "01"
+      ]
+    },
+    {
+      "id": "auto_abandoned_factory_canteen_02",
+      "name": "Abandoned Factory Canteen 02",
+      "url": "/skybox/indoor/abandoned_factory_canteen_02.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_factory_canteen_02.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "factory",
+        "canteen",
+        "02"
+      ]
+    },
+    {
+      "id": "auto_abandoned_games_room_01",
+      "name": "Abandoned Games Room 01",
+      "url": "/skybox/indoor/abandoned_games_room_01.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_games_room_01.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "games",
+        "room",
+        "01"
+      ]
+    },
+    {
+      "id": "auto_abandoned_games_room_02",
+      "name": "Abandoned Games Room 02",
+      "url": "/skybox/indoor/abandoned_games_room_02.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_games_room_02.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "games",
+        "room",
+        "02"
+      ]
+    },
+    {
+      "id": "auto_abandoned_garage",
+      "name": "Abandoned Garage",
+      "url": "/skybox/indoor/abandoned_garage.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_garage.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "garage"
+      ]
+    },
+    {
+      "id": "auto_abandoned_greenhouse",
+      "name": "Abandoned Greenhouse",
+      "url": "/skybox/indoor/abandoned_greenhouse.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_greenhouse.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "greenhouse"
+      ]
+    },
+    {
+      "id": "auto_abandoned_hall_01",
+      "name": "Abandoned Hall 01",
+      "url": "/skybox/indoor/abandoned_hall_01.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_hall_01.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "hall",
+        "01"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tiled_room",
+      "name": "Abandoned Tiled Room",
+      "url": "/skybox/indoor/abandoned_tiled_room.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_tiled_room.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "tiled",
+        "room"
+      ]
+    },
+    {
+      "id": "auto_abandoned_workshop",
+      "name": "Abandoned Workshop",
+      "url": "/skybox/indoor/abandoned_workshop.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_workshop.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "workshop"
+      ]
+    },
+    {
+      "id": "auto_abandoned_workshop_02",
+      "name": "Abandoned Workshop 02",
+      "url": "/skybox/indoor/abandoned_workshop_02.hdr",
+      "thumbnail": "/skybox/indoor/abandoned_workshop_02.hdr",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "workshop",
+        "02"
+      ]
+    },
+    {
+      "id": "auto_acoustical_shell",
+      "name": "Acoustical Shell",
+      "url": "/skybox/indoor/acoustical_shell.hdr",
+      "thumbnail": "/skybox/indoor/acoustical_shell.hdr",
+      "category": "indoor",
+      "tags": [
+        "acoustical",
+        "shell"
+      ]
+    },
+    {
+      "id": "auto_adams_place_bridge",
+      "name": "Adams Place Bridge",
+      "url": "/skybox/indoor/adams_place_bridge.hdr",
+      "thumbnail": "/skybox/indoor/adams_place_bridge.hdr",
+      "category": "indoor",
+      "tags": [
+        "adams",
+        "place",
+        "bridge"
+      ]
+    },
+    {
+      "id": "auto_aerodynamics_workshop",
+      "name": "Aerodynamics Workshop",
+      "url": "/skybox/indoor/aerodynamics_workshop.hdr",
+      "thumbnail": "/skybox/indoor/aerodynamics_workshop.hdr",
+      "category": "indoor",
+      "tags": [
+        "aerodynamics",
+        "workshop"
+      ]
+    },
+    {
+      "id": "auto_abandoned_church",
+      "name": "Abandoned Church",
+      "url": "/skybox/nature/abandoned_church.hdr",
+      "thumbnail": "/skybox/nature/abandoned_church.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "church"
+      ]
+    },
+    {
+      "id": "auto_abandoned_hopper_terminal_01",
+      "name": "Abandoned Hopper Terminal 01",
+      "url": "/skybox/nature/abandoned_hopper_terminal_01.hdr",
+      "thumbnail": "/skybox/nature/abandoned_hopper_terminal_01.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "hopper",
+        "terminal",
+        "01"
+      ]
+    },
+    {
+      "id": "auto_abandoned_hopper_terminal_02",
+      "name": "Abandoned Hopper Terminal 02",
+      "url": "/skybox/nature/abandoned_hopper_terminal_02.hdr",
+      "thumbnail": "/skybox/nature/abandoned_hopper_terminal_02.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "hopper",
+        "terminal",
+        "02"
+      ]
+    },
+    {
+      "id": "auto_abandoned_hopper_terminal_03",
+      "name": "Abandoned Hopper Terminal 03",
+      "url": "/skybox/nature/abandoned_hopper_terminal_03.hdr",
+      "thumbnail": "/skybox/nature/abandoned_hopper_terminal_03.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "hopper",
+        "terminal",
+        "03"
+      ]
+    },
+    {
+      "id": "auto_abandoned_hopper_terminal_04",
+      "name": "Abandoned Hopper Terminal 04",
+      "url": "/skybox/nature/abandoned_hopper_terminal_04.hdr",
+      "thumbnail": "/skybox/nature/abandoned_hopper_terminal_04.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "hopper",
+        "terminal",
+        "04"
+      ]
+    },
+    {
+      "id": "auto_abandoned_pathway",
+      "name": "Abandoned Pathway",
+      "url": "/skybox/nature/abandoned_pathway.hdr",
+      "thumbnail": "/skybox/nature/abandoned_pathway.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "pathway"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tank_farm_04",
+      "name": "Abandoned Tank Farm 04",
+      "url": "/skybox/nature/abandoned_tank_farm_04.hdr",
+      "thumbnail": "/skybox/nature/abandoned_tank_farm_04.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "tank",
+        "farm",
+        "04"
+      ]
+    },
+    {
+      "id": "auto_abandoned_waterworks",
+      "name": "Abandoned Waterworks",
+      "url": "/skybox/nature/abandoned_waterworks.hdr",
+      "thumbnail": "/skybox/nature/abandoned_waterworks.hdr",
+      "category": "nature",
+      "tags": [
+        "abandoned",
+        "waterworks"
+      ]
+    },
+    {
+      "id": "auto_abandoned_parking",
+      "name": "Abandoned Parking",
+      "url": "/skybox/urban/abandoned_parking.hdr",
+      "thumbnail": "/skybox/urban/abandoned_parking.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "parking"
+      ]
+    },
+    {
+      "id": "auto_abandoned_slipway",
+      "name": "Abandoned Slipway",
+      "url": "/skybox/urban/abandoned_slipway.hdr",
+      "thumbnail": "/skybox/urban/abandoned_slipway.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "slipway"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tank_farm_01",
+      "name": "Abandoned Tank Farm 01",
+      "url": "/skybox/urban/abandoned_tank_farm_01.hdr",
+      "thumbnail": "/skybox/urban/abandoned_tank_farm_01.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "tank",
+        "farm",
+        "01"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tank_farm_02",
+      "name": "Abandoned Tank Farm 02",
+      "url": "/skybox/urban/abandoned_tank_farm_02.hdr",
+      "thumbnail": "/skybox/urban/abandoned_tank_farm_02.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "tank",
+        "farm",
+        "02"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tank_farm_03",
+      "name": "Abandoned Tank Farm 03",
+      "url": "/skybox/urban/abandoned_tank_farm_03.hdr",
+      "thumbnail": "/skybox/urban/abandoned_tank_farm_03.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "tank",
+        "farm",
+        "03"
+      ]
+    },
+    {
+      "id": "auto_abandoned_tank_farm_05",
+      "name": "Abandoned Tank Farm 05",
+      "url": "/skybox/urban/abandoned_tank_farm_05.hdr",
+      "thumbnail": "/skybox/urban/abandoned_tank_farm_05.hdr",
+      "category": "outdoor",
+      "tags": [
+        "abandoned",
+        "tank",
+        "farm",
+        "05"
+      ]
+    },
+    {
+      "id": "auto_afrikaans_church_exterior",
+      "name": "Afrikaans Church Exterior",
+      "url": "/skybox/urban/afrikaans_church_exterior.hdr",
+      "thumbnail": "/skybox/urban/afrikaans_church_exterior.hdr",
+      "category": "outdoor",
+      "tags": [
+        "afrikaans",
+        "church",
+        "exterior"
+      ]
+    }
+  ]
+}

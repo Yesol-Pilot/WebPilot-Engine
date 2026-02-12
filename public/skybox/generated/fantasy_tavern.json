@@ -1,0 +1,10 @@
+{
+  "id": "fantasy_tavern",
+  "styleId": 10,
+  "prompt": "Cozy medieval tavern interior, warm fireplace, wooden beams, candlelight, beer mugs on tables, fantasy RPG",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/SciFi_equirectangular-jpg_VR360_Medieval_tavern_atmosphere_3139650943_14965058.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/SciFi_depth-map-png_VR360_Medieval_tavern_atmosphere_9884978420_14965058.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_SciFi_thumb_VR360_Medieval_tavern_atmosphere_6467831124_14965058.jpg?ver=1",
+  "fileSize": 9160116,
+  "createdAt": "2026-02-11T03:08:37.150Z"
+}

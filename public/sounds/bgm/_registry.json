@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-02-12T01:18:25.245Z",
+  "totalFiles": 20,
+  "entries": [
+    {
+      "id": "bgm_action_battle",
+      "url": "/sounds/bgm/action/bgm_action_battle.mp3",
+      "category": "action",
+      "mood": "intense",
+      "filename": "bgm_action_battle.mp3"
+    },
+    {
+      "id": "bgm_action_chase",
+      "url": "/sounds/bgm/action/bgm_action_chase.mp3",
+      "category": "action",
+      "mood": "urgent",
+      "filename": "bgm_action_chase.mp3"
+    },
+    {
+      "id": "bgm_action_stealth",
+      "url": "/sounds/bgm/action/bgm_action_stealth.mp3",
+      "category": "action",
+      "mood": "sneaky",
+      "filename": "bgm_action_stealth.mp3"
+    },
+    {
+      "id": "bgm_fantasy_epic",
+      "url": "/sounds/bgm/fantasy/bgm_fantasy_epic.mp3",
+      "category": "fantasy",
+      "mood": "epic",
+      "filename": "bgm_fantasy_epic.mp3"
+    },
+    {
+      "id": "bgm_fantasy_mystery",
+      "url": "/sounds/bgm/fantasy/bgm_fantasy_mystery.mp3",
+      "category": "fantasy",
+      "mood": "mysterious",
+      "filename": "bgm_fantasy_mystery.mp3"
+    },
+    {
+      "id": "bgm_fantasy_peaceful",
+      "url": "/sounds/bgm/fantasy/bgm_fantasy_peaceful.mp3",
+      "category": "fantasy",
+      "mood": "peaceful",
+      "filename": "bgm_fantasy_peaceful.mp3"
+    },
+    {
+      "id": "bgm_fantasy_tavern",
+      "url": "/sounds/bgm/fantasy/bgm_fantasy_tavern.mp3",
+      "category": "fantasy",
+      "mood": "cozy",
+      "filename": "bgm_fantasy_tavern.mp3"
+    },
+    {
+      "id": "bgm_interior_cafe",
+      "url": "/sounds/bgm/interior/bgm_interior_cafe.mp3",
+      "category": "interior",
+      "mood": "warm",
+      "filename": "bgm_interior_cafe.mp3"
+    },
+    {
+      "id": "bgm_interior_library",
+      "url": "/sounds/bgm/interior/bgm_interior_library.mp3",
+      "category": "interior",
+      "mood": "quiet",
+      "filename": "bgm_interior_library.mp3"
+    },
+    {
+      "id": "bgm_mood_horror",
+      "url": "/sounds/bgm/mood/bgm_mood_horror.mp3",
+      "category": "mood",
+      "mood": "creepy",
+      "filename": "bgm_mood_horror.mp3"
+    },
+    {
+      "id": "bgm_mood_melancholy",
+      "url": "/sounds/bgm/mood/bgm_mood_melancholy.mp3",
+      "category": "mood",
+      "mood": "melancholy",
+      "filename": "bgm_mood_melancholy.mp3"
+    },
+    {
+      "id": "bgm_mood_romantic",
+      "url": "/sounds/bgm/mood/bgm_mood_romantic.mp3",
+      "category": "mood",
+      "mood": "romantic",
+      "filename": "bgm_mood_romantic.mp3"
+    },
+    {
+      "id": "bgm_mood_zen",
+      "url": "/sounds/bgm/mood/bgm_mood_zen.mp3",
+      "category": "mood",
+      "mood": "tranquil",
+      "filename": "bgm_mood_zen.mp3"
+    },
+    {
+      "id": "bgm_nature_forest",
+      "url": "/sounds/bgm/nature/bgm_nature_forest.mp3",
+      "category": "nature",
+      "mood": "peaceful",
+      "filename": "bgm_nature_forest.mp3"
+    },
+    {
+      "id": "bgm_nature_mountain",
+      "url": "/sounds/bgm/nature/bgm_nature_mountain.mp3",
+      "category": "nature",
+      "mood": "majestic",
+      "filename": "bgm_nature_mountain.mp3"
+    },
+    {
+      "id": "bgm_nature_ocean",
+      "url": "/sounds/bgm/nature/bgm_nature_ocean.mp3",
+      "category": "nature",
+      "mood": "calm",
+      "filename": "bgm_nature_ocean.mp3"
+    },
+    {
+      "id": "bgm_nature_rain",
+      "url": "/sounds/bgm/nature/bgm_nature_rain.mp3",
+      "category": "nature",
+      "mood": "melancholy",
+      "filename": "bgm_nature_rain.mp3"
+    },
+    {
+      "id": "bgm_scifi_cyberpunk",
+      "url": "/sounds/bgm/scifi/bgm_scifi_cyberpunk.mp3",
+      "category": "scifi",
+      "mood": "neon",
+      "filename": "bgm_scifi_cyberpunk.mp3"
+    },
+    {
+      "id": "bgm_scifi_lab",
+      "url": "/sounds/bgm/scifi/bgm_scifi_lab.mp3",
+      "category": "scifi",
+      "mood": "electronic",
+      "filename": "bgm_scifi_lab.mp3"
+    },
+    {
+      "id": "bgm_scifi_space",
+      "url": "/sounds/bgm/scifi/bgm_scifi_space.mp3",
+      "category": "scifi",
+      "mood": "ambient",
+      "filename": "bgm_scifi_space.mp3"
+    }
+  ]
+}

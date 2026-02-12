@@ -1,0 +1,10 @@
+{
+  "id": "nature_mountain_peak",
+  "styleId": 19,
+  "prompt": "Mountain peak above clouds at sunrise, vast panoramic view, snow-capped peaks, golden light, majestic and serene",
+  "fileUrl": "https://images.blockadelabs.com/images/imagine/Low_Poly_Voxels_equirectangular-jpg_VR360_panorama_summit_above_8095688391_14965069.jpg?ver=1",
+  "depthMapUrl": "https://images.blockadelabs.com/depths/imagine/Low_Poly_Voxels_depth-map-png_VR360_panorama_summit_above_6192956241_14965069.png?ver=1",
+  "thumbUrl": "https://images.blockadelabs.com/thumbs/imagine/thumb_Low_Poly_Voxels_thumb_VR360_panorama_summit_above_1758695953_14965069.jpg?ver=1",
+  "fileSize": 5751847,
+  "createdAt": "2026-02-11T03:11:28.390Z"
+}

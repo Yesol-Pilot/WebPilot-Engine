@@ -1,0 +1,3012 @@
+{
+  "generatedAt": "2026-02-12T01:18:25.258Z",
+  "totalFiles": 334,
+  "entries": [
+    {
+      "id": "arm",
+      "url": "/textures/brick/asbestos_sheet/arm.jpg",
+      "materialType": "asbestos_sheet",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/asbestos_sheet/nor_gl.jpg",
+      "materialType": "asbestos_sheet",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/asbestos_sheet_02/arm.jpg",
+      "materialType": "asbestos_sheet_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/asbestos_sheet_02/nor_gl.jpg",
+      "materialType": "asbestos_sheet_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/beige_wall_001/arm.jpg",
+      "materialType": "beige_wall_001",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/beige_wall_001/nor_gl.jpg",
+      "materialType": "beige_wall_001",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/beige_wall_002/arm.jpg",
+      "materialType": "beige_wall_002",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/beige_wall_002/nor_gl.jpg",
+      "materialType": "beige_wall_002",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/blue_floor_tiles_01/arm.jpg",
+      "materialType": "blue_floor_tiles_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/blue_floor_tiles_01/nor_gl.jpg",
+      "materialType": "blue_floor_tiles_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/blue_plaster_weathered/arm.jpg",
+      "materialType": "blue_plaster_weathered",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/blue_plaster_weathered/nor_gl.jpg",
+      "materialType": "blue_plaster_weathered",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_4/arm.jpg",
+      "materialType": "brick_4",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_4/nor_gl.jpg",
+      "materialType": "brick_4",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_crosswalk/arm.jpg",
+      "materialType": "brick_crosswalk",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_crosswalk/nor_gl.jpg",
+      "materialType": "brick_crosswalk",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_floor/arm.jpg",
+      "materialType": "brick_floor",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_floor/nor_gl.jpg",
+      "materialType": "brick_floor",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_floor_003/arm.jpg",
+      "materialType": "brick_floor_003",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_floor_003/nor_gl.jpg",
+      "materialType": "brick_floor_003",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_floor_02/arm.jpg",
+      "materialType": "brick_floor_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_floor_02/nor_gl.jpg",
+      "materialType": "brick_floor_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_moss_001/arm.jpg",
+      "materialType": "brick_moss_001",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_moss_001/nor_gl.jpg",
+      "materialType": "brick_moss_001",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_pavement_02/arm.jpg",
+      "materialType": "brick_pavement_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_pavement_02/nor_gl.jpg",
+      "materialType": "brick_pavement_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_villa_floor/arm.jpg",
+      "materialType": "brick_villa_floor",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_villa_floor/nor_gl.jpg",
+      "materialType": "brick_villa_floor",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_001/arm.jpg",
+      "materialType": "brick_wall_001",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_001/nor_gl.jpg",
+      "materialType": "brick_wall_001",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_003/arm.jpg",
+      "materialType": "brick_wall_003",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_003/nor_gl.jpg",
+      "materialType": "brick_wall_003",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_005/arm.jpg",
+      "materialType": "brick_wall_005",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_005/nor_gl.jpg",
+      "materialType": "brick_wall_005",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_006/arm.jpg",
+      "materialType": "brick_wall_006",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_006/nor_gl.jpg",
+      "materialType": "brick_wall_006",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_02/arm.jpg",
+      "materialType": "brick_wall_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_02/nor_gl.jpg",
+      "materialType": "brick_wall_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_07/arm.jpg",
+      "materialType": "brick_wall_07",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_07/nor_gl.jpg",
+      "materialType": "brick_wall_07",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_08/arm.jpg",
+      "materialType": "brick_wall_08",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_08/nor_gl.jpg",
+      "materialType": "brick_wall_08",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_09/arm.jpg",
+      "materialType": "brick_wall_09",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_09/nor_gl.jpg",
+      "materialType": "brick_wall_09",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_10/arm.jpg",
+      "materialType": "brick_wall_10",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_10/nor_gl.jpg",
+      "materialType": "brick_wall_10",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_11/arm.jpg",
+      "materialType": "brick_wall_11",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_11/nor_gl.jpg",
+      "materialType": "brick_wall_11",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_12/arm.jpg",
+      "materialType": "brick_wall_12",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_12/nor_gl.jpg",
+      "materialType": "brick_wall_12",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/brick_wall_13/arm.jpg",
+      "materialType": "brick_wall_13",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/brick_wall_13/nor_gl.jpg",
+      "materialType": "brick_wall_13",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/brick/broken_brick_wall/arm.jpg",
+      "materialType": "broken_brick_wall",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/brick/broken_brick_wall/nor_gl.jpg",
+      "materialType": "broken_brick_wall",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "colormap",
+      "url": "/textures/colormap.png",
+      "materialType": "textures",
+      "filename": "colormap.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/aerial_asphalt_01/arm.jpg",
+      "materialType": "aerial_asphalt_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/aerial_asphalt_01/nor_gl.jpg",
+      "materialType": "aerial_asphalt_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/anti_slip_concrete/arm.jpg",
+      "materialType": "anti_slip_concrete",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/anti_slip_concrete/nor_gl.jpg",
+      "materialType": "anti_slip_concrete",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_01/arm.jpg",
+      "materialType": "asphalt_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_01/nor_gl.jpg",
+      "materialType": "asphalt_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_02/arm.jpg",
+      "materialType": "asphalt_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_02/nor_gl.jpg",
+      "materialType": "asphalt_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_03/arm.jpg",
+      "materialType": "asphalt_03",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_03/nor_gl.jpg",
+      "materialType": "asphalt_03",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_04/arm.jpg",
+      "materialType": "asphalt_04",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_04/nor_gl.jpg",
+      "materialType": "asphalt_04",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_05/arm.jpg",
+      "materialType": "asphalt_05",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_05/nor_gl.jpg",
+      "materialType": "asphalt_05",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_06/arm.jpg",
+      "materialType": "asphalt_06",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_06/nor_gl.jpg",
+      "materialType": "asphalt_06",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_07/arm.jpg",
+      "materialType": "asphalt_07",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_07/nor_gl.jpg",
+      "materialType": "asphalt_07",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_floor/arm.jpg",
+      "materialType": "asphalt_floor",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_floor/nor_gl.jpg",
+      "materialType": "asphalt_floor",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_pit_lane/arm.jpg",
+      "materialType": "asphalt_pit_lane",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_pit_lane/nor_gl.jpg",
+      "materialType": "asphalt_pit_lane",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_snow/arm.jpg",
+      "materialType": "asphalt_snow",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_snow/nor_gl.jpg",
+      "materialType": "asphalt_snow",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/asphalt_track/arm.jpg",
+      "materialType": "asphalt_track",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/asphalt_track/nor_gl.jpg",
+      "materialType": "asphalt_track",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/concrete/bitumen/arm.jpg",
+      "materialType": "bitumen",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/concrete/bitumen/nor_gl.jpg",
+      "materialType": "bitumen",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/fabric/bi_stretch/arm.jpg",
+      "materialType": "bi_stretch",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/fabric/bi_stretch/nor_gl.jpg",
+      "materialType": "bi_stretch",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/fabric/book_pattern/arm.jpg",
+      "materialType": "book_pattern",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/fabric/book_pattern/nor_gl.jpg",
+      "materialType": "book_pattern",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/ground/aerial_ground_rock/arm.jpg",
+      "materialType": "aerial_ground_rock",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/ground/aerial_ground_rock/nor_gl.jpg",
+      "materialType": "aerial_ground_rock",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/ground/aerial_mud_1/arm.jpg",
+      "materialType": "aerial_mud_1",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/ground/aerial_mud_1/nor_gl.jpg",
+      "materialType": "aerial_mud_1",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/ground/baseball_playground/arm.jpg",
+      "materialType": "baseball_playground",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/ground/baseball_playground/nor_gl.jpg",
+      "materialType": "baseball_playground",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/metal/blue_metal_plate/arm.jpg",
+      "materialType": "blue_metal_plate",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/metal/blue_metal_plate/nor_gl.jpg",
+      "materialType": "blue_metal_plate",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/metal/box_profile_metal_sheet/arm.jpg",
+      "materialType": "box_profile_metal_sheet",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/metal/box_profile_metal_sheet/nor_gl.jpg",
+      "materialType": "box_profile_metal_sheet",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "circle_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/circle_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "circle_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/circle_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "circle_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/circle_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "circle_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/circle_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "circle_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/circle_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "circle_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/dirt_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "dirt_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/dirt_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "dirt_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/dirt_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "dirt_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "fire_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/fire_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "fire_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "fire_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/fire_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "fire_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_06",
+      "url": "/textures/particles/kenney/PNG (Black background)/flame_06.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flame_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flare_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/flare_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "flare_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/light_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "light_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/light_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "light_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/light_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "light_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/magic_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "magic_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/magic_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "magic_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/magic_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "magic_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/magic_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "magic_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/magic_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "magic_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/muzzle_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "muzzle_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/muzzle_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "muzzle_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/muzzle_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "muzzle_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/muzzle_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "muzzle_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/muzzle_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "muzzle_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/flame_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "flame_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/flame_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "flame_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_01_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/muzzle_01_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_01_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_02_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/muzzle_02_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_02_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_03_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/muzzle_03_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_03_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_04_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/muzzle_04_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_04_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/muzzle_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/spark_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "spark_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/spark_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "spark_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_01_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_01_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_01_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_02_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_02_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_02_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_03_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_03_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_03_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_04_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_04_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_04_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_07_rotated",
+      "url": "/textures/particles/kenney/PNG (Black background)/Rotated/trace_07_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_07_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/scorch_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "scorch_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/scorch_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "scorch_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/scorch_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "scorch_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scratch_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/scratch_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "scratch_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/slash_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "slash_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/slash_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "slash_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/slash_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "slash_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/slash_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "slash_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_06",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_06.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_07",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_07.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_08",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_08.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_08.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_09",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_09.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_09.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_10",
+      "url": "/textures/particles/kenney/PNG (Black background)/smoke_10.png",
+      "materialType": "PNG (Black background)",
+      "filename": "smoke_10.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_06",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_06.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_07",
+      "url": "/textures/particles/kenney/PNG (Black background)/spark_07.png",
+      "materialType": "PNG (Black background)",
+      "filename": "spark_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_06",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_06.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_07",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_07.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_08",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_08.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_08.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_09",
+      "url": "/textures/particles/kenney/PNG (Black background)/star_09.png",
+      "materialType": "PNG (Black background)",
+      "filename": "star_09.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "symbol_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/symbol_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "symbol_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "symbol_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/symbol_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "symbol_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_05",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_05.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_06",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_06.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_07",
+      "url": "/textures/particles/kenney/PNG (Black background)/trace_07.png",
+      "materialType": "PNG (Black background)",
+      "filename": "trace_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/twirl_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "twirl_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/twirl_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "twirl_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/twirl_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "twirl_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_01",
+      "url": "/textures/particles/kenney/PNG (Black background)/window_01.png",
+      "materialType": "PNG (Black background)",
+      "filename": "window_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_02",
+      "url": "/textures/particles/kenney/PNG (Black background)/window_02.png",
+      "materialType": "PNG (Black background)",
+      "filename": "window_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_03",
+      "url": "/textures/particles/kenney/PNG (Black background)/window_03.png",
+      "materialType": "PNG (Black background)",
+      "filename": "window_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_04",
+      "url": "/textures/particles/kenney/PNG (Black background)/window_04.png",
+      "materialType": "PNG (Black background)",
+      "filename": "window_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/circle_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "circle_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/circle_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "circle_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/circle_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "circle_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/circle_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "circle_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "circle_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/circle_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "circle_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/dirt_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "dirt_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/dirt_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "dirt_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "dirt_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/dirt_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "dirt_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "fire_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/fire_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "fire_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "fire_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/fire_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "fire_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_06",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flame_06.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flame_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flare_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/flare_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "flare_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/light_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "light_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/light_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "light_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "light_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/light_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "light_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/magic_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "magic_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/magic_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "magic_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/magic_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "magic_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/magic_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "magic_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "magic_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/magic_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "magic_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/muzzle_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "muzzle_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/muzzle_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "muzzle_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/muzzle_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "muzzle_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/muzzle_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "muzzle_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/muzzle_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "muzzle_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/flame_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "flame_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "flame_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/flame_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "flame_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_01_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/muzzle_01_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_01_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_02_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/muzzle_02_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_02_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_03_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/muzzle_03_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_03_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_04_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/muzzle_04_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_04_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "muzzle_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/muzzle_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "muzzle_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/spark_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "spark_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/spark_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "spark_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_01_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_01_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_01_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_02_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_02_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_02_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_03_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_03_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_03_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_04_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_04_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_04_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_05_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_05_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_05_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_06_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_06_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_06_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_07_rotated",
+      "url": "/textures/particles/kenney/PNG (Transparent)/Rotated/trace_07_rotated.png",
+      "materialType": "Rotated",
+      "filename": "trace_07_rotated.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/scorch_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "scorch_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/scorch_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "scorch_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scorch_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/scorch_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "scorch_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "scratch_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/scratch_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "scratch_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/slash_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "slash_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/slash_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "slash_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/slash_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "slash_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "slash_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/slash_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "slash_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_06",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_06.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_07",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_07.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_08",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_08.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_08.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_09",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_09.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_09.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "smoke_10",
+      "url": "/textures/particles/kenney/PNG (Transparent)/smoke_10.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "smoke_10.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_06",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_06.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "spark_07",
+      "url": "/textures/particles/kenney/PNG (Transparent)/spark_07.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "spark_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_06",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_06.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_07",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_07.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_08",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_08.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_08.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "star_09",
+      "url": "/textures/particles/kenney/PNG (Transparent)/star_09.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "star_09.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "symbol_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/symbol_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "symbol_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "symbol_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/symbol_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "symbol_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_05",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_05.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_05.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_06",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_06.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_06.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "trace_07",
+      "url": "/textures/particles/kenney/PNG (Transparent)/trace_07.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "trace_07.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/twirl_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "twirl_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/twirl_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "twirl_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "twirl_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/twirl_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "twirl_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_01",
+      "url": "/textures/particles/kenney/PNG (Transparent)/window_01.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "window_01.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_02",
+      "url": "/textures/particles/kenney/PNG (Transparent)/window_02.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "window_02.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_03",
+      "url": "/textures/particles/kenney/PNG (Transparent)/window_03.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "window_03.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "window_04",
+      "url": "/textures/particles/kenney/PNG (Transparent)/window_04.png",
+      "materialType": "PNG (Transparent)",
+      "filename": "window_04.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "preview",
+      "url": "/textures/particles/kenney/Preview.png",
+      "materialType": "kenney",
+      "filename": "Preview.png",
+      "maps": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/sand/aerial_beach_01/arm.jpg",
+      "materialType": "aerial_beach_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/sand/aerial_beach_01/nor_gl.jpg",
+      "materialType": "aerial_beach_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/sand/aerial_beach_02/arm.jpg",
+      "materialType": "aerial_beach_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/sand/aerial_beach_02/nor_gl.jpg",
+      "materialType": "aerial_beach_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/sand/aerial_beach_03/arm.jpg",
+      "materialType": "aerial_beach_03",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/sand/aerial_beach_03/nor_gl.jpg",
+      "materialType": "aerial_beach_03",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/sand/aerial_sand/arm.jpg",
+      "materialType": "aerial_sand",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/sand/aerial_sand/nor_gl.jpg",
+      "materialType": "aerial_sand",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/sand/bicolour_gravel/arm.jpg",
+      "materialType": "bicolour_gravel",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/sand/bicolour_gravel/nor_gl.jpg",
+      "materialType": "bicolour_gravel",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/aerial_grass_rock/arm.jpg",
+      "materialType": "aerial_grass_rock",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/aerial_grass_rock/nor_gl.jpg",
+      "materialType": "aerial_grass_rock",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/aerial_rocks_01/arm.jpg",
+      "materialType": "aerial_rocks_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/aerial_rocks_01/nor_gl.jpg",
+      "materialType": "aerial_rocks_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/aerial_rocks_02/arm.jpg",
+      "materialType": "aerial_rocks_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/aerial_rocks_02/nor_gl.jpg",
+      "materialType": "aerial_rocks_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/aerial_rocks_04/arm.jpg",
+      "materialType": "aerial_rocks_04",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/aerial_rocks_04/nor_gl.jpg",
+      "materialType": "aerial_rocks_04",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/brick_pavement/arm.jpg",
+      "materialType": "brick_pavement",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/brick_pavement/nor_gl.jpg",
+      "materialType": "brick_pavement",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/stone/brick_wall_04/arm.jpg",
+      "materialType": "brick_wall_04",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/stone/brick_wall_04/nor_gl.jpg",
+      "materialType": "brick_wall_04",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/tile/anti_skid_tiles/arm.jpg",
+      "materialType": "anti_skid_tiles",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/tile/anti_skid_tiles/nor_gl.jpg",
+      "materialType": "anti_skid_tiles",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/aerial_wood_snips/arm.jpg",
+      "materialType": "aerial_wood_snips",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/aerial_wood_snips/nor_gl.jpg",
+      "materialType": "aerial_wood_snips",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_bluegum/arm.jpg",
+      "materialType": "bark_bluegum",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_bluegum/nor_gl.jpg",
+      "materialType": "bark_bluegum",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_brown_01/arm.jpg",
+      "materialType": "bark_brown_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_brown_01/nor_gl.jpg",
+      "materialType": "bark_brown_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_brown_02/arm.jpg",
+      "materialType": "bark_brown_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_brown_02/nor_gl.jpg",
+      "materialType": "bark_brown_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_platanus/arm.jpg",
+      "materialType": "bark_platanus",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_platanus/nor_gl.jpg",
+      "materialType": "bark_platanus",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_willow/arm.jpg",
+      "materialType": "bark_willow",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_willow/nor_gl.jpg",
+      "materialType": "bark_willow",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/bark_willow_02/arm.jpg",
+      "materialType": "bark_willow_02",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/bark_willow_02/nor_gl.jpg",
+      "materialType": "bark_willow_02",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/beam_wall_01/arm.jpg",
+      "materialType": "beam_wall_01",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/beam_wall_01/nor_gl.jpg",
+      "materialType": "beam_wall_01",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/black_painted_planks/arm.jpg",
+      "materialType": "black_painted_planks",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/black_painted_planks/nor_gl.jpg",
+      "materialType": "black_painted_planks",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    },
+    {
+      "id": "arm",
+      "url": "/textures/wood/blue_painted_planks/arm.jpg",
+      "materialType": "blue_painted_planks",
+      "filename": "arm.jpg",
+      "maps": [
+        "arm"
+      ]
+    },
+    {
+      "id": "nor_gl",
+      "url": "/textures/wood/blue_painted_planks/nor_gl.jpg",
+      "materialType": "blue_painted_planks",
+      "filename": "nor_gl.jpg",
+      "maps": [
+        "nor"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,661 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-02-11T02:11:00.725Z",
+  "totalEntries": 35,
+  "source": "Poly Haven (CC0)",
+  "resolution": "1k",
+  "categoryDistribution": {
+    "indoor": 19,
+    "nature": 9,
+    "urban": 7
+  },
+  "entries": [
+    {
+      "id": "hdri/indoor/abandoned_bakery",
+      "slug": "abandoned_bakery",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "empty",
+        "industrial",
+        "windows",
+        "bare",
+        "rubble",
+        "brick",
+        "concrete",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_bakery.hdr",
+      "fileSize": 1730263,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_church",
+      "slug": "abandoned_church",
+      "category": "nature",
+      "tags": [
+        "tree",
+        "autumn",
+        "church",
+        "abandoned",
+        "leaves"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_church.hdr",
+      "fileSize": 1730881,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_construction",
+      "slug": "abandoned_construction",
+      "category": "indoor",
+      "tags": [
+        "brick",
+        "pillar",
+        "warehouse",
+        "rubble",
+        "abandoned",
+        "debris",
+        "desolate",
+        "empty",
+        "ruin",
+        "gloomy"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_construction.hdr",
+      "fileSize": 1708048,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_factory_canteen_01",
+      "slug": "abandoned_factory_canteen_01",
+      "category": "indoor",
+      "tags": [
+        "hall",
+        "abandoned",
+        "fluorescent",
+        "industrial",
+        "backplates",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_factory_canteen_01.hdr",
+      "fileSize": 1653994,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_factory_canteen_02",
+      "slug": "abandoned_factory_canteen_02",
+      "category": "indoor",
+      "tags": [
+        "hall",
+        "abandoned",
+        "industrial",
+        "boxes",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_factory_canteen_02.hdr",
+      "fileSize": 1675278,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_bakery",
+      "slug": "abandoned_bakery",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "empty",
+        "industrial",
+        "windows",
+        "bare",
+        "rubble",
+        "brick",
+        "concrete",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_bakery.hdr",
+      "fileSize": 1730263,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_church",
+      "slug": "abandoned_church",
+      "category": "nature",
+      "tags": [
+        "tree",
+        "autumn",
+        "church",
+        "abandoned",
+        "leaves"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_church.hdr",
+      "fileSize": 1730881,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_construction",
+      "slug": "abandoned_construction",
+      "category": "indoor",
+      "tags": [
+        "brick",
+        "pillar",
+        "warehouse",
+        "rubble",
+        "abandoned",
+        "debris",
+        "desolate",
+        "empty",
+        "ruin",
+        "gloomy"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_construction.hdr",
+      "fileSize": 1708048,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_factory_canteen_01",
+      "slug": "abandoned_factory_canteen_01",
+      "category": "indoor",
+      "tags": [
+        "hall",
+        "abandoned",
+        "fluorescent",
+        "industrial",
+        "backplates",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_factory_canteen_01.hdr",
+      "fileSize": 1653994,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_factory_canteen_02",
+      "slug": "abandoned_factory_canteen_02",
+      "category": "indoor",
+      "tags": [
+        "hall",
+        "abandoned",
+        "industrial",
+        "boxes",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_factory_canteen_02.hdr",
+      "fileSize": 1675278,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_games_room_01",
+      "slug": "abandoned_games_room_01",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "room",
+        "window",
+        "tile",
+        "rubble"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_games_room_01.hdr",
+      "fileSize": 1650845,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_games_room_02",
+      "slug": "abandoned_games_room_02",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "room",
+        "window",
+        "tile",
+        "arcade",
+        "rubble"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_games_room_02.hdr",
+      "fileSize": 1647181,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_garage",
+      "slug": "abandoned_garage",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "graffiti",
+        "grunge",
+        "workshop",
+        "tire",
+        "debris",
+        "trash"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_garage.hdr",
+      "fileSize": 1718216,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_greenhouse",
+      "slug": "abandoned_greenhouse",
+      "category": "indoor",
+      "tags": [
+        "warehouse",
+        "concrete",
+        "greenhouse",
+        "abandoned",
+        "industrial",
+        "graffiti"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_greenhouse.hdr",
+      "fileSize": 1739912,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_hall_01",
+      "slug": "abandoned_hall_01",
+      "category": "indoor",
+      "tags": [
+        "hall",
+        "window",
+        "abandoned",
+        "empty",
+        "bare"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_hall_01.hdr",
+      "fileSize": 1636687,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_hopper_terminal_01",
+      "slug": "abandoned_hopper_terminal_01",
+      "category": "nature",
+      "tags": [
+        "tree",
+        "sun",
+        "winter",
+        "road",
+        "tracks",
+        "rail",
+        "industrial",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_hopper_terminal_01.hdr",
+      "fileSize": 1640604,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_hopper_terminal_02",
+      "slug": "abandoned_hopper_terminal_02",
+      "category": "nature",
+      "tags": [
+        "sun",
+        "rail",
+        "tracks",
+        "tree",
+        "winter",
+        "birch",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_hopper_terminal_02.hdr",
+      "fileSize": 1755301,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_hopper_terminal_03",
+      "slug": "abandoned_hopper_terminal_03",
+      "category": "nature",
+      "tags": [
+        "industrial",
+        "sun",
+        "tree",
+        "winter",
+        "field",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_hopper_terminal_03.hdr",
+      "fileSize": 1565055,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_hopper_terminal_04",
+      "slug": "abandoned_hopper_terminal_04",
+      "category": "nature",
+      "tags": [
+        "field",
+        "industrial",
+        "sun",
+        "tree",
+        "summer",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_hopper_terminal_04.hdr",
+      "fileSize": 1517504,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_parking",
+      "slug": "abandoned_parking",
+      "category": "urban",
+      "tags": [
+        "parking",
+        "asphalt",
+        "road",
+        "tree",
+        "bush",
+        "derelict",
+        "abandoned",
+        "industrial",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_parking.hdr",
+      "fileSize": 1622097,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_pathway",
+      "slug": "abandoned_pathway",
+      "category": "nature",
+      "tags": [
+        "sun",
+        "tree",
+        "road",
+        "path",
+        "field",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_pathway.hdr",
+      "fileSize": 1514200,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_slipway",
+      "slug": "abandoned_slipway",
+      "category": "urban",
+      "tags": [
+        "ocean",
+        "bay",
+        "lake",
+        "industrial",
+        "abandoned"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_slipway.hdr",
+      "fileSize": 1662646,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_tank_farm_01",
+      "slug": "abandoned_tank_farm_01",
+      "category": "urban",
+      "tags": [
+        "sun",
+        "tree",
+        "parking",
+        "abandoned",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_tank_farm_01.hdr",
+      "fileSize": 1522831,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_tank_farm_02",
+      "slug": "abandoned_tank_farm_02",
+      "category": "urban",
+      "tags": [
+        "sun",
+        "tree",
+        "abandoned",
+        "road",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_tank_farm_02.hdr",
+      "fileSize": 1531651,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_tank_farm_03",
+      "slug": "abandoned_tank_farm_03",
+      "category": "urban",
+      "tags": [
+        "sun",
+        "parking",
+        "abandoned",
+        "asphalt",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_tank_farm_03.hdr",
+      "fileSize": 1597102,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_tank_farm_04",
+      "slug": "abandoned_tank_farm_04",
+      "category": "nature",
+      "tags": [
+        "sun",
+        "grass",
+        "field",
+        "hill",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_tank_farm_04.hdr",
+      "fileSize": 1519138,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/abandoned_tank_farm_05",
+      "slug": "abandoned_tank_farm_05",
+      "category": "urban",
+      "tags": [
+        "sun",
+        "sand",
+        "dirt",
+        "building",
+        "mounds",
+        "winter",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/abandoned_tank_farm_05.hdr",
+      "fileSize": 1448809,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_tiled_room",
+      "slug": "abandoned_tiled_room",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "industrial",
+        "rubble",
+        "ruin",
+        "trash",
+        "weathered",
+        "broken",
+        "neglected",
+        "decay",
+        "debris",
+        "grunge",
+        "window"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_tiled_room.hdr",
+      "fileSize": 1791628,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/nature/abandoned_waterworks",
+      "slug": "abandoned_waterworks",
+      "category": "nature",
+      "tags": [
+        "tree",
+        "concrete",
+        "overgrown",
+        "abandoned",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/nature/abandoned_waterworks.hdr",
+      "fileSize": 1690281,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_workshop",
+      "slug": "abandoned_workshop",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "warehouse",
+        "rubble",
+        "brick",
+        "pillar",
+        "bare",
+        "empty",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_workshop.hdr",
+      "fileSize": 1697985,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/abandoned_workshop_02",
+      "slug": "abandoned_workshop_02",
+      "category": "indoor",
+      "tags": [
+        "abandoned",
+        "warehouse",
+        "concrete",
+        "bare",
+        "empty",
+        "overgrown",
+        "backplates"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/abandoned_workshop_02.hdr",
+      "fileSize": 1755439,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/acoustical_shell",
+      "slug": "acoustical_shell",
+      "category": "indoor",
+      "tags": [
+        "stage",
+        "promenade",
+        "tree",
+        "garden",
+        "bay"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/acoustical_shell.hdr",
+      "fileSize": 1681811,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/adams_place_bridge",
+      "slug": "adams_place_bridge",
+      "category": "indoor",
+      "tags": [
+        "building",
+        "architecture",
+        "europe",
+        "bridge",
+        "tunnel",
+        "path"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/adams_place_bridge.hdr",
+      "fileSize": 1613851,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/indoor/aerodynamics_workshop",
+      "slug": "aerodynamics_workshop",
+      "category": "indoor",
+      "tags": [
+        "machine",
+        "industrial",
+        "workshop",
+        "wind tunnel",
+        "window"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/indoor/aerodynamics_workshop.hdr",
+      "fileSize": 1488808,
+      "source": "polyhaven",
+      "license": "CC0"
+    },
+    {
+      "id": "hdri/urban/afrikaans_church_exterior",
+      "slug": "afrikaans_church_exterior",
+      "category": "urban",
+      "tags": [
+        "church",
+        "dutch architecture",
+        "asphalt",
+        "historical",
+        "white building",
+        "paved walkway"
+      ],
+      "resolution": "1k",
+      "filePath": "/skybox/urban/afrikaans_church_exterior.hdr",
+      "fileSize": 1635711,
+      "source": "polyhaven",
+      "license": "CC0"
+    }
+  ]
+}

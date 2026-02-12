@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검증 에이전트 프로토콜 Phase 1 기술 보고서</title>
+    <meta name="description" content="PlacementValidator 및 PerformanceValidator의 아키텍처 설계와 LangGraph 파이프라인 통합">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a12;
+            --bg-secondary: #12121e;
+            --bg-tertiary: #1a1a2e;
+            --text-primary: #e8e8f0;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a80;
+            --accent-blue: #4d9fff;
+            --accent-purple: #a855f7;
+            --accent-green: #4ade80;
+            --accent-orange: #fb923c;
+            --accent-red: #f87171;
+            --border-color: rgba(100, 100, 150, 0.2);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* 네비게이션 */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(10, 10, 18, 0.95);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            padding: 140px 40px 80px;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(77, 159, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(77, 159, 255, 0.1);
+            border: 1px solid rgba(77, 159, 255, 0.3);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--accent-blue);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 목차 */
+        .toc {
+            position: fixed;
+            left: 40px;
+            top: 100px;
+            width: 240px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .toc-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .toc-list a:hover,
+        .toc-list a.active {
+            color: var(--accent-blue);
+            background: rgba(77, 159, 255, 0.1);
+        }
+
+        .toc-list .sub {
+            padding-left: 24px;
+            font-size: 12px;
+        }
+
+        /* 메인 콘텐츠 */
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 40px 120px;
+            margin-left: 320px;
+        }
+
+        /* 섹션 */
+        section {
+            margin-bottom: 80px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2 .num {
+            font-size: 14px;
+            padding: 4px 10px;
+            background: var(--gradient-1);
+            border-radius: 6px;
+            color: #fff;
+        }
+
+        h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            color: var(--accent-blue);
+        }
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* 강조 박스 */
+        .callout {
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+            border-left: 4px solid;
+        }
+
+        .callout.info {
+            background: rgba(77, 159, 255, 0.1);
+            border-color: var(--accent-blue);
+        }
+
+        .callout.warning {
+            background: rgba(251, 146, 60, 0.1);
+            border-color: var(--accent-orange);
+        }
+
+        .callout.success {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 코드 블록 */
+        pre {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        pre code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        /* 리스트 */
+        ul,
+        ol {
+            margin: 16px 0 24px 24px;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 테이블 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        tr:hover td {
+            background: rgba(77, 159, 255, 0.05);
+        }
+
+        /* 다이어그램 */
+        .diagram {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 32px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .diagram-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .flow-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .flow-node {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 500;
+            min-width: 200px;
+        }
+
+        .flow-node.generator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .flow-node.placement {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #fff;
+        }
+
+        .flow-node.performance {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+            color: #fff;
+        }
+
+        .flow-node.success {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #fff;
+        }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 24px;
+        }
+
+        .flow-branch {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .flow-label {
+            font-size: 12px;
+            color: var(--accent-green);
+            padding: 4px 8px;
+            background: rgba(74, 222, 128, 0.1);
+            border-radius: 4px;
+        }
+
+        .flow-label.fail {
+            color: var(--accent-red);
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        /* 수식 */
+        .math {
+            font-family: 'JetBrains Mono', monospace;
+            font-style: italic;
+            color: var(--accent-purple);
+        }
+
+        /* 강조 텍스트 */
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        em {
+            color: var(--accent-blue);
+            font-style: normal;
+        }
+
+        /* 카드 그리드 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* 푸터 */
+        footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-left: 320px;
+        }
+
+        /* 반응형 */
+        @media (max-width: 1200px) {
+            .toc {
+                display: none;
+            }
+
+            .main,
+            footer {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                padding: 0 20px;
+            }
+
+            .main {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 네비게이션 -->
+    <nav class="nav">
+        <div class="nav-logo">🛡️ WebPilot Engine</div>
+        <div class="nav-links">
+            <a href="/docs/architecture.html">아키텍처</a>
+            <a href="/docs/api.html">API</a>
+            <a href="https://github.com/YeonSol/webpilot-engine" target="_blank">GitHub</a>
+        </div>
+    </nav>
+
+    <!-- 히어로 -->
+    <header class="hero">
+        <div class="hero-badge">
+            <span>📄</span>
+            <span>기술 보고서 | Phase 1</span>
+        </div>
+        <h1>검증 에이전트 프로토콜<br>Phase 1 기술 보고서</h1>
+        <p class="hero-subtitle">
+            PlacementValidator 및 PerformanceValidator의 아키텍처 설계와<br>
+            LangGraph 파이프라인 통합
+        </p>
+        <div class="hero-meta">
+            <span>📅 2026.02.06</span>
+            <span>⏱️ 읽는 시간 약 20분</span>
+            <span>🏷️ 3D 검증, BVH, LangGraph</span>
+        </div>
+    </header>
+
+    <!-- 목차 -->
+    <aside class="toc">
+        <div class="toc-title">목차</div>
+        <ul class="toc-list">
+            <li><a href="#intro">서론: 패러다임 변화</a></li>
+            <li><a href="#architecture">1. 아키텍처 전략</a></li>
+            <li class="sub"><a href="#fail-fast">1.1 Fail-Fast 원칙</a></li>
+            <li class="sub"><a href="#feedback">1.2 피드백 명확성</a></li>
+            <li><a href="#placement">2. PlacementValidator</a></li>
+            <li class="sub"><a href="#bvh">2.1 BVH 기법</a></li>
+            <li class="sub"><a href="#floating">2.2 부유 현상 감지</a></li>
+            <li><a href="#performance">3. PerformanceValidator</a></li>
+            <li class="sub"><a href="#drawcall">3.1 드로우 콜</a></li>
+            <li class="sub"><a href="#material">3.2 재질 비용</a></li>
+            <li><a href="#langgraph">4. LangGraph 통합</a></li>
+            <li><a href="#robustness">5. 견고성 확보</a></li>
+            <li><a href="#conclusion">6. 결론</a></li>
+        </ul>
+    </aside>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main">
+        <!-- 서론 -->
+        <section id="intro">
+            <h2><span class="num">서론</span> 생성형 AI 시대의 3D 품질 보증 패러다임 변화</h2>
+
+            <p>인공지능(AI) 기술의 비약적인 발전은 텍스트와 2D 이미지를 넘어 <strong>3D 콘텐츠 생성 분야</strong>에서도 혁명적인 변화를 일으키고 있다. 그러나 대규모 언어
+                모델(LLM)과 확산 모델(Diffusion Model)을 결합한 생성형 3D 파이프라인은 본질적으로 <em>'환각(Hallucination)'</em>의 위험을 내포하고 있다.</p>
+
+            <div class="callout warning">
+                <div class="callout-title">⚠️ 생성 모델의 한계</div>
+                <p>텍스트 프롬프트의 의미론적 요구사항을 시각적으로 구현하는 데 집중하는 생성 모델은 종종 <strong>물리적 법칙</strong>이나 <strong>3D 렌더링 엔진의 기술적 제약
+                        사항</strong>을 간과하는 경향이 있다.</p>
+            </div>
+
+            <p>예를 들어, 생성된 가구 모델이 바닥을 뚫고 배치되거나, 벽면과 겹쳐지는 <em>'Interpenetration'</em> 현상, 혹은 렌더링 예산을 초과하는 수백만 개의 폴리곤을 가진
+                자산이 생성되어 실시간 애플리케이션의 성능을 저하시키는 사례가 빈번하다.</p>
+
+            <p>전통적인 3D 제작 파이프라인에서는 숙련된 아티스트와 테크니컬 아티스트(TA)가 수동으로 이러한 오류를 수정했다. 하지만 생성형 AI가 주도하는 자동화된 워크플로우에서는 이러한
+                <strong>인간 개입(Human-in-the-loop)</strong>이 병목 구간이 되며, 시스템의 확장성을 저해한다.</p>
+
+            <div class="callout success">
+                <div class="callout-title">✅ 해결책: 자율 검증 에이전트</div>
+                <p>생성된 결과물의 품질을 즉시 평가하고, 구체적인 수정 피드백을 생성 에이전트에게 전달하여 스스로 문제를 해결하게 만드는 <strong>'자율 검증 에이전트(Autonomous
+                        Verification Agent)'</strong>의 도입이 필수적이다.</p>
+            </div>
+
+            <p>본 보고서는 이러한 배경 하에 설계된 검증 에이전트 프로토콜의 <strong>Phase 1</strong> 구현 전략을 상세히 기술한다.</p>
+        </section>
+
+        <!-- 1. 아키텍처 전략 -->
+        <section id="architecture">
+            <h2><span class="num">1</span> 아키텍처 전략: Option A 실행 모델의 타당성 분석</h2>
+
+            <p>검증 시스템을 설계할 때 가장 먼저 직면하는 결정은 다수의 검증기(Validator)를 어떻게 조직화할 것인가에 대한 문제이다.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">Option A: 순차적 차단</div>
+                    <div class="card-desc">각 검증 단계가 통과되어야만 다음 단계로 진행하는 게이트키퍼 구조 (채택)</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">Option B: 병렬 집계</div>
+                    <div class="card-desc">모든 검증기를 병렬로 실행하여 오류를 한 번에 집계</div>
+                </div>
+            </div>
+
+            <h3 id="fail-fast">1.1 Fail-Fast 원칙과 자원 효율성</h3>
+
+            <p>Option A의 가장 큰 강점은 <strong>Fail-Fast 원칙</strong>에 기반한 자원 관리 효율성이다. 3D 씬 검증 과정에서 PlacementValidator와
+                PerformanceValidator가 소모하는 연산 비용은 <em>비대칭적</em>이다.</p>
+
+            <table>
+                <tr>
+                    <th>검증 유형</th>
+                    <th>연산 비용</th>
+                    <th>기법</th>
+                </tr>
+                <tr>
+                    <td>배치 검증 (Placement)</td>
+                    <td>저비용 ⚡</td>
+                    <td>BVH 공간 분할 알고리즘</td>
+                </tr>
+                <tr>
+                    <td>성능 검증 (Performance)</td>
+                    <td>고비용 🔥</td>
+                    <td>씬 그래프 전체 순회, 재질 파싱</td>
+                </tr>
+            </table>
+
+            <p>유효하지 않은 씬에 대해 복잡한 렌더링 성능 분석을 수행하는 것은 컴퓨팅 자원의 낭비이다. Option A는 배치 검증을 <strong>1차 관문</strong>으로 설정하여, 기하학적
+                오류가 발견되는 즉시 파이프라인을 중단하고 생성 에이전트에게 제어권과 피드백을 반환한다.</p>
+
+            <h3 id="feedback">1.2 피드백 명확성과 에이전트 혼란 방지</h3>
+
+            <p>생성 에이전트(Generator Agent) 입장에서 피드백의 질은 수정 성공률과 직결된다. Option B와 같이 복합적인 피드백을 한 번에 전달할 경우, LLM 기반의 에이전트는
+                우선순위를 설정하는 데 어려움을 겪거나 <em>'퇴행(Regression)'</em>을 범할 가능성이 높다.</p>
+
+            <div class="callout info">
+                <div class="callout-title">💡 Option A의 접근법</div>
+                <p>한 번에 하나의 명확한 목표를 제시한다. 1단계: "위치만 수정하라", 2단계: "폴리곤 수만 줄이라"는 순차적 지시로 에이전트가 각 문제 해결에 집중할 수 있는 환경을 조성한다.
+                </p>
+            </div>
+        </section>
+
+        <!-- 2. PlacementValidator -->
+        <section id="placement">
+            <h2><span class="num">2</span> 기하학적 정합성 보증: PlacementValidator 상세 설계</h2>
+
+            <p>PlacementValidator는 3D 공간 내 객체들의 <strong>물리적 타당성(Physical Plausibility)</strong>을 보증하는 핵심 모듈이다.</p>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">💥</div>
+                    <div class="card-title">충돌(Collision)</div>
+                    <div class="card-desc">서로 다른 객체가 물리적으로 불가능하게 겹치는 교차 현상</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎈</div>
+                    <div class="card-title">부유(Floating)</div>
+                    <div class="card-desc">중력의 영향을 받는 객체가 공중에 떠 있는 현상</div>
+                </div>
+            </div>
+
+            <h3 id="bvh">2.1 고속 충돌 감지를 위한 공간 분할 기법 (BVH)</h3>
+
+            <p>3D 씬에서의 충돌 감지는 계산 복잡도가 매우 높은 작업이다. 가장 단순한 'Brute-force' 방식은 <span class="math">O(N × M)</span>의 연산 복잡도를
+                가지며, 현대적 3D 환경에서는 실시간 검증이 사실상 불가능하다.</p>
+
+            <h4>BVH(Bounding Volume Hierarchy)의 원리</h4>
+
+            <ol>
+                <li><strong>AABB(Axis-Aligned Bounding Box)</strong>: 각 객체나 폴리곤 그룹을 포함하는 최소한의 직육면체 박스를 생성</li>
+                <li><strong>계층 구조(Hierarchy)</strong>: 전체 씬을 감싸는 루트 노드에서 시작하여, 공간을 재귀적으로 분할하며 하위 노드를 생성</li>
+            </ol>
+
+            <p>이를 통해 충돌 감지의 평균 복잡도를 <span class="math">O(N)</span>에서 <span class="math">O(log N)</span> 수준으로 획기적으로 단축시킬
+                수 있다.</p>
+
+            <h4>three-mesh-bvh 활용 및 Shapecast 구현</h4>
+
+            <pre><code class="language-typescript">import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
+import * as THREE from 'three';
+
+// 프로토타입 확장
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+THREE.Mesh.prototype.raycast = acceleratedRaycast;
+
+export function checkCollision(sceneMesh: THREE.Mesh, objectMesh: THREE.Mesh): CollisionResult {
+    // 정적 씬의 BVH가 없다면 생성 (캐싱 권장)
+    if (!sceneMesh.geometry.boundsTree) {
+        sceneMesh.geometry.computeBoundsTree();
+    }
+
+    // 객체 자신의 BVH 생성
+    if (!objectMesh.geometry.boundsTree) {
+        objectMesh.geometry.computeBoundsTree();
+    }
+
+    let isColliding = false;
+    
+    // Shapecast를 통한 볼륨 교차 검사
+    sceneMesh.geometry.boundsTree.shapecast({
+        intersectsBounds: (box) => {
+            return box.intersectsBox(objectMesh.geometry.boundingBox);
+        },
+        intersectsTriangle: (triangle) => {
+            if (objectMesh.geometry.boundsTree.intersectsTriangle(triangle)) {
+                isColliding = true;
+                return true; // 충돌 확인 시 즉시 중단
+            }
+            return false;
+        }
+    });
+
+    return { isColliding };
+}</code></pre>
+
+            <table>
+                <tr>
+                    <th>기법</th>
+                    <th>장점</th>
+                    <th>한계</th>
+                </tr>
+                <tr>
+                    <td>Raycasting</td>
+                    <td>간단한 구현</td>
+                    <td>Deep Penetration 감지 불가</td>
+                </tr>
+                <tr>
+                    <td>Shapecast</td>
+                    <td>볼륨 기반 정밀 검사, 침투 깊이 측정</td>
+                    <td>상대적 고비용</td>
+                </tr>
+            </table>
+
+            <h3 id="floating">2.2 부유(Floating) 현상 감지와 레이캐스팅 전략</h3>
+
+            <h4>다지점 샘플링(Multi-point Sampling) 전략</h4>
+
+            <ol>
+                <li><strong>AABB 바닥면 추출</strong>: 바닥면의 네 모서리와 중심점 등 최소 5개 이상의 샘플 포인트 선정</li>
+                <li><strong>레이 발사</strong>: 각 샘플 포인트에서 월드 좌표계의 -Y축(아래쪽) 방향으로 레이 발사</li>
+                <li><strong>거리 측정 및 판정</strong>:
+                    <ul>
+                        <li><strong>접촉(Contact)</strong>: 거리가 허용 오차 ε (예: 0.01m) 이내</li>
+                        <li><strong>부유(Floating)</strong>: 모든 샘플 포인트에서의 충돌 거리가 ε보다 큼</li>
+                        <li><strong>침투(Penetration)</strong>: 충돌 지점이 객체의 바닥면보다 위쪽</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <!-- 3. PerformanceValidator -->
+        <section id="performance">
+            <h2><span class="num">3</span> 렌더링 효율성 관리: PerformanceValidator 상세 설계</h2>
+
+            <p>PerformanceValidator는 생성된 씬이 시각적으로 아름다울 뿐만 아니라, <strong>기술적으로 실행 가능한지(Feasible)</strong>를 검증하는 역할을 수행한다.
+            </p>
+
+            <h3 id="drawcall">3.1 드로우 콜(Draw Call)과 성능 병목의 상관관계</h3>
+
+            <p>3D 렌더링 성능을 저하시키는 가장 주된 요인은 GPU의 연산 능력 부족보다는 CPU와 GPU 간의 통신 병목, 즉 <strong>드로우 콜(Draw Call)</strong>의 과다
+                발생에 있다.</p>
+
+            <div class="callout info">
+                <div class="callout-title">📊 목표 지표</div>
+                <p>일반적인 웹 애플리케이션에서 부드러운 <strong>60 FPS</strong>를 유지하기 위해서는 프레임당 드로우 콜을 <strong>100회 ~ 500회 이하</strong>로
+                    유지하는 것이 권장된다.</p>
+            </div>
+
+            <h3 id="material">3.2 재질(Material) 속성에 따른 은폐된 비용 분석</h3>
+
+            <p>특히 <code>MeshPhysicalMaterial</code>의 <em>transmission</em> 속성은 가장 치명적인 성능 저하 요인이다.</p>
+
+            <table>
+                <tr>
+                    <th>조건</th>
+                    <th>추가 비용</th>
+                    <th>이유</th>
+                </tr>
+                <tr>
+                    <td>기본 드로우 콜</td>
+                    <td>1</td>
+                    <td>기본 렌더링</td>
+                </tr>
+                <tr>
+                    <td>transmission > 0</td>
+                    <td>+1</td>
+                    <td>투과 패스 추가</td>
+                </tr>
+                <tr>
+                    <td>roughness 낮음</td>
+                    <td>+가중치</td>
+                    <td>실시간 반사 계산</td>
+                </tr>
+                <tr>
+                    <td>그림자 캐스팅</td>
+                    <td>+드로우 콜</td>
+                    <td>그림자 맵 생성</td>
+                </tr>
+            </table>
+
+            <h4>정적 성능 예측 알고리즘</h4>
+
+            <pre><code class="language-typescript">interface PerformanceMetrics {
+    totalDrawCalls: number;
+    totalTriangleCount: number;
+    highCostMaterials: number;
+}
+
+function analyzeScenePerformance(scene: THREE.Group): PerformanceMetrics {
+    let metrics = { totalDrawCalls: 0, totalTriangleCount: 0, highCostMaterials: 0 };
+
+    scene.traverse((object) => {
+        if (object instanceof THREE.Mesh) {
+            // 1. 드로우 콜 예측
+            metrics.totalDrawCalls++;
+
+            // 2. 재질 비용 분석
+            if (object.material instanceof THREE.MeshPhysicalMaterial) {
+                if (object.material.transmission > 0) {
+                    metrics.totalDrawCalls++; // 투과 패스 추가 비용
+                    metrics.highCostMaterials++;
+                }
+            }
+
+            // 3. 폴리곤 수 집계
+            const geometry = object.geometry;
+            if (geometry) {
+                const count = geometry.index 
+                    ? geometry.index.count / 3 
+                    : geometry.attributes.position.count / 3;
+                metrics.totalTriangleCount += count;
+            }
+        }
+    });
+
+    return metrics;
+}</code></pre>
+        </section>
+
+        <!-- 4. LangGraph 파이프라인 -->
+        <section id="langgraph">
+            <h2><span class="num">4</span> LangGraph 파이프라인 통합: 상태 주도형 오케스트레이션</h2>
+
+            <p>PlacementValidator와 PerformanceValidator를 자율적인 에이전트 시스템으로 통합하기 위해 <strong>LangGraph</strong> 프레임워크를 활용한다.
+            </p>
+
+            <h3>4.1 상태 스키마(State Schema) 정의</h3>
+
+            <pre><code class="language-typescript">interface AgentState {
+    // 생성된 3D 씬 데이터
+    sceneData: SceneGraphJSON;
+    
+    // 현재까지 누적된 검증 오류 목록
+    validationErrors: ValidationError[];
+    
+    // 검증 실패 시 생성된 피드백
+    feedbackHistory: string[];
+    
+    // 무한 루프 방지를 위한 재시도 카운터
+    retryCount: number;
+    
+    // 현재 실행 단계 추적
+    currentStage: 'GENERATION' | 'PLACEMENT_CHECK' | 'PERFORMANCE_CHECK' | 'APPROVED' | 'FAILED';
+}
+
+interface ValidationError {
+    type: 'COLLISION' | 'FLOATING' | 'HIGH_POLY' | 'DRAW_CALL_OVERFLOW';
+    objectId: string;
+    message: string;
+    suggestion?: Vector3; // 예: { x: 0, y: 0.5, z: 0 }
+}</code></pre>
+
+            <h3>4.2 그래프 토폴로지(Topology)와 순환 구조</h3>
+
+            <div class="diagram">
+                <div class="diagram-title">Option A: 순차적 차단 및 피드백 루프</div>
+                <div class="flow-chart">
+                    <div class="flow-node generator">🎬 GeneratorNode</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-node placement">📦 PlacementValidator</div>
+                    <div class="flow-branch">
+                        <span class="flow-label">통과</span>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-node performance">⚡ PerformanceValidator</div>
+                    </div>
+                    <div class="flow-branch">
+                        <span class="flow-label fail">실패</span>
+                        <span class="flow-arrow">↺ 피드백 루프</span>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-node success">✅ SuccessNode</div>
+                </div>
+            </div>
+
+            <p>핵심은 <strong>조건부 엣지(Conditional Edge)</strong>를 통한 동적 라우팅이다. 검증 결과에 따라 실행 흐름이 과거(생성 단계)로 돌아갈 수 있는 <em>순환
+                    구조(Cyclic Graph)</em>가 LangGraph의 강력함을 드러내는 지점이다.</p>
+        </section>
+
+        <!-- 5. 견고성 확보 -->
+        <section id="robustness">
+            <h2><span class="num">5</span> 견고성 확보: 재시도 정책과 에러 핸들링</h2>
+
+            <h3>5.1 이중 계층 재시도 전략 (Dual-Layer Retry Strategy)</h3>
+
+            <table>
+                <tr>
+                    <th>계층</th>
+                    <th>오류 유형</th>
+                    <th>해결책</th>
+                </tr>
+                <tr>
+                    <td>기술적/일시적</td>
+                    <td>API 타임아웃, 네트워크 손실</td>
+                    <td>노드 레벨 RetryPolicy (지수 백오프)</td>
+                </tr>
+                <tr>
+                    <td>논리적/검증</td>
+                    <td>모델 충돌, 성능 초과</td>
+                    <td>그래프 레벨 피드백 루프</td>
+                </tr>
+            </table>
+
+            <h3>5.2 Fallback 메커니즘</h3>
+
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-icon">🔨</div>
+                    <div class="card-title">Hard Rule 적용</div>
+                    <div class="card-desc">충돌하는 객체 중 덜 중요한 객체를 씬에서 강제 삭제</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📉</div>
+                    <div class="card-title">성능 강제 최적화</div>
+                    <div class="card-desc">텍스처 해상도 절반 축소, 저렴한 Material로 변환</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. 결론 -->
+        <section id="conclusion">
+            <h2><span class="num">6</span> 구현 로드맵 및 결론</h2>
+
+            <h3>6.1 권장 기술 스택</h3>
+
+            <table>
+                <tr>
+                    <th>영역</th>
+                    <th>기술</th>
+                    <th>용도</th>
+                </tr>
+                <tr>
+                    <td>런타임</td>
+                    <td>Node.js v18+</td>
+                    <td>서버 사이드 실행</td>
+                </tr>
+                <tr>
+                    <td>3D 엔진</td>
+                    <td>Three.js</td>
+                    <td>웹 기반 3D 표준</td>
+                </tr>
+                <tr>
+                    <td>오케스트레이션</td>
+                    <td>LangGraph</td>
+                    <td>상태 관리 및 에이전트 루프</td>
+                </tr>
+                <tr>
+                    <td>수학 연산</td>
+                    <td>three-mesh-bvh</td>
+                    <td>공간 분할 및 충돌 검사</td>
+                </tr>
+            </table>
+
+            <h3>6.2 검증 단계 요약</h3>
+
+            <table>
+                <tr>
+                    <th>검증 단계</th>
+                    <th>주요 목표</th>
+                    <th>핵심 기술</th>
+                    <th>실패 시 대응</th>
+                </tr>
+                <tr>
+                    <td>Phase 1-A</td>
+                    <td>배치 정합성</td>
+                    <td>BVH, Raycasting, Shapecast</td>
+                    <td>위치 수정 피드백</td>
+                </tr>
+                <tr>
+                    <td>Phase 1-B</td>
+                    <td>성능 효율성</td>
+                    <td>정적 씬 분석, 재질 비용 계산</td>
+                    <td>폴리곤 감축 요청</td>
+                </tr>
+                <tr>
+                    <td>Phase 2</td>
+                    <td>의미론적 타당성</td>
+                    <td>VLM (Vision-Language Model)</td>
+                    <td>프롬프트 맥락 재해석</td>
+                </tr>
+            </table>
+
+            <div class="callout success">
+                <div class="callout-title">🎯 결론</div>
+                <p>본 보고서에서 제시한 Phase 1 구현 계획은 생성형 3D 파이프라인의 신뢰성을 확보하기 위한 초석이다. <strong>Option A의 순차적 검증 아키텍처</strong>와
+                    <strong>LangGraph의 순환적 피드백 루프</strong> 결합은 리소스 효율성과 결과물 품질이라는 두 마리 토끼를 잡을 수 있는 최적의 전략으로 평가된다.</p>
+            </div>
+
+            <p>향후 이어질 <strong>Phase 2</strong>에서는 기하학적/기술적 검증을 넘어, "식탁 위에 의자가 올라가 있는가?"와 같은 <em>의미론적 검증(Semantic
+                    Validation)</em>과, 텍스처의 깨짐이나 UV 매핑 오류를 시각적으로 검사하는 <em>Visual QA 에이전트</em>의 통합이 요구될 것이다.</p>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer>
+        <p>© 2026 WebPilot Engine · 검증 에이전트 프로토콜 Phase 1 기술 보고서</p>
+    </footer>
+
+    <script>
+        // 코드 하이라이팅
+        hljs.highlightAll();
+
+        // 목차 스크롤 활성화
+        const tocLinks = document.querySelectorAll('.toc-list a');
+        const sections = document.querySelectorAll('section[id]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

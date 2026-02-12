@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "WebPilot Engine 로컬 에셋 매핑 - 하드코딩 대체용",
+    "version": "1.0.0",
+    "lastUpdated": "2026-02-06",
+    "furniture": {
+        "chair": "/models/furniture/modern_office_chair_padded_01.glb",
+        "의자": "/models/furniture/modern_office_chair_padded_01.glb",
+        "desk": "/models/furniture/realistic_wooden_office_desk_01.glb",
+        "책상": "/models/furniture/realistic_wooden_office_desk_01.glb",
+        "table": "/models/furniture/detailed_realistic_model_largeoaktable_01.glb",
+        "테이블": "/models/furniture/detailed_realistic_model_largeoaktable_01.glb",
+        "탁자": "/models/furniture/detailed_realistic_model_largeoaktable_01.glb",
+        "shelf": "/models/furniture/detailed_realistic_model_bookcase_01.glb",
+        "선반": "/models/furniture/detailed_realistic_model_bookcase_01.glb",
+        "broom": "/models/furniture/detailed_realistic_model_broomstick_01.glb",
+        "빗자루": "/models/furniture/detailed_realistic_model_broomstick_01.glb",
+        "piano": "/models/furniture/detailed_realistic_model_grand_01.glb",
+        "피아노": "/models/furniture/detailed_realistic_model_grand_01.glb",
+        "antique desk": "/models/furniture/detailed_realistic_model_grandoaktable_01.glb"
+    },
+    "props": {
+        "magic_book": "/models/misc/detailed_realistic_model_leatherbound_01.glb",
+        "마법서": "/models/misc/detailed_realistic_model_leatherbound_01.glb",
+        "sorting_hat": "/models/misc/HarryPotter_Hat_Test.glb",
+        "snitch": "/models/misc/snitch.glb",
+        "potion": "/models/misc/detailed_realistic_model_potions_01.glb",
+        "bookshelf": "/models/misc/detailed_realistic_model_ancientbookshelf_01.glb",
+        "floating_candle": "/models/misc/detailed_realistic_model_floatingcandles_02.glb",
+        "dumbledore": "/models/misc/detailed_realistic_model_albusdumbledore_02.glb",
+        "모자": "/models/misc/detailed_realistic_model_sortinghat_01.glb",
+        "스니치": "/models/misc/snitch.glb",
+        "포션": "/models/misc/detailed_realistic_model_potions_01.glb",
+        "책장": "/models/misc/detailed_realistic_model_ancientbookshelf_01.glb",
+        "촛불": "/models/misc/detailed_realistic_model_floatingcandles_02.glb",
+        "덤블도어": "/models/misc/detailed_realistic_model_albusdumbledore_02.glb",
+        "hogwarts_miniature": "/models/misc/detailed_realistic_model_hogwarts_01.glb"
+    },
+    "architecture": {
+        "hogwarts_great_hall": "/models/Harry/hogwarts_grand_hall.glb",
+        "dumbledores_office": "/models/Harry/dumbledores_office.glb",
+        "hogwarts_corridor": "/models/Harry/hogwarts_corridor.glb",
+        "honey_dukes_shop": "/models/Harry/honey_dukes_shop.glb",
+        "ollivanders_shop": "/models/Harry/ollivanders_wand_shop.glb",
+        "potions_classroom": "/models/Harry/potions_classroom.glb",
+        "transfiguration_class": "/models/Harry/transfiguration_class.glb",
+        "umbridges_office": "/models/Harry/umbridges_office.glb"
+    }
+}
