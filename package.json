@@ -5,14 +5,9 @@
   "scripts": {
     "dev": "next dev -p 8090",
     "build": "cross-env NEXT_TURBOPACK=0 next build",
-    "build:registry": "npx tsx scripts/asset-pipeline/build-asset-registry.ts",
-    "build:semantic": "npx tsx scripts/metadata/rebuild-semantic-assets.ts",
-    "build:vectors": "npx tsx scripts/metadata/build-vector-index.ts",
-    "prebuild": "npm run build:registry",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",
-    "download:assets": "node scripts/download_resources.js",
     "deploy:check": "npx vercel list web-pilot-engine --prod",
     "test": "vitest run",
     "test:watch": "vitest"
