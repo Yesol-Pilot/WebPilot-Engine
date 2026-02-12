@@ -15,6 +15,7 @@
 <p align="center">
   <a href="https://web-pilot-engine.vercel.app"><img src="https://img.shields.io/badge/🌐_Live_Demo-web--pilot--engine.vercel.app-000?style=flat-square&logo=vercel" alt="Live Demo"/></a>
   <a href="https://web-pilot-engine.vercel.app/reports"><img src="https://img.shields.io/badge/📊_R&D_Reports-View_Online-4A90D9?style=flat-square" alt="R&D Reports"/></a>
+  <a href="https://github.com/Yesol-Pilot/WebPilot-Engine/actions/workflows/ci.yml"><img src="https://github.com/Yesol-Pilot/WebPilot-Engine/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
   <img src="https://img.shields.io/badge/Assets-3,477-blue?style=flat-square" alt="Assets"/>
   <img src="https://img.shields.io/badge/GLB_Models-2,632-green?style=flat-square" alt="GLB"/>
   <img src="https://img.shields.io/badge/AI_Cells-15_(7_Layers)-purple?style=flat-square" alt="Cells"/>
