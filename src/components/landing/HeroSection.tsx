@@ -9,11 +9,25 @@
 
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { useUnifiedStore } from '@/store/unifiedStore';
+import { DEFAULT_SCENARIO } from '@/data/scenarios';
 
 // 3D 캔버스는 클라이언트에서만 로드
 const HeroCanvas = dynamic(() => import('./HeroCanvas'), { ssr: false });
 
 export function HeroSection() {
+    const router = useRouter();
+    const unifiedStore = useUnifiedStore();
+
+    const handleStartDemo = () => {
+        // [SSOT] 통합 스토어 액션 사용 + Fallback 시나리오 주입
+        unifiedStore.enterDemoMode(DEFAULT_SCENARIO);
+
+        // 게임 페이지로 이동
+        router.push('/game');
+    };
+
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
             {/* 3D 배경 */}
@@ -59,12 +73,12 @@ export function HeroSection() {
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
 
-                    <Link
-                        href="/sorting"
+                    <button
+                        onClick={handleStartDemo}
                         className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full font-bold text-lg text-white hover:bg-white/20 transition-all hover:scale-105"
                     >
                         🎩 데모 체험하기
-                    </Link>
+                    </button>
                 </div>
 
                 {/* 기술 스택 미니 배지 */}

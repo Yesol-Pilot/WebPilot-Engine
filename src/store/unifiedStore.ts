@@ -32,6 +32,7 @@ import {
 export type UnifiedStore = WorldSlice & SimulationSlice & EditorSlice & {
     // 통합 액션
     enterAIWorld: () => void;
+    enterDemoMode: (fallbackScenario?: any) => void;
     resetAll: () => void;
 };
 
@@ -81,6 +82,28 @@ const createUnifiedSlice: StateCreator<UnifiedStore, [], [], UnifiedStore> = (se
         state.setNarrativeState('intro');
 
         console.log('[UnifiedStore] AI 월드 진입 완료:', scenario.nodes.length, '개 오브젝트');
+    },
+
+    /**
+     * 데모 모드 진입 (체험하기 버튼용)
+     * 
+     * @param fallbackScenario AI 씬이 없을 경우 사용할 기본 시나리오
+     */
+    enterDemoMode: (fallbackScenario?: any) => {
+        const state = get();
+
+        if (state.aiScene.isGenerated && state.aiScene.objects.length > 0) {
+            state.enterAIWorld();
+        } else {
+            console.warn('[UnifiedStore] 생성된 씬이 없어 기본 데모 모드로 진입합니다.');
+
+            if (fallbackScenario) {
+                state.loadScenario(fallbackScenario);
+            }
+
+            state.setGameMode('demo');
+            state.setNarrativeState('intro');
+        }
     },
 
     /**
