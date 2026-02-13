@@ -206,10 +206,12 @@ function PreviewNode({ node }: { node: SceneNode }) {
                     // 로컬 경로인 경우에만 /models/ prefix 적용
                     const isExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
                     const modelUrl = isExternalUrl
-                        ? rawUrl  // 외부 URL은 그대로
+                        ? rawUrl
                         : rawUrl.startsWith('/')
-                            ? rawUrl  // /로 시작하는 로컬 경로는 그대로
-                            : `/models/${rawUrl}.glb`;  // 그 외는 로컬 모델로 취급
+                            ? rawUrl
+                            : rawUrl.endsWith('.glb')
+                                ? `/models/${rawUrl}`
+                                : `/models/${rawUrl}.glb`;
                     console.log(`[PreviewNode] 📌 직접 지정: ${node.name} → ${modelUrl}`);
                     setModelPath(modelUrl);
                     setSearchAttempted(true);
@@ -229,26 +231,32 @@ function PreviewNode({ node }: { node: SceneNode }) {
                 }
 
                 // 2단계: API 폴백 (DB 기반 검색 - 2400+ 에셋)
-                console.log(`[PreviewNode] 🔍 API 검색 시도: "${searchKey}"`);
-                const response = await fetch('/api/resources/match', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ description: searchKey })
-                });
+                // type: 'asset' 필수 — API 라우트가 타입별 분기 처리
+                try {
+                    console.log(`[PreviewNode] 🔍 API 검색 시도: "${searchKey}"`);
+                    const response = await fetch('/api/resources/match', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: 'asset', description: searchKey })
+                    });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    // ResourceMatcher는 filePath를 반환, 일부는 url 사용
-                    const modelUrl = result?.url || result?.filePath;
-                    if (modelUrl) {
-                        console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${modelUrl}`);
-                        setModelPath(modelUrl);
-                        setSearchAttempted(true);
-                        return;
+                    if (response.ok) {
+                        const result = await response.json();
+                        // ResourceMatcher는 filePath를 반환, 일부는 url 사용
+                        const modelUrl = result?.url || result?.filePath;
+                        if (modelUrl) {
+                            console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${modelUrl}`);
+                            setModelPath(modelUrl);
+                            setSearchAttempted(true);
+                            return;
+                        }
                     }
+                    // 404는 매칭 실패의 정상 케이스 — 조용히 처리
+                } catch {
+                    // API 서버 미응답 등 네트워크 에러 — 무시하고 폴백 진행
                 }
 
-                // 모든 매칭 실패
+                // 모든 매칭 실패 — 절차적 메시로 폴백
                 console.log(`[PreviewNode] ❌ 매칭 실패: "${searchKey}" (${node.type})`);
                 setSearchAttempted(true);
 
