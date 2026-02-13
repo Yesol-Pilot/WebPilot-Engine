@@ -16,6 +16,8 @@
 // [중요] three-stdlib 사용 (@react-three/drei의 useGLTF와 호환)
 import { DRACOLoader } from 'three-stdlib';
 import { GLTFLoader, GLTF } from 'three-stdlib';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import * as THREE from 'three';
 import { MissingResourceTracker } from './MissingResourceTracker';
 
 // 자산 로딩 결과 타입
@@ -61,6 +63,9 @@ export class AssetOrchestrator {
     // 싱글톤 GLTFLoader 인스턴스
     private gltfLoader: GLTFLoader | null = null;
 
+    // KTX2Loader 인스턴스
+    private ktx2Loader: KTX2Loader | null = null;
+
     // 검증 캐시 (중복 HEAD 요청 방지)
     private validationCache: Map<string, AssetValidationResult> = new Map();
 
@@ -91,6 +96,9 @@ export class AssetOrchestrator {
 
     // 로컬 Draco 폴백 경로
     private readonly DRACO_LOCAL_PATH = '/draco/';
+
+    // KTX2 Basis Universal 트랜스코더 CDN
+    private readonly KTX2_TRANSCODER_CDN = 'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/';
 
     private constructor() {
         this.detectDeviceCapabilities();
@@ -130,6 +138,7 @@ export class AssetOrchestrator {
     /**
      * 로더 초기화 (싱글톤)
      * [Fix] JS 디코더 강제 사용으로 WASM BYTES_PER_ELEMENT 에러 방지
+     * [Fix] KTX2Loader 추가로 KTX2 텍스처 지원
      */
     private initializeLoaders(): void {
         // DRACOLoader 싱글톤 생성
@@ -148,7 +157,28 @@ export class AssetOrchestrator {
         this.gltfLoader = new GLTFLoader();
         this.gltfLoader.setDRACOLoader(this.dracoLoader);
 
-        console.log('[AssetOrchestrator] ✅ 로더 초기화 완료 (Draco JS 싱글톤)');
+        // KTX2Loader 설정 (브라우저 환경에서만)
+        if (typeof window !== 'undefined') {
+            try {
+                this.ktx2Loader = new KTX2Loader();
+                this.ktx2Loader.setTranscoderPath(this.KTX2_TRANSCODER_CDN);
+
+                const tempCanvas = document.createElement('canvas');
+                const tempRenderer = new THREE.WebGLRenderer({
+                    canvas: tempCanvas,
+                    context: tempCanvas.getContext('webgl2') || undefined,
+                });
+                this.ktx2Loader.detectSupport(tempRenderer);
+                tempRenderer.dispose();
+
+                this.gltfLoader.setKTX2Loader(this.ktx2Loader as any);
+                console.log('[AssetOrchestrator] ⚙️ KTX2 트랜스코더 설정 완료');
+            } catch (e) {
+                console.warn('[AssetOrchestrator] ⚠️ KTX2Loader 초기화 실패 (무시):', e);
+            }
+        }
+
+        console.log('[AssetOrchestrator] ✅ 로더 초기화 완료 (Draco JS + KTX2)');
     }
 
     /**
@@ -409,6 +439,10 @@ export class AssetOrchestrator {
         if (this.dracoLoader) {
             this.dracoLoader.dispose();
             this.dracoLoader = null;
+        }
+        if (this.ktx2Loader) {
+            this.ktx2Loader.dispose();
+            this.ktx2Loader = null;
         }
         this.gltfLoader = null;
         this.validationCache.clear();
