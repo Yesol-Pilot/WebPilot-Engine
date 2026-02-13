@@ -597,7 +597,9 @@ class VectorSearchServiceClass {
      * [Phase 3] 정확 매칭 우선 처리 추가
      * [Phase 4] 시맨틱 캐시 통합 (접근법 D)
      */
-    async findBestHybridMatch(concept: string): Promise<HybridSearchResult | null> {
+    async findBestHybridMatch(concept: string, roleHint?: string): Promise<HybridSearchResult | null> {
+        // [Phase 6] role 기반 카테고리 필터 — character 에셋이 non-character 개념에 매핑되는 것을 방지
+        const isCharacterRole = roleHint && ['character', 'npc', 'hero_character'].includes(roleHint.toLowerCase());
         // [Phase 4] 시맨틱 캐시 조회 먼저 시도
         const cacheResult = await AssetSearchCache.lookup(concept);
         if (cacheResult.hit && cacheResult.value) {
@@ -652,23 +654,36 @@ class VectorSearchServiceClass {
         }
 
         if (exactMatch && !isBlacklistedPath(exactMatch.path)) {
-            console.log(`[HybridSearch] 🎯 정확 매칭 발견: "${concept}" → ${exactMatch.id} (path: ${exactMatch.path})`);
-            return {
-                asset: exactMatch,
-                score: 1.0,
-                confidence: 1.0,
-                vectorRank: 1,
-                lexicalRank: 1,
-                rrfScore: 1.0,
-                matchedTerms: [concept],
-            };
+            // [Phase 6] 정확 매칭에도 character 카테고리 필터 적용
+            if (exactMatch.category === 'character' && !isCharacterRole) {
+                console.log(`[HybridSearch] 🚫 정확 매칭 character 필터링: ${exactMatch.id} (role: ${roleHint || 'unknown'})`);
+            } else {
+                console.log(`[HybridSearch] 🎯 정확 매칭 발견: "${concept}" → ${exactMatch.id} (path: ${exactMatch.path})`);
+                return {
+                    asset: exactMatch,
+                    score: 1.0,
+                    confidence: 1.0,
+                    vectorRank: 1,
+                    lexicalRank: 1,
+                    rrfScore: 1.0,
+                    matchedTerms: [concept],
+                };
+            }
         }
 
         // 일반 하이브리드 검색
         const allResults = await this.hybridSearch(concept, 10);
 
-        // 블랙리스트 경로 제외
-        const filteredResults = allResults.filter(r => !isBlacklistedPath(r.asset.path));
+        // 블랙리스트 경로 제외 + [Phase 6] character 카테고리 필터링
+        const filteredResults = allResults.filter(r => {
+            if (isBlacklistedPath(r.asset.path)) return false;
+            // character 카테고리 에셋은 role이 명시적으로 character/npc일 때만 허용
+            if (r.asset.category === 'character' && !isCharacterRole) {
+                console.log(`[HybridSearch] 🚫 character 에셋 필터링: ${r.asset.id} (role: ${roleHint || 'unknown'})`);
+                return false;
+            }
+            return true;
+        });
 
         if (filteredResults.length > 0) {
             const bestResult = filteredResults[0];

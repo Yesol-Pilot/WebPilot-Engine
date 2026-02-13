@@ -259,12 +259,12 @@ export const AssetRetrievalService = {
 
         // 1단계: 로컬 캐시 검색 (다중 쿼리 전략)
         // 1-1: 원본 concept으로 검색
-        let localPath = await AssetRetrievalService.searchLocalCache(conceptName);
+        let localPath = await AssetRetrievalService.searchLocalCache(conceptName, concept.role);
 
         // 1-2: concept 검색 실패 시 search_keywords로 순차 검색
         if (!localPath && searchKeywords.length > 0) {
             for (const keyword of searchKeywords) {
-                localPath = await AssetRetrievalService.searchLocalCache(keyword);
+                localPath = await AssetRetrievalService.searchLocalCache(keyword, concept.role);
                 if (localPath) {
                     console.log(`[AssetRetrieval] ✅ search_keywords 매칭: "${keyword}" → ${localPath}`);
                     break;
@@ -276,7 +276,7 @@ export const AssetRetrievalService = {
         if (!localPath) {
             const tokens = conceptName.split(/[_\s-]+/).filter(t => t.length > 2);
             for (const token of tokens) {
-                localPath = await AssetRetrievalService.searchLocalCache(token);
+                localPath = await AssetRetrievalService.searchLocalCache(token, concept.role);
                 if (localPath) {
                     console.log(`[AssetRetrieval] ✅ 토큰 매칭: "${token}" → ${localPath}`);
                     break;
@@ -347,11 +347,11 @@ export const AssetRetrievalService = {
      * 로컬 캐시에서 에셋 검색 (Phase 2: 하이브리드 검색)
      * - BM25 (렉시컬) + Vector (시맨틱) + RRF 융합
      */
-    searchLocalCache: async (concept: string): Promise<string | null> => {
-        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"`);
+    searchLocalCache: async (concept: string, roleHint?: string): Promise<string | null> => {
+        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"${roleHint ? ` (role: ${roleHint})` : ''}`);
 
-        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합)
-        const result = await VectorSearchService.findBestHybridMatch(concept);
+        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합) + Phase 6: role 필터링
+        const result = await VectorSearchService.findBestHybridMatch(concept, roleHint);
 
         if (result) {
             console.log(`[AssetRetrieval] 🔍 HybridSearch 결과: ${result.asset?.id} (RRF: ${result.rrfScore.toFixed(4)}, confidence: ${result.confidence.toFixed(2)})`);
