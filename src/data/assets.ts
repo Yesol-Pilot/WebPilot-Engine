@@ -1119,10 +1119,12 @@ export const HOGWARTS_KEYWORDS: Record<string, string> = {
 };
 
 /**
- * 키워드-키 간 동적 매칭 점수 계산
+ * 키워드-키 간 동적 매칭 점수 계산 (v3 — 하드코딩 금지)
  * - 정확 일치 = 1.0
- * - 키가 쿼리에 포함 = 키 길이/쿼리 길이 (길수록 높은 점수)
- * - 쿼리가 키에 포함 = 쿼리 길이/키 길이 × 0.5 (역방향 페널티)
+ * - 키가 쿼리에 포함 = 키 길이/쿼리 길이 (키가 길수록 관련성 높음)
+ * - 쿼리가 키에 포함 = 쿼리 길이/키 길이 × 0.3 (역방향 페널티 강화)
+ * 
+ * 키 길이가 짧을수록 비율 점수가 자연적으로 낮아져 오매칭 방지
  */
 function computeMatchScore(query: string, key: string): number {
     const keyLower = key.toLowerCase();
@@ -1131,13 +1133,15 @@ function computeMatchScore(query: string, key: string): number {
     if (query === keyLower) return 1.0;
 
     // 키가 쿼리 안에 포함 (예: query="medieval_stone", key="stone")
+    // 키가 길수록 더 높은 점수 (3자 키 → 3/15=0.2, 8자 키 → 8/15=0.53)
     if (query.includes(keyLower)) {
         return keyLower.length / query.length;
     }
 
-    // 쿼리가 키 안에 포함 (예: query="car", key="carconcept")
+    // 역방향: 쿼리가 키에 포함 (예: query="car", key="carconcept")
+    // 0.5 → 0.3으로 페널티 강화 (의도치 않은 매칭 최소화)
     if (keyLower.includes(query)) {
-        return (query.length / keyLower.length) * 0.5;
+        return (query.length / keyLower.length) * 0.3;
     }
 
     return 0;
@@ -1173,8 +1177,11 @@ export function findAssetByKeyword(keyword: string): string | null {
         }
     }
 
-    // 동적 임계값: 키워드 길이에 비례 (짧은 키워드는 높은 정확도 요구)
-    const minThreshold = lower.length / (lower.length + 1);
+    // 동적 임계값: 키워드 길이에 비례하되 0.4~0.7 범위로 클램프
+    // 기존: length/(length+1) → 5자에서 0.83 (너무 높아 대부분 거부)
+    // 개선: length/(length+2) → 5자에서 0.71, 클램프 → 0.7 (적절한 필터)
+    const rawThreshold = lower.length / (lower.length + 2);
+    const minThreshold = Math.max(0.4, Math.min(0.7, rawThreshold));
     return bestScore >= minThreshold ? bestMatch : null;
 }
 

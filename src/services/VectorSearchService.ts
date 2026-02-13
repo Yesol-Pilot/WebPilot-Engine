@@ -394,6 +394,12 @@ class VectorSearchServiceClass {
                 score *= 1.3;
             }
 
+            // [v3] 카테고리 불일치 페널티: 추론된 카테고리와 완전히 다르면 ×0.5
+            // 하드코딩 없이 기존 inferCategoryFromQuery 결과만 활용
+            if (inferredCategory && asset.category !== inferredCategory && score > 0) {
+                score *= 0.5;
+            }
+
             return { asset, score, matchCount: score };
         });
 

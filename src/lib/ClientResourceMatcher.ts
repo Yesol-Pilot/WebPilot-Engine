@@ -37,36 +37,35 @@ export function matchStaticOrRemote(description: string): ClientMatchResult | nu
     const keywords = extractKeywords(description);
     console.log(`[ClientMatcher] 추출된 키워드: ${keywords.join(', ')}`);
 
-    // 2. 개별 단어로 Static Library 검색
+    // 2. 모든 키워드에 대한 최적 매칭 수집 (v3: 즉시 반환 → 다중 후보 비교)
+    let bestResult: ClientMatchResult | null = null;
+    let bestScore = 0;
+
     for (const keyword of keywords) {
         const libraryPath = findAssetByKeyword(keyword);
         if (libraryPath) {
-            console.log(`[ClientMatcher] Static 매칭: "${keyword}" → ${libraryPath}`);
-            return {
-                type: 'asset',
-                source: 'library',
-                id: keyword.replace(/\s+/g, '_'),
-                filePath: libraryPath,
-                similarity: 1.0
-            };
+            // 키워드 길이 기반 관련성 점수: 긴 키워드 = 더 구체적 = 더 높은 점수
+            const score = keyword.length / (keyword.length + 2);
+            if (score > bestScore) {
+                bestScore = score;
+                bestResult = {
+                    type: 'asset',
+                    source: 'library',
+                    id: keyword.replace(/\s+/g, '_'),
+                    filePath: libraryPath,
+                    similarity: score
+                };
+            }
         }
     }
 
-    // 3. 개별 단어로 Remote CDN 검색
+    if (bestResult) {
+        console.log(`[ClientMatcher] Static 최적 매칭: "${bestResult.id}" → ${bestResult.filePath} (score: ${bestScore.toFixed(3)})`);
+        return bestResult;
+    }
+
+    // 3. Remote CDN 검색 (현재 비활성화)
     // [FIX] Poly Pizza CORS/Auth Issues - Temporarily Disabled
-    // for (const keyword of keywords) {
-    //     const remotePath = findRemoteAsset(keyword);
-    //     if (remotePath) {
-    //         console.log(`[ClientMatcher] Remote 매칭: "${keyword}" → ${remotePath}`);
-    //         return {
-    //             type: 'asset',
-    //             source: 'remote',
-    //             id: `remote_${keyword.replace(/\s+/g, '_')}`,
-    //             filePath: remotePath,
-    //             similarity: 0.95
-    //         };
-    //     }
-    // }
 
     console.log(`[ClientMatcher] 매칭 실패: ${description}`);
     return null;

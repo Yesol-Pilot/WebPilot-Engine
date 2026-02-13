@@ -15037,8 +15037,9 @@ export function searchAssets(keyword: string): AssetMetadata[] {
             if (s > bestScore) bestScore = s;
         }
 
-        // 동적 임계값: 쿼리 길이에 비례
-        const threshold = lower.length / (lower.length + 1);
+        // 동적 임계값: 쿼리 길이에 비례하되 0.4~0.7 범위로 클램프 (v3)
+        const rawThreshold = lower.length / (lower.length + 2);
+        const threshold = Math.max(0.4, Math.min(0.7, rawThreshold));
         if (bestScore >= threshold) {
             scored.push({ asset: a, score: bestScore });
         }
