@@ -409,7 +409,7 @@ export default function DynamicModel({
                     const response = await fetch('/api/resources/match', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ description, theme, tags })
+                        body: JSON.stringify({ type: 'asset', description, theme, tags })
                     });
 
                     if (response.ok) {

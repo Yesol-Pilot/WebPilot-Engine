@@ -15000,14 +15000,54 @@ function isBlacklistedPath(path: string): boolean {
     return ASSET_PATH_BLACKLIST.some(pattern => lowerPath.includes(pattern.toLowerCase()));
 }
 
+/**
+ * 키워드-에셋 간 동적 매칭 점수 계산
+ * - 정확 일치 = 1.0
+ * - 키워드가 에셋 키에 포함 = 키워드 길이/키 길이 × 0.5 (역방향 페널티)
+ * - 에셋 키가 키워드에 포함 = 키 길이/키워드 길이 (정규화 점수)
+ */
+function assetMatchScore(query: string, assetKeyword: string): number {
+    if (query === assetKeyword) return 1.0;
+    if (assetKeyword.includes(query)) {
+        return (query.length / assetKeyword.length) * 0.5;
+    }
+    if (query.includes(assetKeyword)) {
+        return assetKeyword.length / query.length;
+    }
+    return 0;
+}
+
 export function searchAssets(keyword: string): AssetMetadata[] {
     const lower = keyword.toLowerCase();
-    return ASSETS.filter(a =>
-        !isBlacklistedPath(a.path) && (
-            a.id.includes(lower) ||
-            a.keywords.some(k => k.includes(lower))
-        )
-    );
+    const scored: { asset: AssetMetadata; score: number }[] = [];
+
+    for (const a of ASSETS) {
+        if (isBlacklistedPath(a.path)) continue;
+
+        // ID 정확 매칭
+        if (a.id.toLowerCase() === lower) {
+            scored.push({ asset: a, score: 1.0 });
+            continue;
+        }
+
+        // 키워드 중 최고 스코어 채택
+        let bestScore = 0;
+        for (const k of a.keywords) {
+            const s = assetMatchScore(lower, k.toLowerCase());
+            if (s > bestScore) bestScore = s;
+        }
+
+        // 동적 임계값: 쿼리 길이에 비례
+        const threshold = lower.length / (lower.length + 1);
+        if (bestScore >= threshold) {
+            scored.push({ asset: a, score: bestScore });
+        }
+    }
+
+    // 스코어 내림차순 정렬 → 최적 매칭 우선
+    return scored
+        .sort((a, b) => b.score - a.score)
+        .map(s => s.asset);
 }
 
 

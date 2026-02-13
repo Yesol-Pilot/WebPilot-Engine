@@ -74,10 +74,11 @@ export default function Experience() {
         if (savedScene && !store.currentScenario) {
             try {
                 const parsed = JSON.parse(savedScene);
-                if (parsed.scenario && parsed.gameMode === 'custom') {
-                    console.log('[Experience] ✅ AI 씬 복원:', parsed.scenario.nodes?.length, '개 노드');
+                if (parsed.scenario?.nodes?.length > 0) {
+                    const restoredMode = parsed.gameMode || 'custom';
+                    console.log('[Experience] ✅ AI 씬 복원:', parsed.scenario.nodes.length, '개 노드, 모드:', restoredMode);
                     store.loadScenario(parsed.scenario);
-                    store.setGameMode('custom');
+                    store.setGameMode(restoredMode);
                     store.setLoading(false);
 
                     // 통합 스토어에도 동기화

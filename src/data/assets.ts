@@ -1119,7 +1119,32 @@ export const HOGWARTS_KEYWORDS: Record<string, string> = {
 };
 
 /**
- * 키워드로 에셋 경로 찾기
+ * 키워드-키 간 동적 매칭 점수 계산
+ * - 정확 일치 = 1.0
+ * - 키가 쿼리에 포함 = 키 길이/쿼리 길이 (길수록 높은 점수)
+ * - 쿼리가 키에 포함 = 쿼리 길이/키 길이 × 0.5 (역방향 페널티)
+ */
+function computeMatchScore(query: string, key: string): number {
+    const keyLower = key.toLowerCase();
+
+    // 정확 매칭
+    if (query === keyLower) return 1.0;
+
+    // 키가 쿼리 안에 포함 (예: query="medieval_stone", key="stone")
+    if (query.includes(keyLower)) {
+        return keyLower.length / query.length;
+    }
+
+    // 쿼리가 키 안에 포함 (예: query="car", key="carconcept")
+    if (keyLower.includes(query)) {
+        return (query.length / keyLower.length) * 0.5;
+    }
+
+    return 0;
+}
+
+/**
+ * 키워드로 에셋 경로 찾기 — 동적 유사도 스코어링
  */
 export function findAssetByKeyword(keyword: string): string | null {
     const lower = keyword.toLowerCase();
@@ -1133,14 +1158,24 @@ export function findAssetByKeyword(keyword: string): string | null {
         }
     }
 
-    // 2. ASSET_LIBRARY 직접 매칭
+    // 2. 정확 매칭 (최우선)
+    if (ASSET_LIBRARY[lower]) return ASSET_LIBRARY[lower];
+
+    // 3. 유사도 기반 최적 매칭
+    let bestMatch: string | null = null;
+    let bestScore = 0;
+
     for (const [key, path] of Object.entries(ASSET_LIBRARY)) {
-        if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
-            return path;
+        const score = computeMatchScore(lower, key);
+        if (score > bestScore) {
+            bestScore = score;
+            bestMatch = path;
         }
     }
 
-    return null;
+    // 동적 임계값: 키워드 길이에 비례 (짧은 키워드는 높은 정확도 요구)
+    const minThreshold = lower.length / (lower.length + 1);
+    return bestScore >= minThreshold ? bestMatch : null;
 }
 
 /**
