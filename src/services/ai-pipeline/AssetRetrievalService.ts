@@ -183,19 +183,33 @@ export const AssetRetrievalService = {
     },
 
     /**
-     * [Phase 2.5] 파일 경로로 유니크 에셋 여부 확인
+     * [Phase 2.5] 크기/카테고리 기반 유니크 에셋 자동 판단
+     * 
+     * 키워드 하드코딩 대신 AssetMetadataService의 크기 추정을 활용:
+     * - 높이(y) ≥ 4m → 대형 구조물 (건물, 성, 탑 등)
+     * - 바닥면적(x * z) ≥ 50m² → 환경/지형 에셋
+     * → 씬에 같은 파일이 1개만 배치되도록 보장
      */
     isUniqueAssetPath: (filePath: string): boolean => {
-        const lowerPath = filePath.toLowerCase();
+        // Procedural 에셋은 유니크 판단 제외
+        if (filePath.startsWith('__PROCEDURAL__')) return false;
 
-        // 대형 건물/환경 에셋 패턴
-        const uniquePatterns = [
-            'hogwarts', 'castle', 'grand_hall', 'hall',
-            'fortress', 'palace', 'cathedral', 'temple',
-            'building', 'tower', 'mansion',
-        ];
+        // 파일명에서 에셋 이름 추출 (경로의 마지막 부분, 확장자 제거)
+        const fileName = filePath.split('/').pop()?.replace(/\.glb$/i, '') || '';
+        if (!fileName) return false;
 
-        return uniquePatterns.some(pattern => lowerPath.includes(pattern));
+        // AssetMetadataService로 크기 추정
+        const { AssetMetadataService } = require('@/services/AssetMetadataService');
+        const size = AssetMetadataService.estimateSizeByName(fileName);
+
+        // 대형 구조물: 높이 4m 이상 또는 바닥면적 50m² 이상
+        const isLargeStructure = size.y >= 4 || (size.x * size.z) >= 50;
+
+        if (isLargeStructure) {
+            console.log(`[AssetRetrieval] 🏗️ 유니크 에셋 감지 (크기 기반): "${fileName}" (${size.x.toFixed(1)}×${size.y.toFixed(1)}×${size.z.toFixed(1)})`);
+        }
+
+        return isLargeStructure;
     },
 
     /**
