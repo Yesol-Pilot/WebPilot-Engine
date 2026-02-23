@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, Part } from '@google/generative-ai';
 import { GenreId, GENRE_TEMPLATES } from '@/data/GenreTemplates';
 
 /**
@@ -18,8 +18,10 @@ export async function expandPrompt(
     }
 
     try {
+        const { getModelForTier, AIModelTier } = require('../app/api/ai/utils/gemini');
+        const modelId = getModelForTier(AIModelTier.ULTRA);
         const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = genAI.getGenerativeModel({ model: modelId });
 
         const template = GENRE_TEMPLATES[genre];
 

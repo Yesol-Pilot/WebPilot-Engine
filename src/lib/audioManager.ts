@@ -17,17 +17,17 @@ class AudioManager {
     private bgmSources: Record<Genre, string> = {
         fantasy: 'https://actions.google.com/sounds/v1/ambiences/fire.ogg',
         'sci-fi': 'https://actions.google.com/sounds/v1/science_fiction/space_ambience_industrial.ogg',
-        horror: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3',
-        mystery: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3',
+        horror: 'https://actions.google.com/sounds/v1/ambiences/thunderstorm.ogg',
+        mystery: 'https://actions.google.com/sounds/v1/ambiences/wind_chimes.ogg',
         modern: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg'
     };
 
     // SFX 소스 정의
     private sfxSources = {
-        click: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_21c8a14b0b.mp3',
-        success: 'https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3',
-        footstep: '',
-        pickup: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_21c8a14b0b.mp3'
+        click: 'https://actions.google.com/sounds/v1/cartoon/pop.ogg',
+        success: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/escape.wav',
+        footstep: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/numkey.wav',
+        pickup: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/squit.mp3'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)
@@ -71,14 +71,14 @@ class AudioManager {
     public playBGM(genre: string) {
         if (this.currentGenre === genre) return;
 
-        // 이전 BGM 페이드 아웃
+        // 이전 BGM 페이드 아웃 및 즉시 언로드 예약
         if (this.bgm) {
             const oldBgm = this.bgm;
-            oldBgm.fade(0.5, 0, 1000);
+            oldBgm.fade(oldBgm.volume(), 0, 500); // 페이드 시간을 당겨 더 빨리 해제
             setTimeout(() => {
                 oldBgm.stop();
-                oldBgm.unload(); // [Phase 5] 이전 인스턴스 메모리 해제
-            }, 1000);
+                oldBgm.unload(); // [Phase 5] 강제 언로드로 Audio Pool 확보
+            }, 550);
         }
 
         const targetGenre = (Object.keys(this.bgmSources).includes(genre) ? genre : 'modern') as Genre;
@@ -89,26 +89,29 @@ class AudioManager {
 
         this.bgm = new Howl({
             src: [src],
-            html5: true,
+            html5: true, // BGM은 스트리밍을 위해 html5 유지
             loop: true,
             volume: 0,
             onloaderror: (_id, err) => console.warn(`[Audio] BGM 로드 실패: ${err}`),
-            onplayerror: (_id, err) => console.warn(`[Audio] BGM 재생 실패: ${err}`)
+            onplayerror: (_id, err) => {
+                console.warn(`[Audio] BGM 재생 실패 (Autoplay?): ${err}`);
+                // 재생 실패 시 사용자 상호작용 후 재시도할 수 있도록 상태 유지
+            }
         });
 
         this.bgm.play();
         this.bgm.fade(0, 0.5, 1000);
-        console.log(`[Audio] BGM 재생: ${targetGenre}`);
+        console.log(`[Audio] BGM 재생 시작: ${targetGenre}`);
     }
 
     public playBGMFromUrl(url: string) {
         if (this.bgm) {
             const oldBgm = this.bgm;
-            oldBgm.fade(0.5, 0, 1000);
+            oldBgm.fade(oldBgm.volume(), 0, 500);
             setTimeout(() => {
                 oldBgm.stop();
                 oldBgm.unload(); // [Phase 5] 메모리 해제
-            }, 1000);
+            }, 550);
         }
 
         this.bgm = new Howl({
@@ -154,6 +157,31 @@ class AudioManager {
 
     public setVolume(vol: number) {
         Howler.volume(vol);
+    }
+
+    /**
+     * [Phase 5] 리소스 해제 (씬 전환 시 호출 권장)
+     * 모든 BGM 및 SFX 인스턴스를 언로드하여 Audio Pool 고갈 방지
+     */
+    public dispose() {
+        console.log('[Audio] 모든 오디오 리소스 해제 중...');
+
+        // BGM 해제
+        if (this.bgm) {
+            this.bgm.stop();
+            this.bgm.unload();
+            this.bgm = null;
+        }
+
+        // SFX 풀 해제
+        this.sfxPool.forEach((howl) => {
+            howl.stop();
+            howl.unload();
+        });
+        this.sfxPool.clear();
+
+        this.currentGenre = null;
+        console.log('[Audio] 오디오 리소스 정리 완료');
     }
 }
 

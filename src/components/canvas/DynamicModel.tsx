@@ -274,8 +274,19 @@ function LoadedModel({
         );
     }
 
+    // [v3.4 FIX] 구조물 에셋에 대해 더 정밀한 콜라이더(trimesh) 자동 결정
+    const effectiveCollider = useMemo(() => {
+        if (colliderType) return colliderType;
+        const lowerPath = filePath.toLowerCase();
+        if (lowerPath.includes('room') || lowerPath.includes('hall') ||
+            lowerPath.includes('dungeon') || lowerPath.includes('interior')) {
+            return 'trimesh';
+        }
+        return 'hull'; // 기본값 (기존 cuboid보다 정밀함)
+    }, [colliderType, filePath]);
+
     return (
-        <RigidBody type="fixed" colliders={colliderType || 'cuboid'} position={position} rotation={rotation}>
+        <RigidBody type="fixed" colliders={effectiveCollider} position={position} rotation={rotation}>
             <primitive
                 object={clonedScene}
                 scale={normalizedScale}

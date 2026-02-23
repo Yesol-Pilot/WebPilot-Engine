@@ -28,7 +28,7 @@ export async function GET(request: Request) {
 
     try {
         console.log(`[PolyPizza] Searching for: ${query}`);
-        const response = await fetch(`${POLY_PIZZA_API_URL}?q=${encodeURIComponent(query)}&format=gltf&limit=${limit}`, {
+        const response = await fetch(`${POLY_PIZZA_API_URL}?q=${encodeURIComponent(query)}&format=gltf&limit=${limit}&license=cc0`, {
             headers: {
                 'X-Auth-Token': apiKey
             }
@@ -58,6 +58,10 @@ export async function GET(request: Request) {
 
     } catch (error) {
         console.error('[API] Poly Pizza Search Failed:', error);
-        return NextResponse.json({ success: false, error: 'External API Error' }, { status: 500 });
+        console.error('[API] Poly Pizza Search Failed:', error instanceof Error ? error.message : String(error));
+        return NextResponse.json({
+            success: false,
+            error: error instanceof Error ? error.message : 'External API Error'
+        }, { status: 500 });
     }
 }

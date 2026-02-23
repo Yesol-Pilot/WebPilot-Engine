@@ -125,7 +125,7 @@ export async function autoScaleAsset(
 
     // 3. 주축 감지
     const dominantAxis = detectDominantAxis(currentSize, category);
-    const currentSizeOnAxis = currentSize[dominantAxis];
+    let currentSizeOnAxis = currentSize[dominantAxis];
 
     // 4. 시맨틱 분석 (프롬프트가 있는 경우)
     let semantic: SemanticScaleResult | null = null;
@@ -146,21 +146,31 @@ export async function autoScaleAsset(
 
     // 5. 스케일 팩터 계산
     let scaleFactor = 1.0;
+    let preScaleFactor = 1.0;
 
-    if (currentSizeOnAxis > 0 && isFinite(currentSizeOnAxis)) {
-        // 대형 건물은 축소만 (확대 금지)
-        if (category === 'buildings' || category === 'environment') {
-            scaleFactor = currentSizeOnAxis > targetSize
-                ? targetSize / currentSizeOnAxis
-                : 1.0;
-        } else {
-            scaleFactor = targetSize / currentSizeOnAxis;
-        }
-
-        // 클램핑 제거: 알고리즘이 계산한 정확한 값 사용
+    // [P0] mm 단위 모델 사전 정규화 (1km 이상)
+    if (currentSizeOnAxis > MM_UNIT_DETECTION_THRESHOLD) {
+        preScaleFactor = MM_TO_METER_SCALE;
+        console.log(`[AutoScale] ⚠️ mm 단위 모델 감지 (Async): ${path.split('/').pop()}`);
+        console.log(`  - 원본: ${currentSizeOnAxis.toFixed(0)}m → 정규화: ${(currentSizeOnAxis * preScaleFactor).toFixed(2)}m`);
+        currentSizeOnAxis *= preScaleFactor;
     }
 
-    console.log(`[AutoScale] ✅ ${path.split('/').pop()}: ${currentSizeOnAxis.toFixed(2)}m → ${targetSize.toFixed(2)}m (×${scaleFactor.toFixed(4)})`);
+    if (currentSizeOnAxis > 0 && isFinite(currentSizeOnAxis)) {
+        // [v3.4 Fix] 스케일 팩터 안전성 강화
+        let rawScaleFactor = targetSize / currentSizeOnAxis;
+
+        if (rawScaleFactor < 0.01 || rawScaleFactor > 100.0) {
+            console.warn(`[AutoScale] ⚠️ 스케일 이상치 감지 (${path.split('/').pop()}): ×${rawScaleFactor.toFixed(4)}`);
+            rawScaleFactor = Math.min(Math.max(rawScaleFactor, 0.05), 10.0);
+            console.log(`  - 🛡️ 안전 스케일로 보정됨: ×${rawScaleFactor.toFixed(4)}`);
+        }
+
+        // 최종 스케일 팩터 = mm 보정 * 타겟 보정
+        scaleFactor = rawScaleFactor * preScaleFactor;
+    }
+
+    console.log(`[AutoScale] ✅ ${path.split('/').pop()}: ${currentSizeOnAxis.toFixed(2)}m → ${(currentSizeOnAxis * scaleFactor).toFixed(2)}m (×${scaleFactor.toFixed(4)})`);
 
     return {
         scaleFactor,
@@ -204,14 +214,15 @@ export function autoScaleAssetSync(
 
     let scaleFactor = 1.0;
     if (currentSizeOnAxis > 0 && isFinite(currentSizeOnAxis)) {
-        if (category === 'environment_container') {
-            // [P0] 대형 환경 컨테이너는 항상 타겟 크기(45m)로 맞춤
-            scaleFactor = targetSize / currentSizeOnAxis;
-        } else if (category === 'buildings' || category === 'environment') {
-            // 일반 건물은 타겟보다 큰 경우에만 축소
-            scaleFactor = currentSizeOnAxis > targetSize ? targetSize / currentSizeOnAxis : 1.0;
+        // [v3.4 Fix] 스케일 팩터 안전성 강화 (Clamping & Sanity Check)
+        const rawScaleFactor = targetSize / currentSizeOnAxis;
+
+        if (rawScaleFactor < 0.01 || rawScaleFactor > 100.0) {
+            console.warn(`[AutoScale] ⚠️ 스케일 이상치 감지 (${path.split('/').pop()}): ×${rawScaleFactor.toFixed(4)}`);
+            scaleFactor = Math.min(Math.max(rawScaleFactor, 0.05), 10.0);
+            console.log(`  - 🛡️ 안전 스케일로 보정됨: ×${scaleFactor.toFixed(4)}`);
         } else {
-            scaleFactor = targetSize / currentSizeOnAxis;
+            scaleFactor = rawScaleFactor;
         }
     }
 

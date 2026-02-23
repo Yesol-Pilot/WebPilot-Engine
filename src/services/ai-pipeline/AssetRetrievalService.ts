@@ -222,7 +222,7 @@ export const AssetRetrievalService = {
         for (const assetConcept of zonePlan.assets) {
             // 각 개념에 대해 count만큼 에셋 검색
             for (let i = 0; i < assetConcept.count; i++) {
-                const retrieved = await AssetRetrievalService.retrieveSingleAsset(assetConcept, i);
+                const retrieved = await AssetRetrievalService.retrieveSingleAsset(assetConcept, i, zonePlan.zone_name); // zone_name이나 theme 정보를 활용 가능
                 assets.push(retrieved);
 
                 // 통계 업데이트
@@ -253,13 +253,15 @@ export const AssetRetrievalService = {
      * 단일 에셋 검색 (Multi-Source Strategy)
      * search_keywords를 활용한 다중 쿼리 전략
      */
-    retrieveSingleAsset: async (concept: AssetConcept, index: number): Promise<RetrievedAsset> => {
+    retrieveSingleAsset: async (concept: AssetConcept, index: number, themeHint?: string): Promise<RetrievedAsset> => {
         const conceptName = concept.concept;
         const searchKeywords = concept.search_keywords || [];
 
-        // 1단계: 로컬 캐시 검색 (다중 쿼리 전략)
+        console.log(`[AssetRetrieval] 🔍 retrieveSingleAsset: "${conceptName}" (theme: ${themeHint || 'none'})`);
+
+        // 1단계: 로컬 캐시(Hybrid Search) 검색
         // 1-1: 원본 concept으로 검색
-        let localPath = await AssetRetrievalService.searchLocalCache(conceptName, concept.role);
+        let localPath = await AssetRetrievalService.searchLocalCache(conceptName, concept.role, themeHint);
 
         // 1-2: concept 검색 실패 시 search_keywords로 순차 검색
         if (!localPath && searchKeywords.length > 0) {
@@ -347,11 +349,11 @@ export const AssetRetrievalService = {
      * 로컬 캐시에서 에셋 검색 (Phase 2: 하이브리드 검색)
      * - BM25 (렉시컬) + Vector (시맨틱) + RRF 융합
      */
-    searchLocalCache: async (concept: string, roleHint?: string): Promise<string | null> => {
-        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"${roleHint ? ` (role: ${roleHint})` : ''}`);
+    searchLocalCache: async (concept: string, roleHint?: string, theme?: string): Promise<string | null> => {
+        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"${roleHint ? ` (role: ${roleHint})` : ''}${theme ? ` (theme: ${theme})` : ''}`);
 
-        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합) + Phase 6: role 필터링
-        const result = await VectorSearchService.findBestHybridMatch(concept, roleHint);
+        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합) + Phase 6: role 필터링 + v3: ThemeGuard
+        const result = await VectorSearchService.findBestHybridMatch(concept, roleHint, theme);
 
         if (result) {
             console.log(`[AssetRetrieval] 🔍 HybridSearch 결과: ${result.asset?.id} (RRF: ${result.rrfScore.toFixed(4)}, confidence: ${result.confidence.toFixed(2)})`);

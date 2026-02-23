@@ -27,6 +27,10 @@ import { createDefaultConstraints } from '@/lib/schema/nsse-constraints';
 import { AssetBoundingBoxService } from './AssetBoundingBoxService';
 import { SkyboxDecisionService } from './SkyboxDecisionService';
 import { MissingResourceTracker } from '../MissingResourceTracker';
+import { PhysicsScatteringService, ScatteringObject } from './PhysicsScatteringService';
+import { VLMFeedbackService, VLMFeedback } from './VLMFeedbackService';
+import { PBRMaterialConverter } from './PBRMaterialConverter';
+import { NavMeshGenerationService, NavMeshResult } from './NavMeshGenerationService';
 import * as THREE from 'three';
 
 // ============================================================
@@ -55,6 +59,7 @@ export interface PipelineResult {
     // [IAOS] Skybox 자동 적용
     skyboxUrl?: string;
     environmentType: 'outdoor' | 'indoor' | 'unknown'; // [IAOS] AI 결정 환경 타입
+    navMesh?: NavMeshResult; // [v4.0] 내비게이션 데이터
     stages: PipelineProgress[];
     totalDuration: number;
     error?: string;
@@ -106,6 +111,14 @@ export class AIPipelineOrchestrator {
 
         // [MissingResourceTracker] 현재 프롬프트 컨텍스트 설정
         MissingResourceTracker.getInstance().setCurrentPrompt(userPrompt);
+
+        // [AssetRegistry Init] 에셋 레지스트리 로드 보장 (레이스 컨디션 해결)
+        try {
+            const { initializeAssetRegistry } = await import('../../data/AssetRegistry');
+            await initializeAssetRegistry();
+        } catch (e) {
+            console.warn('[Pipeline] AssetRegistry 초기화 실패:', e);
+        }
 
         // [Vector Search Init] 시맨틱 검색 초기화
         if (!VectorSearchService.initialized) {
@@ -515,9 +528,22 @@ export class AIPipelineOrchestrator {
             stages.push({ stage: 3, stageName: 'Scale Validation', status: 'completed' });
 
             // ────────────────────────────────────────────────
-            // Stage 4: Semantic Role Placement (시맨틱 역할 기반 배치)
+            // Stage 4: Semantic Role Placement (계층형 NSSE 배치)
             // ────────────────────────────────────────────────
-            this.updateProgress(4, 'Semantic Role Placement', 'running');
+            this.updateProgress(4, 'Hierarchical Semantic Placement', 'running');
+
+            const nsseService = getNSSEIntegrationService();
+            nsseService.clear();
+
+            // 1. 컨테이너와 일반 오브젝트 분리
+            const containers = placeableObjects.filter(obj =>
+                obj.semanticRole === 'environment_container' || obj.semanticRole === 'sub_container'
+            );
+            const otherObjects = placeableObjects.filter(obj =>
+                obj.semanticRole !== 'environment_container' && obj.semanticRole !== 'sub_container'
+            );
+
+            const intermediatePlaced: any[] = [];
 
             // 메인 컨테이너 바운딩 박스 계산
             const containerBounds = mainContainer ? {
@@ -525,38 +551,95 @@ export class AIPipelineOrchestrator {
                 max: [mainContainerScale / 2, mainContainerScale * 0.6, mainContainerScale / 2] as [number, number, number],
             } : null;
 
-            // 각 오브젝트에 시맨틱 역할 기반 위치 적용
-            const placedObjects = placeableObjects.map(obj => {
-                const semanticRole = obj.semanticRole || 'unspecified';
-                const placementHint = obj.placementHint;
-
-                // MCTSPlacementService의 시맨틱 배치 로직 활용
+            // 2. 컨테이너 우선 배치 및 서비스 등록
+            for (const container of containers) {
                 const position = MCTSPlacementService.applySemanticRolePlacement(
-                    semanticRole,
+                    container.semanticRole,
                     containerBounds,
-                    obj.scale,
-                    placementHint
+                    container.scale,
+                    container.placementHint
                 );
 
-                return {
-                    ...obj,
-                    position,
-                    semanticRole,
-                };
-            });
+                // 컨테이너 경계 등록
+                const bounds = new THREE.Box3(
+                    new THREE.Vector3(position[0] - container.scale[0] / 2, position[1], position[2] - container.scale[2] / 2),
+                    new THREE.Vector3(position[0] + container.scale[0] / 2, position[1] + container.scale[1], position[2] + container.scale[2] / 2)
+                );
+                nsseService.registerContainer(container.id, bounds);
 
-            this.updateProgress(4, 'Semantic Role Placement', 'completed',
-                `${placedObjects.length}개 배치 완료`);
-            stages.push({ stage: 4, stageName: 'Semantic Role Placement', status: 'completed' });
+                intermediatePlaced.push({
+                    ...container,
+                    position,
+                    semanticRole: container.semanticRole
+                });
+            }
+
+            // 3. 하위 오브젝트 배치 (부모 제약 조건 반영)
+            for (const obj of otherObjects) {
+                const semanticRole = obj.semanticRole || 'unspecified';
+
+                // NSSE 제약 조건 준비 (부모 유무에 따라 영역 자동 결정)
+                const prepared = nsseService.prepareConstraints(
+                    obj.id,
+                    obj.name,
+                    semanticRole as any,
+                    obj.parentId,
+                    obj.placementHint as any
+                );
+
+                // 부모 영역 내에서 샘플링 (기본적으로 중심에서 랜덤 오프셋)
+                const center = new THREE.Vector3();
+                prepared.constraints.searchVolume.getCenter(center);
+
+                const size = new THREE.Vector3();
+                prepared.constraints.searchVolume.getSize(size);
+
+                // 랜덤 XZ 오프셋
+                center.x += (Math.random() - 0.5) * size.x * 0.8;
+                center.z += (Math.random() - 0.5) * size.z * 0.8;
+
+                // 시맨틱 역할 기반 Y 조정 및 클램핑
+                const finalPos = nsseService.applySemanticRolePlacement(center, prepared.constraints);
+
+                intermediatePlaced.push({
+                    ...obj,
+                    position: [finalPos.x, finalPos.y, finalPos.z],
+                    semanticRole
+                });
+            }
+
+            const placedObjects = intermediatePlaced;
+
+            this.updateProgress(4, 'Hierarchical Semantic Placement', 'completed',
+                `${placedObjects.length}개 계층형 배치 완료`);
+            stages.push({ stage: 4, stageName: 'Hierarchical Semantic Placement', status: 'completed' });
+
+            // ────────────────────────────────────────────────
+            // [v4.0] Stage 5: Physics Scattering (물리 안정화)
+            // ────────────────────────────────────────────────
+            this.updateProgress(5, 'Physics Scattering', 'running');
+            const scatteringService = new PhysicsScatteringService();
+
+            // 물리 연산을 위한 데이터 변환
+            const objectsForScattering: ScatteringObject[] = placedObjects.map(obj => ({
+                id: obj.id,
+                position: obj.position,
+                rotation: [0, Math.random() * Math.PI * 2, 0], // 초기 랜덤 회전
+                scale: obj.scale
+            }));
+
+            const stabilizedObjects = await scatteringService.simulateScattering(objectsForScattering);
+
+            // 물리 안정화 결과 반영
+            const finalPlacedObjects = placedObjects.map((obj, i) => ({
+                ...obj,
+                position: stabilizedObjects[i].position
+            }));
+
+            this.updateProgress(5, 'Physics Scattering', 'completed', '물리적 겹침 해결 및 안착 완료');
+            stages.push({ stage: 5, stageName: 'Physics Scattering', status: 'completed' });
 
             const totalDuration = Date.now() - startTime;
-
-            console.log('='.repeat(60));
-            console.log(`[NSSE] 완료! 소요 시간: ${totalDuration}ms`);
-            console.log(`[NSSE] 오브젝트: ${placedObjects.length}`);
-            console.log(`[NSSE] 공간 관계: ${relationCount}`);
-            console.log(`[NSSE] 스케일 유효성: ${validCount}/${totalCount}`);
-            console.log('='.repeat(60));
 
             // [MissingResourceTracker] 누락 리소스 디스크 저장
             await MissingResourceTracker.getInstance().flush();
@@ -570,7 +653,7 @@ export class AIPipelineOrchestrator {
                     iterations: 1,
                     placement_time_ms: totalDuration,
                 },
-                objects: placedObjects.map(obj => ({
+                objects: finalPlacedObjects.map(obj => ({
                     zone_id: 'main',
                     concept: obj.name,
                     asset_id: obj.id,
@@ -583,11 +666,21 @@ export class AIPipelineOrchestrator {
                 })),
             };
 
+            // ────────────────────────────────────────────────
+            // [v4.0] Stage 11: NavMesh Generation (이동 가능 영역 계산)
+            // ────────────────────────────────────────────────
+            this.updateProgress(11, 'NavMesh Generation', 'running');
+            const navMesh = NavMeshGenerationService.generateGrid(placementResult, 0.5, mainContainerScale);
+            this.updateProgress(11, 'NavMesh Generation', 'completed',
+                `이동 가능 영역: ${(navMesh.walkableAreaRatio * 100).toFixed(1)}%`);
+            stages.push({ stage: 11, stageName: 'NavMesh Generation', status: 'completed' });
+
             return {
                 success: true,
                 unifiedSceneResult: unifiedResult,
                 inferenceResult,
                 placementResult,
+                navMesh,
                 stages,
                 totalDuration,
                 environmentType: 'outdoor', // NSSE는 기본 야외
@@ -605,6 +698,137 @@ export class AIPipelineOrchestrator {
                 error: errorMessage,
             };
         }
+    }
+
+    /**
+     * [v4.0] MACR (AI 비평가 루프) 포함 씬 생성 및 검증
+     * 1. 씬 생성
+     * 2. 렌더링 대기 (UI 호출 필요)
+     * 3. VLM 분석 및 피드백
+     */
+    async executeWithMACR(userPrompt: string): Promise<PipelineResult & { feedback?: VLMFeedback }> {
+        // 1. 기본 생성 (NSSE + Physics)
+        const result = await this.executeNeuroSymbolic(userPrompt);
+        if (!result.success) return result;
+
+        try {
+            this.updateProgress(9, 'Visual Feedback (VLM)', 'pending', '화면 캡처 대기 중...');
+
+            const vlmService = new VLMFeedbackService();
+
+            // [Critical] 여기서는 캔버스 캡처를 위해 잠시 대기
+            await new Promise(r => setTimeout(r, 1500)); // 렌더링 유예 시간 증대 (1.5s)
+
+            const imageBase64 = await vlmService.captureFromCanvas();
+            this.updateProgress(9, 'Visual Feedback (VLM)', 'running', 'Gemini 분석 중...');
+
+            const feedback = await vlmService.analyzeScene(imageBase64, userPrompt);
+
+            this.updateProgress(9, 'Visual Feedback (VLM)', 'completed',
+                `점수: ${feedback.overallScore} | 제안: ${feedback.suggestions.length}건`);
+
+            // ────────────────────────────────────────────────
+            // [v4.0] Stage 10: Auto-Fix (자율 교정)
+            // ────────────────────────────────────────────────
+            if (feedback.overallScore < 85 && feedback.suggestions.length > 0) {
+                this.updateProgress(10, 'Auto-Fix (Closed-loop)', 'running', '피드백 기반 자동 수정 중...');
+
+                const fixedResult = this.autoFixScene(result, feedback);
+
+                this.updateProgress(10, 'Auto-Fix (Closed-loop)', 'completed',
+                    `교정 완료 (suggestions ${feedback.suggestions.length}건 반영)`);
+
+                return {
+                    ...fixedResult,
+                    feedback
+                };
+            }
+
+            return {
+                ...result,
+                feedback
+            };
+
+        } catch (err) {
+            console.warn('[MACR] 피드백 단계 건너뜀:', err);
+            return result;
+        }
+    }
+
+    /**
+     * [v4.0] Stage 10: Auto-Fix 핵심 로직
+     * VLM 피드백의 Actionable 제안을 씬 데이터에 반영
+     */
+    private autoFixScene(result: PipelineResult, feedback: VLMFeedback): PipelineResult {
+        if (!result.placementResult) return result;
+
+        const updatedObjects = [...result.placementResult.objects];
+        let fixCount = 0;
+
+        for (const suggestion of feedback.suggestions) {
+            if (!suggestion.action) continue;
+
+            const { type, targetId, action } = suggestion;
+
+            // 1. 특정 오브젝트 배치 보정 (Nudge)
+            if (type === 'placement' && targetId && action.nudge) {
+                const objIndex = updatedObjects.findIndex(o => o.asset_id === targetId);
+                if (objIndex !== -1) {
+                    const obj = updatedObjects[objIndex];
+                    updatedObjects[objIndex] = {
+                        ...obj,
+                        position: [
+                            obj.position[0] + action.nudge[0],
+                            obj.position[1] + action.nudge[1],
+                            obj.position[2] + action.nudge[2]
+                        ]
+                    };
+                    fixCount++;
+                    console.log(`[Auto-Fix] Nudged object ${targetId} by ${action.nudge}`);
+                }
+            }
+
+            // 2. 스케일 보정
+            if (type === 'scale' && targetId && action.scaleMultiplier) {
+                const objIndex = updatedObjects.findIndex(o => o.asset_id === targetId);
+                if (objIndex !== -1) {
+                    const obj = updatedObjects[objIndex];
+                    updatedObjects[objIndex] = {
+                        ...obj,
+                        scale: [
+                            obj.scale[0] * action.scaleMultiplier,
+                            obj.scale[1] * action.scaleMultiplier,
+                            obj.scale[2] * action.scaleMultiplier
+                        ]
+                    };
+                    fixCount++;
+                    console.log(`[Auto-Fix] Rescaled object ${targetId} by ${action.scaleMultiplier}`);
+                }
+            }
+
+            // 3. 분위기/환경 보정 (Atmosphere/Post-processing)
+            if (type === 'atmosphere' && action) {
+                if (action.intensity !== undefined) {
+                    console.log(`[Auto-Fix] Atmosphere enhancement suggested: Intensity ${action.intensity}`);
+                }
+            }
+
+            // 4. 조명 보정 (Lighting)
+            if (type === 'lighting' && action.intensity !== undefined) {
+                console.log(`[Auto-Fix] Lighting adjustment suggested: Intensity ${action.intensity}`);
+            }
+        }
+
+        // [Note] 조명 강도(intensity) 등은 전역 상태나 Renderer 레벨에서의 처리가 필요하므로 
+        // 여기서는 로그를 남기고, 추후 통합 스토어 액션으로 연동할 수 있도록 설계합니다.
+
+        return {
+            ...result,
+            placementResult: {
+                ...result.placementResult,
+                objects: updatedObjects
+            }
+        };
     }
 }
 

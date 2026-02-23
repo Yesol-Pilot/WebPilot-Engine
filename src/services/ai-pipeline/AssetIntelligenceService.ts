@@ -25,6 +25,8 @@ export const AssetRoleSchema = z.enum([
     'framing',       // 프레이밍 요소 (구도 완성)
     'ambient',       // 환경 요소 (배경 채우기)
     'interactive',   // 상호작용 가능 요소
+    'character',     // 캐릭터 / 생물
+    'structure',     // 대형 구조물 / 건물
 ]);
 
 /**
@@ -121,7 +123,7 @@ Generate a JSON object with the following structure:
       "concept": "<SEARCHABLE asset name derived from user keywords, e.g., 'hogwarts_castle', 'floating_candle'>",
       "search_keywords": ["<3-5 keywords for semantic search>"],
       "count": <1-10>,
-      "role": "<hero_object|supporting|prop|framing|ambient|interactive>",
+      "role": "<hero_object|supporting|prop|framing|ambient|interactive|character|structure>",
       "priority": <1-10, higher = place first>,
       "size_hint": "<tiny|small|medium|large>",
       "material_hint": "<primary material, e.g., 'wood', 'metal'>"

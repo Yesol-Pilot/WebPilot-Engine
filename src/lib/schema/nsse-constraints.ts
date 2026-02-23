@@ -138,6 +138,22 @@ export const ROLE_PHYSICAL_RULES: Record<SemanticRole, Partial<NSSEPlacementCons
         isHanging: false,
     },
 
+    // 생물 및 대형 구조물
+    'character': {
+        yConstraints: { min: 0, max: 0.1 },
+        surfaceAlignment: 'floor',
+        collisionPadding: 0.3,
+        isFloating: false,
+        isHanging: false,
+    },
+    'structure': {
+        yConstraints: { min: 0, max: 0.1 },
+        surfaceAlignment: 'floor',
+        collisionPadding: 0.5,
+        isFloating: false,
+        isHanging: false,
+    },
+
     // 미분류
     'unspecified': {
         yConstraints: { min: 0, max: 2 },

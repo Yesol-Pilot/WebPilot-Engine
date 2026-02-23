@@ -13,8 +13,9 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { SEMANTIC_ASSETS, SemanticAsset } from '@/data/semanticAssets.generated';
-import { LexicalSearchService, LexicalSearchResult } from './search/LexicalSearchService';
+import { SEMANTIC_ASSETS, SemanticAsset, AssetCategory } from '@/data/semanticAssets.generated';
+import { CATEGORY_SCALE_TABLE, KEYWORD_CATEGORY_MAP } from '@/config/ScaleNormalizationConfig';
+import { LexicalSearchService, LexicalSearchResult, isBlacklistedPath } from './search/LexicalSearchService';
 import { AssetSearchCache } from './SemanticCacheService';
 
 
@@ -45,24 +46,6 @@ export interface HybridSearchResult extends SearchResult {
 
 // RRF 하이퍼파라미터 (Elasticsearch 기본값: 60)
 const RRF_K = 60;
-
-// ============================================================
-// 블랙리스트 경로 패턴 - 테스트 파일 및 내부용 에셋 제외
-// ============================================================
-const ASSET_PATH_BLACKLIST = [
-    '_test_data',
-    'test_',
-    'debug_',
-    '/temp/',
-];
-
-/**
- * 블랙리스트 경로 확인
- */
-function isBlacklistedPath(path: string): boolean {
-    const lowerPath = path.toLowerCase();
-    return ASSET_PATH_BLACKLIST.some(pattern => lowerPath.includes(pattern.toLowerCase()));
-}
 
 // ============================================================
 // Vector Search Service
@@ -394,10 +377,10 @@ class VectorSearchServiceClass {
                 score *= 1.3;
             }
 
-            // [v3] 카테고리 불일치 페널티: 추론된 카테고리와 완전히 다르면 ×0.5
+            // [v3] 카테고리 불일치 페널티: 추론된 카테고리와 완전히 다르면 강력한 페널티 (×0.2)
             // 하드코딩 없이 기존 inferCategoryFromQuery 결과만 활용
             if (inferredCategory && asset.category !== inferredCategory && score > 0) {
-                score *= 0.5;
+                score *= 0.2;
             }
 
             return { asset, score, matchCount: score };
@@ -597,25 +580,47 @@ class VectorSearchServiceClass {
      * [Phase 3] 정확 매칭 우선 처리 추가
      * [Phase 4] 시맨틱 캐시 통합 (접근법 D)
      */
-    async findBestHybridMatch(concept: string, roleHint?: string): Promise<HybridSearchResult | null> {
+    async findBestHybridMatch(concept: string, roleHint?: string, theme?: string): Promise<HybridSearchResult | null> {
         // [Phase 6] role 기반 카테고리 필터 — character 에셋이 non-character 개념에 매핑되는 것을 방지
-        const isCharacterRole = roleHint && ['character', 'npc', 'hero_character'].includes(roleHint.toLowerCase());
+        const lowerRole = roleHint?.toLowerCase() || '';
+        const isCharacterRole = ['character', 'npc', 'hero_character'].includes(lowerRole);
+        const isStructureRole = ['structure', 'environment_container', 'building'].includes(lowerRole);
         // [Phase 4] 시맨틱 캐시 조회 먼저 시도
         const cacheResult = await AssetSearchCache.lookup(concept);
         if (cacheResult.hit && cacheResult.value) {
             const cached = cacheResult.value;
             const asset = SEMANTIC_ASSETS.find(a => a.path === cached.assetPath);
             if (asset) {
-                console.log(`[HybridSearch] 🚀 캐시 HIT: "${concept}" → ${asset.id} (${cacheResult.responseTimeMs}ms)`);
-                return {
-                    asset,
-                    score: cached.score,
-                    confidence: cached.score,
-                    vectorRank: 1,
-                    lexicalRank: 1,
-                    rrfScore: cached.score,
-                    matchedTerms: [concept],
-                };
+                // [v3.4 Fix] 캐시된 결과도 현재 roleHint와 상충하는지 최소한의 검증 수행
+                if (asset.category === 'character' && !isCharacterRole) {
+                    const conceptLower = concept.toLowerCase();
+                    const isLivingConcept = ['knight', 'paladin', 'warrior', 'elf', 'human', 'npc', 'hero', 'creature', 'monster', '기사', '용사', '전사', '엘프', '인간', '괴물'].some(k => conceptLower.includes(k));
+                    if (!isLivingConcept) {
+                        console.log(`[HybridSearch] ⚠️ 캐시된 character 에셋이 부적절한 쿼리에 매핑됨 - 무시: ${asset.id}`);
+                    } else {
+                        console.log(`[HybridSearch] 🚀 캐시 HIT (캐릭터 예외): "${concept}" → ${asset.id}`);
+                        return {
+                            asset,
+                            score: cached.score,
+                            confidence: cached.score,
+                            vectorRank: 1,
+                            lexicalRank: 1,
+                            rrfScore: cached.score,
+                            matchedTerms: [concept],
+                        };
+                    }
+                } else {
+                    console.log(`[HybridSearch] 🚀 캐시 HIT: "${concept}" → ${asset.id} (${cacheResult.responseTimeMs}ms)`);
+                    return {
+                        asset,
+                        score: cached.score,
+                        confidence: cached.score,
+                        vectorRank: 1,
+                        lexicalRank: 1,
+                        rrfScore: cached.score,
+                        matchedTerms: [concept],
+                    };
+                }
             }
         }
 
@@ -656,6 +661,22 @@ class VectorSearchServiceClass {
         if (exactMatch && !isBlacklistedPath(exactMatch.path)) {
             // [Phase 6] 정확 매칭에도 character 카테고리 필터 적용
             if (exactMatch.category === 'character' && !isCharacterRole) {
+                // [v3.4 Fix] 쿼리에 명시적인 인격체 키워드가 있으면 허용
+                const conceptLower = concept.toLowerCase();
+                const isLivingConcept = ['knight', 'warrior', 'npc', 'elf', 'human', 'hero', 'paladin', '기사', '전사', '엘프', '인간', '용사'].some(k => conceptLower.includes(k));
+
+                if (isLivingConcept) {
+                    console.log(`[HybridSearch] 🎯 정확 매칭 발견 (캐릭터 예외 허용): "${concept}" → ${exactMatch.id}`);
+                    return {
+                        asset: exactMatch,
+                        score: 1.0,
+                        confidence: 1.0,
+                        vectorRank: 1,
+                        lexicalRank: 1,
+                        rrfScore: 1.0,
+                        matchedTerms: [concept],
+                    };
+                }
                 console.log(`[HybridSearch] 🚫 정확 매칭 character 필터링: ${exactMatch.id} (role: ${roleHint || 'unknown'})`);
             } else {
                 console.log(`[HybridSearch] 🎯 정확 매칭 발견: "${concept}" → ${exactMatch.id} (path: ${exactMatch.path})`);
@@ -674,16 +695,125 @@ class VectorSearchServiceClass {
         // 일반 하이브리드 검색
         const allResults = await this.hybridSearch(concept, 10);
 
-        // 블랙리스트 경로 제외 + [Phase 6] character 카테고리 필터링
-        const filteredResults = allResults.filter(r => {
-            if (isBlacklistedPath(r.asset.path)) return false;
-            // character 카테고리 에셋은 role이 명시적으로 character/npc일 때만 허용
-            if (r.asset.category === 'character' && !isCharacterRole) {
-                console.log(`[HybridSearch] 🚫 character 에셋 필터링: ${r.asset.id} (role: ${roleHint || 'unknown'})`);
-                return false;
+        // [v3.4] 구조물/환경 vs 프롭 정합성 강화 (category와 query 의도 교차 검증용 정규식)
+        const conceptLower = concept.toLowerCase();
+        const isQueryAskingForEnvironment = conceptLower.match(/(field|plain|ocean|forest|desert|valley|landscape|terrain|nature|world|ground|들판|평원|바다|숲|사막|계곡|대지|지형|자연|월드|바닥)/i);
+        const isQueryAskingForStructure = conceptLower.match(/(gate|castle|tower|building|fall|structure|wall|gate|temple|monument|pavilion|고성|성문|구조물|빌딩|건물|폭포|사원|기념비|루)/i);
+        const isQueryAskingForSmallProp = conceptLower.match(/(dagger|sword|potion|key|coin|item|prop|box|chest|book|scroll|chalice|gem|ring|단검|칼|포션|열쇠|금화|소품|박스|상자|책|스크롤|성배|보석|반지)/i);
+
+        // 블랙리스트 경로 제외 + [Phase 6] 역할 기반 필터링 및 가중치 조정
+        const filteredResults = allResults.filter((r: HybridSearchResult) => {
+            if (!r || !r.asset) return false;
+
+            const assetPath = r.asset.path || '';
+            if (isBlacklistedPath(assetPath)) return false;
+
+            const assetCategory = r.asset.category;
+            const assetTags = [...(r.asset.keywords?.ko || []), ...(r.asset.keywords?.en || []), ...(r.asset.tags || [])].map((t: string) => t.toLowerCase());
+
+            // [v3.5+ VAM] Volume-Aware Matching: 쿼리 의도와 에셋 스케일의 물리적 정합성 검증
+            const targetScale = this.inferTargetScale(concept);
+            // 1순위: 에셋에 명시된 physical_scale, 2순위: 카테고리별 기본 스케일 테이블
+            // physical_scale은 SemanticAsset 인터페이스에 optional로 존재함
+            const assetScale = (r.asset as any).physical_scale || CATEGORY_SCALE_TABLE[assetCategory as keyof typeof CATEGORY_SCALE_TABLE] || 1.0;
+
+            // [v3.1] 캐릭터 필터링 완화: 
+            // 드래곤(dragon), 몬스터(monster) 등 생명체 에셋이 캐릭터 카테고리일 경우, 
+            // 쿼리(concept)에 해당 키워드가 포함되어 있다면 roleHint가 없더라도 허용.
+            if (assetCategory === 'character' && !isCharacterRole) {
+                const conceptLower = concept.toLowerCase();
+                // [v3.4 Fix] 캐릭터 지칭 키워드 리스트 강화 (기사, 병사 등 추가)
+                const isLivingConcept = ['dragon', 'monster', 'creature', 'animal', 'knight', 'warrior', 'soldier', 'npc', 'paladin', 'elf', 'human', '용', '괴물', '생물', '동물', '기사', '전사', '병사', '인간'].some(k => conceptLower.includes(k));
+                const hasLivingTag = assetTags.some(t => ['living', 'creature', 'humanoid', 'character', 'dragon', 'knight', 'npc'].includes(t));
+
+                if (isLivingConcept || hasLivingTag) {
+                    console.log(`[HybridSearch] 🐉 캐릭터 필터링 예외 허용: ${r.asset.id}`);
+                    r.rrfScore *= 0.9; // 페널티 감소 (0.8 -> 0.9)
+                } else {
+                    console.log(`[HybridSearch] 🚫 character 에셋 필터링: ${r.asset.id} (role: ${roleHint || 'unknown'})`);
+                    return false;
+                }
+            }
+
+            // [v3.5+ VAM] 물리적 스케일 기반 정합성 검증 (Scale Ratio)
+            // 스케일 차이가 10배 이상 나면 강력한 페널티 (예: 0.3m 소품 vs 45m 대형 환경)
+            const scaleRatio = Math.max(targetScale, assetScale) / Math.min(targetScale, assetScale);
+
+            if (scaleRatio > 10) {
+                const isQuerySmall = targetScale < 1.0;
+                const isAssetLarge = assetScale > 5.0;
+                const isQueryLarge = targetScale > 5.0;
+                const isAssetSmall = assetScale < 1.0;
+
+                if ((isQuerySmall && isAssetLarge) || (isQueryLarge && isAssetSmall)) {
+                    r.rrfScore *= 0.0001; // 거의 차단 수준
+                    r.confidence *= 0.0001;
+                    console.log(`[HybridSearch] 📏 VAM 차단: ${r.asset.id} (Scale Ratio: ${scaleRatio.toFixed(1)}x, Query: ${concept})`);
+                }
+            }
+
+            // [v3.4] 구조물/환경 vs 프롭 정합성 강화 (키워드 기반 가중합산 가속)
+            if (assetCategory === 'environment_container' || assetCategory === 'environment') {
+                if (isQueryAskingForEnvironment) {
+                    r.rrfScore *= 1.5;
+                    r.confidence = Math.min(r.confidence * 1.5, 1.0);
+                }
+            } else if (assetCategory === 'structure') {
+                if (isStructureRole || isQueryAskingForStructure) {
+                    r.rrfScore *= 1.4;
+                    r.confidence = Math.min(r.confidence * 1.4, 1.0);
+                }
+            } else if (assetCategory === 'prop') {
+                if (isQueryAskingForSmallProp) {
+                    r.rrfScore *= 1.2;
+                }
             }
             return true;
         });
+
+        // [v3] ThemeGuard: 현재 씬의 장르(theme)와 에셋의 스타일이 일치하는지 검사
+        if (theme && filteredResults.length > 0) {
+            const normalizedTheme = theme.toLowerCase();
+            filteredResults.forEach(r => {
+                const style = (r.asset as any).style?.toLowerCase() || '';
+                const tags = [...r.asset.keywords.ko, ...r.asset.keywords.en].map((k: string) => k.toLowerCase());
+
+                // 테마 일치 시 보너스 (1.5배)
+                if (style === normalizedTheme || tags.includes(normalizedTheme)) {
+                    r.rrfScore *= 1.5;
+                    r.confidence = Math.min(r.confidence * 1.5, 1.0);
+                }
+                // 테마 불일치(상충) 시 페널티 (0.2배로 강화)
+                else if (normalizedTheme === 'urban' && (style === 'fantasy' || tags.includes('fantasy'))) {
+                    r.rrfScore *= 0.2;
+                    r.confidence *= 0.2;
+                }
+                else if (normalizedTheme === 'fantasy' && (style === 'sci-fi' || tags.includes('sci-fi') || style === 'urban')) {
+                    r.rrfScore *= 0.2;
+                    r.confidence *= 0.2;
+                }
+                // [v3.4] Hell/Fantasy 테마 대형 구조물(Gate/Castle) 정합성 강화 및 Dagger 오매칭 방지
+                else if ((normalizedTheme === 'hell' || normalizedTheme === 'fantasy') &&
+                    (concept.toLowerCase().match(/(gate|castle|tower|temple|monument)/i))) {
+                    // 쿼리가 대형 구조물을 지칭하는데 dagger, sword 등 무기류가 매칭되면 원천 차단에 가까운 페널티
+                    const isWeaponOrSmallItem = tags.some(t => ['dagger', 'sword', 'blade', 'arrow', 'potion', 'key', 'coin', '단검', '검'].includes(t.toLowerCase()));
+                    if (isWeaponOrSmallItem) {
+                        console.log(`[HybridSearch] 🚫 쿼리(${concept}) vs 에셋(${r.asset.id}) 불일치 차단: ${normalizedTheme} 구조물 자리에 소품 매칭됨`);
+                        r.rrfScore *= 0.001;
+                        r.confidence *= 0.001;
+                    }
+                }
+                // Hell 테마에서 Lava 쿼리에 단검이 매칭되는 경우 방지
+                else if (normalizedTheme === 'hell' && concept.toLowerCase().includes('lava')) {
+                    if (tags.some(t => ['dagger', 'dagger', 'weapon'].includes(t.toLowerCase()))) {
+                        r.rrfScore *= 0.01;
+                        console.log(`[HybridSearch] 🚫 Lava 쿼리에 단검 매칭 차단: ${r.asset.id}`);
+                    }
+                }
+            });
+            // 점수에 따라 재정렬
+            filteredResults.sort((a, b) => b.rrfScore - a.rrfScore);
+        }
 
         if (filteredResults.length > 0) {
             const bestResult = filteredResults[0];
@@ -884,6 +1014,22 @@ class VectorSearchServiceClass {
         }
 
         return results[0].score > 0 ? results[0].skybox.url : null;
+    }
+
+    /**
+     * [v3.5+ VAM] 쿼리 키워드로부터 목표 물리 스케일 추론
+     */
+    private inferTargetScale(query: string): number {
+        const queryLower = query.toLowerCase();
+
+        // ScaleNormalizationConfig의 키워드 맵 활용
+        for (const [category, keywords] of Object.entries(KEYWORD_CATEGORY_MAP) as [string, string[]][]) {
+            if (keywords.some((k: string) => queryLower.includes(k.toLowerCase()))) {
+                return CATEGORY_SCALE_TABLE[category as AssetCategory] || 1.0;
+            }
+        }
+
+        return 1.0; // 기본값 1m
     }
 }
 

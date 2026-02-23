@@ -164,7 +164,7 @@ const ASSET_PATH_BLACKLIST = [
 /**
  * 블랙리스트 경로 확인
  */
-function isBlacklistedPath(path: string): boolean {
+export function isBlacklistedPath(path: string): boolean {
     const lowerPath = path.toLowerCase();
     return ASSET_PATH_BLACKLIST.some(pattern => lowerPath.includes(pattern.toLowerCase()));
 }

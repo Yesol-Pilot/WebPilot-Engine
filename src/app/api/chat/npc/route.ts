@@ -64,8 +64,11 @@ PROCESS:
         const typePrompt = GAMETYPE_INSTRUCTIONS[gameType?.toLowerCase()] || GAMETYPE_INSTRUCTIONS['escape'];
 
         // 2. Select Model (Gemini 2.0 Flash)
+        const { getModelForTier, AIModelTier } = require('../utils/gemini');
+        const modelId = getModelForTier(AIModelTier.FLASH);
+
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash',
+            model: modelId,
             generationConfig: {
                 responseMimeType: "application/json" // Force JSON output
             },

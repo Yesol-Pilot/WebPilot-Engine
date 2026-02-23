@@ -174,9 +174,12 @@ export async function planScene(
     ).join('\n');
 
     try {
+        const { getModelForTier, AIModelTier } = require('../app/api/ai/utils/gemini');
+        const modelId = getModelForTier(AIModelTier.PRO);
         const genAI = new GoogleGenerativeAI(apiKey);
+        // [v3.0] 공간 배치 지능 상향
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash',
+            model: modelId,
             generationConfig: { responseMimeType: "application/json" }
         });
 

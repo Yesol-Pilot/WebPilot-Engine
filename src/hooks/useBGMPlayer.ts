@@ -97,8 +97,6 @@ export function useBGMPlayer(): UseBGMPlayerReturn {
         const handlePlay = () => setIsPlaying(true);
         const handlePause = () => setIsPlaying(false);
 
-        audio.addEventListener('canplaythrough', handleCanPlay);
-        audio.addEventListener('error', handleError);
         audio.addEventListener('play', handlePlay);
         audio.addEventListener('pause', handlePause);
 
@@ -107,8 +105,11 @@ export function useBGMPlayer(): UseBGMPlayerReturn {
             audio.removeEventListener('error', handleError);
             audio.removeEventListener('play', handlePlay);
             audio.removeEventListener('pause', handlePause);
+
+            // [Phase 3.3] 오디오 리소스 강제 해제 (Memory Leak & Pool Exhaustion 방지)
             audio.pause();
             audio.src = '';
+            audio.load(); // 스트림 중단 유도
         };
     }, [bgmUrl]);
 

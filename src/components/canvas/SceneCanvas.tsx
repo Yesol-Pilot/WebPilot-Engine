@@ -88,7 +88,7 @@ export default function SceneCanvas({ children, cameraMode = 'follow' }: SceneCa
 
                 {/* Physics World */}
                 <Suspense fallback={null}>
-                    <Physics debug={process.env.NODE_ENV !== 'production'} gravity={[0, -9.81, 0]}>
+                    <Physics debug={false} gravity={[0, -9.81, 0]}>
                         {/* 
                The Main Scene Content goes here.
                Usually <Experience /> or specific scene nodes.

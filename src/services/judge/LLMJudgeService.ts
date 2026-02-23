@@ -22,8 +22,8 @@ import type {
 } from './types';
 import { DEFAULT_CRITERIA_PRESETS } from './types';
 
-// 기본 설정
-const DEFAULT_MODEL = 'gemini-1.5-flash';
+// 기본 설정 - v3.0 업그레이드 (고지능 판정을 위해 Pro 모델 사용)
+const DEFAULT_MODEL = 'gemini-2.0-pro';
 const DEFAULT_TEMPERATURE = 0.3; // 낮은 온도로 일관된 평가
 
 /**
@@ -140,7 +140,7 @@ ${JSON.stringify(request.targetData, null, 2)}`;
             console.log(`[LLMJudge] Gemini API 호출 시작 (모델: ${this.config.model})`);
 
             const response = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                `https://generativelanguage.googleapis.com/v1beta/models/${this.config.model}:generateContent?key=${apiKey}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

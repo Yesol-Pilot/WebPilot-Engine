@@ -57,8 +57,8 @@ export const CATEGORY_SCALE_TABLE: Record<string, number> = {
  */
 export const KEYWORD_CATEGORY_MAP: Record<string, string[]> = {
     'buildings': ['castle', 'tower', 'house', 'building', 'palace', 'temple'],
-    'environment_container': ['grand_hall', 'great_hall', 'hogwarts', 'throne_room', 'cathedral', 'ballroom', 'arena', 'colosseum', 'gryffindor', 'slytherin', 'hufflepuff', 'ravenclaw', 'common_room', 'dorm_room', 'dormitory'],
-    'environment': ['dungeon', 'cave', 'terrain', 'ground', 'floor', 'sky'],
+    'environment_container': ['grand_hall', 'great_hall', 'hogwarts', 'throne_room', 'cathedral', 'ballroom', 'arena', 'colosseum', 'gryffindor', 'slytherin', 'hufflepuff', 'ravenclaw', 'common_room', 'dorm_room', 'dormitory', 'field', 'plain', 'ocean', 'forest', 'desert', 'valley'],
+    'environment': ['dungeon', 'cave', 'terrain', 'ground', 'floor', 'sky', 'wall', 'ceiling'],
     'characters': ['man', 'woman', 'hero', 'villain', 'npc'],
     'creatures': ['monster', 'beast', 'dragon', 'animal', 'wolf'],
     'furniture': ['table', 'chair', 'desk', 'bed', 'sofa', 'shelf', 'bookcase'],
