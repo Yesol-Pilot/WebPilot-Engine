@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect, useState, useRef } from 'react';
+import { getAssetUrl } from '@/lib/assetConfig';
 import axios from 'axios';
 import { Html, useAnimations } from '@react-three/drei';
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
@@ -393,32 +394,35 @@ export const AssetLoader = React.memo(({
         const loadModel = async () => {
             // [FIX] 0. Use prop if available (Asset Registry Path)
             if (propModelUrl) {
-                console.log(`[AssetLoader] Using provided modelUrl: ${propModelUrl}`);
-                setModelUrl(propModelUrl);
+                const cdnUrl = getAssetUrl(propModelUrl);
+                console.log(`[AssetLoader] Using provided modelUrl: ${cdnUrl}`);
+                setModelUrl(cdnUrl);
                 setIsGenerating(false);
                 return;
             }
 
             if (!description) return;
-            // 1. Check Local Mappings
+            // 1. Check Local Mappings → CDN URL 변환
             const localPath = AssetManager.getLocalModel(description);
             if (localPath) {
-                console.log(`[AssetLoader] Found local model for ${description}: ${localPath}`);
-                setModelUrl(localPath);
+                const cdnUrl = getAssetUrl(localPath);
+                console.log(`[AssetLoader] Found model for ${description}: ${cdnUrl}`);
+                setModelUrl(cdnUrl);
                 setIsGenerating(false);
                 return;
             }
             try {
                 const check = await axios.post('/api/model/find', { prompt: description });
                 if (check.data.found && check.data.modelUrl) {
+                    const cdnUrl = getAssetUrl(check.data.modelUrl);
                     try {
-                        await axios.head(check.data.modelUrl);
-                        setModelUrl(check.data.modelUrl);
+                        await axios.head(cdnUrl);
+                        setModelUrl(cdnUrl);
                         setIsGenerating(false);
                         return;
-                        setIsGenerating(false);
-                        return;
-                    } catch { /* ignore head check error */ }
+                    } catch {
+                        console.warn(`[AssetLoader] 모델 접근 실패 (404?): ${cdnUrl}`);
+                    }
                 }
             } catch { /* ignore find error */ }
             setFallback(AssetManager.getFallbackGeometry(description));
