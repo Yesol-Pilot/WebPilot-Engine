@@ -3,10 +3,14 @@
 // Howler.js 기반 싱글톤 패턴
 // [Phase 5] SFX 사전 로드 + 인스턴스 재사용으로 Audio Pool 고갈 방지
 // [v4.0 Hotfix] 모든 SFX를 Google Actions Sounds OGG로 통일 (외부 CDN 403 에러 해결)
+// [v4.0 Hotfix2] SSR/Prerendering 환경에서 document/window 접근 방지 (Vercel 빌드 에러 수정)
 
 import { Howl, Howler } from 'howler';
 
 type Genre = 'fantasy' | 'sci-fi' | 'horror' | 'modern' | 'mystery';
+
+// SSR 환경 체크 유틸리티
+const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
 
 class AudioManager {
     private static instance: AudioManager;
@@ -36,6 +40,9 @@ class AudioManager {
     private sfxPool: Map<string, Howl> = new Map();
 
     private constructor() {
+        // [v4.0 Hotfix2] SSR 환경에서는 오디오 초기화 건너뛰기
+        if (!isBrowser) return;
+
         Howler.volume(0.5);
         // SFX를 사전 로드하여 풀에 저장
         this.preloadSFX();
@@ -46,8 +53,11 @@ class AudioManager {
     /**
      * [v4.0 Hotfix] 사용자 상호작용 시 대기 중인 BGM 자동 재생
      * Chrome/Safari의 자동재생 정책 우회
+     * [v4.0 Hotfix2] document 접근 전 SSR 체크 추가
      */
     private setupAutoplayUnlock(): void {
+        if (!isBrowser) return;
+
         const unlock = () => {
             if (this.pendingBgmGenre) {
                 console.log('[BGM] 🎵 사용자 상호작용 감지 - 대기 BGM 재생 시도');
@@ -69,6 +79,8 @@ class AudioManager {
      * 매 호출마다 new Howl() 생성 대신 미리 인스턴스를 만들어 재사용
      */
     private preloadSFX(): void {
+        if (!isBrowser) return;
+
         for (const [key, src] of Object.entries(this.sfxSources)) {
             if (!src) continue;
             try {
@@ -94,6 +106,7 @@ class AudioManager {
     }
 
     public playBGM(genre: string) {
+        if (!isBrowser) return;
         if (this.currentGenre === genre) return;
 
         // 이전 BGM 페이드 아웃 및 즉시 언로드 예약
@@ -132,6 +145,8 @@ class AudioManager {
     }
 
     public playBGMFromUrl(url: string) {
+        if (!isBrowser) return;
+
         if (this.bgm) {
             const oldBgm = this.bgm;
             oldBgm.fade(oldBgm.volume(), 0, 500);
@@ -160,6 +175,8 @@ class AudioManager {
      * 매번 new Howl() 생성하지 않고 풀에서 가져와 .play() 호출
      */
     public playSFX(key: keyof typeof this.sfxSources) {
+        if (!isBrowser) return;
+
         const pooled = this.sfxPool.get(key);
         if (pooled) {
             pooled.play();
@@ -177,12 +194,14 @@ class AudioManager {
     }
 
     public toggleMute() {
+        if (!isBrowser) return false;
         this.muted = !this.muted;
         Howler.mute(this.muted);
         return this.muted;
     }
 
     public setVolume(vol: number) {
+        if (!isBrowser) return;
         Howler.volume(vol);
     }
 
@@ -212,4 +231,5 @@ class AudioManager {
     }
 }
 
+// [v4.0 Hotfix2] 지연 초기화 — SSR 시에는 빈 인스턴스, 브라우저 시에만 실제 초기화
 export const audioManager = AudioManager.getInstance();
