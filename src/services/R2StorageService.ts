@@ -50,8 +50,8 @@ class R2StorageServiceClass {
     private initialized = false;
 
     constructor() {
-        this.bucketName = process.env.R2_BUCKET_NAME || 'webpilot-assets';
-        this.publicUrl = process.env.R2_PUBLIC_URL || '';
+        this.bucketName = process.env.R2_BUCKET_NAME || 'webpilot-engine';
+        this.publicUrl = process.env.R2_PUBLIC_URL || 'https://pub-6caff6e94ba344e03412165007.r2.dev'; // 🔴 영구 보존: Cloudflare API로 추출된 Managed Domain
         this.initializeClient();
     }
 
