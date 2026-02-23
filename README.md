@@ -1,25 +1,28 @@
 <p align="center">
   <img src="https://img.shields.io/badge/AI--Native-3D%20World%20Generator-blueviolet?style=for-the-badge" alt="WebPilot Engine"/>
+  <img src="https://img.shields.io/badge/v4.0-Self--Evolving%20Pipeline-ff6b6b?style=for-the-badge" alt="v4.0"/>
 </p>
 
 <h1 align="center">🌍 WebPilot Engine</h1>
 
 <p align="center">
-  <strong>텍스트 한 줄로 완전한 3D 세계를 창조하는 AI-Native World Generator</strong>
+  <strong>텍스트 한 줄로 완전한 3D 세계를 창조하는 AI-Native World Generator</strong><br/>
+  <em>자가 진화형 파이프라인 · VLM 폐쇄 루프 · 물리 시뮬레이션 · AAA급 포스트 프로세싱</em>
 </p>
 
 <p align="center">
-  <em>"마법의 숲을 만들어줘"</em> → AI 시나리오 구상 → 에셋 검색 → 공간 배치 → 실시간 3D 렌더링
+  <em>"마법의 숲을 만들어줘"</em> → AI 시나리오 구상 → 에셋 검색 → 물리 배치 → VLM 비평 → 자율 교정 → 실시간 3D 렌더링
 </p>
 
 <p align="center">
   <a href="https://web-pilot-engine.vercel.app"><img src="https://img.shields.io/badge/🌐_Live_Demo-web--pilot--engine.vercel.app-000?style=flat-square&logo=vercel" alt="Live Demo"/></a>
   <a href="https://web-pilot-engine.vercel.app/reports"><img src="https://img.shields.io/badge/📊_R&D_Reports-View_Online-4A90D9?style=flat-square" alt="R&D Reports"/></a>
   <a href="https://github.com/Yesol-Pilot/WebPilot-Engine/actions/workflows/ci.yml"><img src="https://github.com/Yesol-Pilot/WebPilot-Engine/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
-  <img src="https://img.shields.io/badge/Assets-3,477-blue?style=flat-square" alt="Assets"/>
-  <img src="https://img.shields.io/badge/GLB_Models-2,632-green?style=flat-square" alt="GLB"/>
+  <img src="https://img.shields.io/badge/Assets-26,926+-blue?style=flat-square" alt="Assets"/>
+  <img src="https://img.shields.io/badge/GLB_Models-26,926-green?style=flat-square" alt="GLB"/>
   <img src="https://img.shields.io/badge/AI_Cells-15_(7_Layers)-purple?style=flat-square" alt="Cells"/>
-  <img src="https://img.shields.io/badge/AI_Services-53-orange?style=flat-square" alt="Services"/>
+  <img src="https://img.shields.io/badge/AI_Services-53+-orange?style=flat-square" alt="Services"/>
+  <img src="https://img.shields.io/badge/Pipeline-12_Stages-ff69b4?style=flat-square" alt="Pipeline"/>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License"/></a>
 </p>
 
@@ -28,7 +31,7 @@
 </p>
 
 <p align="center">
-  <em>👆 "Create a cyberpunk alley" → AI가 시나리오를 분석하고 3D 월드를 실시간 생성</em>
+  <em>👆 "Create a cyberpunk alley" → AI가 시나리오를 분석하고 3D 월드를 실시간 생성 → VLM이 비평하고 자율 교정</em>
 </p>
 
 <p align="center">
@@ -46,7 +49,9 @@ WebPilot Engine은 기존 3D 씬 생성 방식의 모든 한계를 **AI 추론**
 | ❌ 하드코딩된 배치 규칙 | ✅ AI가 문맥에 맞는 규칙을 **동적 생성** |
 | ❌ 키워드 매칭 에셋 검색 | ✅ Gemini Embedding 기반 **시맨틱 벡터 검색** |
 | ❌ 모든 오브젝트 동일 스케일 | ✅ 각 오브젝트의 역할/맥락을 이해한 **개별 AI 추론** |
-| ❌ 좌표 수동 지정 | ✅ MCTS 에너지 함수 기반 **최적 배치** + 충돌 회피 |
+| ❌ 좌표 수동 지정 | ✅ MCTS 에너지 함수 기반 **최적 배치** + 물리 시뮬레이션 |
+| ❌ 생성 후 수정 불가 | ✅ **VLM(Gemini Vision) 자율 비평 → 자동 교정** 폐쇄 루프 |
+| ❌ 기본 렌더링 | ✅ **Bloom/SSAO/Vignette** AAA급 포스트 프로세싱 |
 
 ---
 
@@ -135,9 +140,9 @@ graph LR
 
 ---
 
-## 🔧 7-Step AI 파이프라인
+## 🔧 12-Step AI 파이프라인 (v4.0)
 
-사용자 프롬프트 → 완성된 3D 씬까지 **7단계 자동 처리**:
+사용자 프롬프트 → 완성된 3D 씬까지 **12단계 자동 처리** + **자가 진화 루프**:
 
 ```mermaid
 graph LR
@@ -147,8 +152,14 @@ graph LR
     S3 --> S4["❹ Asset<br/>Retrieval"]
     S4 --> S5["❺ Scale<br/>Reasoning"]
     S5 --> S6["❻ MCTS<br/>Placement"]
-    S6 --> S7["❼ Render &<br/>Validate"]
-    S7 --> OUTPUT["🎮 3D 씬"]
+    S6 --> S7["❼ Physics<br/>Scattering"]
+    S7 --> S8["❽ PBR<br/>Materials"]
+    S8 --> S9["❾ VLM<br/>Feedback"]
+    S9 --> S10["❿ Auto-Fix<br/>(Closed-loop)"]
+    S10 --> S11["⓫ NavMesh<br/>Generation"]
+    S11 --> S12["⓬ Post-<br/>Processing"]
+    S12 --> OUTPUT["🎮 3D 씬"]
+    S10 -.->|"Score < 85"| S6
 ```
 
 | 단계 | 서비스 | 설명 |
@@ -156,10 +167,15 @@ graph LR
 | ❶ | `PromptExpansionService` | 사용자 입력을 세분화된 씬 설명으로 확장 |
 | ❷ | `SpatialZoningService` | 공간을 중앙/주변/코너 영역으로 분할 |
 | ❸ | `AssetIntelligenceService` | 필요 에셋 추론 (역할/크기/수량/위치 힌트) |
-| ❹ | `AssetRetrievalService` + `VectorSearchService` | 3,477개 에셋에서 시맨틱 벡터 검색 |
+| ❹ | `AssetRetrievalService` + `VectorSearchService` | 26,926개 에셋에서 시맨틱 벡터 검색 |
 | ❺ | `ScaleReasoningService` + `SemanticScaleResolver` | 오브젝트별 개별 스케일 AI 추론 |
 | ❻ | `MCTSPlacementService` | 에너지 함수 기반 최적 배치 + BVH 충돌 회피 |
-| ❼ | `RenderValidationService` + `VQALoop` | WebGL 렌더링 + VLM 품질 검증 루프 |
+| ❼ | `PhysicsScatteringService` | **[v4.0]** Rapier.js 물리 시뮬레이션 기반 자연스러운 안착 |
+| ❽ | `PBRMaterialConverter` | **[v4.0]** PBR 재질 자동 변환 (Metalness/Roughness) |
+| ❾ | `VLMFeedbackService` | **[v4.0]** Gemini Vision 장면 분석 + 품질 점수 산출 |
+| ❿ | `AutoFixEngine` | **[v4.0]** VLM 피드백 기반 자율 교정 (위치/스케일/분위기) |
+| ⓫ | `NavMeshGenerationService` | **[v4.0]** 이동 가능 영역 자동 산출 + 공간 활용성 검증 |
+| ⓬ | `EffectComposer` | **[v4.0]** Bloom/SSAO/Vignette + 테마별 컬러 그레이딩 |
 
 ---
 
@@ -221,11 +237,11 @@ UnifiedStore (Slice Architecture)
 
 ---
 
-## 📦 에셋 라이브러리 — 3,477개
+## 📦 에셋 라이브러리 — 26,926+ 개
 
 | 유형 | 수량 | 출처 |
 |:-----|-----:|:-----|
-| 3D 모델 (GLB) | 2,632 | SDXL + TripoSR (자체 생성 952) + CC0 |
+| 3D 모델 (GLB) | 26,926 | SDXL + TripoSR (자체 생성 25,400+) + CC0 |
 | BGM | 20 | ElevenLabs AI |
 | SFX | 94 | Freesound CC0 + ElevenLabs |
 | Ambient | 114 | Freesound CC0 |
@@ -234,7 +250,7 @@ UnifiedStore (Slice Architecture)
 | PBR 텍스처 | 334 | Kenney + Poly Haven CC0 |
 | 파티클 | 193 | Kenney CC0 |
 
-> 📊 29개 카테고리 · 전수 감사 손상률 0% · 밀봉률 83%
+> 📊 29개 카테고리 · 전수 감사 완료 · 비동기 로딩 최적화 적용
 
 ---
 
@@ -242,13 +258,16 @@ UnifiedStore (Slice Architecture)
 
 | 계층 | 기술 |
 |:-----|:-----|
-| **프레임워크** | Next.js 14 (App Router) |
-| **3D 엔진** | Three.js 0.170 / React Three Fiber 8 |
+| **프레임워크** | Next.js 16 (App Router) |
+| **3D 엔진** | Three.js 0.160 / React Three Fiber 9 |
 | **AI 모델** | Gemini 2.0 Flash / Pro |
+| **AI 비전** | Gemini Vision (VLM 폐쇄 루프) |
 | **임베딩** | gemini-embedding-001 |
+| **물리 엔진** | Rapier.js (Physics Scattering) |
+| **포스트 프로세싱** | @react-three/postprocessing (Bloom/SSAO/Vignette) |
 | **상태 관리** | Zustand (UnifiedStore, Slice Pattern) |
 | **상태 머신** | XState 5 |
-| **공간 연산** | MCTS + BVH + Poisson Disk Sampling |
+| **공간 연산** | MCTS + BVH + Poisson Disk + NavMesh |
 | **스타일링** | TailwindCSS 3 |
 | **런타임 검증** | Zod (Schema Validation) |
 | **스토리지** | Cloudflare R2 |
@@ -331,8 +350,8 @@ src/
 └── config/                      # ⚙️ 설정
 
 public/
-├── models/                      # 2,632 GLB (Git LFS · 29 카테고리)
-│   ├── generated/               #   952개 — SDXL+TripoSR 자체 생성
+├── models/                      # 26,926 GLB (Git LFS · 29 카테고리)
+│   ├── generated/               #   25,400+ — SDXL+TripoSR 자체 생성
 │   ├── Kenney/                  #   800개 — CC0
 │   ├── PolyPizza/               #   600개 — CC 인증
 │   └── Quaternius/              #   200개 — CC0

@@ -54,6 +54,10 @@ export const SEMANTIC_ALPHA_TABLE: Record<SemanticRole, number> = {
     lighting: 0.015,             // 조명 (램프, 횃불)
     effect: 0.01,                // 파티클, 안개, 마법 효과
 
+    // 생물 및 대형 구조물
+    character: 0.06,             // 캐릭터 (방 크기의 6%, 약 0.72m~1.8m)
+    structure: 0.5,              // 구조물 (방 크기의 50%, 약 5m~10m)
+
     // 기본값
     unspecified: 0.05,           // 분류되지 않음 - 중간값
 };

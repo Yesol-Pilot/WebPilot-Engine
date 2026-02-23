@@ -34,14 +34,30 @@ export default function AudioManagerComponent() {
         }
     }, [bgmUrl, currentGenre]);
 
-    // [Narration Logic - Keeping as HTMLAudio for now]
+    // [Narration Logic - Memory Leak Prevention]
     useEffect(() => {
-        if (!narrationRef.current) narrationRef.current = new Audio();
+        if (!narrationRef.current) {
+            narrationRef.current = new Audio();
+        }
+
+        const audio = narrationRef.current;
 
         if (narrationUrl) {
-            narrationRef.current.src = narrationUrl;
-            narrationRef.current.play().catch(e => console.warn("Narration Play error:", e));
+            audio.pause();
+            audio.src = narrationUrl;
+            audio.load(); // 명시적 로드
+            audio.play().catch(e => console.warn("[Audio] Narration Play error:", e));
         }
+
+        // 컴포넌트 언마운트 시 또는 URL 변경 전 정리
+        return () => {
+            if (audio) {
+                audio.pause();
+                audio.src = '';
+                audio.removeAttribute('src'); // DOM 단계에서 리소스 확실히 제거
+                audio.load(); // 빈 상태로 로드하여 스트림 해제
+            }
+        };
     }, [narrationUrl]);
 
     // [Sync Volume & Mute]
@@ -49,19 +65,17 @@ export default function AudioManagerComponent() {
         // Sync GameStore volume to Howler
         audioManager.setVolume(gameAudio.volume);
 
-        if (gameAudio.isMuted !== audioManager.toggleMute()) {
-            // Sync mute state if needed, but toggleMute toggles. 
-            // Better to set explicit mute if API supported, but for now we trust the store is source of truth.
-            // Actually toggleMute returns new state. 
-            // Let's rely on setVolume(0) for mute or fix AudioManger to have setMute.
-            // For now, let's just use volume.
-            if (gameAudio.isMuted) audioManager.setVolume(0);
-            else audioManager.setVolume(gameAudio.volume);
+        // Mute 처리: Howler.mute() 대신 볼륨 0 처리로 더 확실하게 제어 (Howler pool 이슈 대응)
+        if (gameAudio.isMuted) {
+            audioManager.setVolume(0);
+        } else {
+            audioManager.setVolume(gameAudio.volume);
         }
 
         // Also control Narration volume
         if (narrationRef.current) {
             narrationRef.current.volume = gameAudio.isMuted ? 0 : audioStoreVolume.narration;
+            narrationRef.current.muted = gameAudio.isMuted;
         }
 
     }, [gameAudio.volume, gameAudio.isMuted, audioStoreVolume.narration]);

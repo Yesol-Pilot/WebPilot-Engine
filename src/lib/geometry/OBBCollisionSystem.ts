@@ -191,10 +191,11 @@ export function checkOBBCollision(a: OBB, b: OBB): SATCollisionResult {
         const distance = Math.abs(centerDiff.dot(axis));
 
         // 간격 = 거리 - (A 반경 + B 반경)
+        // [Phase 4] 미세 오차 허용 (0.001단위 겹침은 무시)
         const gap = distance - (radiusA + radiusB);
 
         // 간격이 0보다 크면 분리됨 (충돌 없음)
-        if (gap > 0) {
+        if (gap > -0.001) {
             return { collides: false };
         }
 
@@ -315,10 +316,11 @@ export class OBBCollisionManager {
         }
 
         // MTV 적용하여 새 위치 반환
+        // [Phase 4] 해결 후 아주 미세하게 더 밀어내어 재충돌 방지
         return [
-            position[0] + totalMTV.x,
-            position[1] + totalMTV.y,
-            position[2] + totalMTV.z,
+            position[0] + totalMTV.x * 1.002,
+            position[1] + totalMTV.y * 1.002,
+            position[2] + totalMTV.z * 1.002,
         ];
     }
 

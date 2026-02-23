@@ -257,19 +257,15 @@ export class AssetHunterCell extends BaseCell {
     // ══════════════════════════════════════════════════════════
 
     // 카테고리 → Matcap 텍스처 자동 매핑
-    // nidorx/matcaps 저장소의 텍스처 URL 사용 (CC0)
-    private static readonly MATCAP_BY_CATEGORY: Record<string, string> = {
-        // 가구/나무 → 따뜻한 나무 톤
-        furniture: 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/C7B898_6C4B25_A08552_8C704C.png',
-        // 차량/금속 → 메탈릭
-        vehicle: 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/C8C8C8_4B4B4B_8E8E8E_6C6C6C.png',
-        // 자연/식물 → 녹색 무광
-        nature: 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/4B6B35_BEE08C_8DA962_698844.png',
-        // 건물/구조물 → 밝은 콘크리트
-        structural: 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/E6BF3C_864A1C_B69131_FEEA74.png',
-        // 기본값 → 세라믹/클레이
-        default: 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/3B3C3F_76777B_505255_626469.png',
+    // nidorx/matcaps 저장소 URL이 불안정하므로, 기본적으로 undefined를 반환하여
+    // LowPolyMaterialAdapter가 내부 프로시저럴 텍스처를 생성하도록 유도합니다.
+    private static readonly MATCAP_URLS: Record<string, string> = {
+        // user-defined types can be added here if we host them locally
     };
+
+    private getMatcapForType(type: string): string | undefined {
+        return AssetHunterCell.MATCAP_URLS[type];
+    }
 
     /**
      * 렌더 스타일 해소 — 3단계 폴백 전략
@@ -412,30 +408,13 @@ export class AssetHunterCell extends BaseCell {
      * 1순위: DB에서 subCategory 기반 랜덤 선택
      * 2순위: 기존 고정 URL 폴백
      */
-    private async pickMatcapByCategory(category?: string): Promise<string> {
+    private async pickMatcapByCategory(category?: string): Promise<string | undefined> {
         // DB 동적 조회 시도
         const dbMatcap = await this.queryMatcapFromDB(category);
         if (dbMatcap) return dbMatcap;
 
-        // 폴백: 기존 고정 URL
-        if (!category) return AssetHunterCell.MATCAP_BY_CATEGORY.default;
-
-        const lower = category.toLowerCase();
-
-        if (['furniture', 'support'].some(k => lower.includes(k))) {
-            return AssetHunterCell.MATCAP_BY_CATEGORY.furniture;
-        }
-        if (['vehicle', 'car', 'metal'].some(k => lower.includes(k))) {
-            return AssetHunterCell.MATCAP_BY_CATEGORY.vehicle;
-        }
-        if (['nature', 'tree', 'plant', 'vegetation', 'ambient'].some(k => lower.includes(k))) {
-            return AssetHunterCell.MATCAP_BY_CATEGORY.nature;
-        }
-        if (['structural', 'building', 'wall', 'floor', 'focal'].some(k => lower.includes(k))) {
-            return AssetHunterCell.MATCAP_BY_CATEGORY.structural;
-        }
-
-        return AssetHunterCell.MATCAP_BY_CATEGORY.default;
+        // 폴백: 외부 URL이 없으므로 undefined 반환 -> 내장 프로시저럴 텍스처 사용
+        return undefined;
     }
 
     /**

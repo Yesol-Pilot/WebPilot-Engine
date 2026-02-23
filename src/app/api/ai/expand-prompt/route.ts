@@ -2,6 +2,6 @@
  * Stage 1: Prompt Expansion API Route
  */
 
-import { createAIHandler } from '../utils/gemini';
+import { createAIHandler, AIModelTier } from '../utils/gemini';
 
-export const POST = createAIHandler('PromptExpansion');
+export const POST = createAIHandler('PromptExpansion', AIModelTier.ULTRA);

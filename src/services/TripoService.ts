@@ -46,6 +46,69 @@ class TripoServiceClass {
     private proxyUrl = '/api/tripo';
     private generationCache = new Map<string, GeneratedAsset>();
 
+    // ─── 일일 API 호출 제한 (하루 5회) ───
+    private static readonly DAILY_LIMIT = 5;
+    private static readonly STORAGE_KEY = 'tripo_daily_usage';
+
+    /**
+     * 오늘 날짜 기준 API 사용량 조회
+     * localStorage에 { date: 'YYYY-MM-DD', count: number } 형태로 저장
+     */
+    private getDailyUsage(): { date: string; count: number } {
+        const today = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+        try {
+            const raw = typeof window !== 'undefined'
+                ? localStorage.getItem(TripoServiceClass.STORAGE_KEY)
+                : null;
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                // 날짜가 다르면 리셋
+                if (parsed.date === today) {
+                    return parsed;
+                }
+            }
+        } catch {
+            // localStorage 접근 불가 (SSR 등) — 메모리 폴백 아래에서 처리
+        }
+        return { date: today, count: 0 };
+    }
+
+    /**
+     * API 호출 횟수 증가 + 저장
+     */
+    private incrementDailyUsage(): number {
+        const usage = this.getDailyUsage();
+        usage.count += 1;
+        try {
+            if (typeof window !== 'undefined') {
+                localStorage.setItem(
+                    TripoServiceClass.STORAGE_KEY,
+                    JSON.stringify(usage)
+                );
+            }
+        } catch {
+            // localStorage 접근 불가 시 무시
+        }
+        console.log(`[Tripo] 일일 사용량: ${usage.count}/${TripoServiceClass.DAILY_LIMIT}`);
+        return usage.count;
+    }
+
+    /**
+     * 일일 한도 도달 여부 확인
+     */
+    isDailyLimitReached(): boolean {
+        const usage = this.getDailyUsage();
+        return usage.count >= TripoServiceClass.DAILY_LIMIT;
+    }
+
+    /**
+     * 남은 일일 호출 횟수 반환
+     */
+    getRemainingCalls(): number {
+        const usage = this.getDailyUsage();
+        return Math.max(0, TripoServiceClass.DAILY_LIMIT - usage.count);
+    }
+
     /**
      * 시맨틱 중복 체크 (Semantic Guardrail)
      * 유사도 0.9 이상이면 기존 에셋 재사용
@@ -75,15 +138,26 @@ class TripoServiceClass {
 
     /**
      * Text-to-3D 모델 생성 요청
+     * ⚠️ 하루 5회 제한 — 초과 시 차단
      */
     async generateFromText(prompt: string, isCritical = false): Promise<string> {
         console.log(`[Tripo] 생성 시작: "${prompt}" (핵심: ${isCritical})`);
 
-        // 1. 중복 체크
+        // 1. 중복 체크 (API 호출 아님 — 한도에 포함하지 않음)
         const existing = await this.checkSemanticDuplicate(prompt);
         if (existing) return existing;
 
-        // 2. Tripo API 호출
+        // 2. ⛔ 일일 한도 확인 — 초과 시 API 호출 차단
+        if (this.isDailyLimitReached()) {
+            const msg = `[Tripo] ⛔ 일일 API 호출 한도(${TripoServiceClass.DAILY_LIMIT}회) 도달! 내일 자정에 리셋됩니다. 남은 호출: 0`;
+            console.error(msg);
+            throw new Error(msg);
+        }
+
+        // 3. 호출 횟수 증가 (API 호출 전에 카운트하여 실패해도 차감)
+        this.incrementDailyUsage();
+
+        // 4. Tripo API 호출
         const response = await fetch(this.proxyUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

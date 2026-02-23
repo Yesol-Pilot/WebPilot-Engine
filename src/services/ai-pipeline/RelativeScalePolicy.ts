@@ -40,6 +40,10 @@ export const SCALE_RATIO_BY_ROLE: Record<SemanticRole, { min: number; max: numbe
     lighting: { min: 0.01, max: 0.05 },          // 1% ~ 5%
     effect: { min: 0.01, max: 0.2 },             // 1% ~ 20% (가변적)
 
+    // 생물 및 대형 구조물
+    character: { min: 0.03, max: 0.12 },         // 3% ~ 12%
+    structure: { min: 0.3, max: 1.0 },           // 30% ~ 100%
+
     // 기본값
     unspecified: { min: 0.01, max: 0.5 },        // 1% ~ 50%
 };

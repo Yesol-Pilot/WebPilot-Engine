@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import * as THREE from 'three';
 import { useMachine } from '@xstate/react';
 import { RigidBody, CuboidCollider, BallCollider } from '@react-three/rapier';
-import { useGameStore } from '@/store/useGameStore';
+import { useGameStore } from '@/store/game';
 import { useInteraction } from '@/components/interaction/InteractionManager';
 import { objectMachine } from '@/machines/objectMachine';
 import { useObjectStore } from '@/store/useObjectStore';
@@ -24,6 +24,7 @@ interface GeneratedModelProps {
     semanticName: string; // Debug Friendly Name
     prompt: string;
     initialPosition: [number, number, number];
+    initialScale?: [number, number, number]; // [v3.5] 물리 추론용 스케일
     initialRotation?: [number, number, number]; // Y축 회전 (그리드 배치 시 중앙 방향)
     spatialDesc: string;
     modelUrl?: string; // [FIX] Add modelUrl prop
@@ -37,7 +38,16 @@ interface GeneratedModelProps {
  * - [New] Auto-Rigging: 절차적 애니메이션 적용
  * - [New] Grid Layout: 그리드 기반 자동 배치 및 회전
  */
-export default function GeneratedModel({ id, semanticName, prompt, initialPosition, initialScale = [1, 1, 1], initialRotation = [0, 0, 0], spatialDesc, modelUrl }: GeneratedModelProps & { initialScale?: [number, number, number] }) {
+export default function GeneratedModel({
+    id,
+    semanticName,
+    prompt,
+    initialPosition,
+    initialScale = [1, 1, 1],
+    initialRotation = [0, 0, 0],
+    spatialDesc,
+    modelUrl
+}: GeneratedModelProps) {
     const groupRef = useRef<THREE.Group>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
@@ -100,16 +110,31 @@ export default function GeneratedModel({ id, semanticName, prompt, initialPositi
 
     if (!isClient) return null;
 
+    // [v3.4 PERFECTION] 물리 유형 및 고정 여부 동적 결정
+    // 1. 방, 지형, 바닥은 항상 fixed(고정)
+    const isStaticBase = isRoom || initialScale[0] > 10 || initialScale[2] > 10;
+
+    // 2. 콜라이더 타입 결정
+    let colliderType: 'trimesh' | 'hull' | 'cuboid' = (physicsProps.collider as any) || 'cuboid';
+    if (isRoom) colliderType = 'trimesh';
+    else if (initialScale[0] > 5) colliderType = 'hull'; // 거대 구조물은 hull
+    else colliderType = 'cuboid'; // 일반 소품은 성능을 위해 cuboid
+
     return (
         <RigidBody
+            key={id}
             position={initialPosition}
             rotation={initialRotation}
-            // [FIX] Scale is now handled by AssetLoader, not RigidBody
-            colliders={isRoom ? 'trimesh' : false}
-            // [FIX] Fix Sorting Hat in air (don't let it fall)
-            type={isRoom ? 'fixed' : 'dynamic'}
+            colliders={colliderType}
+            type={isStaticBase ? 'fixed' : 'dynamic'}
             friction={physicsProps.friction}
             restitution={physicsProps.restitution}
+            mass={isStaticBase ? undefined : (
+                initialScale[0] *
+                initialScale[1] *
+                initialScale[2] *
+                (physicsProps?.density || 1000)
+            )}
             userData={{
                 isInteractable: true,
                 id: id,
@@ -123,15 +148,6 @@ export default function GeneratedModel({ id, semanticName, prompt, initialPositi
                 }
             }}
         >
-            {/* Explicit Colliders for Props Only */}
-            {!isRoom && (
-                physicsProps.collider === 'ball' ? (
-                    <BallCollider args={[0.4]} />
-                ) : (
-                    <CuboidCollider args={[0.4, 0.4, 0.4]} />
-                )
-            )}
-
             <group
                 ref={groupRef}
                 onClick={(e) => {

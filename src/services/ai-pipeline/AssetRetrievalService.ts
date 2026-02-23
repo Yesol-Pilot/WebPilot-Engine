@@ -183,19 +183,33 @@ export const AssetRetrievalService = {
     },
 
     /**
-     * [Phase 2.5] 파일 경로로 유니크 에셋 여부 확인
+     * [Phase 2.5] 크기/카테고리 기반 유니크 에셋 자동 판단
+     * 
+     * 키워드 하드코딩 대신 AssetMetadataService의 크기 추정을 활용:
+     * - 높이(y) ≥ 4m → 대형 구조물 (건물, 성, 탑 등)
+     * - 바닥면적(x * z) ≥ 50m² → 환경/지형 에셋
+     * → 씬에 같은 파일이 1개만 배치되도록 보장
      */
     isUniqueAssetPath: (filePath: string): boolean => {
-        const lowerPath = filePath.toLowerCase();
+        // Procedural 에셋은 유니크 판단 제외
+        if (filePath.startsWith('__PROCEDURAL__')) return false;
 
-        // 대형 건물/환경 에셋 패턴
-        const uniquePatterns = [
-            'hogwarts', 'castle', 'grand_hall', 'hall',
-            'fortress', 'palace', 'cathedral', 'temple',
-            'building', 'tower', 'mansion',
-        ];
+        // 파일명에서 에셋 이름 추출 (경로의 마지막 부분, 확장자 제거)
+        const fileName = filePath.split('/').pop()?.replace(/\.glb$/i, '') || '';
+        if (!fileName) return false;
 
-        return uniquePatterns.some(pattern => lowerPath.includes(pattern));
+        // AssetMetadataService로 크기 추정
+        const { AssetMetadataService } = require('@/services/AssetMetadataService');
+        const size = AssetMetadataService.estimateSizeByName(fileName);
+
+        // 대형 구조물: 높이 4m 이상 또는 바닥면적 50m² 이상
+        const isLargeStructure = size.y >= 4 || (size.x * size.z) >= 50;
+
+        if (isLargeStructure) {
+            console.log(`[AssetRetrieval] 🏗️ 유니크 에셋 감지 (크기 기반): "${fileName}" (${size.x.toFixed(1)}×${size.y.toFixed(1)}×${size.z.toFixed(1)})`);
+        }
+
+        return isLargeStructure;
     },
 
     /**
@@ -208,7 +222,7 @@ export const AssetRetrievalService = {
         for (const assetConcept of zonePlan.assets) {
             // 각 개념에 대해 count만큼 에셋 검색
             for (let i = 0; i < assetConcept.count; i++) {
-                const retrieved = await AssetRetrievalService.retrieveSingleAsset(assetConcept, i);
+                const retrieved = await AssetRetrievalService.retrieveSingleAsset(assetConcept, i, zonePlan.zone_name); // zone_name이나 theme 정보를 활용 가능
                 assets.push(retrieved);
 
                 // 통계 업데이트
@@ -239,18 +253,20 @@ export const AssetRetrievalService = {
      * 단일 에셋 검색 (Multi-Source Strategy)
      * search_keywords를 활용한 다중 쿼리 전략
      */
-    retrieveSingleAsset: async (concept: AssetConcept, index: number): Promise<RetrievedAsset> => {
+    retrieveSingleAsset: async (concept: AssetConcept, index: number, themeHint?: string): Promise<RetrievedAsset> => {
         const conceptName = concept.concept;
         const searchKeywords = concept.search_keywords || [];
 
-        // 1단계: 로컬 캐시 검색 (다중 쿼리 전략)
+        console.log(`[AssetRetrieval] 🔍 retrieveSingleAsset: "${conceptName}" (theme: ${themeHint || 'none'})`);
+
+        // 1단계: 로컬 캐시(Hybrid Search) 검색
         // 1-1: 원본 concept으로 검색
-        let localPath = await AssetRetrievalService.searchLocalCache(conceptName);
+        let localPath = await AssetRetrievalService.searchLocalCache(conceptName, concept.role, themeHint);
 
         // 1-2: concept 검색 실패 시 search_keywords로 순차 검색
         if (!localPath && searchKeywords.length > 0) {
             for (const keyword of searchKeywords) {
-                localPath = await AssetRetrievalService.searchLocalCache(keyword);
+                localPath = await AssetRetrievalService.searchLocalCache(keyword, concept.role);
                 if (localPath) {
                     console.log(`[AssetRetrieval] ✅ search_keywords 매칭: "${keyword}" → ${localPath}`);
                     break;
@@ -262,7 +278,7 @@ export const AssetRetrievalService = {
         if (!localPath) {
             const tokens = conceptName.split(/[_\s-]+/).filter(t => t.length > 2);
             for (const token of tokens) {
-                localPath = await AssetRetrievalService.searchLocalCache(token);
+                localPath = await AssetRetrievalService.searchLocalCache(token, concept.role);
                 if (localPath) {
                     console.log(`[AssetRetrieval] ✅ 토큰 매칭: "${token}" → ${localPath}`);
                     break;
@@ -333,11 +349,11 @@ export const AssetRetrievalService = {
      * 로컬 캐시에서 에셋 검색 (Phase 2: 하이브리드 검색)
      * - BM25 (렉시컬) + Vector (시맨틱) + RRF 융합
      */
-    searchLocalCache: async (concept: string): Promise<string | null> => {
-        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"`);
+    searchLocalCache: async (concept: string, roleHint?: string, theme?: string): Promise<string | null> => {
+        console.log(`[AssetRetrieval] 🔍 searchLocalCache 호출 (하이브리드 검색): "${concept}"${roleHint ? ` (role: ${roleHint})` : ''}${theme ? ` (theme: ${theme})` : ''}`);
 
-        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합)
-        const result = await VectorSearchService.findBestHybridMatch(concept);
+        // Phase 2: 하이브리드 검색 (Vector + BM25 + RRF 융합) + Phase 6: role 필터링 + v3: ThemeGuard
+        const result = await VectorSearchService.findBestHybridMatch(concept, roleHint, theme);
 
         if (result) {
             console.log(`[AssetRetrieval] 🔍 HybridSearch 결과: ${result.asset?.id} (RRF: ${result.rrfScore.toFixed(4)}, confidence: ${result.confidence.toFixed(2)})`);

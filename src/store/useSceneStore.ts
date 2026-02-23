@@ -19,8 +19,12 @@ export interface SceneState {
         preset: string;
         background: boolean;
     };
+    // [Integration] 전역 렌더링 스타일 설정
+    matcapTexture?: string;
+
     addObject: (obj: SceneObject) => void;
     setScene: (objects: SceneObject[]) => void;
+    setMatcapTexture: (url?: string) => void;
     resetScene: () => void;
 }
 
@@ -35,7 +39,10 @@ export const useSceneStore = create<SceneState>((set) => ({
         preset: 'sunset',
         background: true
     },
+    matcapTexture: undefined,
+
     addObject: (obj) => set((state) => ({ objects: [...state.objects, obj] })),
     setScene: (objects) => set({ objects }),
+    setMatcapTexture: (url) => set({ matcapTexture: url }),
     resetScene: () => set({ objects: [] }),
 }));

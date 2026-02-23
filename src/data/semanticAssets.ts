@@ -6,12 +6,13 @@
  */
 
 export type AssetCategory =
-    | 'environment'  // 환경/장소
-    | 'furniture'    // 가구
-    | 'character'    // 캐릭터
-    | 'prop'         // 소품
-    | 'nature'       // 자연물
-    | 'structure';   // 구조물
+    | 'environment'           // 환경/장소
+    | 'environment_container' // 대규모 환경 컨테이너 (v3.5 추가)
+    | 'furniture'             // 가구
+    | 'character'             // 캐릭터
+    | 'prop'                  // 소품
+    | 'nature'                // 자연물
+    | 'structure';            // 구조물
 
 export interface SemanticAsset {
     id: string;

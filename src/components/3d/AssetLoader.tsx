@@ -330,7 +330,7 @@ const Content = React.memo(({ modelUrl, fallback, isGenerating, scale, onSelect,
                         rotation={rotation}
                         scale={scale}
                         type={(description.toLowerCase().match(/(room|hall|castle|dungeon|environment)/) || type === 'static_mesh' || description.includes('hat')) ? "fixed" : "dynamic"}
-                        colliders={description.toLowerCase().match(/(room|hall|castle|dungeon)/) ? "trimesh" : "cuboid"}
+                        colliders={description.toLowerCase().match(/(room|hall|castle|dungeon)/) ? "trimesh" : "hull"}
                         userData={{ isAssetRoot: true }}
                     >
                         <GeneratedModel
@@ -429,12 +429,6 @@ export const AssetLoader = React.memo(({
 
     const contentProps = { modelUrl, fallback, isGenerating, scale, onSelect, onInteract, description, withPhysics, type };
     const rbKey = modelUrl ? `rb-model-${modelUrl}` : `rb-fallback-${description}`;
-
-    const isRoom = description.toLowerCase().includes('room') || description.toLowerCase().includes('dungeon') || description.toLowerCase().includes('environment') || description.toLowerCase().includes('hall') || description.toLowerCase().includes('castle') || description.toLowerCase().includes('school');
-    // [Fix] 'white_floor' should be cuboid, NOT trimesh (it's a box).
-    // Using trimesh on a procedurally generated mesh inside Suspense sometimes fails in Rapier.
-    const isFloor = description.toLowerCase().includes('floor') || description.toLowerCase().includes('white_floor');
-    const colliderType = isRoom ? "trimesh" : (isFloor ? "cuboid" : "cuboid");
 
     if (type === 'spawn_point') {
         return <group position={position} userData={{ isSpawnPoint: true }} />;

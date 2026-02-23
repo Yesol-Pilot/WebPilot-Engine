@@ -13,13 +13,17 @@
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three';
 
 // Draco CDN 경로
 const DRACO_CDN = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
+const KTX2_CDN = 'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/';
 
 // DRACOLoader 싱글톤 (메모리 효율)
 let dracoLoaderInstance: DRACOLoader | null = null;
+let ktx2LoaderInstance: KTX2Loader | null = null;
 
 function getDracoLoader(): DRACOLoader {
     if (!dracoLoaderInstance) {
@@ -31,6 +35,30 @@ function getDracoLoader(): DRACOLoader {
         console.log('[useSafeGLTF] DRACOLoader 초기화 완료 (JS 디코더 강제)');
     }
     return dracoLoaderInstance;
+}
+
+function getKTX2Loader(): KTX2Loader | null {
+    if (!ktx2LoaderInstance && typeof window !== 'undefined') {
+        try {
+            ktx2LoaderInstance = new KTX2Loader();
+            ktx2LoaderInstance.setTranscoderPath(KTX2_CDN);
+
+            // GPU 지원 감지를 위한 임시 렌더러
+            const tempCanvas = document.createElement('canvas');
+            const tempRenderer = new THREE.WebGLRenderer({
+                canvas: tempCanvas,
+                context: tempCanvas.getContext('webgl2') || undefined,
+            });
+            ktx2LoaderInstance.detectSupport(tempRenderer);
+            tempRenderer.dispose();
+
+            console.log('[useSafeGLTF] KTX2Loader 초기화 완료');
+        } catch (e) {
+            console.warn('[useSafeGLTF] KTX2Loader 초기화 실패 (무시):', e);
+            ktx2LoaderInstance = null;
+        }
+    }
+    return ktx2LoaderInstance;
 }
 
 /**
@@ -45,6 +73,12 @@ export function useSafeGLTF(path: string): GLTF {
             // GLTFLoader에 DRACOLoader 설정
             const dracoLoader = getDracoLoader();
             loader.setDRACOLoader(dracoLoader);
+
+            // KTX2Loader 설정
+            const ktx2Loader = getKTX2Loader();
+            if (ktx2Loader) {
+                loader.setKTX2Loader(ktx2Loader);
+            }
         }
     ) as GLTF;
 
@@ -63,6 +97,8 @@ useSafeGLTF.preload = (path: string) => {
 
     const loader = new GLTFLoader();
     loader.setDRACOLoader(getDracoLoader());
+    const ktx2 = getKTX2Loader();
+    if (ktx2) loader.setKTX2Loader(ktx2);
     loader.load(path, () => { }, undefined, (error) => {
         console.warn(`[useSafeGLTF] 프리로드 실패: ${path}`, error);
     });
@@ -84,5 +120,9 @@ export function disposeDracoLoader() {
     if (dracoLoaderInstance) {
         dracoLoaderInstance.dispose();
         dracoLoaderInstance = null;
+    }
+    if (ktx2LoaderInstance) {
+        ktx2LoaderInstance.dispose();
+        ktx2LoaderInstance = null;
     }
 }

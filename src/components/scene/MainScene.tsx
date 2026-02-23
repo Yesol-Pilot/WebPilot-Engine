@@ -1,15 +1,12 @@
-
 "use client";
 
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture } from '@react-three/drei';
 import { useSceneStore, SceneObject } from '../../store/useSceneStore';
 
 // Model Loader Component
-import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
 import { LowPolyMaterialAdapter } from '../../services/LowPolyMaterialAdapter';
 
 // Model Loader Component
@@ -28,33 +25,50 @@ const ModelBase = ({ info }: { info: SceneObject }) => {
     );
 };
 
+// Matcap 텍스처 로더 컴포넌트 (조건부 Hook 호출을 위해 분리)
+function MatcapLoader({ url, onLoad }: { url: string; onLoad: (tex: THREE.Texture) => void }) {
+    const texture = useTexture(url);
+    useEffect(() => {
+        if (texture) onLoad(texture);
+    }, [texture, url, onLoad]);
+    return null;
+}
+
 // Matcap 전용 Model Component — useTexture 조건 분리
 const ModelWithMatcap = ({ info }: { info: SceneObject }) => {
     const { scene } = useGLTF(info.path);
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
     const group = useRef<THREE.Group>(null);
+    const [loadedMatcap, setLoadedMatcap] = useState<THREE.Texture | undefined>(undefined);
 
     // Matcap 텍스처 로드 (info.matcapTexture 또는 기본값)
-    const matcapUrl = info.matcapTexture
-        || 'https://raw.githubusercontent.com/nidorx/matcaps/master/1024/3B3C3F_76777B_505255_626469.png';
-    const matcapTexture = useTexture(matcapUrl);
+    // 외부 URL 제거 내장 프로시저럴 텍스처 사용
+    const matcapFromStore = useSceneStore((state) => state.matcapTexture);
+    const matcapUrl = info.matcapTexture || matcapFromStore;
+
+    // Matcap 텍스처가 준비되면 적용
+    const matcapTexture = loadedMatcap;
 
     // Matcap 스타일 적용
     useEffect(() => {
         if (!group.current) return;
+        // 텍스처가 없으면 내부 프로시저럴 텍스처 사용
         LowPolyMaterialAdapter.applyMatcapStyle(group.current, {
             customMatcap: matcapTexture
         });
     }, [matcapTexture, clonedScene]);
 
     return (
-        <primitive
-            ref={group}
-            object={clonedScene}
-            position={info.position}
-            rotation={info.rotation}
-            scale={info.scale}
-        />
+        <>
+            {matcapUrl && <MatcapLoader url={matcapUrl} onLoad={setLoadedMatcap} />}
+            <primitive
+                ref={group}
+                object={clonedScene}
+                position={info.position}
+                rotation={info.rotation}
+                scale={info.scale}
+            />
+        </>
     );
 };
 

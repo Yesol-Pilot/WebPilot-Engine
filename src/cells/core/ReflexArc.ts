@@ -29,11 +29,11 @@ import {
 import type { ReflexResult, PlacedObject } from '../types';
 
 // ── 반사 신경 상수 ──
-const MAX_NUDGE_ATTEMPTS = 3;      // MTV Nudge 최대 시도 횟수
+const MAX_NUDGE_ATTEMPTS = 5;      // MTV Nudge 최대 시도 횟수 상향 (3->5)
 const MAX_SHRINK_ITERATIONS = 5;   // 스케일 축소 최대 반복
 const SHRINK_FACTOR = 0.9;         // 축소 비율 (10% 감소)
-const MIN_NUDGE_MARGIN = 0.05;     // 최소 Nudge 마진 (5cm)
-const NUDGE_MARGIN_RATIO = 0.1;    // 오브젝트 크기 대비 마진 비율 (10%)
+const MIN_NUDGE_MARGIN = 0.08;     // 최소 Nudge 마진 상향 (5cm -> 8cm)
+const NUDGE_MARGIN_RATIO = 0.12;   // 오브젝트 크기 대비 마진 비율 상향 (10% -> 12%)
 
 /**
  * ReflexArc — 척수 반사 신경 시스템

@@ -104,10 +104,11 @@ const CATEGORY_SIZE_MAP: Record<string, AssetDimensions> = {
 // 카테고리 매칭 우선순위 (긴 키워드 → 짧은 키워드, 오분류 방지)
 const CATEGORY_PRIORITY: string[] = [
     // 복합어 / 구체적 카테고리 (오분류 위험 낮음)
+    'knight', 'paladin', 'hero', 'warrior', // 인격체 최우선
     'bookshelf', 'tombstone', 'graveyard', 'mushroom', 'campfire',
     'character', 'creature', 'environment',
     'building', 'terrain', 'boulder', 'vehicle', 'cabinet', 'cottage',
-    'village', 'knight',
+    'village',
     // 중간 길이
     'castle', 'bridge', 'flower', 'shield', 'scroll', 'potion',
     'barrel', 'dragon', 'horse', 'chest', 'crate', 'tower',

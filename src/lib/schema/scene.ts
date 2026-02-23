@@ -40,6 +40,10 @@ export const SemanticRoleSchema = z.enum([
     'lighting',               // 조명 (램프, 횃불)
     'effect',                 // 파티클, 안개, 마법 효과
 
+    // 생물 및 대형 구조물 (추가)
+    'character',              // 캐릭터, NPC, 몬스터
+    'structure',              // 개별 건물, 성, 탑 (environment_container의 구성 요소)
+
     // 기본값
     'unspecified',            // 분류되지 않음
 ]);

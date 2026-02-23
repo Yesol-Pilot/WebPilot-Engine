@@ -66,6 +66,7 @@ const DirectModelLoader = ({
     scale,
     onClick,
     disableCollider = false,
+    colliderType = 'trimesh' as 'hull' | 'cuboid' | 'trimesh' | false,
 }: {
     url: string;
     position: [number, number, number];
@@ -73,6 +74,7 @@ const DirectModelLoader = ({
     scale: [number, number, number];
     onClick?: () => void;
     disableCollider?: boolean;
+    colliderType?: 'hull' | 'cuboid' | 'trimesh' | false;
 }) => {
     // [FIX] 정적 장식 오브젝트는 RigidBody 없이 렌더링 (플레이어 가두기 방지)
     if (disableCollider) {
@@ -85,7 +87,7 @@ const DirectModelLoader = ({
         );
     }
     return (
-        <RigidBody type="fixed" colliders="cuboid" position={position} rotation={rotation}>
+        <RigidBody type="fixed" colliders={colliderType || 'cuboid'} position={position} rotation={rotation}>
             <group scale={scale}>
                 <SafeModelLoader url={url} onClick={(e: any) => { e.stopPropagation(); onClick?.(); }} />
             </group>
@@ -263,7 +265,9 @@ const SceneNodeRenderer = ({ node, theme }: { node: SceneNode, theme: string }) 
                         position={position}
                         rotation={rotation}
                         scale={scale}
-                        disableCollider={node.type === 'static_mesh'}
+                        // [v3.4 PERFECTION] 성능 최적화: 기본을 hull로 하고, 대형 건축물만 선별적으로 trimesh 적용
+                        colliderType={(node as any).colliderType || (node.type === 'static_mesh' ? 'hull' : 'cuboid')}
+                        disableCollider={false}
                         onClick={() => {
                             if (node.type === 'interactive_prop' || node.type === 'npc') {
                                 console.log(`[Interaction] Object Clicked: ${node.id}`);
@@ -287,7 +291,7 @@ const SceneNodeRenderer = ({ node, theme }: { node: SceneNode, theme: string }) 
             type={node.type}
             theme={theme}
             tags={node.tags}
-            colliderType={node.type === 'static_mesh' ? false : (node as unknown as { colliderType?: 'hull' | 'cuboid' | 'trimesh' | false }).colliderType}
+            colliderType={(node as any).colliderType !== undefined ? (node as any).colliderType : 'hull'}
             onClick={() => {
                 if (node.type === 'interactive_prop' || node.type === 'npc') {
                     console.log(`[Interaction] Object Clicked: ${node.id}`);

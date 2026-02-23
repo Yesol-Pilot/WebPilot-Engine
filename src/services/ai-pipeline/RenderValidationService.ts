@@ -115,20 +115,105 @@ export const RenderValidationService = {
         const issues: ValidationIssue[] = [];
         let adjustedCount = 0;
 
-        // 충돌 감지를 위한 위치 맵
-        const positionMap = new Map<string, PlacedObject>();
+        // [v3.4] ReflexArc (OBB SAT Collision Engine) 초기화
+        const ReflexArc = (await import('@/cells/core/ReflexArc')).ReflexArc;
+
+        // 1. 기존 배치 데이터 + 플레이어(PC) 위치 추가
+        // PC는 보통 중앙 부근에 위치하므로 (0,0,0) 주변 2m 영역을 충돌 구역으로 설정
+        const pcOBB = {
+            id: 'PLAYER_PC_RESERVED',
+            position: [0, 0, 0] as [number, number, number],
+            scale: [1.5, 2.0, 1.5] as [number, number, number], // 플레이어 부피
+            rotation: [0, 0, 0] as [number, number, number]
+        };
+
+        const candidateObjects = [
+            pcOBB,
+            ...placementResult.objects.map(obj => ({
+                id: obj.asset_id,
+                position: obj.position,
+                scale: obj.scale,
+                rotation: obj.rotation
+            }))
+        ];
+
+        const reflexEngine = new ReflexArc();
+        // 엔진에 모든 오브젝트 미리 등록하여 상호 충돌 준비
+        candidateObjects.forEach(o => reflexEngine.commit(o.id, o.position, o.scale, o.rotation));
 
         for (const obj of placementResult.objects) {
-            const validated = RenderValidationService.validateObject(obj, positionMap, issues);
-            validatedObjects.push(validated);
+            // 1. 기본 물리 및 경계 검증 (지면, 경계 클램핑)
+            const preValidated = RenderValidationService.validateObjectBasic(obj, issues);
 
-            if (validated.was_adjusted) {
-                adjustedCount++;
+            // 2. ReflexArc를 통한 정밀 OBB 충돌 검사 및 해결 (MTV 적용)
+            // PC 영역 침범 시 Nudge(밀어내기)가 수행됨
+            const reflexResult = reflexEngine.check(
+                preValidated.position,
+                preValidated.scale,
+                preValidated.rotation,
+                obj.asset_id
+            );
+
+            if (!reflexResult.allowed || reflexResult.action !== 'PASS') {
+                const isAdjusted = reflexResult.action === 'NUDGE' || reflexResult.action === 'SHRINK';
+
+                issues.push({
+                    object_id: obj.asset_id,
+                    issue_type: 'collision',
+                    severity: isAdjusted ? 'fixed' : 'error',
+                    description: `[ReflexArc] ${reflexResult.action}: 충돌 해결 시도됨`,
+                    original_value: obj.position,
+                    corrected_value: reflexResult.finalPosition,
+                });
+
+                preValidated.position = reflexResult.finalPosition as [number, number, number];
+                preValidated.scale = reflexResult.finalScale as [number, number, number];
+                preValidated.was_adjusted = isAdjusted;
+                preValidated.adjustments = [
+                    ...(preValidated.adjustments || []),
+                    `ReflexArc ${reflexResult.action} (Penetration: ${(reflexResult.penetrationDepth || 0).toFixed(3)}m)`
+                ];
             }
 
-            // 위치 맵에 추가 (충돌 감지용)
-            const posKey = `${Math.round(validated.position[0])},${Math.round(validated.position[2])}`;
-            positionMap.set(posKey, obj);
+            validatedObjects.push(preValidated);
+            if (preValidated.was_adjusted) adjustedCount++;
+        }
+
+        // ────────────────────────────────────────────────
+        // [Stage 7.5] AI Quality Gate (AI Judge)
+        // ────────────────────────────────────────────────
+        try {
+            console.log(`[RenderValidation] AI Quality Gate 검증 시도 (PRO)...`);
+            const aiResponse = await fetch('/api/ai/quality-gate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ placementResult, sceneSpec }),
+            });
+
+            if (aiResponse.ok) {
+                const aiData = await aiResponse.json();
+
+                // AI 제안 이슈 반영
+                if (aiData.issues && aiData.issues.length > 0) {
+                    aiData.issues.forEach((issue: any) => {
+                        issues.push(issue);
+
+                        // 수정 제안이 있고, 대상 오브젝트를 찾은 경우 반영
+                        const targetObj = validatedObjects.find(o => o.id === issue.object_id);
+                        if (targetObj && issue.suggested_adjustment) {
+                            if (issue.suggested_adjustment.position) {
+                                targetObj.position = issue.suggested_adjustment.position;
+                                targetObj.was_adjusted = true;
+                                targetObj.adjustments = [...(targetObj.adjustments || []), `AI Judge: ${issue.description}`];
+                                adjustedCount++;
+                            }
+                        }
+                    });
+                }
+                console.log(`[RenderValidation] AI Quality Gate 완료: ${aiData.issues?.length || 0}개 이슈 발견`);
+            }
+        } catch (aiError) {
+            console.warn(`[RenderValidation] AI Quality Gate 실패 (무시하고 휴리스틱 결과 사용):`, aiError);
         }
 
         const validationTime = Date.now() - startTime;
@@ -147,11 +232,11 @@ export const RenderValidationService = {
     },
 
     /**
-     * 단일 오브젝트 검증
+     * 단일 오브젝트 기본 검증 (지면, 경계)
+     * 충돌은 Stage 7 수준에서 ReflexArc가 처리함
      */
-    validateObject: (
+    validateObjectBasic: (
         obj: PlacedObject,
-        positionMap: Map<string, PlacedObject>,
         issues: ValidationIssue[]
     ): ValidatedObject => {
         const adjustments: string[] = [];
@@ -190,25 +275,6 @@ export const RenderValidationService = {
             position[0] = Math.max(WORLD_BOUNDS.minX + 1, Math.min(WORLD_BOUNDS.maxX - 1, position[0]));
             position[2] = Math.max(WORLD_BOUNDS.minZ + 1, Math.min(WORLD_BOUNDS.maxZ - 1, position[2]));
             adjustments.push('경계 내로 조정');
-            wasAdjusted = true;
-        }
-
-        // 3. 완전 동일 위치 충돌만 처리 (미세 조정)
-        const posKey = `${Math.round(position[0])},${Math.round(position[2])}`;
-        if (positionMap.has(posKey)) {
-            issues.push({
-                object_id: obj.asset_id,
-                issue_type: 'collision',
-                severity: 'fixed',
-                description: `동일 위치 충돌 감지`,
-            });
-
-            // 약간 이동 (0.5~1.5m 랜덤)
-            const offset = 0.5 + Math.random();
-            const angle = Math.random() * Math.PI * 2;
-            position[0] += Math.cos(angle) * offset;
-            position[2] += Math.sin(angle) * offset;
-            adjustments.push('충돌 회피 이동');
             wasAdjusted = true;
         }
 

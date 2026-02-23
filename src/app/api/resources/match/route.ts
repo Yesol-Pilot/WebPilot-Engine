@@ -83,11 +83,13 @@ export async function POST(request: Request) {
             }
         }
 
-        // 모든 레이어 매칭 실패
-        return NextResponse.json(
-            { error: '매칭 결과 없음', description },
-            { status: 404 }
-        );
+        // 모든 레이어 매칭 실패 - 404 대신 200(none) 반환하여 로그 노이즈 제거
+        return NextResponse.json({
+            type: 'none',
+            source: 'none',
+            message: '적절한 매칭 결과를 찾을 수 없습니다.',
+            description
+        }, { status: 200 });
     } catch (error) {
         console.error('[API] Resource Match Error:', error);
         return NextResponse.json(

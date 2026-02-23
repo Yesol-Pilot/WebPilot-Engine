@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSceneData } from '@/context/SceneContext';
 import { GeminiService } from '@/services/GeminiService';
@@ -201,11 +201,37 @@ export default function CreatorStudioPage() {
     }
   };
 
+  // [FIX] AI 파이프라인이 통합 스토어에 씬을 설정하면 previewNodes 자동 동기화
+  const aiSceneObjects = useUnifiedStore((s) => s.aiScene.objects);
+  const aiSceneGenerated = useUnifiedStore((s) => s.aiScene.isGenerated);
+
+  React.useEffect(() => {
+    if (aiSceneGenerated && aiSceneObjects.length > 0 && previewNodes.length === 0) {
+      // AI 파이프라인이 씬을 생성했지만 previewNodes가 비어있는 경우 동기화
+      const nodes = aiSceneObjects.map((obj: any) => ({
+        id: obj.id || obj.concept,
+        name: obj.name || obj.concept,
+        modelUrl: obj.modelUrl || obj.file_path,
+        position: obj.position || [0, 0, 0],
+        rotation: obj.rotation || [0, 0, 0],
+        scale: obj.scale || [1, 1, 1],
+      }));
+      setPreviewNodes(nodes as any);
+      setStatus('🎮 "월드 입장" 버튼을 클릭하세요!');
+      setLoading(false);
+      console.log('[Studio] AI 파이프라인 씬 → previewNodes 동기화:', nodes.length, '개');
+    }
+  }, [aiSceneGenerated, aiSceneObjects]);
+
   // 생성 핸들러
   const handleGenerate = async () => {
     setError('');
     setLoading(true);
     setStatus(inputMode === 'image' ? '🔍 이미지 분석 중...' : '📝 시나리오 작성 중...');
+
+    // [FIX] 이전 씬 데이터 클리어 (캐시 잔재 방지)
+    setPreviewNodes([]);
+    sessionStorage.removeItem('webpilot_ai_scene');
 
     // 생성 카운터 초기화 (1회 시도당 5개 제한)
     if (typeof window !== 'undefined') {
@@ -325,16 +351,48 @@ export default function CreatorStudioPage() {
   };
 
   // 월드 입장 (Seamless Transition)
+  // [FIX] 통합 스토어의 최신 AI 씬을 우선 사용 (stale 캐시 방지)
   const handleEnterWorld = () => {
+    const unifiedStore = getUnifiedStore();
     const store = useGameStore.getState();
-    store.setLoaded(true);
-
-    // [FIX] game.ts 스토어에도 시나리오 데이터 동기화
-    // Experience.tsx가 game.ts의 currentScenario를 사용하기 때문
     const gameStore2 = useGameStore2.getState();
-    if (store.scenario && store.scenario.id) {
-      gameStore2.loadScenario(store.scenario as any); // [FIX] 타입 호환성 (optional id vs required id)
-      gameStore2.setGameMode('custom');
+
+    // 1. 통합 스토어에서 최신 AI 씬 확인
+    if (unifiedStore.aiScene.isGenerated && unifiedStore.aiScene.objects.length > 0) {
+      console.log('[Studio] ✅ 통합 스토어 AI 씬으로 월드 진입:', unifiedStore.aiScene.objects.length, '개 오브젝트');
+
+      // AI 씬 → Scenario 변환
+      unifiedStore.enterAIWorld();
+      const scenario = unifiedStore.convertAISceneToScenario();
+
+      if (scenario) {
+        // 레거시 스토어 동기화
+        setSceneData(scenario as any);
+        store.setScenario(scenario as any);
+        store.setLoaded(true);
+        gameStore2.loadScenario(scenario as any);
+        gameStore2.setGameMode('custom');
+
+        // sessionStorage에 저장 (페이지 리로드 생존)
+        try {
+          sessionStorage.setItem('webpilot_ai_scene', JSON.stringify({
+            scenario,
+            gameMode: 'custom',
+            aiScene: unifiedStore.aiScene,
+            timestamp: Date.now(),
+          }));
+        } catch (e) {
+          console.warn('[Studio] sessionStorage 저장 실패:', e);
+        }
+      }
+    } else if (store.scenario) {
+      // 2. 레거시 시나리오 사용 (AI 파이프라인 아닌 경우)
+      console.log('[Studio] 레거시 시나리오로 월드 진입');
+      store.setLoaded(true);
+      if (store.scenario.id) {
+        gameStore2.loadScenario(store.scenario as any);
+        gameStore2.setGameMode('custom');
+      }
     }
 
     setIsIngame(true); // 페이지 이동 없이 즉시 게임 모드 전환

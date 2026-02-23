@@ -105,7 +105,7 @@ export class VisualCriticAgent extends BaseAgent {
         }
 
         try {
-            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+            const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-pro' });
 
             const base64Image = typeof imageData === 'string'
                 ? imageData

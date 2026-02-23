@@ -132,7 +132,7 @@ const UNIFIED_SCENE_PROMPT_TEMPLATE = `
       "id": "고유 ID",
       "name": "오브젝트 이름",
       "description": "검색용 설명",
-      "semanticRole": "environment_container | sub_container | furniture_floor | decoration_floating | decoration_hanging | decoration_surface | lighting | effect | unspecified",
+      "semanticRole": "environment_container | sub_container | furniture_floor | decoration_floating | decoration_hanging | decoration_surface | lighting | effect | character | structure | unspecified",
       "keywords": ["검색", "키워드"],
       "parentId": "부모 ID (없으면 null)",
       "isContainer": true/false,
@@ -142,6 +142,7 @@ const UNIFIED_SCENE_PROMPT_TEMPLATE = `
       "placementHint": {
         "floatingRange": [minY, maxY],  // 부유 오브젝트용
         "attachTo": "floor | ceiling | wall",
+        "y_range": [minY, maxY],        // Y축 배치 범위 (필수)
         "zone": "center | near_wall | corner | random"
       },
       "suggestedScale": 미터_단위_스케일,
@@ -172,7 +173,7 @@ const UNIFIED_SCENE_PROMPT_TEMPLATE = `
 - 벽면 부착: \`y_range: [1.2, 2.0]\`
 
 ### 2. semantic_role (필수)
-\`furniture_floor\`, \`decoration_floating\`, \`decoration_hanging\`, \`lighting\`, \`effect\`, \`sub_container\` 중 선택.
+\`furniture_floor\`, \`decoration_floating\`, \`decoration_hanging\`, \`lighting\`, \`effect\`, \`sub_container\`, \`character\`, \`structure\` 중 선택.
 
 ⚠️ **이 필드가 누락되면 해당 오브젝트는 올바르게 배치되지 않습니다.**
 
@@ -380,6 +381,8 @@ export const UnifiedSceneGenerationService = {
             decoration_hanging: 1.5,
             lighting: 0.5,
             effect: 2,
+            character: 1.8,
+            structure: 10,
             unspecified: 1,
         };
         return scaleMap[role] || 1;

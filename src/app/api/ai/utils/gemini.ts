@@ -5,7 +5,26 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, Part } from '@google/generative-ai';
+
+/**
+ * AI 모델 티어 정의
+ */
+export enum AIModelTier {
+    ULTRA = 'gemini-2.0-pro-exp',   // 최고 지능 (전략/평가)
+    PRO = 'gemini-2.0-pro',         // 고지능 (비평/심층 분석)
+    FLASH = 'gemini-2.0-flash',     // 고속 (일반 배치/채팅/이미지 분석)
+    LITE = 'gemini-1.5-flash',      // 경량 (단순 처리)
+    EMBEDDING = 'text-embedding-004' // 임베딩
+}
+
+/**
+ * 티어별 모델 ID 반환 (환경 변수 우선)
+ */
+export function getModelForTier(tier: AIModelTier): string {
+    const envKey = `MODEL_${tier.replace(/-/g, '_').toUpperCase()}`;
+    return process.env[envKey] || tier;
+}
 
 // Gemini 클라이언트 초기화
 const getGeminiClient = () => {
@@ -17,13 +36,33 @@ const getGeminiClient = () => {
 };
 
 /**
- * Gemini 호출 공통 핸들러
+ * Gemini 호출 공통 핸들러 (텍스트 + 이미지 지원)
  */
-export async function callGemini(prompt: string, model: string = 'gemini-2.0-flash'): Promise<string> {
+export async function callGemini(
+    prompt: string,
+    tier: AIModelTier = AIModelTier.FLASH,
+    options: {
+        temperature?: number;
+        responseMimeType?: string;
+        imageParts?: Part[]; // 멀티모달 지원
+    } = {}
+): Promise<string> {
     const genAI = getGeminiClient();
-    const generativeModel = genAI.getGenerativeModel({ model });
+    const modelId = getModelForTier(tier);
+    const generativeModel = genAI.getGenerativeModel({
+        model: modelId,
+        generationConfig: {
+            temperature: options.temperature ?? 1.0,
+            responseMimeType: options.responseMimeType
+        }
+    });
 
-    const result = await generativeModel.generateContent(prompt);
+    // 텍스트와 이미지 파트 결합
+    const content = options.imageParts
+        ? [prompt, ...options.imageParts]
+        : [prompt];
+
+    const result = await generativeModel.generateContent(content);
     const response = await result.response;
     const text = response.text();
 
@@ -39,10 +78,15 @@ export async function callGemini(prompt: string, model: string = 'gemini-2.0-fla
 /**
  * AI 프롬프트 처리 API Route 팩토리
  */
-export function createAIHandler(stageName: string) {
+export function createAIHandler(stageName: string, defaultTier: AIModelTier = AIModelTier.FLASH) {
     return async function handler(request: NextRequest) {
         try {
-            const { prompt } = await request.json();
+            const body = await request.json();
+            const {
+                prompt,
+                tier = defaultTier,
+                images = [] // base64 이미지 배열 지원
+            } = body;
 
             if (!prompt) {
                 return NextResponse.json(
@@ -51,10 +95,27 @@ export function createAIHandler(stageName: string) {
                 );
             }
 
-            console.log(`[API/${stageName}] 요청 처리 중...`);
+            // 이미지 파트 생성 (멀티모달)
+            const imageParts: Part[] = images.map((base64: string) => {
+                // 'data:image/jpeg;base64,' 등의 접두사 제거
+                const cleanBase64 = base64.includes('base64,')
+                    ? base64.split('base64,')[1]
+                    : base64;
+
+                return {
+                    inlineData: {
+                        data: cleanBase64,
+                        mimeType: 'image/jpeg'
+                    }
+                };
+            });
+
+            console.log(`[API/${stageName}] 요청 처리 중... (Tier: ${tier}, Images: ${imageParts.length})`);
             const startTime = Date.now();
 
-            const result = await callGemini(prompt);
+            const result = await callGemini(prompt, tier as AIModelTier, {
+                imageParts: imageParts.length > 0 ? imageParts : undefined
+            });
 
             const duration = Date.now() - startTime;
             console.log(`[API/${stageName}] 완료 (${duration}ms)`);

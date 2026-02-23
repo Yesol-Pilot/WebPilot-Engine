@@ -6,10 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Gemini API 클라이언트
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+import { callGemini, AIModelTier } from '../utils/gemini';
 
 export async function POST(request: NextRequest) {
     try {
@@ -22,34 +19,22 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log('[UnifiedScene API] 요청 수신:', prompt.substring(0, 100));
+        console.log('[UnifiedScene API] 요청 수신 (Tier: ULTRA):', prompt.substring(0, 100));
 
-        // Gemini 모델 호출
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-1.5-flash',
-            generationConfig: {
-                responseMimeType: 'application/json',
-                temperature: 0.7,
-            },
+        // [v3.0] ULTRA 티어(gemini-2.0-pro-exp) 모델 사용
+        const resultText = await callGemini(prompt, AIModelTier.ULTRA, {
+            responseMimeType: 'application/json',
+            temperature: 0.7,
         });
-
-        const result = await model.generateContent(prompt);
-        const response = result.response;
-        const text = response.text();
 
         // JSON 파싱
         let parsed;
         try {
-            // JSON 블록 추출 (마크다운 코드 블록 처리)
-            const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) ||
-                text.match(/```\s*([\s\S]*?)\s*```/) ||
-                [null, text];
-            const jsonStr = jsonMatch[1] || text;
-            parsed = JSON.parse(jsonStr.trim());
+            parsed = JSON.parse(resultText);
         } catch (parseError) {
             console.error('[UnifiedScene API] JSON 파싱 실패:', parseError);
             return NextResponse.json(
-                { error: 'AI 응답 파싱 실패', raw: text },
+                { error: 'AI 응답 파싱 실패', raw: resultText },
                 { status: 500 }
             );
         }

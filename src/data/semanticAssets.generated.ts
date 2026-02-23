@@ -9,6 +9,7 @@
 
 export type AssetCategory =
     | 'environment'
+    | 'environment_container'
     | 'furniture'
     | 'character'
     | 'prop'
@@ -31,6 +32,7 @@ export interface SemanticAsset {
     style?: string;
     placementContexts?: string[];
     companions?: string[];
+    physical_scale?: number; // [v3.5] 에셋의 물리적 크기 (미터 단위)
     // 레거시 호환
     variants?: number;
     lighting?: { exposure?: number };
@@ -39,7 +41,7 @@ export interface SemanticAsset {
 export const SEMANTIC_ASSETS: SemanticAsset[] = [
     {
         "id": "_test_polypizza_Adventurer",
-        "path": "/models/_test_polypizza/Adventurer.glb.glb",
+        "path": "/models/_test_polypizza/Adventurer.glb",
         "category": "character",
         "subCategory": "adventurer",
         "keywords": {
@@ -114,7 +116,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "_test_polypizza_Knight",
-        "path": "/models/_test_polypizza/Knight.glb.glb",
+        "path": "/models/_test_polypizza/Knight.glb",
         "category": "prop",
         "subCategory": "knight",
         "keywords": {
@@ -188,7 +190,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_both_houses_scene",
-        "path": "/models/buildings/both_houses_scene.glb.glb",
+        "path": "/models/buildings/both_houses_scene.glb",
         "category": "structure",
         "subCategory": "houses",
         "keywords": {
@@ -262,7 +264,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_car-kit_debris-door",
-        "path": "/models/buildings/car-kit_debris-door.glb.glb",
+        "path": "/models/buildings/car-kit_debris-door.glb",
         "category": "structure",
         "subCategory": "debris",
         "keywords": {
@@ -328,7 +330,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_car-kit_debris-door-window",
-        "path": "/models/buildings/car-kit_debris-door-window.glb.glb",
+        "path": "/models/buildings/car-kit_debris-door-window.glb",
         "category": "structure",
         "subCategory": "debris",
         "keywords": {
@@ -397,7 +399,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_cellarDoor",
-        "path": "/models/buildings/cellarDoor.glb.glb",
+        "path": "/models/buildings/cellarDoor.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -471,7 +473,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_detailed_realistic_model_house_01",
-        "path": "/models/buildings/detailed_realistic_model_house_01.glb.glb",
+        "path": "/models/buildings/detailed_realistic_model_house_01.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -544,7 +546,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_detailed_realistic_model_houseelf_01",
-        "path": "/models/buildings/detailed_realistic_model_houseelf_01.glb.glb",
+        "path": "/models/buildings/detailed_realistic_model_houseelf_01.glb",
         "category": "character",
         "subCategory": "houseelf",
         "keywords": {
@@ -617,7 +619,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_detailed_realistic_model_houseelf_02",
-        "path": "/models/buildings/detailed_realistic_model_houseelf_02.glb.glb",
+        "path": "/models/buildings/detailed_realistic_model_houseelf_02.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -691,7 +693,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_dumbledores_office",
-        "path": "/models/buildings/dumbledores_office.glb.glb",
+        "path": "/models/buildings/dumbledores_office.glb",
         "category": "structure",
         "subCategory": "office",
         "keywords": {
@@ -763,7 +765,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_balcony-wall",
-        "path": "/models/buildings/fantasy-town-kit_balcony-wall.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_balcony-wall.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -836,7 +838,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_balcony-wall-fence",
-        "path": "/models/buildings/fantasy-town-kit_balcony-wall-fence.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_balcony-wall-fence.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -909,7 +911,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_fence",
-        "path": "/models/buildings/fantasy-town-kit_fence.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_fence.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -985,7 +987,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_fence-broken",
-        "path": "/models/buildings/fantasy-town-kit_fence-broken.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_fence-broken.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -1061,7 +1063,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_fence-curved",
-        "path": "/models/buildings/fantasy-town-kit_fence-curved.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_fence-curved.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -1137,7 +1139,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_fence-gate",
-        "path": "/models/buildings/fantasy-town-kit_fence-gate.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_fence-gate.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -1212,7 +1214,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_hedge-gate",
-        "path": "/models/buildings/fantasy-town-kit_hedge-gate.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_hedge-gate.glb",
         "category": "structure",
         "subCategory": "gate",
         "keywords": {
@@ -1286,7 +1288,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_hedge-large-gate",
-        "path": "/models/buildings/fantasy-town-kit_hedge-large-gate.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_hedge-large-gate.glb",
         "category": "structure",
         "subCategory": "gate",
         "keywords": {
@@ -1362,7 +1364,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof",
-        "path": "/models/buildings/fantasy-town-kit_roof.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1436,7 +1438,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-corner",
-        "path": "/models/buildings/fantasy-town-kit_roof-corner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-corner.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1511,7 +1513,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-corner-inner",
-        "path": "/models/buildings/fantasy-town-kit_roof-corner-inner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-corner-inner.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1584,7 +1586,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-corner-round",
-        "path": "/models/buildings/fantasy-town-kit_roof-corner-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-corner-round.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1658,7 +1660,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-flat",
-        "path": "/models/buildings/fantasy-town-kit_roof-flat.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-flat.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1732,7 +1734,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-gable",
-        "path": "/models/buildings/fantasy-town-kit_roof-gable.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-gable.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1806,7 +1808,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-gable-detail",
-        "path": "/models/buildings/fantasy-town-kit_roof-gable-detail.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-gable-detail.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1882,7 +1884,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-gable-end",
-        "path": "/models/buildings/fantasy-town-kit_roof-gable-end.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-gable-end.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -1956,7 +1958,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-gable-top",
-        "path": "/models/buildings/fantasy-town-kit_roof-gable-top.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-gable-top.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2031,7 +2033,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high",
-        "path": "/models/buildings/fantasy-town-kit_roof-high.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2105,7 +2107,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-corner",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-corner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-corner.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2181,7 +2183,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-corner-round",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-corner-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-corner-round.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2257,7 +2259,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-cornerinner",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-cornerinner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-cornerinner.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2332,7 +2334,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-flat",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-flat.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-flat.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2404,7 +2406,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-gable",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-gable.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-gable.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2480,7 +2482,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-gable-detail",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-detail.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-detail.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2553,7 +2555,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-gable-end",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-end.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-end.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2629,7 +2631,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-gable-top",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-top.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-gable-top.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2702,7 +2704,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-left",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-left.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-left.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2776,7 +2778,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-point",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-point.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-point.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2847,7 +2849,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-right",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-right.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-right.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2919,7 +2921,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-high-window",
-        "path": "/models/buildings/fantasy-town-kit_roof-high-window.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-high-window.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -2994,7 +2996,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-left",
-        "path": "/models/buildings/fantasy-town-kit_roof-left.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-left.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -3070,7 +3072,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-point",
-        "path": "/models/buildings/fantasy-town-kit_roof-point.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-point.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -3146,7 +3148,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-right",
-        "path": "/models/buildings/fantasy-town-kit_roof-right.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-right.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -3222,7 +3224,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_roof-window",
-        "path": "/models/buildings/fantasy-town-kit_roof-window.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_roof-window.glb",
         "category": "structure",
         "subCategory": "roof",
         "keywords": {
@@ -3297,7 +3299,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall",
-        "path": "/models/buildings/fantasy-town-kit_wall.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3373,7 +3375,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-arch",
-        "path": "/models/buildings/fantasy-town-kit_wall-arch.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-arch.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3448,7 +3450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-arch-top",
-        "path": "/models/buildings/fantasy-town-kit_wall-arch-top.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-arch-top.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3522,7 +3524,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-arch-top-detail",
-        "path": "/models/buildings/fantasy-town-kit_wall-arch-top-detail.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-arch-top-detail.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3599,7 +3601,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-block",
-        "path": "/models/buildings/fantasy-town-kit_wall-block.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-block.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3676,7 +3678,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-block-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-block-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-block-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3753,7 +3755,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-broken",
-        "path": "/models/buildings/fantasy-town-kit_wall-broken.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-broken.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3829,7 +3831,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-corner",
-        "path": "/models/buildings/fantasy-town-kit_wall-corner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-corner.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3905,7 +3907,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-corner-detail",
-        "path": "/models/buildings/fantasy-town-kit_wall-corner-detail.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-corner-detail.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -3980,7 +3982,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-corner-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-corner-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-corner-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4056,7 +4058,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-corner-diagonal-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-corner-diagonal-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-corner-diagonal-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4128,7 +4130,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-corner-edge",
-        "path": "/models/buildings/fantasy-town-kit_wall-corner-edge.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-corner-edge.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4205,7 +4207,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-curved",
-        "path": "/models/buildings/fantasy-town-kit_wall-curved.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-curved.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4281,7 +4283,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-detail-cross",
-        "path": "/models/buildings/fantasy-town-kit_wall-detail-cross.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-detail-cross.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4356,7 +4358,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-detail-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-detail-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-detail-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4432,7 +4434,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-detail-horizontal",
-        "path": "/models/buildings/fantasy-town-kit_wall-detail-horizontal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-detail-horizontal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4505,7 +4507,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4580,7 +4582,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-door",
-        "path": "/models/buildings/fantasy-town-kit_wall-door.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-door.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4656,7 +4658,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-doorway-base",
-        "path": "/models/buildings/fantasy-town-kit_wall-doorway-base.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-doorway-base.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4732,7 +4734,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-doorway-round",
-        "path": "/models/buildings/fantasy-town-kit_wall-doorway-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-doorway-round.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4807,7 +4809,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-doorway-square",
-        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4884,7 +4886,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-doorway-square-wide",
-        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square-wide.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square-wide.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -4961,7 +4963,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-doorway-square-wide-curved",
-        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square-wide-curved.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-doorway-square-wide-curved.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5037,7 +5039,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5113,7 +5115,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-rounded",
-        "path": "/models/buildings/fantasy-town-kit_wall-rounded.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-rounded.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5189,7 +5191,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-side",
-        "path": "/models/buildings/fantasy-town-kit_wall-side.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-side.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5263,7 +5265,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-slope",
-        "path": "/models/buildings/fantasy-town-kit_wall-slope.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-slope.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5339,7 +5341,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-window-glass",
-        "path": "/models/buildings/fantasy-town-kit_wall-window-glass.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-window-glass.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5415,7 +5417,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-window-round",
-        "path": "/models/buildings/fantasy-town-kit_wall-window-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-window-round.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5490,7 +5492,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-window-shutters",
-        "path": "/models/buildings/fantasy-town-kit_wall-window-shutters.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-window-shutters.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5565,7 +5567,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-window-small",
-        "path": "/models/buildings/fantasy-town-kit_wall-window-small.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-window-small.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5641,7 +5643,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5717,7 +5719,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-arch",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5791,7 +5793,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-arch-top",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch-top.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch-top.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5867,7 +5869,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-arch-top-detail",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch-top-detail.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-arch-top-detail.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -5944,7 +5946,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-block",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-block.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-block.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6018,7 +6020,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-block-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-block-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-block-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6091,7 +6093,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-broken",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-broken.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-broken.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6168,7 +6170,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-corner",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6244,7 +6246,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-corner-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6320,7 +6322,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-corner-diagonal-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-diagonal-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-diagonal-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6390,7 +6392,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-corner-edge",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-edge.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-corner-edge.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6462,7 +6464,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-curved",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-curved.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-curved.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6538,7 +6540,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-detail-cross",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-cross.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-cross.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6610,7 +6612,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-detail-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6685,7 +6687,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-detail-horizontal",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-horizontal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-detail-horizontal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6760,7 +6762,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-diagonal",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-diagonal.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-diagonal.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6836,7 +6838,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-door",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-door.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-door.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -6912,7 +6914,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-doorway-base",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-base.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-base.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -6987,7 +6989,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-doorway-round",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-round.glb",
         "category": "structure",
         "subCategory": "doorway",
         "keywords": {
@@ -7063,7 +7065,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-doorway-square",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7136,7 +7138,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-doorway-square-wide",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square-wide.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square-wide.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7210,7 +7212,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-doorway-square-wide-curved",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square-wide-curved.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-doorway-square-wide-curved.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -7286,7 +7288,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-half",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-half.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-half.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7358,7 +7360,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-rounded",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-rounded.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-rounded.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7430,7 +7432,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-side",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-side.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-side.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7501,7 +7503,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-slope",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-slope.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-slope.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7574,7 +7576,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-window-glass",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-glass.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-glass.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7650,7 +7652,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-window-round",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-round.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-round.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7726,7 +7728,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-window-shutters",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-shutters.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-shutters.glb",
         "category": "structure",
         "subCategory": "shutters",
         "keywords": {
@@ -7800,7 +7802,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fantasy-town-kit_wall-wood-window-small",
-        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-small.glb.glb",
+        "path": "/models/buildings/fantasy-town-kit_wall-wood-window-small.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -7876,7 +7878,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fence",
-        "path": "/models/buildings/fence.glb.glb",
+        "path": "/models/buildings/fence.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -7949,7 +7951,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceACorner1",
-        "path": "/models/buildings/fenceACorner1.glb.glb",
+        "path": "/models/buildings/fenceACorner1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8020,7 +8022,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceACorner2",
-        "path": "/models/buildings/fenceACorner2.glb.glb",
+        "path": "/models/buildings/fenceACorner2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8092,7 +8094,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceACorner3",
-        "path": "/models/buildings/fenceACorner3.glb.glb",
+        "path": "/models/buildings/fenceACorner3.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8165,7 +8167,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceACorner4",
-        "path": "/models/buildings/fenceACorner4.glb.glb",
+        "path": "/models/buildings/fenceACorner4.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8239,7 +8241,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAGate",
-        "path": "/models/buildings/fenceAGate.glb.glb",
+        "path": "/models/buildings/fenceAGate.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8315,7 +8317,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar1",
-        "path": "/models/buildings/fenceAPillar1.glb.glb",
+        "path": "/models/buildings/fenceAPillar1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8392,7 +8394,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar2",
-        "path": "/models/buildings/fenceAPillar2.glb.glb",
+        "path": "/models/buildings/fenceAPillar2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8464,7 +8466,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar3",
-        "path": "/models/buildings/fenceAPillar3.glb.glb",
+        "path": "/models/buildings/fenceAPillar3.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -8540,7 +8542,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar4",
-        "path": "/models/buildings/fenceAPillar4.glb.glb",
+        "path": "/models/buildings/fenceAPillar4.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8615,7 +8617,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar5",
-        "path": "/models/buildings/fenceAPillar5.glb.glb",
+        "path": "/models/buildings/fenceAPillar5.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8689,7 +8691,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar6",
-        "path": "/models/buildings/fenceAPillar6.glb.glb",
+        "path": "/models/buildings/fenceAPillar6.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8762,7 +8764,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar7",
-        "path": "/models/buildings/fenceAPillar7.glb.glb",
+        "path": "/models/buildings/fenceAPillar7.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8832,7 +8834,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceAPillar8",
-        "path": "/models/buildings/fenceAPillar8.glb.glb",
+        "path": "/models/buildings/fenceAPillar8.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8909,7 +8911,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceASection1",
-        "path": "/models/buildings/fenceASection1.glb.glb",
+        "path": "/models/buildings/fenceASection1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -8982,7 +8984,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceASection2",
-        "path": "/models/buildings/fenceASection2.glb.glb",
+        "path": "/models/buildings/fenceASection2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9054,7 +9056,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceASection3",
-        "path": "/models/buildings/fenceASection3.glb.glb",
+        "path": "/models/buildings/fenceASection3.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9125,7 +9127,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceASection4",
-        "path": "/models/buildings/fenceASection4.glb.glb",
+        "path": "/models/buildings/fenceASection4.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9193,7 +9195,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceASection5",
-        "path": "/models/buildings/fenceASection5.glb.glb",
+        "path": "/models/buildings/fenceASection5.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9264,7 +9266,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBCorner1",
-        "path": "/models/buildings/fenceBCorner1.glb.glb",
+        "path": "/models/buildings/fenceBCorner1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9335,7 +9337,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBCorner2",
-        "path": "/models/buildings/fenceBCorner2.glb.glb",
+        "path": "/models/buildings/fenceBCorner2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9412,7 +9414,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBCorner3",
-        "path": "/models/buildings/fenceBCorner3.glb.glb",
+        "path": "/models/buildings/fenceBCorner3.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9482,7 +9484,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBPillar1",
-        "path": "/models/buildings/fenceBPillar1.glb.glb",
+        "path": "/models/buildings/fenceBPillar1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9558,7 +9560,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBPillar2",
-        "path": "/models/buildings/fenceBPillar2.glb.glb",
+        "path": "/models/buildings/fenceBPillar2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9634,7 +9636,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBPillar3",
-        "path": "/models/buildings/fenceBPillar3.glb.glb",
+        "path": "/models/buildings/fenceBPillar3.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -9710,7 +9712,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBPillar4",
-        "path": "/models/buildings/fenceBPillar4.glb.glb",
+        "path": "/models/buildings/fenceBPillar4.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9786,7 +9788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBSection1",
-        "path": "/models/buildings/fenceBSection1.glb.glb",
+        "path": "/models/buildings/fenceBSection1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9855,7 +9857,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBSection2",
-        "path": "/models/buildings/fenceBSection2.glb.glb",
+        "path": "/models/buildings/fenceBSection2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -9930,7 +9932,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBSection3",
-        "path": "/models/buildings/fenceBSection3.glb.glb",
+        "path": "/models/buildings/fenceBSection3.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10004,7 +10006,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceBSection4",
-        "path": "/models/buildings/fenceBSection4.glb.glb",
+        "path": "/models/buildings/fenceBSection4.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10075,7 +10077,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceC1",
-        "path": "/models/buildings/fenceC1.glb.glb",
+        "path": "/models/buildings/fenceC1.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10148,7 +10150,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceC1Skewed",
-        "path": "/models/buildings/fenceC1Skewed.glb.glb",
+        "path": "/models/buildings/fenceC1Skewed.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10219,7 +10221,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceC2",
-        "path": "/models/buildings/fenceC2.glb.glb",
+        "path": "/models/buildings/fenceC2.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10293,7 +10295,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_fenceC3",
-        "path": "/models/buildings/fenceC3.glb.glb",
+        "path": "/models/buildings/fenceC3.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -10365,7 +10367,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_GlassBrokenWindow",
-        "path": "/models/buildings/GlassBrokenWindow.glb.glb",
+        "path": "/models/buildings/GlassBrokenWindow.glb",
         "category": "structure",
         "subCategory": "window",
         "keywords": {
@@ -10433,7 +10435,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_brick-wall",
-        "path": "/models/buildings/graveyard-kit_brick-wall.glb.glb",
+        "path": "/models/buildings/graveyard-kit_brick-wall.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -10509,7 +10511,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_brick-wall-curve",
-        "path": "/models/buildings/graveyard-kit_brick-wall-curve.glb.glb",
+        "path": "/models/buildings/graveyard-kit_brick-wall-curve.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -10584,7 +10586,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_brick-wall-curve-small",
-        "path": "/models/buildings/graveyard-kit_brick-wall-curve-small.glb.glb",
+        "path": "/models/buildings/graveyard-kit_brick-wall-curve-small.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -10653,7 +10655,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_brick-wall-end",
-        "path": "/models/buildings/graveyard-kit_brick-wall-end.glb.glb",
+        "path": "/models/buildings/graveyard-kit_brick-wall-end.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -10728,7 +10730,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_column-large",
-        "path": "/models/buildings/graveyard-kit_column-large.glb.glb",
+        "path": "/models/buildings/graveyard-kit_column-large.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -10805,7 +10807,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_cross-column",
-        "path": "/models/buildings/graveyard-kit_cross-column.glb.glb",
+        "path": "/models/buildings/graveyard-kit_cross-column.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -10874,7 +10876,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_crypt-door",
-        "path": "/models/buildings/graveyard-kit_crypt-door.glb.glb",
+        "path": "/models/buildings/graveyard-kit_crypt-door.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -10948,7 +10950,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_crypt-large-door",
-        "path": "/models/buildings/graveyard-kit_crypt-large-door.glb.glb",
+        "path": "/models/buildings/graveyard-kit_crypt-large-door.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -11022,7 +11024,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_crypt-large-roof",
-        "path": "/models/buildings/graveyard-kit_crypt-large-roof.glb.glb",
+        "path": "/models/buildings/graveyard-kit_crypt-large-roof.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -11096,7 +11098,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_crypt-small-roof",
-        "path": "/models/buildings/graveyard-kit_crypt-small-roof.glb.glb",
+        "path": "/models/buildings/graveyard-kit_crypt-small-roof.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -11171,7 +11173,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_fence",
-        "path": "/models/buildings/graveyard-kit_fence.glb.glb",
+        "path": "/models/buildings/graveyard-kit_fence.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11243,7 +11245,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_fence-damaged",
-        "path": "/models/buildings/graveyard-kit_fence-damaged.glb.glb",
+        "path": "/models/buildings/graveyard-kit_fence-damaged.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11312,7 +11314,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_fence-gate",
-        "path": "/models/buildings/graveyard-kit_fence-gate.glb.glb",
+        "path": "/models/buildings/graveyard-kit_fence-gate.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11385,7 +11387,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence",
-        "path": "/models/buildings/graveyard-kit_iron-fence.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11458,7 +11460,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-bar",
-        "path": "/models/buildings/graveyard-kit_iron-fence-bar.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-bar.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11531,7 +11533,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-border",
-        "path": "/models/buildings/graveyard-kit_iron-fence-border.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-border.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11602,7 +11604,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-border-column",
-        "path": "/models/buildings/graveyard-kit_iron-fence-border-column.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-border-column.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -11671,7 +11673,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-border-curve",
-        "path": "/models/buildings/graveyard-kit_iron-fence-border-curve.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-border-curve.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11746,7 +11748,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-border-gate",
-        "path": "/models/buildings/graveyard-kit_iron-fence-border-gate.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-border-gate.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11823,7 +11825,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-curve",
-        "path": "/models/buildings/graveyard-kit_iron-fence-curve.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-curve.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11899,7 +11901,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_graveyard-kit_iron-fence-damaged",
-        "path": "/models/buildings/graveyard-kit_iron-fence-damaged.glb.glb",
+        "path": "/models/buildings/graveyard-kit_iron-fence-damaged.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -11971,7 +11973,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_gryffindor_common_room",
-        "path": "/models/buildings/gryffindor_common_room.glb.glb",
+        "path": "/models/buildings/gryffindor_common_room.glb",
         "category": "structure",
         "subCategory": "room",
         "keywords": {
@@ -12043,7 +12045,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_gryffindor_common_room_original",
-        "path": "/models/buildings/gryffindor_common_room_original.glb.glb",
+        "path": "/models/buildings/gryffindor_common_room_original.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12118,7 +12120,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_haunted_house",
-        "path": "/models/buildings/haunted_house.glb.glb",
+        "path": "/models/buildings/haunted_house.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -12192,7 +12194,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall",
-        "path": "/models/buildings/hogwarts_grand_hall.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12267,7 +12269,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_backup",
-        "path": "/models/buildings/hogwarts_grand_hall_backup.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_backup.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12342,7 +12344,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_backup_v4_fixed",
-        "path": "/models/buildings/hogwarts_grand_hall_backup_v4_fixed.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_backup_v4_fixed.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12414,7 +12416,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_backup_v5_fixed",
-        "path": "/models/buildings/hogwarts_grand_hall_backup_v5_fixed.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_backup_v5_fixed.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12487,7 +12489,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_backup2",
-        "path": "/models/buildings/hogwarts_grand_hall_backup2.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_backup2.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12563,7 +12565,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_fixed",
-        "path": "/models/buildings/hogwarts_grand_hall_fixed.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_fixed.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12635,7 +12637,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_hogwarts_grand_hall_restored",
-        "path": "/models/buildings/hogwarts_grand_hall_restored.glb.glb",
+        "path": "/models/buildings/hogwarts_grand_hall_restored.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -12707,7 +12709,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_honey_dukes_shop",
-        "path": "/models/buildings/honey_dukes_shop.glb.glb",
+        "path": "/models/buildings/honey_dukes_shop.glb",
         "category": "structure",
         "subCategory": "shop",
         "keywords": {
@@ -12777,7 +12779,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_house_scene",
-        "path": "/models/buildings/house_scene.glb.glb",
+        "path": "/models/buildings/house_scene.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -12851,7 +12853,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor",
-        "path": "/models/buildings/modular-dungeon-kit_corridor.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -12928,7 +12930,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-corner",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-corner.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-corner.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13002,7 +13004,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-end",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-end.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-end.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13076,7 +13078,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-intersection",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-intersection.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-intersection.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13151,7 +13153,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-junction",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-junction.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-junction.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13226,7 +13228,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-transition",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-transition.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-transition.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13300,7 +13302,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-wide",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-wide.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-wide.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13370,7 +13372,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-wide-corner",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-corner.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-corner.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13441,7 +13443,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-wide-end",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-end.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-end.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13513,7 +13515,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-wide-intersection",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-intersection.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-intersection.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13587,7 +13589,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_corridor-wide-junction",
-        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-junction.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_corridor-wide-junction.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -13662,7 +13664,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_gate",
-        "path": "/models/buildings/modular-dungeon-kit_gate.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_gate.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13739,7 +13741,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_gate-door",
-        "path": "/models/buildings/modular-dungeon-kit_gate-door.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_gate-door.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13812,7 +13814,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_gate-door-window",
-        "path": "/models/buildings/modular-dungeon-kit_gate-door-window.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_gate-door-window.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13889,7 +13891,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-corner",
-        "path": "/models/buildings/modular-dungeon-kit_room-corner.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-corner.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -13964,7 +13966,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-large",
-        "path": "/models/buildings/modular-dungeon-kit_room-large.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-large.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14039,7 +14041,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-large-variation",
-        "path": "/models/buildings/modular-dungeon-kit_room-large-variation.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-large-variation.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14113,7 +14115,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-small",
-        "path": "/models/buildings/modular-dungeon-kit_room-small.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-small.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14188,7 +14190,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-small-variation",
-        "path": "/models/buildings/modular-dungeon-kit_room-small-variation.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-small-variation.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14263,7 +14265,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-wide",
-        "path": "/models/buildings/modular-dungeon-kit_room-wide.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-wide.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14338,7 +14340,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_room-wide-variation",
-        "path": "/models/buildings/modular-dungeon-kit_room-wide-variation.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_room-wide-variation.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14411,7 +14413,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_stairs",
-        "path": "/models/buildings/modular-dungeon-kit_stairs.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_stairs.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -14482,7 +14484,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_stairs-wide",
-        "path": "/models/buildings/modular-dungeon-kit_stairs-wide.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_stairs-wide.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -14557,7 +14559,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14631,7 +14633,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall-corner",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall-corner.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall-corner.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14705,7 +14707,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall-detail-a",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall-detail-a.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall-detail-a.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14782,7 +14784,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall-half",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall-half.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall-half.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14855,7 +14857,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall-stairs",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall-stairs.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall-stairs.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -14930,7 +14932,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_modular-dungeon-kit_template-wall-top",
-        "path": "/models/buildings/modular-dungeon-kit_template-wall-top.glb.glb",
+        "path": "/models/buildings/modular-dungeon-kit_template-wall-top.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -15007,7 +15009,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_ollivanders_wand_shop",
-        "path": "/models/buildings/ollivanders_wand_shop.glb.glb",
+        "path": "/models/buildings/ollivanders_wand_shop.glb",
         "category": "structure",
         "subCategory": "shop",
         "keywords": {
@@ -15077,7 +15079,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_door-large-open",
-        "path": "/models/buildings/platformer-kit_door-large-open.glb.glb",
+        "path": "/models/buildings/platformer-kit_door-large-open.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -15151,7 +15153,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_door-open",
-        "path": "/models/buildings/platformer-kit_door-open.glb.glb",
+        "path": "/models/buildings/platformer-kit_door-open.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -15226,7 +15228,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_door-rotate",
-        "path": "/models/buildings/platformer-kit_door-rotate.glb.glb",
+        "path": "/models/buildings/platformer-kit_door-rotate.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -15299,7 +15301,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_door-rotate-large",
-        "path": "/models/buildings/platformer-kit_door-rotate-large.glb.glb",
+        "path": "/models/buildings/platformer-kit_door-rotate-large.glb",
         "category": "structure",
         "subCategory": "door",
         "keywords": {
@@ -15365,7 +15367,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-broken",
-        "path": "/models/buildings/platformer-kit_fence-broken.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-broken.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15440,7 +15442,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-corner",
-        "path": "/models/buildings/platformer-kit_fence-corner.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-corner.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15511,7 +15513,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-corner-curved",
-        "path": "/models/buildings/platformer-kit_fence-corner-curved.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-corner-curved.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15581,7 +15583,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-low-broken",
-        "path": "/models/buildings/platformer-kit_fence-low-broken.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-low-broken.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15651,7 +15653,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-low-corner",
-        "path": "/models/buildings/platformer-kit_fence-low-corner.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-low-corner.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15722,7 +15724,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-low-corner-curved",
-        "path": "/models/buildings/platformer-kit_fence-low-corner-curved.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-low-corner-curved.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15796,7 +15798,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-low-straight",
-        "path": "/models/buildings/platformer-kit_fence-low-straight.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-low-straight.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15867,7 +15869,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-rope",
-        "path": "/models/buildings/platformer-kit_fence-rope.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-rope.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -15937,7 +15939,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_platformer-kit_fence-straight",
-        "path": "/models/buildings/platformer-kit_fence-straight.glb.glb",
+        "path": "/models/buildings/platformer-kit_fence-straight.glb",
         "category": "structure",
         "subCategory": "fence",
         "keywords": {
@@ -16007,7 +16009,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_potions_classroom",
-        "path": "/models/buildings/potions_classroom.glb.glb",
+        "path": "/models/buildings/potions_classroom.glb",
         "category": "structure",
         "subCategory": "classroom",
         "keywords": {
@@ -16080,7 +16082,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_slytherin_dorm_room",
-        "path": "/models/buildings/slytherin_dorm_room.glb.glb",
+        "path": "/models/buildings/slytherin_dorm_room.glb",
         "category": "structure",
         "subCategory": "dorm room",
         "keywords": {
@@ -16151,7 +16153,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_slytherin_dorm_room_1769413346242",
-        "path": "/models/buildings/slytherin_dorm_room_1769413346242.glb.glb",
+        "path": "/models/buildings/slytherin_dorm_room_1769413346242.glb",
         "category": "structure",
         "subCategory": "dorm",
         "keywords": {
@@ -16222,7 +16224,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_slytherin_dorm_room_backup",
-        "path": "/models/buildings/slytherin_dorm_room_backup.glb.glb",
+        "path": "/models/buildings/slytherin_dorm_room_backup.glb",
         "category": "structure",
         "subCategory": "dormitory",
         "keywords": {
@@ -16293,7 +16295,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_slytherin_dorm_room_lite",
-        "path": "/models/buildings/slytherin_dorm_room_lite.glb.glb",
+        "path": "/models/buildings/slytherin_dorm_room_lite.glb",
         "category": "structure",
         "subCategory": "dorm room",
         "keywords": {
@@ -16364,7 +16366,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_slytherin_dorm_room_v2",
-        "path": "/models/buildings/slytherin_dorm_room_v2.glb.glb",
+        "path": "/models/buildings/slytherin_dorm_room_v2.glb",
         "category": "structure",
         "subCategory": "dorm",
         "keywords": {
@@ -16437,7 +16439,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_Slytherin_Dorm_Room_v20260121_135123_MetadataPatched",
-        "path": "/models/buildings/Slytherin_Dorm_Room_v20260121_135123_MetadataPatched.glb.glb",
+        "path": "/models/buildings/Slytherin_Dorm_Room_v20260121_135123_MetadataPatched.glb",
         "category": "structure",
         "subCategory": "dorm",
         "keywords": {
@@ -16510,7 +16512,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_three_js-examples_dungeon_warkarma",
-        "path": "/models/buildings/three.js-examples_dungeon_warkarma.glb.glb",
+        "path": "/models/buildings/three.js-examples_dungeon_warkarma.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -16587,7 +16589,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_TransmissionThinwallTestGrid",
-        "path": "/models/buildings/TransmissionThinwallTestGrid.glb.glb",
+        "path": "/models/buildings/TransmissionThinwallTestGrid.glb",
         "category": "structure",
         "subCategory": "transmission tower",
         "keywords": {
@@ -16653,7 +16655,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_umbridges_office",
-        "path": "/models/buildings/umbridges_office.glb.glb",
+        "path": "/models/buildings/umbridges_office.glb",
         "category": "structure",
         "subCategory": "office",
         "keywords": {
@@ -16722,7 +16724,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_wall",
-        "path": "/models/buildings/wall.glb.glb",
+        "path": "/models/buildings/wall.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -16798,7 +16800,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_wallArch",
-        "path": "/models/buildings/wallArch.glb.glb",
+        "path": "/models/buildings/wallArch.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -16874,7 +16876,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_wallCorner",
-        "path": "/models/buildings/wallCorner.glb.glb",
+        "path": "/models/buildings/wallCorner.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -16948,7 +16950,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_window",
-        "path": "/models/buildings/window.glb.glb",
+        "path": "/models/buildings/window.glb",
         "category": "structure",
         "subCategory": "window",
         "keywords": {
@@ -17022,7 +17024,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "buildings_window2",
-        "path": "/models/buildings/window2.glb.glb",
+        "path": "/models/buildings/window2.glb",
         "category": "structure",
         "subCategory": "window",
         "keywords": {
@@ -17096,7 +17098,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_Astronaut",
-        "path": "/models/characters/Astronaut.glb.glb",
+        "path": "/models/characters/Astronaut.glb",
         "category": "character",
         "subCategory": "astronaut",
         "keywords": {
@@ -17159,7 +17161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_babylon-assets_CesiumMan",
-        "path": "/models/characters/babylon-assets_CesiumMan.glb.glb",
+        "path": "/models/characters/babylon-assets_CesiumMan.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -17225,7 +17227,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_CesiumMan",
-        "path": "/models/characters/CesiumMan.glb.glb",
+        "path": "/models/characters/CesiumMan.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -17288,7 +17290,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_graveyard-kit_character-ghost",
-        "path": "/models/characters/graveyard-kit_character-ghost.glb.glb",
+        "path": "/models/characters/graveyard-kit_character-ghost.glb",
         "category": "character",
         "subCategory": "ghost",
         "keywords": {
@@ -17360,7 +17362,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_graveyard-kit_character-keeper",
-        "path": "/models/characters/graveyard-kit_character-keeper.glb.glb",
+        "path": "/models/characters/graveyard-kit_character-keeper.glb",
         "category": "character",
         "subCategory": "keeper",
         "keywords": {
@@ -17429,7 +17431,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_graveyard-kit_character-skeleton",
-        "path": "/models/characters/graveyard-kit_character-skeleton.glb.glb",
+        "path": "/models/characters/graveyard-kit_character-skeleton.glb",
         "category": "character",
         "subCategory": "skeleton",
         "keywords": {
@@ -17496,7 +17498,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_graveyard-kit_character-vampire",
-        "path": "/models/characters/graveyard-kit_character-vampire.glb.glb",
+        "path": "/models/characters/graveyard-kit_character-vampire.glb",
         "category": "character",
         "subCategory": "vampire",
         "keywords": {
@@ -17569,7 +17571,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_graveyard-kit_character-zombie",
-        "path": "/models/characters/graveyard-kit_character-zombie.glb.glb",
+        "path": "/models/characters/graveyard-kit_character-zombie.glb",
         "category": "character",
         "subCategory": "zombie",
         "keywords": {
@@ -17637,7 +17639,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_HVGirl",
-        "path": "/models/characters/HVGirl.glb.glb",
+        "path": "/models/characters/HVGirl.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -17701,7 +17703,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_NodePerformanceTest",
-        "path": "/models/characters/NodePerformanceTest.glb.glb",
+        "path": "/models/characters/NodePerformanceTest.glb",
         "category": "character",
         "subCategory": "performance",
         "keywords": {
@@ -17752,7 +17754,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_platformer-kit_character-oobi",
-        "path": "/models/characters/platformer-kit_character-oobi.glb.glb",
+        "path": "/models/characters/platformer-kit_character-oobi.glb",
         "category": "character",
         "subCategory": "platformer",
         "keywords": {
@@ -17819,7 +17821,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_platformer-kit_character-oodi",
-        "path": "/models/characters/platformer-kit_character-oodi.glb.glb",
+        "path": "/models/characters/platformer-kit_character-oodi.glb",
         "category": "character",
         "subCategory": "platformer character",
         "keywords": {
@@ -17886,7 +17888,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_platformer-kit_character-ooli",
-        "path": "/models/characters/platformer-kit_character-ooli.glb.glb",
+        "path": "/models/characters/platformer-kit_character-ooli.glb",
         "category": "character",
         "subCategory": "platformer",
         "keywords": {
@@ -17953,7 +17955,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_platformer-kit_character-oopi",
-        "path": "/models/characters/platformer-kit_character-oopi.glb.glb",
+        "path": "/models/characters/platformer-kit_character-oopi.glb",
         "category": "character",
         "subCategory": "platformer",
         "keywords": {
@@ -18020,7 +18022,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_platformer-kit_character-oozi",
-        "path": "/models/characters/platformer-kit_character-oozi.glb.glb",
+        "path": "/models/characters/platformer-kit_character-oozi.glb",
         "category": "character",
         "subCategory": "platformer",
         "keywords": {
@@ -18086,7 +18088,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_RobotExpressive",
-        "path": "/models/characters/RobotExpressive.glb.glb",
+        "path": "/models/characters/RobotExpressive.glb",
         "category": "character",
         "subCategory": "robot",
         "keywords": {
@@ -18153,7 +18155,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_snowMan",
-        "path": "/models/characters/snowMan.glb.glb",
+        "path": "/models/characters/snowMan.glb",
         "category": "character",
         "subCategory": "snow man",
         "keywords": {
@@ -18219,7 +18221,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "characters_three_js-examples_Soldier",
-        "path": "/models/characters/three.js-examples_Soldier.glb.glb",
+        "path": "/models/characters/three.js-examples_Soldier.glb",
         "category": "character",
         "subCategory": "soldier",
         "keywords": {
@@ -18283,7 +18285,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_babylon-assets_BarramundiFish",
-        "path": "/models/creatures/babylon-assets_BarramundiFish.glb.glb",
+        "path": "/models/creatures/babylon-assets_BarramundiFish.glb",
         "category": "character",
         "subCategory": "fish",
         "keywords": {
@@ -18350,7 +18352,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_babylon-assets_Monster",
-        "path": "/models/creatures/babylon-assets_Monster.glb.glb",
+        "path": "/models/creatures/babylon-assets_Monster.glb",
         "category": "character",
         "subCategory": "monster",
         "keywords": {
@@ -18421,7 +18423,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_babylon-assets_ReciprocatingSaw",
-        "path": "/models/creatures/babylon-assets_ReciprocatingSaw.glb.glb",
+        "path": "/models/creatures/babylon-assets_ReciprocatingSaw.glb",
         "category": "prop",
         "subCategory": "saw",
         "keywords": {
@@ -18483,7 +18485,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_BarramundiFish",
-        "path": "/models/creatures/BarramundiFish.glb.glb",
+        "path": "/models/creatures/BarramundiFish.glb",
         "category": "character",
         "subCategory": "fish",
         "keywords": {
@@ -18549,7 +18551,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_dragon",
-        "path": "/models/creatures/dragon.glb.glb",
+        "path": "/models/creatures/dragon.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -18623,7 +18625,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_DragonAttenuation",
-        "path": "/models/creatures/DragonAttenuation.glb.glb",
+        "path": "/models/creatures/DragonAttenuation.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -18695,7 +18697,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_DragonDispersion",
-        "path": "/models/creatures/DragonDispersion.glb.glb",
+        "path": "/models/creatures/DragonDispersion.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -18769,7 +18771,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_dragonUV",
-        "path": "/models/creatures/dragonUV.glb.glb",
+        "path": "/models/creatures/dragonUV.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -18840,7 +18842,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_fish",
-        "path": "/models/creatures/fish.glb.glb",
+        "path": "/models/creatures/fish.glb",
         "category": "character",
         "subCategory": "fish",
         "keywords": {
@@ -18906,7 +18908,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_Fox",
-        "path": "/models/creatures/Fox.glb.glb",
+        "path": "/models/creatures/Fox.glb",
         "category": "character",
         "subCategory": "fox",
         "keywords": {
@@ -18977,7 +18979,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_Horse",
-        "path": "/models/creatures/Horse.glb.glb",
+        "path": "/models/creatures/Horse.glb",
         "category": "character",
         "subCategory": "horse",
         "keywords": {
@@ -19045,7 +19047,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_ScatteringSkull",
-        "path": "/models/creatures/ScatteringSkull.glb.glb",
+        "path": "/models/creatures/ScatteringSkull.glb",
         "category": "prop",
         "subCategory": "skull",
         "keywords": {
@@ -19113,7 +19115,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_tarisland_dragon_high_poly",
-        "path": "/models/creatures/tarisland_dragon_high_poly.glb.glb",
+        "path": "/models/creatures/tarisland_dragon_high_poly.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -19185,7 +19187,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_three_js-examples_DragonAttenuation",
-        "path": "/models/creatures/three.js-examples_DragonAttenuation.glb.glb",
+        "path": "/models/creatures/three.js-examples_DragonAttenuation.glb",
         "category": "character",
         "subCategory": "dragon",
         "keywords": {
@@ -19257,7 +19259,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_three_js-examples_Horse",
-        "path": "/models/creatures/three.js-examples_Horse.glb.glb",
+        "path": "/models/creatures/three.js-examples_Horse.glb",
         "category": "character",
         "subCategory": "horse",
         "keywords": {
@@ -19327,7 +19329,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "creatures_underwaterSceneShadowCatcher",
-        "path": "/models/creatures/underwaterSceneShadowCatcher.glb.glb",
+        "path": "/models/creatures/underwaterSceneShadowCatcher.glb",
         "category": "prop",
         "subCategory": "underwater",
         "keywords": {
@@ -19389,7 +19391,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_babylon-assets_WaterBottle",
-        "path": "/models/food/babylon-assets_WaterBottle.glb.glb",
+        "path": "/models/food/babylon-assets_WaterBottle.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -19458,7 +19460,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_DiffuseTransmissionTeacup",
-        "path": "/models/food/DiffuseTransmissionTeacup.glb.glb",
+        "path": "/models/food/DiffuseTransmissionTeacup.glb",
         "category": "prop",
         "subCategory": "cup",
         "keywords": {
@@ -19525,7 +19527,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_graveyard-kit_detail-plate",
-        "path": "/models/food/graveyard-kit_detail-plate.glb.glb",
+        "path": "/models/food/graveyard-kit_detail-plate.glb",
         "category": "prop",
         "subCategory": "plate",
         "keywords": {
@@ -19590,7 +19592,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-corner",
-        "path": "/models/food/modular-dungeon-kit_template-corner.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-corner.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -19665,7 +19667,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-detail",
-        "path": "/models/food/modular-dungeon-kit_template-detail.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-detail.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -19736,7 +19738,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor",
-        "path": "/models/food/modular-dungeon-kit_template-floor.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -19812,7 +19814,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor-big",
-        "path": "/models/food/modular-dungeon-kit_template-floor-big.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor-big.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -19888,7 +19890,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor-detail",
-        "path": "/models/food/modular-dungeon-kit_template-floor-detail.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor-detail.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -19964,7 +19966,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor-detail-a",
-        "path": "/models/food/modular-dungeon-kit_template-floor-detail-a.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor-detail-a.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -20040,7 +20042,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor-layer",
-        "path": "/models/food/modular-dungeon-kit_template-floor-layer.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor-layer.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -20116,7 +20118,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_modular-dungeon-kit_template-floor-layer-raised",
-        "path": "/models/food/modular-dungeon-kit_template-floor-layer-raised.glb.glb",
+        "path": "/models/food/modular-dungeon-kit_template-floor-layer-raised.glb",
         "category": "structure",
         "subCategory": "dungeon",
         "keywords": {
@@ -20192,7 +20194,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_mrtk-fluent-backplate",
-        "path": "/models/food/mrtk-fluent-backplate.glb.glb",
+        "path": "/models/food/mrtk-fluent-backplate.glb",
         "category": "prop",
         "subCategory": "display",
         "keywords": {
@@ -20254,7 +20256,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_mrtk-fluent-frontplate",
-        "path": "/models/food/mrtk-fluent-frontplate.glb.glb",
+        "path": "/models/food/mrtk-fluent-frontplate.glb",
         "category": "prop",
         "subCategory": "plate",
         "keywords": {
@@ -20317,7 +20319,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "food_WaterBottle",
-        "path": "/models/food/WaterBottle.glb.glb",
+        "path": "/models/food/WaterBottle.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -20386,7 +20388,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_AnisotropyBarnLamp",
-        "path": "/models/furniture/AnisotropyBarnLamp.glb.glb",
+        "path": "/models/furniture/AnisotropyBarnLamp.glb",
         "category": "furniture",
         "subCategory": "lamp",
         "keywords": {
@@ -20452,7 +20454,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_ChairDamaskPurplegold",
-        "path": "/models/furniture/ChairDamaskPurplegold.glb.glb",
+        "path": "/models/furniture/ChairDamaskPurplegold.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -20522,7 +20524,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_ancientbookshelf_01",
-        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_01.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -20592,7 +20594,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_ancientbookshelf_02",
-        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_02.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -20663,7 +20665,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_ancientbookshelf_03",
-        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_03.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_ancientbookshelf_03.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -20732,7 +20734,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antique_01",
-        "path": "/models/furniture/detailed_realistic_model_antique_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antique_01.glb",
         "category": "furniture",
         "subCategory": "antique",
         "keywords": {
@@ -20799,7 +20801,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_02",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_02.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -20866,7 +20868,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_03",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_03.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_03.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -20935,7 +20937,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_04",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_04.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_04.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21003,7 +21005,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_05",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_05.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_05.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21074,7 +21076,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_06",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_06.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_06.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21143,7 +21145,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_07",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_07.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_07.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21211,7 +21213,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_08",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_08.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_08.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21279,7 +21281,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_09",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_09.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_09.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21348,7 +21350,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_10",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_10.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_10.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21415,7 +21417,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_11",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_11.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_11.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21483,7 +21485,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_12",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_12.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_12.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21552,7 +21554,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_13",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_13.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_13.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21622,7 +21624,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_14",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_14.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_14.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21691,7 +21693,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_15",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_15.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_15.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21759,7 +21761,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_16",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_16.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_16.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21828,7 +21830,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_17",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_17.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_17.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21896,7 +21898,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_18",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_18.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_18.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -21963,7 +21965,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_19",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_19.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_19.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22032,7 +22034,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_20",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_20.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_20.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22100,7 +22102,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_21",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_21.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_21.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22167,7 +22169,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_22",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_22.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_22.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22236,7 +22238,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_23",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_23.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_23.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22305,7 +22307,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_24",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_24.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_24.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22374,7 +22376,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_25",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_25.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_25.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22443,7 +22445,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_antiquebookshelf_26",
-        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_26.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_antiquebookshelf_26.glb",
         "category": "furniture",
         "subCategory": "bookshelf",
         "keywords": {
@@ -22512,7 +22514,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_bookcase_01",
-        "path": "/models/furniture/detailed_realistic_model_bookcase_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_bookcase_01.glb",
         "category": "furniture",
         "subCategory": "bookcase",
         "keywords": {
@@ -22578,7 +22580,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_broomstick_01",
-        "path": "/models/furniture/detailed_realistic_model_broomstick_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_broomstick_01.glb",
         "category": "furniture",
         "subCategory": "broom",
         "keywords": {
@@ -22641,7 +22643,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_broomstick_02",
-        "path": "/models/furniture/detailed_realistic_model_broomstick_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_broomstick_02.glb",
         "category": "furniture",
         "subCategory": "broomstick",
         "keywords": {
@@ -22704,7 +22706,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_castiron_01",
-        "path": "/models/furniture/detailed_realistic_model_castiron_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_castiron_01.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -22774,7 +22776,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grand_01",
-        "path": "/models/furniture/detailed_realistic_model_grand_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grand_01.glb",
         "category": "furniture",
         "subCategory": "furniture",
         "keywords": {
@@ -22840,7 +22842,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_01",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_01.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -22908,7 +22910,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_02",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_02.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -22975,7 +22977,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_03",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_03.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_03.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23043,7 +23045,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_04",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_04.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_04.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23111,7 +23113,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_05",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_05.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_05.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23178,7 +23180,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_06",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_06.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_06.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23246,7 +23248,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_07",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_07.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_07.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23312,7 +23314,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_08",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_08.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_08.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23380,7 +23382,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_09",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_09.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_09.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23448,7 +23450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_10",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_10.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_10.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23516,7 +23518,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_11",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_11.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_11.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23584,7 +23586,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_12",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_12.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_12.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23652,7 +23654,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_13",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_13.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_13.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23718,7 +23720,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_14",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_14.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_14.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23786,7 +23788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_15",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_15.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_15.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23857,7 +23859,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_16",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_16.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_16.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23925,7 +23927,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_grandoaktable_17",
-        "path": "/models/furniture/detailed_realistic_model_grandoaktable_17.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_grandoaktable_17.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -23991,7 +23993,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_01",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_01.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24060,7 +24062,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_02",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_02.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24130,7 +24132,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_03",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_03.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_03.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24196,7 +24198,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_04",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_04.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_04.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24263,7 +24265,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_05",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_05.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_05.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24330,7 +24332,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_06",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_06.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_06.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24398,7 +24400,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_07",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_07.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_07.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24466,7 +24468,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_08",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_08.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_08.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24535,7 +24537,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_09",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_09.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_09.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24602,7 +24604,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_10",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_10.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_10.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24669,7 +24671,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_11",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_11.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_11.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24737,7 +24739,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_12",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_12.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_12.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24804,7 +24806,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_13",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_13.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_13.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24872,7 +24874,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_largeoaktable_14",
-        "path": "/models/furniture/detailed_realistic_model_largeoaktable_14.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_largeoaktable_14.glb",
         "category": "furniture",
         "subCategory": "table",
         "keywords": {
@@ -24940,7 +24942,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_potionshelf_01",
-        "path": "/models/furniture/detailed_realistic_model_potionshelf_01.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_potionshelf_01.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -25012,7 +25014,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_detailed_realistic_model_potionshelf_02",
-        "path": "/models/furniture/detailed_realistic_model_potionshelf_02.glb.glb",
+        "path": "/models/furniture/detailed_realistic_model_potionshelf_02.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -25085,7 +25087,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_fantasy-town-kit_stall-bench",
-        "path": "/models/furniture/fantasy-town-kit_stall-bench.glb.glb",
+        "path": "/models/furniture/fantasy-town-kit_stall-bench.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -25158,7 +25160,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_fantasy-town-kit_stall-stool",
-        "path": "/models/furniture/fantasy-town-kit_stall-stool.glb.glb",
+        "path": "/models/furniture/fantasy-town-kit_stall-stool.glb",
         "category": "furniture",
         "subCategory": "stool",
         "keywords": {
@@ -25231,7 +25233,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_GlamVelvetSofa",
-        "path": "/models/furniture/GlamVelvetSofa.glb.glb",
+        "path": "/models/furniture/GlamVelvetSofa.glb",
         "category": "furniture",
         "subCategory": "sofa",
         "keywords": {
@@ -25298,7 +25300,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_graveyard-kit_bench",
-        "path": "/models/furniture/graveyard-kit_bench.glb.glb",
+        "path": "/models/furniture/graveyard-kit_bench.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -25368,7 +25370,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_graveyard-kit_bench-damaged",
-        "path": "/models/furniture/graveyard-kit_bench-damaged.glb.glb",
+        "path": "/models/furniture/graveyard-kit_bench-damaged.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -25440,7 +25442,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_IridescenceLamp",
-        "path": "/models/furniture/IridescenceLamp.glb.glb",
+        "path": "/models/furniture/IridescenceLamp.glb",
         "category": "furniture",
         "subCategory": "lamp",
         "keywords": {
@@ -25510,7 +25512,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_LightsPunctualLamp",
-        "path": "/models/furniture/LightsPunctualLamp.glb.glb",
+        "path": "/models/furniture/LightsPunctualLamp.glb",
         "category": "furniture",
         "subCategory": "lamp",
         "keywords": {
@@ -25576,7 +25578,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_01",
-        "path": "/models/furniture/modern_office_chair_padded_01.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_01.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25646,7 +25648,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_02",
-        "path": "/models/furniture/modern_office_chair_padded_02.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_02.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25716,7 +25718,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_03",
-        "path": "/models/furniture/modern_office_chair_padded_03.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_03.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25785,7 +25787,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_04",
-        "path": "/models/furniture/modern_office_chair_padded_04.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_04.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25857,7 +25859,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_05",
-        "path": "/models/furniture/modern_office_chair_padded_05.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_05.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25927,7 +25929,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_06",
-        "path": "/models/furniture/modern_office_chair_padded_06.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_06.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -25992,7 +25994,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_07",
-        "path": "/models/furniture/modern_office_chair_padded_07.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_07.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26058,7 +26060,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_08",
-        "path": "/models/furniture/modern_office_chair_padded_08.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_08.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26127,7 +26129,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_09",
-        "path": "/models/furniture/modern_office_chair_padded_09.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_09.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26194,7 +26196,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_10",
-        "path": "/models/furniture/modern_office_chair_padded_10.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_10.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26265,7 +26267,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_11",
-        "path": "/models/furniture/modern_office_chair_padded_11.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_11.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26334,7 +26336,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_12",
-        "path": "/models/furniture/modern_office_chair_padded_12.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_12.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26403,7 +26405,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_13",
-        "path": "/models/furniture/modern_office_chair_padded_13.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_13.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26469,7 +26471,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_14",
-        "path": "/models/furniture/modern_office_chair_padded_14.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_14.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26541,7 +26543,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_15",
-        "path": "/models/furniture/modern_office_chair_padded_15.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_15.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26606,7 +26608,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_16",
-        "path": "/models/furniture/modern_office_chair_padded_16.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_16.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26675,7 +26677,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_17",
-        "path": "/models/furniture/modern_office_chair_padded_17.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_17.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26740,7 +26742,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_18",
-        "path": "/models/furniture/modern_office_chair_padded_18.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_18.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26809,7 +26811,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_19",
-        "path": "/models/furniture/modern_office_chair_padded_19.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_19.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26878,7 +26880,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_20",
-        "path": "/models/furniture/modern_office_chair_padded_20.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_20.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -26947,7 +26949,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_21",
-        "path": "/models/furniture/modern_office_chair_padded_21.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_21.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27019,7 +27021,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_22",
-        "path": "/models/furniture/modern_office_chair_padded_22.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_22.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27084,7 +27086,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_23",
-        "path": "/models/furniture/modern_office_chair_padded_23.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_23.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27155,7 +27157,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_24",
-        "path": "/models/furniture/modern_office_chair_padded_24.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_24.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27220,7 +27222,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_25",
-        "path": "/models/furniture/modern_office_chair_padded_25.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_25.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27289,7 +27291,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_26",
-        "path": "/models/furniture/modern_office_chair_padded_26.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_26.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27358,7 +27360,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_27",
-        "path": "/models/furniture/modern_office_chair_padded_27.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_27.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27423,7 +27425,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_28",
-        "path": "/models/furniture/modern_office_chair_padded_28.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_28.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27494,7 +27496,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_29",
-        "path": "/models/furniture/modern_office_chair_padded_29.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_29.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27563,7 +27565,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_modern_office_chair_padded_30",
-        "path": "/models/furniture/modern_office_chair_padded_30.glb.glb",
+        "path": "/models/furniture/modern_office_chair_padded_30.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27628,7 +27630,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_realistic_wooden_office_desk_01",
-        "path": "/models/furniture/realistic_wooden_office_desk_01.glb.glb",
+        "path": "/models/furniture/realistic_wooden_office_desk_01.glb",
         "category": "furniture",
         "subCategory": "desk",
         "keywords": {
@@ -27699,7 +27701,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_realistic_wooden_office_desk_02",
-        "path": "/models/furniture/realistic_wooden_office_desk_02.glb.glb",
+        "path": "/models/furniture/realistic_wooden_office_desk_02.glb",
         "category": "furniture",
         "subCategory": "desk",
         "keywords": {
@@ -27771,7 +27773,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_realistic_wooden_office_desk_03",
-        "path": "/models/furniture/realistic_wooden_office_desk_03.glb.glb",
+        "path": "/models/furniture/realistic_wooden_office_desk_03.glb",
         "category": "furniture",
         "subCategory": "desk",
         "keywords": {
@@ -27842,7 +27844,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_realistic_wooden_office_desk_04",
-        "path": "/models/furniture/realistic_wooden_office_desk_04.glb.glb",
+        "path": "/models/furniture/realistic_wooden_office_desk_04.glb",
         "category": "furniture",
         "subCategory": "desk",
         "keywords": {
@@ -27913,7 +27915,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_SheenChair",
-        "path": "/models/furniture/SheenChair.glb.glb",
+        "path": "/models/furniture/SheenChair.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -27983,7 +27985,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_SheenChair_1769416633174",
-        "path": "/models/furniture/SheenChair_1769416633174.glb.glb",
+        "path": "/models/furniture/SheenChair_1769416633174.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -28053,7 +28055,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_SheenWoodLeatherSofa",
-        "path": "/models/furniture/SheenWoodLeatherSofa.glb.glb",
+        "path": "/models/furniture/SheenWoodLeatherSofa.glb",
         "category": "furniture",
         "subCategory": "sofa",
         "keywords": {
@@ -28119,7 +28121,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_three_js-examples_AnisotropyBarnLamp",
-        "path": "/models/furniture/three.js-examples_AnisotropyBarnLamp.glb.glb",
+        "path": "/models/furniture/three.js-examples_AnisotropyBarnLamp.glb",
         "category": "furniture",
         "subCategory": "lamp",
         "keywords": {
@@ -28187,7 +28189,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_three_js-examples_IridescenceLamp",
-        "path": "/models/furniture/three.js-examples_IridescenceLamp.glb.glb",
+        "path": "/models/furniture/three.js-examples_IridescenceLamp.glb",
         "category": "furniture",
         "subCategory": "lamp",
         "keywords": {
@@ -28257,7 +28259,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_three_js-examples_minimalistic_modern_bedroom",
-        "path": "/models/furniture/three.js-examples_minimalistic_modern_bedroom.glb.glb",
+        "path": "/models/furniture/three.js-examples_minimalistic_modern_bedroom.glb",
         "category": "furniture",
         "subCategory": "bedroom",
         "keywords": {
@@ -28327,7 +28329,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "furniture_three_js-examples_SheenChair",
-        "path": "/models/furniture/three.js-examples_SheenChair.glb.glb",
+        "path": "/models/furniture/three.js-examples_SheenChair.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -28395,7 +28397,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_bush1",
-        "path": "/models/nature/bush1.glb.glb",
+        "path": "/models/nature/bush1.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -28471,7 +28473,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_bush2",
-        "path": "/models/nature/bush2.glb.glb",
+        "path": "/models/nature/bush2.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -28545,7 +28547,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_bush3",
-        "path": "/models/nature/bush3.glb.glb",
+        "path": "/models/nature/bush3.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -28619,7 +28621,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_bush4",
-        "path": "/models/nature/bush4.glb.glb",
+        "path": "/models/nature/bush4.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -28693,7 +28695,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_bush5",
-        "path": "/models/nature/bush5.glb.glb",
+        "path": "/models/nature/bush5.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -28770,7 +28772,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_02",
-        "path": "/models/nature/detailed_realistic_model_crystalball_02.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_02.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -28833,7 +28835,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_03",
-        "path": "/models/nature/detailed_realistic_model_crystalball_03.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_03.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -28899,7 +28901,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_04",
-        "path": "/models/nature/detailed_realistic_model_crystalball_04.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_04.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -28962,7 +28964,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_05",
-        "path": "/models/nature/detailed_realistic_model_crystalball_05.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_05.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29028,7 +29030,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_06",
-        "path": "/models/nature/detailed_realistic_model_crystalball_06.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_06.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29093,7 +29095,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_07",
-        "path": "/models/nature/detailed_realistic_model_crystalball_07.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_07.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29158,7 +29160,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_08",
-        "path": "/models/nature/detailed_realistic_model_crystalball_08.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_08.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29224,7 +29226,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_09",
-        "path": "/models/nature/detailed_realistic_model_crystalball_09.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_09.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29287,7 +29289,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_10",
-        "path": "/models/nature/detailed_realistic_model_crystalball_10.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_10.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29354,7 +29356,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_11",
-        "path": "/models/nature/detailed_realistic_model_crystalball_11.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_11.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29417,7 +29419,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_12",
-        "path": "/models/nature/detailed_realistic_model_crystalball_12.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_12.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29481,7 +29483,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_13",
-        "path": "/models/nature/detailed_realistic_model_crystalball_13.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_13.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29544,7 +29546,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_14",
-        "path": "/models/nature/detailed_realistic_model_crystalball_14.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_14.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29607,7 +29609,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_15",
-        "path": "/models/nature/detailed_realistic_model_crystalball_15.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_15.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29671,7 +29673,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_16",
-        "path": "/models/nature/detailed_realistic_model_crystalball_16.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_16.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29734,7 +29736,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_17",
-        "path": "/models/nature/detailed_realistic_model_crystalball_17.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_17.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29799,7 +29801,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_18",
-        "path": "/models/nature/detailed_realistic_model_crystalball_18.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_18.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29864,7 +29866,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_19",
-        "path": "/models/nature/detailed_realistic_model_crystalball_19.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_19.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29927,7 +29929,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_20",
-        "path": "/models/nature/detailed_realistic_model_crystalball_20.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_20.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -29990,7 +29992,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_21",
-        "path": "/models/nature/detailed_realistic_model_crystalball_21.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_21.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -30053,7 +30055,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_22",
-        "path": "/models/nature/detailed_realistic_model_crystalball_22.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_22.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -30116,7 +30118,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_23",
-        "path": "/models/nature/detailed_realistic_model_crystalball_23.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_23.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -30181,7 +30183,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_crystalball_24",
-        "path": "/models/nature/detailed_realistic_model_crystalball_24.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_crystalball_24.glb",
         "category": "prop",
         "subCategory": "crystalball",
         "keywords": {
@@ -30246,7 +30248,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_detailed_realistic_model_stone_01",
-        "path": "/models/nature/detailed_realistic_model_stone_01.glb.glb",
+        "path": "/models/nature/detailed_realistic_model_stone_01.glb",
         "category": "nature",
         "subCategory": "stone",
         "keywords": {
@@ -30323,7 +30325,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_DiffuseTransmissionPlant",
-        "path": "/models/nature/DiffuseTransmissionPlant.glb.glb",
+        "path": "/models/nature/DiffuseTransmissionPlant.glb",
         "category": "nature",
         "subCategory": "plant",
         "keywords": {
@@ -30390,7 +30392,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_pillar-stone",
-        "path": "/models/nature/fantasy-town-kit_pillar-stone.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_pillar-stone.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -30466,7 +30468,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_rock-large",
-        "path": "/models/nature/fantasy-town-kit_rock-large.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_rock-large.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -30542,7 +30544,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_rock-small",
-        "path": "/models/nature/fantasy-town-kit_rock-small.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_rock-small.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -30618,7 +30620,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_rock-wide",
-        "path": "/models/nature/fantasy-town-kit_rock-wide.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_rock-wide.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -30694,7 +30696,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-stone",
-        "path": "/models/nature/fantasy-town-kit_stairs-stone.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-stone.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -30766,7 +30768,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-stone-corner",
-        "path": "/models/nature/fantasy-town-kit_stairs-stone-corner.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-stone-corner.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -30837,7 +30839,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-stone-handrail",
-        "path": "/models/nature/fantasy-town-kit_stairs-stone-handrail.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-stone-handrail.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -30910,7 +30912,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-stone-round",
-        "path": "/models/nature/fantasy-town-kit_stairs-stone-round.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-stone-round.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -30982,7 +30984,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-wide-stone",
-        "path": "/models/nature/fantasy-town-kit_stairs-wide-stone.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-wide-stone.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -31055,7 +31057,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_stairs-wide-stone-handrail",
-        "path": "/models/nature/fantasy-town-kit_stairs-wide-stone-handrail.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_stairs-wide-stone-handrail.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -31130,7 +31132,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_tree",
-        "path": "/models/nature/fantasy-town-kit_tree.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_tree.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -31206,7 +31208,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_tree-crooked",
-        "path": "/models/nature/fantasy-town-kit_tree-crooked.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_tree-crooked.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -31281,7 +31283,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_tree-high",
-        "path": "/models/nature/fantasy-town-kit_tree-high.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_tree-high.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -31352,7 +31354,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_tree-high-crooked",
-        "path": "/models/nature/fantasy-town-kit_tree-high-crooked.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_tree-high-crooked.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -31428,7 +31430,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_tree-high-round",
-        "path": "/models/nature/fantasy-town-kit_tree-high-round.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_tree-high-round.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -31504,7 +31506,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_wall-window-stone",
-        "path": "/models/nature/fantasy-town-kit_wall-window-stone.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_wall-window-stone.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -31580,7 +31582,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_fantasy-town-kit_wall-wood-window-stone",
-        "path": "/models/nature/fantasy-town-kit_wall-wood-window-stone.glb.glb",
+        "path": "/models/nature/fantasy-town-kit_wall-wood-window-stone.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -31656,7 +31658,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_GlassVaseFlowers",
-        "path": "/models/nature/GlassVaseFlowers.glb.glb",
+        "path": "/models/nature/GlassVaseFlowers.glb",
         "category": "nature",
         "subCategory": "flowers",
         "keywords": {
@@ -31725,7 +31727,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_altar-stone",
-        "path": "/models/nature/graveyard-kit_altar-stone.glb.glb",
+        "path": "/models/nature/graveyard-kit_altar-stone.glb",
         "category": "structure",
         "subCategory": "altar",
         "keywords": {
@@ -31795,7 +31797,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-bevel",
-        "path": "/models/nature/graveyard-kit_gravestone-bevel.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-bevel.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -31866,7 +31868,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-broken",
-        "path": "/models/nature/graveyard-kit_gravestone-broken.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-broken.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -31937,7 +31939,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-cross",
-        "path": "/models/nature/graveyard-kit_gravestone-cross.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-cross.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32006,7 +32008,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-cross-large",
-        "path": "/models/nature/graveyard-kit_gravestone-cross-large.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-cross-large.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32079,7 +32081,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-debris",
-        "path": "/models/nature/graveyard-kit_gravestone-debris.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-debris.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32147,7 +32149,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-decorative",
-        "path": "/models/nature/graveyard-kit_gravestone-decorative.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-decorative.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32214,7 +32216,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-roof",
-        "path": "/models/nature/graveyard-kit_gravestone-roof.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-roof.glb",
         "category": "structure",
         "subCategory": "gravestone",
         "keywords": {
@@ -32288,7 +32290,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-round",
-        "path": "/models/nature/graveyard-kit_gravestone-round.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-round.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32356,7 +32358,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_gravestone-wide",
-        "path": "/models/nature/graveyard-kit_gravestone-wide.glb.glb",
+        "path": "/models/nature/graveyard-kit_gravestone-wide.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -32427,7 +32429,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_rocks",
-        "path": "/models/nature/graveyard-kit_rocks.glb.glb",
+        "path": "/models/nature/graveyard-kit_rocks.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -32499,7 +32501,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_rocks-tall",
-        "path": "/models/nature/graveyard-kit_rocks-tall.glb.glb",
+        "path": "/models/nature/graveyard-kit_rocks-tall.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -32570,7 +32572,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_stone-wall",
-        "path": "/models/nature/graveyard-kit_stone-wall.glb.glb",
+        "path": "/models/nature/graveyard-kit_stone-wall.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -32645,7 +32647,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_stone-wall-column",
-        "path": "/models/nature/graveyard-kit_stone-wall-column.glb.glb",
+        "path": "/models/nature/graveyard-kit_stone-wall-column.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -32720,7 +32722,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_stone-wall-curve",
-        "path": "/models/nature/graveyard-kit_stone-wall-curve.glb.glb",
+        "path": "/models/nature/graveyard-kit_stone-wall-curve.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -32795,7 +32797,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_graveyard-kit_stone-wall-damaged",
-        "path": "/models/nature/graveyard-kit_stone-wall-damaged.glb.glb",
+        "path": "/models/nature/graveyard-kit_stone-wall-damaged.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -32870,7 +32872,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass",
-        "path": "/models/nature/platformer-kit_block-grass.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -32939,7 +32941,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-corner",
-        "path": "/models/nature/platformer-kit_block-grass-corner.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-corner.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33010,7 +33012,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-corner-low",
-        "path": "/models/nature/platformer-kit_block-grass-corner-low.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-corner-low.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33082,7 +33084,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-corner-overhang",
-        "path": "/models/nature/platformer-kit_block-grass-corner-overhang.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-corner-overhang.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33151,7 +33153,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-corner-overhang-low",
-        "path": "/models/nature/platformer-kit_block-grass-corner-overhang-low.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-corner-overhang-low.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33219,7 +33221,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-curve",
-        "path": "/models/nature/platformer-kit_block-grass-curve.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-curve.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33291,7 +33293,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-curve-half",
-        "path": "/models/nature/platformer-kit_block-grass-curve-half.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-curve-half.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33362,7 +33364,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-curve-low",
-        "path": "/models/nature/platformer-kit_block-grass-curve-low.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-curve-low.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33432,7 +33434,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-edge",
-        "path": "/models/nature/platformer-kit_block-grass-edge.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-edge.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33503,7 +33505,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-hexagon",
-        "path": "/models/nature/platformer-kit_block-grass-hexagon.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-hexagon.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33573,7 +33575,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large",
-        "path": "/models/nature/platformer-kit_block-grass-large.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33642,7 +33644,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large-slope",
-        "path": "/models/nature/platformer-kit_block-grass-large-slope.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large-slope.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33711,7 +33713,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large-slope-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-large-slope-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large-slope-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33779,7 +33781,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large-slope-steep",
-        "path": "/models/nature/platformer-kit_block-grass-large-slope-steep.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large-slope-steep.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33852,7 +33854,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large-slope-steep-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-large-slope-steep-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large-slope-steep-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33920,7 +33922,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-large-tall",
-        "path": "/models/nature/platformer-kit_block-grass-large-tall.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-large-tall.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -33993,7 +33995,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-long",
-        "path": "/models/nature/platformer-kit_block-grass-long.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-long.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34063,7 +34065,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-low",
-        "path": "/models/nature/platformer-kit_block-grass-low.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-low.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34132,7 +34134,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-low-hexagon",
-        "path": "/models/nature/platformer-kit_block-grass-low-hexagon.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-low-hexagon.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34204,7 +34206,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-low-large",
-        "path": "/models/nature/platformer-kit_block-grass-low-large.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-low-large.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34276,7 +34278,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-low-long",
-        "path": "/models/nature/platformer-kit_block-grass-low-long.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-low-long.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34344,7 +34346,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-low-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-low-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-low-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34413,7 +34415,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34485,7 +34487,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-corner",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-corner.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-corner.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34556,7 +34558,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-edge",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-edge.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-edge.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34625,7 +34627,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-hexagon",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-hexagon.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-hexagon.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34696,7 +34698,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34767,7 +34769,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large-slope",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34840,7 +34842,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large-slope-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34911,7 +34913,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large-slope-steep",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-steep.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-steep.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -34985,7 +34987,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large-slope-steep-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-steep-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large-slope-steep-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35057,7 +35059,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-large-tall",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-large-tall.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-large-tall.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35125,7 +35127,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-long",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-long.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-long.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35194,7 +35196,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-low",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-low.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-low.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35262,7 +35264,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-low-hexagon",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-low-hexagon.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-low-hexagon.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35329,7 +35331,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-low-large",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-low-large.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-low-large.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35401,7 +35403,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-low-long",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-low-long.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-low-long.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35473,7 +35475,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-low-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-low-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-low-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35541,7 +35543,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_block-grass-overhang-narrow",
-        "path": "/models/nature/platformer-kit_block-grass-overhang-narrow.glb.glb",
+        "path": "/models/nature/platformer-kit_block-grass-overhang-narrow.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35611,7 +35613,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_flowers",
-        "path": "/models/nature/platformer-kit_flowers.glb.glb",
+        "path": "/models/nature/platformer-kit_flowers.glb",
         "category": "nature",
         "subCategory": "flowers",
         "keywords": {
@@ -35680,7 +35682,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_flowers-tall",
-        "path": "/models/nature/platformer-kit_flowers-tall.glb.glb",
+        "path": "/models/nature/platformer-kit_flowers-tall.glb",
         "category": "nature",
         "subCategory": "flowers",
         "keywords": {
@@ -35748,7 +35750,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_grass",
-        "path": "/models/nature/platformer-kit_grass.glb.glb",
+        "path": "/models/nature/platformer-kit_grass.glb",
         "category": "nature",
         "subCategory": "grass",
         "keywords": {
@@ -35818,7 +35820,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_mushrooms",
-        "path": "/models/nature/platformer-kit_mushrooms.glb.glb",
+        "path": "/models/nature/platformer-kit_mushrooms.glb",
         "category": "nature",
         "subCategory": "mushroom",
         "keywords": {
@@ -35892,7 +35894,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_plant",
-        "path": "/models/nature/platformer-kit_plant.glb.glb",
+        "path": "/models/nature/platformer-kit_plant.glb",
         "category": "nature",
         "subCategory": "plant",
         "keywords": {
@@ -35962,7 +35964,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_rocks",
-        "path": "/models/nature/platformer-kit_rocks.glb.glb",
+        "path": "/models/nature/platformer-kit_rocks.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -36028,7 +36030,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_stones",
-        "path": "/models/nature/platformer-kit_stones.glb.glb",
+        "path": "/models/nature/platformer-kit_stones.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -36100,7 +36102,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree",
-        "path": "/models/nature/platformer-kit_tree.glb.glb",
+        "path": "/models/nature/platformer-kit_tree.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36173,7 +36175,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree-pine",
-        "path": "/models/nature/platformer-kit_tree-pine.glb.glb",
+        "path": "/models/nature/platformer-kit_tree-pine.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36244,7 +36246,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree-pine-small",
-        "path": "/models/nature/platformer-kit_tree-pine-small.glb.glb",
+        "path": "/models/nature/platformer-kit_tree-pine-small.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36317,7 +36319,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree-pine-snow",
-        "path": "/models/nature/platformer-kit_tree-pine-snow.glb.glb",
+        "path": "/models/nature/platformer-kit_tree-pine-snow.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36386,7 +36388,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree-pine-snow-small",
-        "path": "/models/nature/platformer-kit_tree-pine-snow-small.glb.glb",
+        "path": "/models/nature/platformer-kit_tree-pine-snow-small.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36458,7 +36460,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_platformer-kit_tree-snow",
-        "path": "/models/nature/platformer-kit_tree-snow.glb.glb",
+        "path": "/models/nature/platformer-kit_tree-snow.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -36529,7 +36531,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_rocks1",
-        "path": "/models/nature/rocks1.glb.glb",
+        "path": "/models/nature/rocks1.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -36604,7 +36606,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_rocks2",
-        "path": "/models/nature/rocks2.glb.glb",
+        "path": "/models/nature/rocks2.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -36680,7 +36682,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_rocks3",
-        "path": "/models/nature/rocks3.glb.glb",
+        "path": "/models/nature/rocks3.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -36755,7 +36757,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_rocks4",
-        "path": "/models/nature/rocks4.glb.glb",
+        "path": "/models/nature/rocks4.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -36830,7 +36832,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_three_js-examples_Flower",
-        "path": "/models/nature/three.js-examples_Flower.glb.glb",
+        "path": "/models/nature/three.js-examples_Flower.glb",
         "category": "nature",
         "subCategory": "flower",
         "keywords": {
@@ -36903,7 +36905,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_three_js-examples_forest_house",
-        "path": "/models/nature/three.js-examples_forest_house.glb.glb",
+        "path": "/models/nature/three.js-examples_forest_house.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -36976,7 +36978,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone1",
-        "path": "/models/nature/tombstone1.glb.glb",
+        "path": "/models/nature/tombstone1.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37047,7 +37049,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone10",
-        "path": "/models/nature/tombstone10.glb.glb",
+        "path": "/models/nature/tombstone10.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37117,7 +37119,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone11",
-        "path": "/models/nature/tombstone11.glb.glb",
+        "path": "/models/nature/tombstone11.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37190,7 +37192,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone1Weathered",
-        "path": "/models/nature/tombstone1Weathered.glb.glb",
+        "path": "/models/nature/tombstone1Weathered.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37261,7 +37263,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone2",
-        "path": "/models/nature/tombstone2.glb.glb",
+        "path": "/models/nature/tombstone2.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37331,7 +37333,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone2Weathered",
-        "path": "/models/nature/tombstone2Weathered.glb.glb",
+        "path": "/models/nature/tombstone2Weathered.glb",
         "category": "nature",
         "subCategory": "tombstone",
         "keywords": {
@@ -37403,7 +37405,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone3",
-        "path": "/models/nature/tombstone3.glb.glb",
+        "path": "/models/nature/tombstone3.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37475,7 +37477,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone4",
-        "path": "/models/nature/tombstone4.glb.glb",
+        "path": "/models/nature/tombstone4.glb",
         "category": "structure",
         "subCategory": "tombstone",
         "keywords": {
@@ -37546,7 +37548,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone5",
-        "path": "/models/nature/tombstone5.glb.glb",
+        "path": "/models/nature/tombstone5.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37618,7 +37620,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone5Weathered",
-        "path": "/models/nature/tombstone5Weathered.glb.glb",
+        "path": "/models/nature/tombstone5Weathered.glb",
         "category": "nature",
         "subCategory": "tombstone",
         "keywords": {
@@ -37690,7 +37692,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone6",
-        "path": "/models/nature/tombstone6.glb.glb",
+        "path": "/models/nature/tombstone6.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37762,7 +37764,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone7",
-        "path": "/models/nature/tombstone7.glb.glb",
+        "path": "/models/nature/tombstone7.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37836,7 +37838,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone8",
-        "path": "/models/nature/tombstone8.glb.glb",
+        "path": "/models/nature/tombstone8.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37911,7 +37913,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tombstone9",
-        "path": "/models/nature/tombstone9.glb.glb",
+        "path": "/models/nature/tombstone9.glb",
         "category": "prop",
         "subCategory": "tombstone",
         "keywords": {
@@ -37985,7 +37987,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree1",
-        "path": "/models/nature/tree1.glb.glb",
+        "path": "/models/nature/tree1.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38061,7 +38063,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree2",
-        "path": "/models/nature/tree2.glb.glb",
+        "path": "/models/nature/tree2.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38137,7 +38139,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree3",
-        "path": "/models/nature/tree3.glb.glb",
+        "path": "/models/nature/tree3.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38213,7 +38215,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree4",
-        "path": "/models/nature/tree4.glb.glb",
+        "path": "/models/nature/tree4.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38290,7 +38292,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree5",
-        "path": "/models/nature/tree5.glb.glb",
+        "path": "/models/nature/tree5.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38365,7 +38367,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree6",
-        "path": "/models/nature/tree6.glb.glb",
+        "path": "/models/nature/tree6.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38441,7 +38443,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree7",
-        "path": "/models/nature/tree7.glb.glb",
+        "path": "/models/nature/tree7.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38517,7 +38519,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_tree8",
-        "path": "/models/nature/tree8.glb.glb",
+        "path": "/models/nature/tree8.glb",
         "category": "nature",
         "subCategory": "tree",
         "keywords": {
@@ -38593,7 +38595,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "nature_underwaterSceneRocksBarnaclesMussels",
-        "path": "/models/nature/underwaterSceneRocksBarnaclesMussels.glb.glb",
+        "path": "/models/nature/underwaterSceneRocksBarnaclesMussels.glb",
         "category": "nature",
         "subCategory": "rocks",
         "keywords": {
@@ -38656,7 +38658,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_AncientVase",
-        "path": "/models/props/AncientVase.glb.glb",
+        "path": "/models/props/AncientVase.glb",
         "category": "prop",
         "subCategory": "vase",
         "keywords": {
@@ -38723,7 +38725,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoomBox",
-        "path": "/models/props/babylon-assets_BoomBox.glb.glb",
+        "path": "/models/props/babylon-assets_BoomBox.glb",
         "category": "prop",
         "subCategory": "audio player",
         "keywords": {
@@ -38786,7 +38788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_Box",
-        "path": "/models/props/babylon-assets_Box.glb.glb",
+        "path": "/models/props/babylon-assets_Box.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -38854,7 +38856,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoxAnimated",
-        "path": "/models/props/babylon-assets_BoxAnimated.glb.glb",
+        "path": "/models/props/babylon-assets_BoxAnimated.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -38916,7 +38918,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoxInterleaved",
-        "path": "/models/props/babylon-assets_BoxInterleaved.glb.glb",
+        "path": "/models/props/babylon-assets_BoxInterleaved.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -38977,7 +38979,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoxTextured",
-        "path": "/models/props/babylon-assets_BoxTextured.glb.glb",
+        "path": "/models/props/babylon-assets_BoxTextured.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39045,7 +39047,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoxVertexColors",
-        "path": "/models/props/babylon-assets_BoxVertexColors.glb.glb",
+        "path": "/models/props/babylon-assets_BoxVertexColors.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39106,7 +39108,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_BoxWithoutIndices",
-        "path": "/models/props/babylon-assets_BoxWithoutIndices.glb.glb",
+        "path": "/models/props/babylon-assets_BoxWithoutIndices.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39171,7 +39173,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_babylon-assets_GearboxAssy",
-        "path": "/models/props/babylon-assets_GearboxAssy.glb.glb",
+        "path": "/models/props/babylon-assets_GearboxAssy.glb",
         "category": "prop",
         "subCategory": "machine",
         "keywords": {
@@ -39232,7 +39234,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_barrel",
-        "path": "/models/props/barrel.glb.glb",
+        "path": "/models/props/barrel.glb",
         "category": "prop",
         "subCategory": "barrel",
         "keywords": {
@@ -39301,7 +39303,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoomBox",
-        "path": "/models/props/BoomBox.glb.glb",
+        "path": "/models/props/BoomBox.glb",
         "category": "prop",
         "subCategory": "boombox",
         "keywords": {
@@ -39364,7 +39366,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoomBox_1769416633018",
-        "path": "/models/props/BoomBox_1769416633018.glb.glb",
+        "path": "/models/props/BoomBox_1769416633018.glb",
         "category": "prop",
         "subCategory": "boombox",
         "keywords": {
@@ -39427,7 +39429,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_Box",
-        "path": "/models/props/Box.glb.glb",
+        "path": "/models/props/Box.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39495,7 +39497,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_box_1769416633021",
-        "path": "/models/props/box_1769416633021.glb.glb",
+        "path": "/models/props/box_1769416633021.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39559,7 +39561,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_Box-draco",
-        "path": "/models/props/Box-draco.glb.glb",
+        "path": "/models/props/Box-draco.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39622,7 +39624,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoxAnimated",
-        "path": "/models/props/BoxAnimated.glb.glb",
+        "path": "/models/props/BoxAnimated.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39690,7 +39692,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoxInterleaved",
-        "path": "/models/props/BoxInterleaved.glb.glb",
+        "path": "/models/props/BoxInterleaved.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39754,7 +39756,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoxTextured",
-        "path": "/models/props/BoxTextured.glb.glb",
+        "path": "/models/props/BoxTextured.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39821,7 +39823,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoxTexturedNonPowerOfTwo",
-        "path": "/models/props/BoxTexturedNonPowerOfTwo.glb.glb",
+        "path": "/models/props/BoxTexturedNonPowerOfTwo.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39888,7 +39890,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_BoxVertexColors",
-        "path": "/models/props/BoxVertexColors.glb.glb",
+        "path": "/models/props/BoxVertexColors.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -39953,7 +39955,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_cornellBox",
-        "path": "/models/props/cornellBox.glb.glb",
+        "path": "/models/props/cornellBox.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -40014,7 +40016,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_crate1",
-        "path": "/models/props/crate1.glb.glb",
+        "path": "/models/props/crate1.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -40081,7 +40083,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_crate2",
-        "path": "/models/props/crate2.glb.glb",
+        "path": "/models/props/crate2.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -40146,7 +40148,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_crateStack",
-        "path": "/models/props/crateStack.glb.glb",
+        "path": "/models/props/crateStack.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -40212,7 +40214,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_02",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_02.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40278,7 +40280,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_03",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_03.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_03.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40347,7 +40349,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_04",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_04.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_04.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40415,7 +40417,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_05",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_05.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_05.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40480,7 +40482,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_06",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_06.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_06.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40547,7 +40549,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_07",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_07.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_07.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40613,7 +40615,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_08",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_08.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_08.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -40682,7 +40684,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_09",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_09.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_09.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40750,7 +40752,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_10",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_10.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_10.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40817,7 +40819,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_11",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_11.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_11.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40884,7 +40886,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_12",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_12.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_12.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -40951,7 +40953,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_13",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_13.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_13.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41018,7 +41020,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_14",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_14.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_14.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41087,7 +41089,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_15",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_15.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_15.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41155,7 +41157,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_16",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_16.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_16.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41222,7 +41224,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_17",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_17.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_17.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41287,7 +41289,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_18",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_18.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_18.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41353,7 +41355,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_19",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_19.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_19.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41421,7 +41423,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_20",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_20.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_20.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41487,7 +41489,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_21",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_21.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_21.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41556,7 +41558,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_22",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_22.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_22.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41623,7 +41625,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_23",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_23.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_23.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41690,7 +41692,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_24",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_24.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_24.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41757,7 +41759,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_25",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_25.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_25.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41823,7 +41825,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_26",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_26.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_26.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41890,7 +41892,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_27",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_27.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_27.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -41957,7 +41959,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_albusdumbledore_28",
-        "path": "/models/props/detailed_realistic_model_albusdumbledore_28.glb.glb",
+        "path": "/models/props/detailed_realistic_model_albusdumbledore_28.glb",
         "category": "character",
         "subCategory": "wizard",
         "keywords": {
@@ -42025,7 +42027,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_dark_01",
-        "path": "/models/props/detailed_realistic_model_dark_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_dark_01.glb",
         "category": "prop",
         "subCategory": "realistic",
         "keywords": {
@@ -42093,7 +42095,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_default_01",
-        "path": "/models/props/detailed_realistic_model_default_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_default_01.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -42159,7 +42161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_default_02",
-        "path": "/models/props/detailed_realistic_model_default_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_default_02.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -42225,7 +42227,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_default_03",
-        "path": "/models/props/detailed_realistic_model_default_03.glb.glb",
+        "path": "/models/props/detailed_realistic_model_default_03.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -42287,7 +42289,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_default_04",
-        "path": "/models/props/detailed_realistic_model_default_04.glb.glb",
+        "path": "/models/props/detailed_realistic_model_default_04.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -42353,7 +42355,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_default_05",
-        "path": "/models/props/detailed_realistic_model_default_05.glb.glb",
+        "path": "/models/props/detailed_realistic_model_default_05.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -42416,7 +42418,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floating_01",
-        "path": "/models/props/detailed_realistic_model_floating_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floating_01.glb",
         "category": "prop",
         "subCategory": "floating object",
         "keywords": {
@@ -42477,7 +42479,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floating_02",
-        "path": "/models/props/detailed_realistic_model_floating_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floating_02.glb",
         "category": "prop",
         "subCategory": "general",
         "keywords": {
@@ -42542,7 +42544,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_02",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_02.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -42609,7 +42611,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_03",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_03.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_03.glb",
         "category": "prop",
         "subCategory": "floatingcandles",
         "keywords": {
@@ -42675,7 +42677,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_04",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_04.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_04.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -42747,7 +42749,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_05",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_05.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_05.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -42816,7 +42818,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_06",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_06.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_06.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -42883,7 +42885,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_07",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_07.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_07.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -42952,7 +42954,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_08",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_08.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_08.glb",
         "category": "prop",
         "subCategory": "floatingcandles",
         "keywords": {
@@ -43023,7 +43025,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_09",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_09.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_09.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43094,7 +43096,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_10",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_10.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_10.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43161,7 +43163,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_11",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_11.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_11.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43232,7 +43234,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_12",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_12.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_12.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43297,7 +43299,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_13",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_13.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_13.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43368,7 +43370,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_14",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_14.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_14.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43438,7 +43440,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_15",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_15.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_15.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43503,7 +43505,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_16",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_16.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_16.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43573,7 +43575,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_17",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_17.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_17.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43642,7 +43644,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_18",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_18.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_18.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43713,7 +43715,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_19",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_19.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_19.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43786,7 +43788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_20",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_20.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_20.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43854,7 +43856,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_21",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_21.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_21.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43923,7 +43925,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_22",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_22.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_22.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -43991,7 +43993,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_23",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_23.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_23.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44059,7 +44061,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_24",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_24.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_24.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44129,7 +44131,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_25",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_25.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_25.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44195,7 +44197,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_26",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_26.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_26.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44262,7 +44264,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_27",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_27.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_27.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44332,7 +44334,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_28",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_28.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_28.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44401,7 +44403,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_29",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_29.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_29.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44471,7 +44473,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_floatingcandles_30",
-        "path": "/models/props/detailed_realistic_model_floatingcandles_30.glb.glb",
+        "path": "/models/props/detailed_realistic_model_floatingcandles_30.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -44542,7 +44544,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_ghostly_01",
-        "path": "/models/props/detailed_realistic_model_ghostly_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_ghostly_01.glb",
         "category": "character",
         "subCategory": "ghost",
         "keywords": {
@@ -44608,7 +44610,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_glass_01",
-        "path": "/models/props/detailed_realistic_model_glass_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_glass_01.glb",
         "category": "prop",
         "subCategory": "glassware",
         "keywords": {
@@ -44677,7 +44679,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_glass_02",
-        "path": "/models/props/detailed_realistic_model_glass_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_glass_02.glb",
         "category": "prop",
         "subCategory": "glassware",
         "keywords": {
@@ -44746,7 +44748,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_goldensnitch_01",
-        "path": "/models/props/detailed_realistic_model_goldensnitch_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_goldensnitch_01.glb",
         "category": "prop",
         "subCategory": "goldensnitch",
         "keywords": {
@@ -44813,7 +44815,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_goldensnitch_02",
-        "path": "/models/props/detailed_realistic_model_goldensnitch_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_goldensnitch_02.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -44876,7 +44878,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_hogwarts_01",
-        "path": "/models/props/detailed_realistic_model_hogwarts_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_hogwarts_01.glb",
         "category": "structure",
         "subCategory": "castle",
         "keywords": {
@@ -44951,7 +44953,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_leatherbound_01",
-        "path": "/models/props/detailed_realistic_model_leatherbound_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_leatherbound_01.glb",
         "category": "prop",
         "subCategory": "book",
         "keywords": {
@@ -45015,7 +45017,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_leatherbound_02",
-        "path": "/models/props/detailed_realistic_model_leatherbound_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_leatherbound_02.glb",
         "category": "prop",
         "subCategory": "book",
         "keywords": {
@@ -45082,7 +45084,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_magic_01",
-        "path": "/models/props/detailed_realistic_model_magic_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_magic_01.glb",
         "category": "prop",
         "subCategory": "magic",
         "keywords": {
@@ -45148,7 +45150,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_portrait_01",
-        "path": "/models/props/detailed_realistic_model_portrait_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_portrait_01.glb",
         "category": "prop",
         "subCategory": "portrait",
         "keywords": {
@@ -45213,7 +45215,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_portrait_02",
-        "path": "/models/props/detailed_realistic_model_portrait_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_portrait_02.glb",
         "category": "prop",
         "subCategory": "portrait",
         "keywords": {
@@ -45276,7 +45278,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_potions_01",
-        "path": "/models/props/detailed_realistic_model_potions_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_potions_01.glb",
         "category": "prop",
         "subCategory": "potion",
         "keywords": {
@@ -45347,7 +45349,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_potions_02",
-        "path": "/models/props/detailed_realistic_model_potions_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_potions_02.glb",
         "category": "prop",
         "subCategory": "potion",
         "keywords": {
@@ -45418,7 +45420,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sleeping_01",
-        "path": "/models/props/detailed_realistic_model_sleeping_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sleeping_01.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45485,7 +45487,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_01",
-        "path": "/models/props/detailed_realistic_model_solid_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_01.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45544,7 +45546,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_02",
-        "path": "/models/props/detailed_realistic_model_solid_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_02.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45608,7 +45610,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_03",
-        "path": "/models/props/detailed_realistic_model_solid_03.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_03.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45676,7 +45678,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_04",
-        "path": "/models/props/detailed_realistic_model_solid_04.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_04.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45741,7 +45743,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_05",
-        "path": "/models/props/detailed_realistic_model_solid_05.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_05.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45805,7 +45807,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_06",
-        "path": "/models/props/detailed_realistic_model_solid_06.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_06.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45871,7 +45873,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_07",
-        "path": "/models/props/detailed_realistic_model_solid_07.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_07.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45934,7 +45936,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_08",
-        "path": "/models/props/detailed_realistic_model_solid_08.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_08.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -45997,7 +45999,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_09",
-        "path": "/models/props/detailed_realistic_model_solid_09.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_09.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46062,7 +46064,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_10",
-        "path": "/models/props/detailed_realistic_model_solid_10.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_10.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -46125,7 +46127,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_11",
-        "path": "/models/props/detailed_realistic_model_solid_11.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_11.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -46192,7 +46194,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_12",
-        "path": "/models/props/detailed_realistic_model_solid_12.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_12.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46257,7 +46259,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_13",
-        "path": "/models/props/detailed_realistic_model_solid_13.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_13.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46325,7 +46327,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_14",
-        "path": "/models/props/detailed_realistic_model_solid_14.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_14.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46390,7 +46392,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_15",
-        "path": "/models/props/detailed_realistic_model_solid_15.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_15.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46452,7 +46454,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_16",
-        "path": "/models/props/detailed_realistic_model_solid_16.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_16.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46514,7 +46516,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_17",
-        "path": "/models/props/detailed_realistic_model_solid_17.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_17.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -46577,7 +46579,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_solid_18",
-        "path": "/models/props/detailed_realistic_model_solid_18.glb.glb",
+        "path": "/models/props/detailed_realistic_model_solid_18.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -46643,7 +46645,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sorting_01",
-        "path": "/models/props/detailed_realistic_model_sorting_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sorting_01.glb",
         "category": "prop",
         "subCategory": "tool",
         "keywords": {
@@ -46704,7 +46706,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sorting_01_1769413346495",
-        "path": "/models/props/detailed_realistic_model_sorting_01_1769413346495.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sorting_01_1769413346495.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -46768,7 +46770,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sorting_02",
-        "path": "/models/props/detailed_realistic_model_sorting_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sorting_02.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -46836,7 +46838,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_01",
-        "path": "/models/props/detailed_realistic_model_sortinghat_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_01.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -46902,7 +46904,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_02",
-        "path": "/models/props/detailed_realistic_model_sortinghat_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_02.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -46969,7 +46971,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_03",
-        "path": "/models/props/detailed_realistic_model_sortinghat_03.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_03.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47034,7 +47036,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_04",
-        "path": "/models/props/detailed_realistic_model_sortinghat_04.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_04.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47099,7 +47101,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_05",
-        "path": "/models/props/detailed_realistic_model_sortinghat_05.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_05.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47166,7 +47168,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_06",
-        "path": "/models/props/detailed_realistic_model_sortinghat_06.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_06.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47235,7 +47237,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_07",
-        "path": "/models/props/detailed_realistic_model_sortinghat_07.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_07.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47303,7 +47305,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_08",
-        "path": "/models/props/detailed_realistic_model_sortinghat_08.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_08.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47369,7 +47371,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_09",
-        "path": "/models/props/detailed_realistic_model_sortinghat_09.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_09.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47435,7 +47437,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_10",
-        "path": "/models/props/detailed_realistic_model_sortinghat_10.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_10.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47502,7 +47504,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_11",
-        "path": "/models/props/detailed_realistic_model_sortinghat_11.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_11.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47567,7 +47569,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_12",
-        "path": "/models/props/detailed_realistic_model_sortinghat_12.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_12.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47635,7 +47637,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_13",
-        "path": "/models/props/detailed_realistic_model_sortinghat_13.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_13.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47702,7 +47704,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_14",
-        "path": "/models/props/detailed_realistic_model_sortinghat_14.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_14.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47769,7 +47771,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_15",
-        "path": "/models/props/detailed_realistic_model_sortinghat_15.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_15.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47838,7 +47840,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_sortinghat_16",
-        "path": "/models/props/detailed_realistic_model_sortinghat_16.glb.glb",
+        "path": "/models/props/detailed_realistic_model_sortinghat_16.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -47907,7 +47909,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_stack_01",
-        "path": "/models/props/detailed_realistic_model_stack_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_stack_01.glb",
         "category": "prop",
         "subCategory": "stack",
         "keywords": {
@@ -47972,7 +47974,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_stack_02",
-        "path": "/models/props/detailed_realistic_model_stack_02.glb.glb",
+        "path": "/models/props/detailed_realistic_model_stack_02.glb",
         "category": "prop",
         "subCategory": "stack",
         "keywords": {
@@ -48035,7 +48037,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_detailed_realistic_model_test_01",
-        "path": "/models/props/detailed_realistic_model_test_01.glb.glb",
+        "path": "/models/props/detailed_realistic_model_test_01.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -48098,7 +48100,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_ExplodingBarrel",
-        "path": "/models/props/ExplodingBarrel.glb.glb",
+        "path": "/models/props/ExplodingBarrel.glb",
         "category": "prop",
         "subCategory": "barrel",
         "keywords": {
@@ -48166,7 +48168,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_GearboxAssy",
-        "path": "/models/props/GearboxAssy.glb.glb",
+        "path": "/models/props/GearboxAssy.glb",
         "category": "prop",
         "subCategory": "gearbox",
         "keywords": {
@@ -48227,7 +48229,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_gemOnly",
-        "path": "/models/props/gemOnly.glb.glb",
+        "path": "/models/props/gemOnly.glb",
         "category": "prop",
         "subCategory": "gem",
         "keywords": {
@@ -48292,7 +48294,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_GlassHurricaneCandleHolder",
-        "path": "/models/props/GlassHurricaneCandleHolder.glb.glb",
+        "path": "/models/props/GlassHurricaneCandleHolder.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -48360,7 +48362,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_graveyard-kit_candle",
-        "path": "/models/props/graveyard-kit_candle.glb.glb",
+        "path": "/models/props/graveyard-kit_candle.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -48432,7 +48434,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_graveyard-kit_candle-multiple",
-        "path": "/models/props/graveyard-kit_candle-multiple.glb.glb",
+        "path": "/models/props/graveyard-kit_candle-multiple.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -48502,7 +48504,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_graveyard-kit_lantern-candle",
-        "path": "/models/props/graveyard-kit_lantern-candle.glb.glb",
+        "path": "/models/props/graveyard-kit_lantern-candle.glb",
         "category": "prop",
         "subCategory": "lantern",
         "keywords": {
@@ -48569,7 +48571,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_barrel",
-        "path": "/models/props/platformer-kit_barrel.glb.glb",
+        "path": "/models/props/platformer-kit_barrel.glb",
         "category": "prop",
         "subCategory": "barrel",
         "keywords": {
@@ -48636,7 +48638,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_chest",
-        "path": "/models/props/platformer-kit_chest.glb.glb",
+        "path": "/models/props/platformer-kit_chest.glb",
         "category": "prop",
         "subCategory": "chest",
         "keywords": {
@@ -48708,7 +48710,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_coin-bronze",
-        "path": "/models/props/platformer-kit_coin-bronze.glb.glb",
+        "path": "/models/props/platformer-kit_coin-bronze.glb",
         "category": "prop",
         "subCategory": "coin",
         "keywords": {
@@ -48773,7 +48775,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_coin-gold",
-        "path": "/models/props/platformer-kit_coin-gold.glb.glb",
+        "path": "/models/props/platformer-kit_coin-gold.glb",
         "category": "prop",
         "subCategory": "coin",
         "keywords": {
@@ -48837,7 +48839,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_coin-silver",
-        "path": "/models/props/platformer-kit_coin-silver.glb.glb",
+        "path": "/models/props/platformer-kit_coin-silver.glb",
         "category": "prop",
         "subCategory": "coin",
         "keywords": {
@@ -48901,7 +48903,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_crate",
-        "path": "/models/props/platformer-kit_crate.glb.glb",
+        "path": "/models/props/platformer-kit_crate.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -48967,7 +48969,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_crate-item",
-        "path": "/models/props/platformer-kit_crate-item.glb.glb",
+        "path": "/models/props/platformer-kit_crate-item.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -49035,7 +49037,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_crate-item-strong",
-        "path": "/models/props/platformer-kit_crate-item-strong.glb.glb",
+        "path": "/models/props/platformer-kit_crate-item-strong.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -49099,7 +49101,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_crate-strong",
-        "path": "/models/props/platformer-kit_crate-strong.glb.glb",
+        "path": "/models/props/platformer-kit_crate-strong.glb",
         "category": "prop",
         "subCategory": "crate",
         "keywords": {
@@ -49166,7 +49168,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_flag",
-        "path": "/models/props/platformer-kit_flag.glb.glb",
+        "path": "/models/props/platformer-kit_flag.glb",
         "category": "prop",
         "subCategory": "flag",
         "keywords": {
@@ -49242,7 +49244,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_platformer-kit_key",
-        "path": "/models/props/platformer-kit_key.glb.glb",
+        "path": "/models/props/platformer-kit_key.glb",
         "category": "prop",
         "subCategory": "key",
         "keywords": {
@@ -49314,7 +49316,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_ReciprocatingSaw",
-        "path": "/models/props/ReciprocatingSaw.glb.glb",
+        "path": "/models/props/ReciprocatingSaw.glb",
         "category": "prop",
         "subCategory": "saw",
         "keywords": {
@@ -49376,7 +49378,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "props_three_js-examples_BoomBox",
-        "path": "/models/props/three.js-examples_BoomBox.glb.glb",
+        "path": "/models/props/three.js-examples_BoomBox.glb",
         "category": "prop",
         "subCategory": "audio player",
         "keywords": {
@@ -49439,7 +49441,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ABeautifulGame",
-        "path": "/models/samples/ABeautifulGame.glb.glb",
+        "path": "/models/samples/ABeautifulGame.glb",
         "category": "prop",
         "subCategory": "game",
         "keywords": {
@@ -49508,7 +49510,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_alien",
-        "path": "/models/samples/alien.glb.glb",
+        "path": "/models/samples/alien.glb",
         "category": "character",
         "subCategory": "alien",
         "keywords": {
@@ -49571,7 +49573,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_AnimatedColorsCube",
-        "path": "/models/samples/AnimatedColorsCube.glb.glb",
+        "path": "/models/samples/AnimatedColorsCube.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -49636,7 +49638,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_AnimationPointerUVs",
-        "path": "/models/samples/AnimationPointerUVs.glb.glb",
+        "path": "/models/samples/AnimationPointerUVs.glb",
         "category": "prop",
         "subCategory": "animation",
         "keywords": {
@@ -49697,7 +49699,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_AntiqueCamera",
-        "path": "/models/samples/AntiqueCamera.glb.glb",
+        "path": "/models/samples/AntiqueCamera.glb",
         "category": "prop",
         "subCategory": "camera",
         "keywords": {
@@ -49758,7 +49760,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Avocado",
-        "path": "/models/samples/Avocado.glb.glb",
+        "path": "/models/samples/Avocado.glb",
         "category": "prop",
         "subCategory": "fruit",
         "keywords": {
@@ -49825,7 +49827,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_2CylinderEngine",
-        "path": "/models/samples/babylon-assets_2CylinderEngine.glb.glb",
+        "path": "/models/samples/babylon-assets_2CylinderEngine.glb",
         "category": "prop",
         "subCategory": "engine",
         "keywords": {
@@ -49888,7 +49890,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_Avocado",
-        "path": "/models/samples/babylon-assets_Avocado.glb.glb",
+        "path": "/models/samples/babylon-assets_Avocado.glb",
         "category": "prop",
         "subCategory": "fruit",
         "keywords": {
@@ -49955,7 +49957,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_BrainStem",
-        "path": "/models/samples/babylon-assets_BrainStem.glb.glb",
+        "path": "/models/samples/babylon-assets_BrainStem.glb",
         "category": "prop",
         "subCategory": "anatomy",
         "keywords": {
@@ -50016,7 +50018,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_Corset",
-        "path": "/models/samples/babylon-assets_Corset.glb.glb",
+        "path": "/models/samples/babylon-assets_Corset.glb",
         "category": "prop",
         "subCategory": "clothing",
         "keywords": {
@@ -50079,7 +50081,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_Duck",
-        "path": "/models/samples/babylon-assets_Duck.glb.glb",
+        "path": "/models/samples/babylon-assets_Duck.glb",
         "category": "prop",
         "subCategory": "toy",
         "keywords": {
@@ -50141,7 +50143,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_Lantern",
-        "path": "/models/samples/babylon-assets_Lantern.glb.glb",
+        "path": "/models/samples/babylon-assets_Lantern.glb",
         "category": "prop",
         "subCategory": "lantern",
         "keywords": {
@@ -50218,7 +50220,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_MetalRoughSpheres",
-        "path": "/models/samples/babylon-assets_MetalRoughSpheres.glb.glb",
+        "path": "/models/samples/babylon-assets_MetalRoughSpheres.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -50279,7 +50281,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_RiggedFigure",
-        "path": "/models/samples/babylon-assets_RiggedFigure.glb.glb",
+        "path": "/models/samples/babylon-assets_RiggedFigure.glb",
         "category": "character",
         "subCategory": "humanoid",
         "keywords": {
@@ -50342,7 +50344,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_RiggedSimple",
-        "path": "/models/samples/babylon-assets_RiggedSimple.glb.glb",
+        "path": "/models/samples/babylon-assets_RiggedSimple.glb",
         "category": "prop",
         "subCategory": "character",
         "keywords": {
@@ -50405,7 +50407,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_SmilingFace",
-        "path": "/models/samples/babylon-assets_SmilingFace.glb.glb",
+        "path": "/models/samples/babylon-assets_SmilingFace.glb",
         "category": "prop",
         "subCategory": "face",
         "keywords": {
@@ -50466,7 +50468,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_TextureSettingsTest",
-        "path": "/models/samples/babylon-assets_TextureSettingsTest.glb.glb",
+        "path": "/models/samples/babylon-assets_TextureSettingsTest.glb",
         "category": "prop",
         "subCategory": "settings",
         "keywords": {
@@ -50530,7 +50532,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_VC",
-        "path": "/models/samples/babylon-assets_VC.glb.glb",
+        "path": "/models/samples/babylon-assets_VC.glb",
         "category": "prop",
         "subCategory": "misc",
         "keywords": {
@@ -50591,7 +50593,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylon-assets_WalkingLady",
-        "path": "/models/samples/babylon-assets_WalkingLady.glb.glb",
+        "path": "/models/samples/babylon-assets_WalkingLady.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -50659,7 +50661,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_babylonBuoy",
-        "path": "/models/samples/babylonBuoy.glb.glb",
+        "path": "/models/samples/babylonBuoy.glb",
         "category": "prop",
         "subCategory": "buoy",
         "keywords": {
@@ -50725,7 +50727,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_BabylonShaderBall_Simple",
-        "path": "/models/samples/BabylonShaderBall_Simple.glb.glb",
+        "path": "/models/samples/BabylonShaderBall_Simple.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -50790,7 +50792,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ballMesh",
-        "path": "/models/samples/ballMesh.glb.glb",
+        "path": "/models/samples/ballMesh.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -50859,7 +50861,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_bars",
-        "path": "/models/samples/bars.glb.glb",
+        "path": "/models/samples/bars.glb",
         "category": "prop",
         "subCategory": "bars",
         "keywords": {
@@ -50926,7 +50928,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Bee",
-        "path": "/models/samples/Bee.glb.glb",
+        "path": "/models/samples/Bee.glb",
         "category": "character",
         "subCategory": "insect",
         "keywords": {
@@ -50996,7 +50998,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_blackPearl",
-        "path": "/models/samples/blackPearl.glb.glb",
+        "path": "/models/samples/blackPearl.glb",
         "category": "prop",
         "subCategory": "ship",
         "keywords": {
@@ -51064,7 +51066,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_BrainStem",
-        "path": "/models/samples/BrainStem.glb.glb",
+        "path": "/models/samples/BrainStem.glb",
         "category": "prop",
         "subCategory": "brain",
         "keywords": {
@@ -51127,7 +51129,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cannon",
-        "path": "/models/samples/cannon.glb.glb",
+        "path": "/models/samples/cannon.glb",
         "category": "prop",
         "subCategory": "cannon",
         "keywords": {
@@ -51196,7 +51198,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ceiling",
-        "path": "/models/samples/ceiling.glb.glb",
+        "path": "/models/samples/ceiling.glb",
         "category": "structure",
         "subCategory": "ceiling",
         "keywords": {
@@ -51266,7 +51268,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ceiling_corner",
-        "path": "/models/samples/ceiling corner.glb.glb",
+        "path": "/models/samples/ceiling corner.glb",
         "category": "structure",
         "subCategory": "ceiling",
         "keywords": {
@@ -51338,7 +51340,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ceiling_straight",
-        "path": "/models/samples/ceiling straight.glb.glb",
+        "path": "/models/samples/ceiling straight.glb",
         "category": "structure",
         "subCategory": "ceiling",
         "keywords": {
@@ -51406,7 +51408,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ChronographWatch",
-        "path": "/models/samples/ChronographWatch.glb.glb",
+        "path": "/models/samples/ChronographWatch.glb",
         "category": "prop",
         "subCategory": "chronograph",
         "keywords": {
@@ -51473,7 +51475,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV1",
-        "path": "/models/samples/cloth_meshV1.glb.glb",
+        "path": "/models/samples/cloth_meshV1.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51543,7 +51545,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV2",
-        "path": "/models/samples/cloth_meshV2.glb.glb",
+        "path": "/models/samples/cloth_meshV2.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51612,7 +51614,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV3",
-        "path": "/models/samples/cloth_meshV3.glb.glb",
+        "path": "/models/samples/cloth_meshV3.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51682,7 +51684,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV4",
-        "path": "/models/samples/cloth_meshV4.glb.glb",
+        "path": "/models/samples/cloth_meshV4.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51750,7 +51752,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV5",
-        "path": "/models/samples/cloth_meshV5.glb.glb",
+        "path": "/models/samples/cloth_meshV5.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51819,7 +51821,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV6",
-        "path": "/models/samples/cloth_meshV6.glb.glb",
+        "path": "/models/samples/cloth_meshV6.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51888,7 +51890,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV7",
-        "path": "/models/samples/cloth_meshV7.glb.glb",
+        "path": "/models/samples/cloth_meshV7.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -51957,7 +51959,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV8",
-        "path": "/models/samples/cloth_meshV8.glb.glb",
+        "path": "/models/samples/cloth_meshV8.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -52026,7 +52028,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cloth_meshV9",
-        "path": "/models/samples/cloth_meshV9.glb.glb",
+        "path": "/models/samples/cloth_meshV9.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -52095,7 +52097,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_clothFolds",
-        "path": "/models/samples/clothFolds.glb.glb",
+        "path": "/models/samples/clothFolds.glb",
         "category": "prop",
         "subCategory": "cloth",
         "keywords": {
@@ -52162,7 +52164,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_coffin",
-        "path": "/models/samples/coffin.glb.glb",
+        "path": "/models/samples/coffin.glb",
         "category": "prop",
         "subCategory": "coffin",
         "keywords": {
@@ -52229,7 +52231,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_coffinOpen",
-        "path": "/models/samples/coffinOpen.glb.glb",
+        "path": "/models/samples/coffinOpen.glb",
         "category": "prop",
         "subCategory": "coffin",
         "keywords": {
@@ -52295,7 +52297,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_CommercialRefrigerator",
-        "path": "/models/samples/CommercialRefrigerator.glb.glb",
+        "path": "/models/samples/CommercialRefrigerator.glb",
         "category": "prop",
         "subCategory": "refrigerator",
         "keywords": {
@@ -52357,7 +52359,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_corner",
-        "path": "/models/samples/corner.glb.glb",
+        "path": "/models/samples/corner.glb",
         "category": "structure",
         "subCategory": "corner",
         "keywords": {
@@ -52424,7 +52426,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_corner2",
-        "path": "/models/samples/corner2.glb.glb",
+        "path": "/models/samples/corner2.glb",
         "category": "structure",
         "subCategory": "architectural_element",
         "keywords": {
@@ -52491,7 +52493,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Corset",
-        "path": "/models/samples/Corset.glb.glb",
+        "path": "/models/samples/Corset.glb",
         "category": "prop",
         "subCategory": "clothing",
         "keywords": {
@@ -52553,7 +52555,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_cottage",
-        "path": "/models/samples/cottage.glb.glb",
+        "path": "/models/samples/cottage.glb",
         "category": "structure",
         "subCategory": "house",
         "keywords": {
@@ -52629,7 +52631,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_D20_Animation",
-        "path": "/models/samples/D20_Animation.glb.glb",
+        "path": "/models/samples/D20_Animation.glb",
         "category": "prop",
         "subCategory": "dice",
         "keywords": {
@@ -52693,7 +52695,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_DirectionalLight",
-        "path": "/models/samples/DirectionalLight.glb.glb",
+        "path": "/models/samples/DirectionalLight.glb",
         "category": "prop",
         "subCategory": "directional light",
         "keywords": {
@@ -52762,7 +52764,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Duck",
-        "path": "/models/samples/Duck.glb.glb",
+        "path": "/models/samples/Duck.glb",
         "category": "prop",
         "subCategory": "duck",
         "keywords": {
@@ -52828,7 +52830,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_emoji_heart",
-        "path": "/models/samples/emoji_heart.glb.glb",
+        "path": "/models/samples/emoji_heart.glb",
         "category": "prop",
         "subCategory": "emoji",
         "keywords": {
@@ -52891,7 +52893,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_blade",
-        "path": "/models/samples/fantasy-town-kit_blade.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_blade.glb",
         "category": "prop",
         "subCategory": "blade",
         "keywords": {
@@ -52964,7 +52966,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-corner-inner",
-        "path": "/models/samples/fantasy-town-kit_fountain-corner-inner.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-corner-inner.glb",
         "category": "structure",
         "subCategory": "fountain",
         "keywords": {
@@ -53033,7 +53035,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-curved",
-        "path": "/models/samples/fantasy-town-kit_fountain-curved.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-curved.glb",
         "category": "structure",
         "subCategory": "fountain",
         "keywords": {
@@ -53105,7 +53107,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-round",
-        "path": "/models/samples/fantasy-town-kit_fountain-round.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-round.glb",
         "category": "prop",
         "subCategory": "fountain",
         "keywords": {
@@ -53176,7 +53178,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-round-detail",
-        "path": "/models/samples/fantasy-town-kit_fountain-round-detail.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-round-detail.glb",
         "category": "structure",
         "subCategory": "fountain",
         "keywords": {
@@ -53247,7 +53249,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-square",
-        "path": "/models/samples/fantasy-town-kit_fountain-square.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-square.glb",
         "category": "structure",
         "subCategory": "fountain",
         "keywords": {
@@ -53319,7 +53321,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_fountain-square-detail",
-        "path": "/models/samples/fantasy-town-kit_fountain-square-detail.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_fountain-square-detail.glb",
         "category": "structure",
         "subCategory": "fountain",
         "keywords": {
@@ -53385,7 +53387,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_hedge-curved",
-        "path": "/models/samples/fantasy-town-kit_hedge-curved.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_hedge-curved.glb",
         "category": "prop",
         "subCategory": "hedge",
         "keywords": {
@@ -53461,7 +53463,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_hedge-large-curved",
-        "path": "/models/samples/fantasy-town-kit_hedge-large-curved.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_hedge-large-curved.glb",
         "category": "prop",
         "subCategory": "hedge",
         "keywords": {
@@ -53536,7 +53538,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_lantern",
-        "path": "/models/samples/fantasy-town-kit_lantern.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_lantern.glb",
         "category": "prop",
         "subCategory": "lantern",
         "keywords": {
@@ -53608,7 +53610,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_planks",
-        "path": "/models/samples/fantasy-town-kit_planks.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_planks.glb",
         "category": "prop",
         "subCategory": "planks",
         "keywords": {
@@ -53677,7 +53679,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_planks-opening",
-        "path": "/models/samples/fantasy-town-kit_planks-opening.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_planks-opening.glb",
         "category": "structure",
         "subCategory": "gate",
         "keywords": {
@@ -53751,7 +53753,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_road-bend",
-        "path": "/models/samples/fantasy-town-kit_road-bend.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_road-bend.glb",
         "category": "structure",
         "subCategory": "road",
         "keywords": {
@@ -53823,7 +53825,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_road-corner",
-        "path": "/models/samples/fantasy-town-kit_road-corner.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_road-corner.glb",
         "category": "structure",
         "subCategory": "road",
         "keywords": {
@@ -53891,7 +53893,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_road-corner-inner",
-        "path": "/models/samples/fantasy-town-kit_road-corner-inner.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_road-corner-inner.glb",
         "category": "structure",
         "subCategory": "road",
         "keywords": {
@@ -53958,7 +53960,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stairs-wide-wood",
-        "path": "/models/samples/fantasy-town-kit_stairs-wide-wood.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stairs-wide-wood.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -54030,7 +54032,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stairs-wide-wood-handrail",
-        "path": "/models/samples/fantasy-town-kit_stairs-wide-wood-handrail.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stairs-wide-wood-handrail.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -54099,7 +54101,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stairs-wood",
-        "path": "/models/samples/fantasy-town-kit_stairs-wood.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stairs-wood.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -54173,7 +54175,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stairs-wood-handrail",
-        "path": "/models/samples/fantasy-town-kit_stairs-wood-handrail.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stairs-wood-handrail.glb",
         "category": "structure",
         "subCategory": "stairs",
         "keywords": {
@@ -54244,7 +54246,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stall",
-        "path": "/models/samples/fantasy-town-kit_stall.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stall.glb",
         "category": "structure",
         "subCategory": "stall",
         "keywords": {
@@ -54314,7 +54316,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stall-green",
-        "path": "/models/samples/fantasy-town-kit_stall-green.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stall-green.glb",
         "category": "prop",
         "subCategory": "stall",
         "keywords": {
@@ -54382,7 +54384,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_stall-red",
-        "path": "/models/samples/fantasy-town-kit_stall-red.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_stall-red.glb",
         "category": "structure",
         "subCategory": "stall",
         "keywords": {
@@ -54455,7 +54457,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_watermill",
-        "path": "/models/samples/fantasy-town-kit_watermill.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_watermill.glb",
         "category": "structure",
         "subCategory": "watermill",
         "keywords": {
@@ -54526,7 +54528,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_watermill-wide",
-        "path": "/models/samples/fantasy-town-kit_watermill-wide.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_watermill-wide.glb",
         "category": "structure",
         "subCategory": "watermill",
         "keywords": {
@@ -54599,7 +54601,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_wheel",
-        "path": "/models/samples/fantasy-town-kit_wheel.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_wheel.glb",
         "category": "prop",
         "subCategory": "wheel",
         "keywords": {
@@ -54668,7 +54670,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_fantasy-town-kit_windmill",
-        "path": "/models/samples/fantasy-town-kit_windmill.glb.glb",
+        "path": "/models/samples/fantasy-town-kit_windmill.glb",
         "category": "structure",
         "subCategory": "windmill",
         "keywords": {
@@ -54741,7 +54743,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Gap",
-        "path": "/models/samples/Gap.glb.glb",
+        "path": "/models/samples/Gap.glb",
         "category": "prop",
         "subCategory": "gap",
         "keywords": {
@@ -54807,7 +54809,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_gothic_cloister_corner",
-        "path": "/models/samples/gothic_cloister_corner.glb.glb",
+        "path": "/models/samples/gothic_cloister_corner.glb",
         "category": "structure",
         "subCategory": "cloister",
         "keywords": {
@@ -54880,7 +54882,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_altar-wood",
-        "path": "/models/samples/graveyard-kit_altar-wood.glb.glb",
+        "path": "/models/samples/graveyard-kit_altar-wood.glb",
         "category": "structure",
         "subCategory": "altar",
         "keywords": {
@@ -54951,7 +54953,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_border-pillar",
-        "path": "/models/samples/graveyard-kit_border-pillar.glb.glb",
+        "path": "/models/samples/graveyard-kit_border-pillar.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -55023,7 +55025,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_coffin",
-        "path": "/models/samples/graveyard-kit_coffin.glb.glb",
+        "path": "/models/samples/graveyard-kit_coffin.glb",
         "category": "prop",
         "subCategory": "coffin",
         "keywords": {
@@ -55088,7 +55090,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_coffin-old",
-        "path": "/models/samples/graveyard-kit_coffin-old.glb.glb",
+        "path": "/models/samples/graveyard-kit_coffin-old.glb",
         "category": "prop",
         "subCategory": "coffin",
         "keywords": {
@@ -55156,7 +55158,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_cross",
-        "path": "/models/samples/graveyard-kit_cross.glb.glb",
+        "path": "/models/samples/graveyard-kit_cross.glb",
         "category": "prop",
         "subCategory": "gravestone",
         "keywords": {
@@ -55226,7 +55228,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_cross-wood",
-        "path": "/models/samples/graveyard-kit_cross-wood.glb.glb",
+        "path": "/models/samples/graveyard-kit_cross-wood.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -55295,7 +55297,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_crypt",
-        "path": "/models/samples/graveyard-kit_crypt.glb.glb",
+        "path": "/models/samples/graveyard-kit_crypt.glb",
         "category": "structure",
         "subCategory": "crypt",
         "keywords": {
@@ -55368,7 +55370,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_crypt-a",
-        "path": "/models/samples/graveyard-kit_crypt-a.glb.glb",
+        "path": "/models/samples/graveyard-kit_crypt-a.glb",
         "category": "structure",
         "subCategory": "crypt",
         "keywords": {
@@ -55439,7 +55441,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_crypt-b",
-        "path": "/models/samples/graveyard-kit_crypt-b.glb.glb",
+        "path": "/models/samples/graveyard-kit_crypt-b.glb",
         "category": "structure",
         "subCategory": "crypt",
         "keywords": {
@@ -55511,7 +55513,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_crypt-large",
-        "path": "/models/samples/graveyard-kit_crypt-large.glb.glb",
+        "path": "/models/samples/graveyard-kit_crypt-large.glb",
         "category": "structure",
         "subCategory": "crypt",
         "keywords": {
@@ -55585,7 +55587,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_crypt-small",
-        "path": "/models/samples/graveyard-kit_crypt-small.glb.glb",
+        "path": "/models/samples/graveyard-kit_crypt-small.glb",
         "category": "structure",
         "subCategory": "crypt",
         "keywords": {
@@ -55658,7 +55660,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_debris",
-        "path": "/models/samples/graveyard-kit_debris.glb.glb",
+        "path": "/models/samples/graveyard-kit_debris.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -55727,7 +55729,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_debris-wood",
-        "path": "/models/samples/graveyard-kit_debris-wood.glb.glb",
+        "path": "/models/samples/graveyard-kit_debris-wood.glb",
         "category": "nature",
         "subCategory": "debris",
         "keywords": {
@@ -55792,7 +55794,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_detail-chalice",
-        "path": "/models/samples/graveyard-kit_detail-chalice.glb.glb",
+        "path": "/models/samples/graveyard-kit_detail-chalice.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -55862,7 +55864,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_fire-basket",
-        "path": "/models/samples/graveyard-kit_fire-basket.glb.glb",
+        "path": "/models/samples/graveyard-kit_fire-basket.glb",
         "category": "prop",
         "subCategory": "fire pit",
         "keywords": {
@@ -55934,7 +55936,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_grave",
-        "path": "/models/samples/graveyard-kit_grave.glb.glb",
+        "path": "/models/samples/graveyard-kit_grave.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -56005,7 +56007,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_grave-border",
-        "path": "/models/samples/graveyard-kit_grave-border.glb.glb",
+        "path": "/models/samples/graveyard-kit_grave-border.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -56076,7 +56078,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_hay-bale",
-        "path": "/models/samples/graveyard-kit_hay-bale.glb.glb",
+        "path": "/models/samples/graveyard-kit_hay-bale.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -56142,7 +56144,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_hay-bale-bundled",
-        "path": "/models/samples/graveyard-kit_hay-bale-bundled.glb.glb",
+        "path": "/models/samples/graveyard-kit_hay-bale-bundled.glb",
         "category": "prop",
         "subCategory": "hay bale",
         "keywords": {
@@ -56209,7 +56211,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_lantern-glass",
-        "path": "/models/samples/graveyard-kit_lantern-glass.glb.glb",
+        "path": "/models/samples/graveyard-kit_lantern-glass.glb",
         "category": "prop",
         "subCategory": "lantern",
         "keywords": {
@@ -56276,7 +56278,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_lightpost-all",
-        "path": "/models/samples/graveyard-kit_lightpost-all.glb.glb",
+        "path": "/models/samples/graveyard-kit_lightpost-all.glb",
         "category": "prop",
         "subCategory": "light",
         "keywords": {
@@ -56348,7 +56350,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_lightpost-double",
-        "path": "/models/samples/graveyard-kit_lightpost-double.glb.glb",
+        "path": "/models/samples/graveyard-kit_lightpost-double.glb",
         "category": "prop",
         "subCategory": "light",
         "keywords": {
@@ -56423,7 +56425,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_lightpost-single",
-        "path": "/models/samples/graveyard-kit_lightpost-single.glb.glb",
+        "path": "/models/samples/graveyard-kit_lightpost-single.glb",
         "category": "prop",
         "subCategory": "light",
         "keywords": {
@@ -56497,7 +56499,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pillar-large",
-        "path": "/models/samples/graveyard-kit_pillar-large.glb.glb",
+        "path": "/models/samples/graveyard-kit_pillar-large.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -56568,7 +56570,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pillar-small",
-        "path": "/models/samples/graveyard-kit_pillar-small.glb.glb",
+        "path": "/models/samples/graveyard-kit_pillar-small.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -56642,7 +56644,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pillar-square",
-        "path": "/models/samples/graveyard-kit_pillar-square.glb.glb",
+        "path": "/models/samples/graveyard-kit_pillar-square.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -56715,7 +56717,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pine",
-        "path": "/models/samples/graveyard-kit_pine.glb.glb",
+        "path": "/models/samples/graveyard-kit_pine.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -56787,7 +56789,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pine-crooked",
-        "path": "/models/samples/graveyard-kit_pine-crooked.glb.glb",
+        "path": "/models/samples/graveyard-kit_pine-crooked.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -56857,7 +56859,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pine-fall",
-        "path": "/models/samples/graveyard-kit_pine-fall.glb.glb",
+        "path": "/models/samples/graveyard-kit_pine-fall.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -56928,7 +56930,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pine-fall-crooked",
-        "path": "/models/samples/graveyard-kit_pine-fall-crooked.glb.glb",
+        "path": "/models/samples/graveyard-kit_pine-fall-crooked.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -56997,7 +56999,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pumpkin",
-        "path": "/models/samples/graveyard-kit_pumpkin.glb.glb",
+        "path": "/models/samples/graveyard-kit_pumpkin.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -57064,7 +57066,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_pumpkin-tall",
-        "path": "/models/samples/graveyard-kit_pumpkin-tall.glb.glb",
+        "path": "/models/samples/graveyard-kit_pumpkin-tall.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -57133,7 +57135,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_road",
-        "path": "/models/samples/graveyard-kit_road.glb.glb",
+        "path": "/models/samples/graveyard-kit_road.glb",
         "category": "structure",
         "subCategory": "road",
         "keywords": {
@@ -57203,7 +57205,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_shovel",
-        "path": "/models/samples/graveyard-kit_shovel.glb.glb",
+        "path": "/models/samples/graveyard-kit_shovel.glb",
         "category": "prop",
         "subCategory": "shovel",
         "keywords": {
@@ -57271,7 +57273,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_shovel-dirt",
-        "path": "/models/samples/graveyard-kit_shovel-dirt.glb.glb",
+        "path": "/models/samples/graveyard-kit_shovel-dirt.glb",
         "category": "prop",
         "subCategory": "shovel",
         "keywords": {
@@ -57332,7 +57334,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_trunk",
-        "path": "/models/samples/graveyard-kit_trunk.glb.glb",
+        "path": "/models/samples/graveyard-kit_trunk.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -57401,7 +57403,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_trunk-long",
-        "path": "/models/samples/graveyard-kit_trunk-long.glb.glb",
+        "path": "/models/samples/graveyard-kit_trunk-long.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -57470,7 +57472,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_urn-round",
-        "path": "/models/samples/graveyard-kit_urn-round.glb.glb",
+        "path": "/models/samples/graveyard-kit_urn-round.glb",
         "category": "prop",
         "subCategory": "urn",
         "keywords": {
@@ -57540,7 +57542,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyard-kit_urn-square",
-        "path": "/models/samples/graveyard-kit_urn-square.glb.glb",
+        "path": "/models/samples/graveyard-kit_urn-square.glb",
         "category": "prop",
         "subCategory": "urn",
         "keywords": {
@@ -57605,7 +57607,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_graveyardScene",
-        "path": "/models/samples/graveyardScene.glb.glb",
+        "path": "/models/samples/graveyardScene.glb",
         "category": "structure",
         "subCategory": "graveyard",
         "keywords": {
@@ -57677,7 +57679,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_greenEnergyBall",
-        "path": "/models/samples/greenEnergyBall.glb.glb",
+        "path": "/models/samples/greenEnergyBall.glb",
         "category": "prop",
         "subCategory": "energy",
         "keywords": {
@@ -57741,7 +57743,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_greySnapper_vertColor",
-        "path": "/models/samples/greySnapper_vertColor.glb.glb",
+        "path": "/models/samples/greySnapper_vertColor.glb",
         "category": "character",
         "subCategory": "fish",
         "keywords": {
@@ -57804,7 +57806,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_HarryPotter_Hat_Test",
-        "path": "/models/samples/HarryPotter_Hat_Test.glb.glb",
+        "path": "/models/samples/HarryPotter_Hat_Test.glb",
         "category": "prop",
         "subCategory": "hat",
         "keywords": {
@@ -57867,7 +57869,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_head",
-        "path": "/models/samples/head.glb.glb",
+        "path": "/models/samples/head.glb",
         "category": "prop",
         "subCategory": "head",
         "keywords": {
@@ -57929,7 +57931,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_hexTile",
-        "path": "/models/samples/hexTile.glb.glb",
+        "path": "/models/samples/hexTile.glb",
         "category": "prop",
         "subCategory": "tile",
         "keywords": {
@@ -57996,7 +57998,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_hogwarts_corridor",
-        "path": "/models/samples/hogwarts_corridor.glb.glb",
+        "path": "/models/samples/hogwarts_corridor.glb",
         "category": "structure",
         "subCategory": "corridor",
         "keywords": {
@@ -58067,7 +58069,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_holiday2021",
-        "path": "/models/samples/holiday2021.glb.glb",
+        "path": "/models/samples/holiday2021.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -58132,7 +58134,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_hollowLog",
-        "path": "/models/samples/hollowLog.glb.glb",
+        "path": "/models/samples/hollowLog.glb",
         "category": "nature",
         "subCategory": "log",
         "keywords": {
@@ -58200,7 +58202,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_inn",
-        "path": "/models/samples/inn.glb.glb",
+        "path": "/models/samples/inn.glb",
         "category": "structure",
         "subCategory": "inn",
         "keywords": {
@@ -58277,7 +58279,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_IridescentDishWithOlives",
-        "path": "/models/samples/IridescentDishWithOlives.glb.glb",
+        "path": "/models/samples/IridescentDishWithOlives.glb",
         "category": "prop",
         "subCategory": "dish",
         "keywords": {
@@ -58344,7 +58346,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_iridescentSphere",
-        "path": "/models/samples/iridescentSphere.glb.glb",
+        "path": "/models/samples/iridescentSphere.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -58409,7 +58411,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_l_hand_lhs",
-        "path": "/models/samples/l_hand_lhs.glb.glb",
+        "path": "/models/samples/l_hand_lhs.glb",
         "category": "prop",
         "subCategory": "hand",
         "keywords": {
@@ -58470,7 +58472,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_l_hand_rhs",
-        "path": "/models/samples/l_hand_rhs.glb.glb",
+        "path": "/models/samples/l_hand_rhs.glb",
         "category": "prop",
         "subCategory": "hand",
         "keywords": {
@@ -58534,7 +58536,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Lantern",
-        "path": "/models/samples/Lantern.glb.glb",
+        "path": "/models/samples/Lantern.glb",
         "category": "prop",
         "subCategory": "lantern",
         "keywords": {
@@ -58606,7 +58608,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_left",
-        "path": "/models/samples/left.glb.glb",
+        "path": "/models/samples/left.glb",
         "category": "prop",
         "subCategory": "sign",
         "keywords": {
@@ -58675,7 +58677,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_lightFixture",
-        "path": "/models/samples/lightFixture.glb.glb",
+        "path": "/models/samples/lightFixture.glb",
         "category": "prop",
         "subCategory": "fixture",
         "keywords": {
@@ -58746,7 +58748,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_lightPaddle",
-        "path": "/models/samples/lightPaddle.glb.glb",
+        "path": "/models/samples/lightPaddle.glb",
         "category": "prop",
         "subCategory": "paddle",
         "keywords": {
@@ -58812,7 +58814,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_lightPost1",
-        "path": "/models/samples/lightPost1.glb.glb",
+        "path": "/models/samples/lightPost1.glb",
         "category": "prop",
         "subCategory": "light",
         "keywords": {
@@ -58882,7 +58884,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_lightPost2",
-        "path": "/models/samples/lightPost2.glb.glb",
+        "path": "/models/samples/lightPost2.glb",
         "category": "prop",
         "subCategory": "street lamp",
         "keywords": {
@@ -58954,7 +58956,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_lightPost3",
-        "path": "/models/samples/lightPost3.glb.glb",
+        "path": "/models/samples/lightPost3.glb",
         "category": "prop",
         "subCategory": "street lamp",
         "keywords": {
@@ -59024,7 +59026,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_logSaw",
-        "path": "/models/samples/logSaw.glb.glb",
+        "path": "/models/samples/logSaw.glb",
         "category": "prop",
         "subCategory": "saw",
         "keywords": {
@@ -59088,7 +59090,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_marineGround",
-        "path": "/models/samples/marineGround.glb.glb",
+        "path": "/models/samples/marineGround.glb",
         "category": "environment",
         "subCategory": "marine",
         "keywords": {
@@ -59154,7 +59156,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_mausoleumLarge",
-        "path": "/models/samples/mausoleumLarge.glb.glb",
+        "path": "/models/samples/mausoleumLarge.glb",
         "category": "structure",
         "subCategory": "mausoleum",
         "keywords": {
@@ -59227,7 +59229,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_mausoleumLargeSkewed",
-        "path": "/models/samples/mausoleumLargeSkewed.glb.glb",
+        "path": "/models/samples/mausoleumLargeSkewed.glb",
         "category": "structure",
         "subCategory": "mausoleum",
         "keywords": {
@@ -59302,7 +59304,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_mausoleumSmall",
-        "path": "/models/samples/mausoleumSmall.glb.glb",
+        "path": "/models/samples/mausoleumSmall.glb",
         "category": "structure",
         "subCategory": "mausoleum",
         "keywords": {
@@ -59376,7 +59378,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_mausoleumSmallSkewed",
-        "path": "/models/samples/mausoleumSmallSkewed.glb.glb",
+        "path": "/models/samples/mausoleumSmallSkewed.glb",
         "category": "structure",
         "subCategory": "mausoleum",
         "keywords": {
@@ -59448,7 +59450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_MetalRoughSpheres",
-        "path": "/models/samples/MetalRoughSpheres.glb.glb",
+        "path": "/models/samples/MetalRoughSpheres.glb",
         "category": "prop",
         "subCategory": "spheres",
         "keywords": {
@@ -59511,7 +59513,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_MetalRoughSpheresNoTextures",
-        "path": "/models/samples/MetalRoughSpheresNoTextures.glb.glb",
+        "path": "/models/samples/MetalRoughSpheresNoTextures.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -59572,7 +59574,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_miniBar2",
-        "path": "/models/samples/miniBar2.glb.glb",
+        "path": "/models/samples/miniBar2.glb",
         "category": "furniture",
         "subCategory": "bar",
         "keywords": {
@@ -59639,7 +59641,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0093b022-794",
-        "path": "/models/samples/model_0093b022-794.glb.glb",
+        "path": "/models/samples/model_0093b022-794.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -59706,7 +59708,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_00f59c8c-52a",
-        "path": "/models/samples/model_00f59c8c-52a.glb.glb",
+        "path": "/models/samples/model_00f59c8c-52a.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -59773,7 +59775,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_01510687-984",
-        "path": "/models/samples/model_01510687-984.glb.glb",
+        "path": "/models/samples/model_01510687-984.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -59839,7 +59841,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_016a52a6-dce",
-        "path": "/models/samples/model_016a52a6-dce.glb.glb",
+        "path": "/models/samples/model_016a52a6-dce.glb",
         "category": "structure",
         "subCategory": "gate",
         "keywords": {
@@ -59916,7 +59918,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_01843fe1-0d8",
-        "path": "/models/samples/model_01843fe1-0d8.glb.glb",
+        "path": "/models/samples/model_01843fe1-0d8.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -59979,7 +59981,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_018e3909-86a",
-        "path": "/models/samples/model_018e3909-86a.glb.glb",
+        "path": "/models/samples/model_018e3909-86a.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -60044,7 +60046,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_01d40f41-443",
-        "path": "/models/samples/model_01d40f41-443.glb.glb",
+        "path": "/models/samples/model_01d40f41-443.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -60111,7 +60113,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_03ce66cf-2cb",
-        "path": "/models/samples/model_03ce66cf-2cb.glb.glb",
+        "path": "/models/samples/model_03ce66cf-2cb.glb",
         "category": "prop",
         "subCategory": "miniature",
         "keywords": {
@@ -60178,7 +60180,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_04055cca-aa4",
-        "path": "/models/samples/model_04055cca-aa4.glb.glb",
+        "path": "/models/samples/model_04055cca-aa4.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -60244,7 +60246,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0453ed65-f52",
-        "path": "/models/samples/model_0453ed65-f52.glb.glb",
+        "path": "/models/samples/model_0453ed65-f52.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -60312,7 +60314,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_04c0a68c-4d3",
-        "path": "/models/samples/model_04c0a68c-4d3.glb.glb",
+        "path": "/models/samples/model_04c0a68c-4d3.glb",
         "category": "prop",
         "subCategory": "board",
         "keywords": {
@@ -60378,7 +60380,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0528de32-356",
-        "path": "/models/samples/model_0528de32-356.glb.glb",
+        "path": "/models/samples/model_0528de32-356.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -60442,7 +60444,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0551ca36-061",
-        "path": "/models/samples/model_0551ca36-061.glb.glb",
+        "path": "/models/samples/model_0551ca36-061.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -60514,7 +60516,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_05a53f67-4b9",
-        "path": "/models/samples/model_05a53f67-4b9.glb.glb",
+        "path": "/models/samples/model_05a53f67-4b9.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -60578,7 +60580,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_07860247-cc1",
-        "path": "/models/samples/model_07860247-cc1.glb.glb",
+        "path": "/models/samples/model_07860247-cc1.glb",
         "category": "prop",
         "subCategory": "jar",
         "keywords": {
@@ -60649,7 +60651,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_07e883b3-2e4",
-        "path": "/models/samples/model_07e883b3-2e4.glb.glb",
+        "path": "/models/samples/model_07e883b3-2e4.glb",
         "category": "prop",
         "subCategory": "plate",
         "keywords": {
@@ -60717,7 +60719,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_087513b0-788",
-        "path": "/models/samples/model_087513b0-788.glb.glb",
+        "path": "/models/samples/model_087513b0-788.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -60783,7 +60785,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_08d8ba2b-37f",
-        "path": "/models/samples/model_08d8ba2b-37f.glb.glb",
+        "path": "/models/samples/model_08d8ba2b-37f.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -60852,7 +60854,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_09507cba-d6a",
-        "path": "/models/samples/model_09507cba-d6a.glb.glb",
+        "path": "/models/samples/model_09507cba-d6a.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -60918,7 +60920,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0970fa42-4ab",
-        "path": "/models/samples/model_0970fa42-4ab.glb.glb",
+        "path": "/models/samples/model_0970fa42-4ab.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -60983,7 +60985,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_098364b0-485",
-        "path": "/models/samples/model_098364b0-485.glb.glb",
+        "path": "/models/samples/model_098364b0-485.glb",
         "category": "prop",
         "subCategory": "tank",
         "keywords": {
@@ -61045,7 +61047,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0a81f502-144",
-        "path": "/models/samples/model_0a81f502-144.glb.glb",
+        "path": "/models/samples/model_0a81f502-144.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -61116,7 +61118,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0af6ef40-5d9",
-        "path": "/models/samples/model_0af6ef40-5d9.glb.glb",
+        "path": "/models/samples/model_0af6ef40-5d9.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -61189,7 +61191,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0b5e780a-7fd",
-        "path": "/models/samples/model_0b5e780a-7fd.glb.glb",
+        "path": "/models/samples/model_0b5e780a-7fd.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -61265,7 +61267,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0c8f0256-480",
-        "path": "/models/samples/model_0c8f0256-480.glb.glb",
+        "path": "/models/samples/model_0c8f0256-480.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -61333,7 +61335,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0d126e35-a18",
-        "path": "/models/samples/model_0d126e35-a18.glb.glb",
+        "path": "/models/samples/model_0d126e35-a18.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -61399,7 +61401,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0d5aa4c9-f28",
-        "path": "/models/samples/model_0d5aa4c9-f28.glb.glb",
+        "path": "/models/samples/model_0d5aa4c9-f28.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -61465,7 +61467,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0da49c1d-aad",
-        "path": "/models/samples/model_0da49c1d-aad.glb.glb",
+        "path": "/models/samples/model_0da49c1d-aad.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -61531,7 +61533,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_0e689817-18d",
-        "path": "/models/samples/model_0e689817-18d.glb.glb",
+        "path": "/models/samples/model_0e689817-18d.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -61598,7 +61600,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1058e0f3-ca5",
-        "path": "/models/samples/model_1058e0f3-ca5.glb.glb",
+        "path": "/models/samples/model_1058e0f3-ca5.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -61671,7 +61673,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_11aba94f-2a2",
-        "path": "/models/samples/model_11aba94f-2a2.glb.glb",
+        "path": "/models/samples/model_11aba94f-2a2.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -61741,7 +61743,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_12363a91-7c2",
-        "path": "/models/samples/model_12363a91-7c2.glb.glb",
+        "path": "/models/samples/model_12363a91-7c2.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -61807,7 +61809,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_12487f1b-e31",
-        "path": "/models/samples/model_12487f1b-e31.glb.glb",
+        "path": "/models/samples/model_12487f1b-e31.glb",
         "category": "prop",
         "subCategory": "stone",
         "keywords": {
@@ -61879,7 +61881,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_135ccf25-173",
-        "path": "/models/samples/model_135ccf25-173.glb.glb",
+        "path": "/models/samples/model_135ccf25-173.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -61952,7 +61954,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_142eb426-331",
-        "path": "/models/samples/model_142eb426-331.glb.glb",
+        "path": "/models/samples/model_142eb426-331.glb",
         "category": "prop",
         "subCategory": "book",
         "keywords": {
@@ -62016,7 +62018,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_154c5dbd-c67",
-        "path": "/models/samples/model_154c5dbd-c67.glb.glb",
+        "path": "/models/samples/model_154c5dbd-c67.glb",
         "category": "prop",
         "subCategory": "crystal",
         "keywords": {
@@ -62089,7 +62091,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_155077a0-2bf",
-        "path": "/models/samples/model_155077a0-2bf.glb.glb",
+        "path": "/models/samples/model_155077a0-2bf.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -62159,7 +62161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_16938d74-b1b",
-        "path": "/models/samples/model_16938d74-b1b.glb.glb",
+        "path": "/models/samples/model_16938d74-b1b.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -62231,7 +62233,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_16d8adee-41d",
-        "path": "/models/samples/model_16d8adee-41d.glb.glb",
+        "path": "/models/samples/model_16d8adee-41d.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -62305,7 +62307,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_174e6c87-f89",
-        "path": "/models/samples/model_174e6c87-f89.glb.glb",
+        "path": "/models/samples/model_174e6c87-f89.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -62369,7 +62371,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1755311d-a94",
-        "path": "/models/samples/model_1755311d-a94.glb.glb",
+        "path": "/models/samples/model_1755311d-a94.glb",
         "category": "prop",
         "subCategory": "pipe",
         "keywords": {
@@ -62435,7 +62437,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_178bcd33-dde",
-        "path": "/models/samples/model_178bcd33-dde.glb.glb",
+        "path": "/models/samples/model_178bcd33-dde.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -62508,7 +62510,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1821afe6-4c6",
-        "path": "/models/samples/model_1821afe6-4c6.glb.glb",
+        "path": "/models/samples/model_1821afe6-4c6.glb",
         "category": "environment",
         "subCategory": "terrain",
         "keywords": {
@@ -62581,7 +62583,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_18d93646-1b6",
-        "path": "/models/samples/model_18d93646-1b6.glb.glb",
+        "path": "/models/samples/model_18d93646-1b6.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -62654,7 +62656,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1946522f-f26",
-        "path": "/models/samples/model_1946522f-f26.glb.glb",
+        "path": "/models/samples/model_1946522f-f26.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -62722,7 +62724,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1a2b827d-ca0",
-        "path": "/models/samples/model_1a2b827d-ca0.glb.glb",
+        "path": "/models/samples/model_1a2b827d-ca0.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -62790,7 +62792,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1be984cb-ce8",
-        "path": "/models/samples/model_1be984cb-ce8.glb.glb",
+        "path": "/models/samples/model_1be984cb-ce8.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -62856,7 +62858,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1c8af2e7-e0e",
-        "path": "/models/samples/model_1c8af2e7-e0e.glb.glb",
+        "path": "/models/samples/model_1c8af2e7-e0e.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -62929,7 +62931,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1cd08e71-e60",
-        "path": "/models/samples/model_1cd08e71-e60.glb.glb",
+        "path": "/models/samples/model_1cd08e71-e60.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -63003,7 +63005,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1d34d1bb-fa4",
-        "path": "/models/samples/model_1d34d1bb-fa4.glb.glb",
+        "path": "/models/samples/model_1d34d1bb-fa4.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -63066,7 +63068,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1ebaca74-ea4",
-        "path": "/models/samples/model_1ebaca74-ea4.glb.glb",
+        "path": "/models/samples/model_1ebaca74-ea4.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -63134,7 +63136,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1ebf3984-395",
-        "path": "/models/samples/model_1ebf3984-395.glb.glb",
+        "path": "/models/samples/model_1ebf3984-395.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -63198,7 +63200,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1f6de2b1-6a8",
-        "path": "/models/samples/model_1f6de2b1-6a8.glb.glb",
+        "path": "/models/samples/model_1f6de2b1-6a8.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -63261,7 +63263,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_1fec001e-606",
-        "path": "/models/samples/model_1fec001e-606.glb.glb",
+        "path": "/models/samples/model_1fec001e-606.glb",
         "category": "prop",
         "subCategory": "standing lamp",
         "keywords": {
@@ -63327,7 +63329,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_200b163b-fb2",
-        "path": "/models/samples/model_200b163b-fb2.glb.glb",
+        "path": "/models/samples/model_200b163b-fb2.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -63395,7 +63397,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_202ac3e3-c96",
-        "path": "/models/samples/model_202ac3e3-c96.glb.glb",
+        "path": "/models/samples/model_202ac3e3-c96.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -63461,7 +63463,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_20d6b88d-840",
-        "path": "/models/samples/model_20d6b88d-840.glb.glb",
+        "path": "/models/samples/model_20d6b88d-840.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -63527,7 +63529,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_21a2c8fa-3bd",
-        "path": "/models/samples/model_21a2c8fa-3bd.glb.glb",
+        "path": "/models/samples/model_21a2c8fa-3bd.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -63595,7 +63597,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_21aa0d34-46b",
-        "path": "/models/samples/model_21aa0d34-46b.glb.glb",
+        "path": "/models/samples/model_21aa0d34-46b.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -63658,7 +63660,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_21c2cbf9-0c1",
-        "path": "/models/samples/model_21c2cbf9-0c1.glb.glb",
+        "path": "/models/samples/model_21c2cbf9-0c1.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -63729,7 +63731,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_21cc9c37-d86",
-        "path": "/models/samples/model_21cc9c37-d86.glb.glb",
+        "path": "/models/samples/model_21cc9c37-d86.glb",
         "category": "prop",
         "subCategory": "dice",
         "keywords": {
@@ -63790,7 +63792,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_21fdb9e5-1ad",
-        "path": "/models/samples/model_21fdb9e5-1ad.glb.glb",
+        "path": "/models/samples/model_21fdb9e5-1ad.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -63855,7 +63857,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2445097b-bdf",
-        "path": "/models/samples/model_2445097b-bdf.glb.glb",
+        "path": "/models/samples/model_2445097b-bdf.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -63927,7 +63929,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_24769937-ced",
-        "path": "/models/samples/model_24769937-ced.glb.glb",
+        "path": "/models/samples/model_24769937-ced.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -63992,7 +63994,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_24cb8a6e-a2f",
-        "path": "/models/samples/model_24cb8a6e-a2f.glb.glb",
+        "path": "/models/samples/model_24cb8a6e-a2f.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -64063,7 +64065,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_24ee6619-f7f",
-        "path": "/models/samples/model_24ee6619-f7f.glb.glb",
+        "path": "/models/samples/model_24ee6619-f7f.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -64127,7 +64129,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_251a10e8-bf6",
-        "path": "/models/samples/model_251a10e8-bf6.glb.glb",
+        "path": "/models/samples/model_251a10e8-bf6.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -64193,7 +64195,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_252c5cbe-f20",
-        "path": "/models/samples/model_252c5cbe-f20.glb.glb",
+        "path": "/models/samples/model_252c5cbe-f20.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -64265,7 +64267,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2544e0ef-078",
-        "path": "/models/samples/model_2544e0ef-078.glb.glb",
+        "path": "/models/samples/model_2544e0ef-078.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -64330,7 +64332,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2568a43c-da7",
-        "path": "/models/samples/model_2568a43c-da7.glb.glb",
+        "path": "/models/samples/model_2568a43c-da7.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -64391,7 +64393,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2572bd61-6c2",
-        "path": "/models/samples/model_2572bd61-6c2.glb.glb",
+        "path": "/models/samples/model_2572bd61-6c2.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -64456,7 +64458,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_259a3789-b8f",
-        "path": "/models/samples/model_259a3789-b8f.glb.glb",
+        "path": "/models/samples/model_259a3789-b8f.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -64522,7 +64524,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2612a456-9d8",
-        "path": "/models/samples/model_2612a456-9d8.glb.glb",
+        "path": "/models/samples/model_2612a456-9d8.glb",
         "category": "prop",
         "subCategory": "pen",
         "keywords": {
@@ -64586,7 +64588,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_263f2bfa-789",
-        "path": "/models/samples/model_263f2bfa-789.glb.glb",
+        "path": "/models/samples/model_263f2bfa-789.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -64651,7 +64653,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_26f30e42-e08",
-        "path": "/models/samples/model_26f30e42-e08.glb.glb",
+        "path": "/models/samples/model_26f30e42-e08.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -64722,7 +64724,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_27d6327d-780",
-        "path": "/models/samples/model_27d6327d-780.glb.glb",
+        "path": "/models/samples/model_27d6327d-780.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -64791,7 +64793,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_285c3534-738",
-        "path": "/models/samples/model_285c3534-738.glb.glb",
+        "path": "/models/samples/model_285c3534-738.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -64863,7 +64865,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_29b2b8b8-376",
-        "path": "/models/samples/model_29b2b8b8-376.glb.glb",
+        "path": "/models/samples/model_29b2b8b8-376.glb",
         "category": "nature",
         "subCategory": "bush",
         "keywords": {
@@ -64937,7 +64939,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_29f8c09b-7b5",
-        "path": "/models/samples/model_29f8c09b-7b5.glb.glb",
+        "path": "/models/samples/model_29f8c09b-7b5.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -65008,7 +65010,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_29fa4c1d-039",
-        "path": "/models/samples/model_29fa4c1d-039.glb.glb",
+        "path": "/models/samples/model_29fa4c1d-039.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -65074,7 +65076,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2ae6b5f8-6b7",
-        "path": "/models/samples/model_2ae6b5f8-6b7.glb.glb",
+        "path": "/models/samples/model_2ae6b5f8-6b7.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -65142,7 +65144,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2aeae9e8-f67",
-        "path": "/models/samples/model_2aeae9e8-f67.glb.glb",
+        "path": "/models/samples/model_2aeae9e8-f67.glb",
         "category": "prop",
         "subCategory": "panel",
         "keywords": {
@@ -65209,7 +65211,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2b5e3201-eab",
-        "path": "/models/samples/model_2b5e3201-eab.glb.glb",
+        "path": "/models/samples/model_2b5e3201-eab.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -65281,7 +65283,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2c0c2b1e-d04",
-        "path": "/models/samples/model_2c0c2b1e-d04.glb.glb",
+        "path": "/models/samples/model_2c0c2b1e-d04.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -65348,7 +65350,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2c397d2d-152",
-        "path": "/models/samples/model_2c397d2d-152.glb.glb",
+        "path": "/models/samples/model_2c397d2d-152.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -65417,7 +65419,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2ecdf33c-7b9",
-        "path": "/models/samples/model_2ecdf33c-7b9.glb.glb",
+        "path": "/models/samples/model_2ecdf33c-7b9.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -65485,7 +65487,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2ef9fc2d-996",
-        "path": "/models/samples/model_2ef9fc2d-996.glb.glb",
+        "path": "/models/samples/model_2ef9fc2d-996.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -65546,7 +65548,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_2f2c50e9-b59",
-        "path": "/models/samples/model_2f2c50e9-b59.glb.glb",
+        "path": "/models/samples/model_2f2c50e9-b59.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -65613,7 +65615,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_302cec82-856",
-        "path": "/models/samples/model_302cec82-856.glb.glb",
+        "path": "/models/samples/model_302cec82-856.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -65685,7 +65687,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_30b31ef3-3a0",
-        "path": "/models/samples/model_30b31ef3-3a0.glb.glb",
+        "path": "/models/samples/model_30b31ef3-3a0.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -65754,7 +65756,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_320a18cb-ccd",
-        "path": "/models/samples/model_320a18cb-ccd.glb.glb",
+        "path": "/models/samples/model_320a18cb-ccd.glb",
         "category": "prop",
         "subCategory": "lamp",
         "keywords": {
@@ -65827,7 +65829,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_325e7a86-3c4",
-        "path": "/models/samples/model_325e7a86-3c4.glb.glb",
+        "path": "/models/samples/model_325e7a86-3c4.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -65895,7 +65897,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_32f1b9ae-541",
-        "path": "/models/samples/model_32f1b9ae-541.glb.glb",
+        "path": "/models/samples/model_32f1b9ae-541.glb",
         "category": "prop",
         "subCategory": "decorative",
         "keywords": {
@@ -65963,7 +65965,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_33f2ac81-de9",
-        "path": "/models/samples/model_33f2ac81-de9.glb.glb",
+        "path": "/models/samples/model_33f2ac81-de9.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -66028,7 +66030,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_348d1f0e-886",
-        "path": "/models/samples/model_348d1f0e-886.glb.glb",
+        "path": "/models/samples/model_348d1f0e-886.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -66097,7 +66099,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3545490d-1fe",
-        "path": "/models/samples/model_3545490d-1fe.glb.glb",
+        "path": "/models/samples/model_3545490d-1fe.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -66159,7 +66161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3570068e-f79",
-        "path": "/models/samples/model_3570068e-f79.glb.glb",
+        "path": "/models/samples/model_3570068e-f79.glb",
         "category": "structure",
         "subCategory": "ruin",
         "keywords": {
@@ -66236,7 +66238,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_35c76694-fce",
-        "path": "/models/samples/model_35c76694-fce.glb.glb",
+        "path": "/models/samples/model_35c76694-fce.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -66311,7 +66313,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_36d09061-0ee",
-        "path": "/models/samples/model_36d09061-0ee.glb.glb",
+        "path": "/models/samples/model_36d09061-0ee.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -66379,7 +66381,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_370372ec-666",
-        "path": "/models/samples/model_370372ec-666.glb.glb",
+        "path": "/models/samples/model_370372ec-666.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -66446,7 +66448,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_37ad51fd-fb2",
-        "path": "/models/samples/model_37ad51fd-fb2.glb.glb",
+        "path": "/models/samples/model_37ad51fd-fb2.glb",
         "category": "prop",
         "subCategory": "brick",
         "keywords": {
@@ -66513,7 +66515,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3841d2a9-390",
-        "path": "/models/samples/model_3841d2a9-390.glb.glb",
+        "path": "/models/samples/model_3841d2a9-390.glb",
         "category": "prop",
         "subCategory": "metal piece",
         "keywords": {
@@ -66574,7 +66576,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_38b81926-4a1",
-        "path": "/models/samples/model_38b81926-4a1.glb.glb",
+        "path": "/models/samples/model_38b81926-4a1.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -66649,7 +66651,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_38ee5af8-ae1",
-        "path": "/models/samples/model_38ee5af8-ae1.glb.glb",
+        "path": "/models/samples/model_38ee5af8-ae1.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -66716,7 +66718,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_398b2073-135",
-        "path": "/models/samples/model_398b2073-135.glb.glb",
+        "path": "/models/samples/model_398b2073-135.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -66786,7 +66788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3a9e1495-750",
-        "path": "/models/samples/model_3a9e1495-750.glb.glb",
+        "path": "/models/samples/model_3a9e1495-750.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -66847,7 +66849,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3e16d14d-c88",
-        "path": "/models/samples/model_3e16d14d-c88.glb.glb",
+        "path": "/models/samples/model_3e16d14d-c88.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -66911,7 +66913,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_3ecf8f2f-db6",
-        "path": "/models/samples/model_3ecf8f2f-db6.glb.glb",
+        "path": "/models/samples/model_3ecf8f2f-db6.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -66982,7 +66984,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_404c439e-090",
-        "path": "/models/samples/model_404c439e-090.glb.glb",
+        "path": "/models/samples/model_404c439e-090.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -67050,7 +67052,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_419f7c52-ba1",
-        "path": "/models/samples/model_419f7c52-ba1.glb.glb",
+        "path": "/models/samples/model_419f7c52-ba1.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -67117,7 +67119,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_41a64de3-78b",
-        "path": "/models/samples/model_41a64de3-78b.glb.glb",
+        "path": "/models/samples/model_41a64de3-78b.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -67181,7 +67183,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_41d4e503-3fe",
-        "path": "/models/samples/model_41d4e503-3fe.glb.glb",
+        "path": "/models/samples/model_41d4e503-3fe.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -67250,7 +67252,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_41fd6727-c30",
-        "path": "/models/samples/model_41fd6727-c30.glb.glb",
+        "path": "/models/samples/model_41fd6727-c30.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -67315,7 +67317,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_420be263-a32",
-        "path": "/models/samples/model_420be263-a32.glb.glb",
+        "path": "/models/samples/model_420be263-a32.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -67381,7 +67383,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_427fe638-14f",
-        "path": "/models/samples/model_427fe638-14f.glb.glb",
+        "path": "/models/samples/model_427fe638-14f.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -67447,7 +67449,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_441d42f0-070",
-        "path": "/models/samples/model_441d42f0-070.glb.glb",
+        "path": "/models/samples/model_441d42f0-070.glb",
         "category": "prop",
         "subCategory": "lamp",
         "keywords": {
@@ -67518,7 +67520,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_45ae3e7a-bf6",
-        "path": "/models/samples/model_45ae3e7a-bf6.glb.glb",
+        "path": "/models/samples/model_45ae3e7a-bf6.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -67589,7 +67591,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_45b034f5-5ab",
-        "path": "/models/samples/model_45b034f5-5ab.glb.glb",
+        "path": "/models/samples/model_45b034f5-5ab.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -67656,7 +67658,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_45ca27ef-75c",
-        "path": "/models/samples/model_45ca27ef-75c.glb.glb",
+        "path": "/models/samples/model_45ca27ef-75c.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -67720,7 +67722,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_45db5c7e-bd0",
-        "path": "/models/samples/model_45db5c7e-bd0.glb.glb",
+        "path": "/models/samples/model_45db5c7e-bd0.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -67787,7 +67789,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4647952e-a6b",
-        "path": "/models/samples/model_4647952e-a6b.glb.glb",
+        "path": "/models/samples/model_4647952e-a6b.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -67851,7 +67853,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_46ae6877-d71",
-        "path": "/models/samples/model_46ae6877-d71.glb.glb",
+        "path": "/models/samples/model_46ae6877-d71.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -67920,7 +67922,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_480f46bd-06c",
-        "path": "/models/samples/model_480f46bd-06c.glb.glb",
+        "path": "/models/samples/model_480f46bd-06c.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -67986,7 +67988,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_481f5d0e-822",
-        "path": "/models/samples/model_481f5d0e-822.glb.glb",
+        "path": "/models/samples/model_481f5d0e-822.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -68050,7 +68052,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_48697b19-ebd",
-        "path": "/models/samples/model_48697b19-ebd.glb.glb",
+        "path": "/models/samples/model_48697b19-ebd.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -68122,7 +68124,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_48ab7121-570",
-        "path": "/models/samples/model_48ab7121-570.glb.glb",
+        "path": "/models/samples/model_48ab7121-570.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -68188,7 +68190,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_48ca45ab-5bb",
-        "path": "/models/samples/model_48ca45ab-5bb.glb.glb",
+        "path": "/models/samples/model_48ca45ab-5bb.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -68252,7 +68254,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_493cf84c-05a",
-        "path": "/models/samples/model_493cf84c-05a.glb.glb",
+        "path": "/models/samples/model_493cf84c-05a.glb",
         "category": "prop",
         "subCategory": "pedestal",
         "keywords": {
@@ -68316,7 +68318,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4b7a5f2d-508",
-        "path": "/models/samples/model_4b7a5f2d-508.glb.glb",
+        "path": "/models/samples/model_4b7a5f2d-508.glb",
         "category": "prop",
         "subCategory": "brick",
         "keywords": {
@@ -68382,7 +68384,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4b9310cf-647",
-        "path": "/models/samples/model_4b9310cf-647.glb.glb",
+        "path": "/models/samples/model_4b9310cf-647.glb",
         "category": "prop",
         "subCategory": "miniature",
         "keywords": {
@@ -68448,7 +68450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4c0a3ec9-bd7",
-        "path": "/models/samples/model_4c0a3ec9-bd7.glb.glb",
+        "path": "/models/samples/model_4c0a3ec9-bd7.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -68520,7 +68522,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4d36d320-19f",
-        "path": "/models/samples/model_4d36d320-19f.glb.glb",
+        "path": "/models/samples/model_4d36d320-19f.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -68584,7 +68586,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4dda6fc2-86e",
-        "path": "/models/samples/model_4dda6fc2-86e.glb.glb",
+        "path": "/models/samples/model_4dda6fc2-86e.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -68650,7 +68652,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_4f2640bd-7ca",
-        "path": "/models/samples/model_4f2640bd-7ca.glb.glb",
+        "path": "/models/samples/model_4f2640bd-7ca.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -68721,7 +68723,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_500544e5-54b",
-        "path": "/models/samples/model_500544e5-54b.glb.glb",
+        "path": "/models/samples/model_500544e5-54b.glb",
         "category": "structure",
         "subCategory": "pillar base",
         "keywords": {
@@ -68796,7 +68798,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_50087d98-87e",
-        "path": "/models/samples/model_50087d98-87e.glb.glb",
+        "path": "/models/samples/model_50087d98-87e.glb",
         "category": "prop",
         "subCategory": "dice",
         "keywords": {
@@ -68863,7 +68865,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_51d0846a-cf4",
-        "path": "/models/samples/model_51d0846a-cf4.glb.glb",
+        "path": "/models/samples/model_51d0846a-cf4.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -68928,7 +68930,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_51eca8bd-2b8",
-        "path": "/models/samples/model_51eca8bd-2b8.glb.glb",
+        "path": "/models/samples/model_51eca8bd-2b8.glb",
         "category": "prop",
         "subCategory": "dice",
         "keywords": {
@@ -68992,7 +68994,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_51ef0b07-49c",
-        "path": "/models/samples/model_51ef0b07-49c.glb.glb",
+        "path": "/models/samples/model_51ef0b07-49c.glb",
         "category": "prop",
         "subCategory": "dust",
         "keywords": {
@@ -69055,7 +69057,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_521a8d84-6bb",
-        "path": "/models/samples/model_521a8d84-6bb.glb.glb",
+        "path": "/models/samples/model_521a8d84-6bb.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -69119,7 +69121,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_529019ee-4bd",
-        "path": "/models/samples/model_529019ee-4bd.glb.glb",
+        "path": "/models/samples/model_529019ee-4bd.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -69179,7 +69181,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_52e6920e-889",
-        "path": "/models/samples/model_52e6920e-889.glb.glb",
+        "path": "/models/samples/model_52e6920e-889.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -69245,7 +69247,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_532b4eca-396",
-        "path": "/models/samples/model_532b4eca-396.glb.glb",
+        "path": "/models/samples/model_532b4eca-396.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -69311,7 +69313,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_53fa9973-756",
-        "path": "/models/samples/model_53fa9973-756.glb.glb",
+        "path": "/models/samples/model_53fa9973-756.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -69379,7 +69381,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_544c368c-c07",
-        "path": "/models/samples/model_544c368c-c07.glb.glb",
+        "path": "/models/samples/model_544c368c-c07.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -69446,7 +69448,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_54db6bb7-87e",
-        "path": "/models/samples/model_54db6bb7-87e.glb.glb",
+        "path": "/models/samples/model_54db6bb7-87e.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -69514,7 +69516,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_55c86f23-52a",
-        "path": "/models/samples/model_55c86f23-52a.glb.glb",
+        "path": "/models/samples/model_55c86f23-52a.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -69581,7 +69583,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_55ef63a7-ffd",
-        "path": "/models/samples/model_55ef63a7-ffd.glb.glb",
+        "path": "/models/samples/model_55ef63a7-ffd.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -69644,7 +69646,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_562d9272-9e4",
-        "path": "/models/samples/model_562d9272-9e4.glb.glb",
+        "path": "/models/samples/model_562d9272-9e4.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -69711,7 +69713,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_562f668f-4e6",
-        "path": "/models/samples/model_562f668f-4e6.glb.glb",
+        "path": "/models/samples/model_562f668f-4e6.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -69781,7 +69783,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_567d607b-d3e",
-        "path": "/models/samples/model_567d607b-d3e.glb.glb",
+        "path": "/models/samples/model_567d607b-d3e.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -69844,7 +69846,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5693c3cb-ead",
-        "path": "/models/samples/model_5693c3cb-ead.glb.glb",
+        "path": "/models/samples/model_5693c3cb-ead.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -69905,7 +69907,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_575e6920-829",
-        "path": "/models/samples/model_575e6920-829.glb.glb",
+        "path": "/models/samples/model_575e6920-829.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -69973,7 +69975,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5760d90d-3aa",
-        "path": "/models/samples/model_5760d90d-3aa.glb.glb",
+        "path": "/models/samples/model_5760d90d-3aa.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -70038,7 +70040,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_58cead34-52d",
-        "path": "/models/samples/model_58cead34-52d.glb.glb",
+        "path": "/models/samples/model_58cead34-52d.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -70111,7 +70113,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_58d94a98-dfa",
-        "path": "/models/samples/model_58d94a98-dfa.glb.glb",
+        "path": "/models/samples/model_58d94a98-dfa.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70178,7 +70180,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_58e02f30-f04",
-        "path": "/models/samples/model_58e02f30-f04.glb.glb",
+        "path": "/models/samples/model_58e02f30-f04.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70244,7 +70246,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5943824c-1ee",
-        "path": "/models/samples/model_5943824c-1ee.glb.glb",
+        "path": "/models/samples/model_5943824c-1ee.glb",
         "category": "furniture",
         "subCategory": "chair",
         "keywords": {
@@ -70313,7 +70315,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_59ac0621-3d2",
-        "path": "/models/samples/model_59ac0621-3d2.glb.glb",
+        "path": "/models/samples/model_59ac0621-3d2.glb",
         "category": "prop",
         "subCategory": "stand",
         "keywords": {
@@ -70376,7 +70378,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_59fbfef8-3f6",
-        "path": "/models/samples/model_59fbfef8-3f6.glb.glb",
+        "path": "/models/samples/model_59fbfef8-3f6.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70442,7 +70444,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5aeb6ff7-56c",
-        "path": "/models/samples/model_5aeb6ff7-56c.glb.glb",
+        "path": "/models/samples/model_5aeb6ff7-56c.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70509,7 +70511,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5af663c3-c23",
-        "path": "/models/samples/model_5af663c3-c23.glb.glb",
+        "path": "/models/samples/model_5af663c3-c23.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -70577,7 +70579,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5b05b336-1f5",
-        "path": "/models/samples/model_5b05b336-1f5.glb.glb",
+        "path": "/models/samples/model_5b05b336-1f5.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -70643,7 +70645,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5ba62572-f9e",
-        "path": "/models/samples/model_5ba62572-f9e.glb.glb",
+        "path": "/models/samples/model_5ba62572-f9e.glb",
         "category": "prop",
         "subCategory": "metal piece",
         "keywords": {
@@ -70706,7 +70708,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5c3443c6-f86",
-        "path": "/models/samples/model_5c3443c6-f86.glb.glb",
+        "path": "/models/samples/model_5c3443c6-f86.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -70773,7 +70775,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5d1b5201-0ed",
-        "path": "/models/samples/model_5d1b5201-0ed.glb.glb",
+        "path": "/models/samples/model_5d1b5201-0ed.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70841,7 +70843,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5d9f92bb-a69",
-        "path": "/models/samples/model_5d9f92bb-a69.glb.glb",
+        "path": "/models/samples/model_5d9f92bb-a69.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -70908,7 +70910,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_5f3495ea-981",
-        "path": "/models/samples/model_5f3495ea-981.glb.glb",
+        "path": "/models/samples/model_5f3495ea-981.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -70976,7 +70978,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6108e984-64b",
-        "path": "/models/samples/model_6108e984-64b.glb.glb",
+        "path": "/models/samples/model_6108e984-64b.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -71045,7 +71047,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_61d1f35c-9f4",
-        "path": "/models/samples/model_61d1f35c-9f4.glb.glb",
+        "path": "/models/samples/model_61d1f35c-9f4.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -71112,7 +71114,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_62eee14a-030",
-        "path": "/models/samples/model_62eee14a-030.glb.glb",
+        "path": "/models/samples/model_62eee14a-030.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -71179,7 +71181,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_630dda53-95a",
-        "path": "/models/samples/model_630dda53-95a.glb.glb",
+        "path": "/models/samples/model_630dda53-95a.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -71246,7 +71248,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_63789130-f81",
-        "path": "/models/samples/model_63789130-f81.glb.glb",
+        "path": "/models/samples/model_63789130-f81.glb",
         "category": "prop",
         "subCategory": "metal",
         "keywords": {
@@ -71310,7 +71312,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_63e35ef7-f63",
-        "path": "/models/samples/model_63e35ef7-f63.glb.glb",
+        "path": "/models/samples/model_63e35ef7-f63.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -71380,7 +71382,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_64466ea0-e65",
-        "path": "/models/samples/model_64466ea0-e65.glb.glb",
+        "path": "/models/samples/model_64466ea0-e65.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -71447,7 +71449,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_64604dc8-e3f",
-        "path": "/models/samples/model_64604dc8-e3f.glb.glb",
+        "path": "/models/samples/model_64604dc8-e3f.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -71518,7 +71520,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_64809de3-3c5",
-        "path": "/models/samples/model_64809de3-3c5.glb.glb",
+        "path": "/models/samples/model_64809de3-3c5.glb",
         "category": "prop",
         "subCategory": "standing lamp",
         "keywords": {
@@ -71586,7 +71588,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_64f8b4c5-3ec",
-        "path": "/models/samples/model_64f8b4c5-3ec.glb.glb",
+        "path": "/models/samples/model_64f8b4c5-3ec.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -71657,7 +71659,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_677a7ddb-579",
-        "path": "/models/samples/model_677a7ddb-579.glb.glb",
+        "path": "/models/samples/model_677a7ddb-579.glb",
         "category": "prop",
         "subCategory": "bucket",
         "keywords": {
@@ -71723,7 +71725,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_67a706e9-022",
-        "path": "/models/samples/model_67a706e9-022.glb.glb",
+        "path": "/models/samples/model_67a706e9-022.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -71790,7 +71792,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_67d2ec8e-f3c",
-        "path": "/models/samples/model_67d2ec8e-f3c.glb.glb",
+        "path": "/models/samples/model_67d2ec8e-f3c.glb",
         "category": "prop",
         "subCategory": "gold",
         "keywords": {
@@ -71854,7 +71856,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_67f85603-aec",
-        "path": "/models/samples/model_67f85603-aec.glb.glb",
+        "path": "/models/samples/model_67f85603-aec.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -71920,7 +71922,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6821c653-ab1",
-        "path": "/models/samples/model_6821c653-ab1.glb.glb",
+        "path": "/models/samples/model_6821c653-ab1.glb",
         "category": "prop",
         "subCategory": "dust",
         "keywords": {
@@ -71983,7 +71985,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_68ad57d3-a67",
-        "path": "/models/samples/model_68ad57d3-a67.glb.glb",
+        "path": "/models/samples/model_68ad57d3-a67.glb",
         "category": "prop",
         "subCategory": "metal piece",
         "keywords": {
@@ -72046,7 +72048,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_68d94dec-206",
-        "path": "/models/samples/model_68d94dec-206.glb.glb",
+        "path": "/models/samples/model_68d94dec-206.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -72118,7 +72120,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_68fe46d0-625",
-        "path": "/models/samples/model_68fe46d0-625.glb.glb",
+        "path": "/models/samples/model_68fe46d0-625.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -72187,7 +72189,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6a1191df-f09",
-        "path": "/models/samples/model_6a1191df-f09.glb.glb",
+        "path": "/models/samples/model_6a1191df-f09.glb",
         "category": "structure",
         "subCategory": "pillar base",
         "keywords": {
@@ -72261,7 +72263,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6abeb22e-6d0",
-        "path": "/models/samples/model_6abeb22e-6d0.glb.glb",
+        "path": "/models/samples/model_6abeb22e-6d0.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -72325,7 +72327,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6b2bc098-b3e",
-        "path": "/models/samples/model_6b2bc098-b3e.glb.glb",
+        "path": "/models/samples/model_6b2bc098-b3e.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -72398,7 +72400,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6b40811b-09b",
-        "path": "/models/samples/model_6b40811b-09b.glb.glb",
+        "path": "/models/samples/model_6b40811b-09b.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -72467,7 +72469,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6b50b5e9-75b",
-        "path": "/models/samples/model_6b50b5e9-75b.glb.glb",
+        "path": "/models/samples/model_6b50b5e9-75b.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -72536,7 +72538,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6b8cf82f-0a5",
-        "path": "/models/samples/model_6b8cf82f-0a5.glb.glb",
+        "path": "/models/samples/model_6b8cf82f-0a5.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -72598,7 +72600,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6b91b218-950",
-        "path": "/models/samples/model_6b91b218-950.glb.glb",
+        "path": "/models/samples/model_6b91b218-950.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -72666,7 +72668,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6bb02cd7-319",
-        "path": "/models/samples/model_6bb02cd7-319.glb.glb",
+        "path": "/models/samples/model_6bb02cd7-319.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -72733,7 +72735,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6dc05ca3-8da",
-        "path": "/models/samples/model_6dc05ca3-8da.glb.glb",
+        "path": "/models/samples/model_6dc05ca3-8da.glb",
         "category": "prop",
         "subCategory": "stone",
         "keywords": {
@@ -72801,7 +72803,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6df40d45-207",
-        "path": "/models/samples/model_6df40d45-207.glb.glb",
+        "path": "/models/samples/model_6df40d45-207.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -72875,7 +72877,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6e5aa4cf-0ac",
-        "path": "/models/samples/model_6e5aa4cf-0ac.glb.glb",
+        "path": "/models/samples/model_6e5aa4cf-0ac.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -72946,7 +72948,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_6f2d8423-3d1",
-        "path": "/models/samples/model_6f2d8423-3d1.glb.glb",
+        "path": "/models/samples/model_6f2d8423-3d1.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -73014,7 +73016,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7089e8e3-3f8",
-        "path": "/models/samples/model_7089e8e3-3f8.glb.glb",
+        "path": "/models/samples/model_7089e8e3-3f8.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -73081,7 +73083,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_71a81dcc-ca5",
-        "path": "/models/samples/model_71a81dcc-ca5.glb.glb",
+        "path": "/models/samples/model_71a81dcc-ca5.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -73147,7 +73149,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_71ea87eb-93e",
-        "path": "/models/samples/model_71ea87eb-93e.glb.glb",
+        "path": "/models/samples/model_71ea87eb-93e.glb",
         "category": "prop",
         "subCategory": "crystal",
         "keywords": {
@@ -73218,7 +73220,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7239c899-1a2",
-        "path": "/models/samples/model_7239c899-1a2.glb.glb",
+        "path": "/models/samples/model_7239c899-1a2.glb",
         "category": "prop",
         "subCategory": "key",
         "keywords": {
@@ -73289,7 +73291,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_72503a6f-b90",
-        "path": "/models/samples/model_72503a6f-b90.glb.glb",
+        "path": "/models/samples/model_72503a6f-b90.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -73355,7 +73357,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7259b4e9-5c7",
-        "path": "/models/samples/model_7259b4e9-5c7.glb.glb",
+        "path": "/models/samples/model_7259b4e9-5c7.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -73421,7 +73423,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_738688be-9d4",
-        "path": "/models/samples/model_738688be-9d4.glb.glb",
+        "path": "/models/samples/model_738688be-9d4.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -73493,7 +73495,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_739d2b34-f1b",
-        "path": "/models/samples/model_739d2b34-f1b.glb.glb",
+        "path": "/models/samples/model_739d2b34-f1b.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -73564,7 +73566,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_73aac0fd-d6c",
-        "path": "/models/samples/model_73aac0fd-d6c.glb.glb",
+        "path": "/models/samples/model_73aac0fd-d6c.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -73631,7 +73633,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_74a1ed00-855",
-        "path": "/models/samples/model_74a1ed00-855.glb.glb",
+        "path": "/models/samples/model_74a1ed00-855.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -73698,7 +73700,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_751f546a-c93",
-        "path": "/models/samples/model_751f546a-c93.glb.glb",
+        "path": "/models/samples/model_751f546a-c93.glb",
         "category": "prop",
         "subCategory": "machine part",
         "keywords": {
@@ -73762,7 +73764,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_752de33a-ec8",
-        "path": "/models/samples/model_752de33a-ec8.glb.glb",
+        "path": "/models/samples/model_752de33a-ec8.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -73834,7 +73836,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_756a01ff-5ff",
-        "path": "/models/samples/model_756a01ff-5ff.glb.glb",
+        "path": "/models/samples/model_756a01ff-5ff.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -73908,7 +73910,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_75986358-ed1",
-        "path": "/models/samples/model_75986358-ed1.glb.glb",
+        "path": "/models/samples/model_75986358-ed1.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -73980,7 +73982,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_75cb3c5e-85a",
-        "path": "/models/samples/model_75cb3c5e-85a.glb.glb",
+        "path": "/models/samples/model_75cb3c5e-85a.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -74050,7 +74052,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_76d45824-c8e",
-        "path": "/models/samples/model_76d45824-c8e.glb.glb",
+        "path": "/models/samples/model_76d45824-c8e.glb",
         "category": "prop",
         "subCategory": "brick",
         "keywords": {
@@ -74114,7 +74116,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_76daba86-cb1",
-        "path": "/models/samples/model_76daba86-cb1.glb.glb",
+        "path": "/models/samples/model_76daba86-cb1.glb",
         "category": "prop",
         "subCategory": "pen",
         "keywords": {
@@ -74181,7 +74183,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_770b16ec-204",
-        "path": "/models/samples/model_770b16ec-204.glb.glb",
+        "path": "/models/samples/model_770b16ec-204.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -74254,7 +74256,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7718b337-b9a",
-        "path": "/models/samples/model_7718b337-b9a.glb.glb",
+        "path": "/models/samples/model_7718b337-b9a.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -74323,7 +74325,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_77861599-217",
-        "path": "/models/samples/model_77861599-217.glb.glb",
+        "path": "/models/samples/model_77861599-217.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -74390,7 +74392,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7838f3a5-a74",
-        "path": "/models/samples/model_7838f3a5-a74.glb.glb",
+        "path": "/models/samples/model_7838f3a5-a74.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -74454,7 +74456,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_798dca47-818",
-        "path": "/models/samples/model_798dca47-818.glb.glb",
+        "path": "/models/samples/model_798dca47-818.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -74518,7 +74520,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7a73c075-097",
-        "path": "/models/samples/model_7a73c075-097.glb.glb",
+        "path": "/models/samples/model_7a73c075-097.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -74585,7 +74587,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7ab90fb6-577",
-        "path": "/models/samples/model_7ab90fb6-577.glb.glb",
+        "path": "/models/samples/model_7ab90fb6-577.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -74651,7 +74653,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7c224626-641",
-        "path": "/models/samples/model_7c224626-641.glb.glb",
+        "path": "/models/samples/model_7c224626-641.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -74717,7 +74719,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7c844771-055",
-        "path": "/models/samples/model_7c844771-055.glb.glb",
+        "path": "/models/samples/model_7c844771-055.glb",
         "category": "prop",
         "subCategory": "dice",
         "keywords": {
@@ -74783,7 +74785,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7cb88781-50b",
-        "path": "/models/samples/model_7cb88781-50b.glb.glb",
+        "path": "/models/samples/model_7cb88781-50b.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -74847,7 +74849,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7cd3e5d3-73b",
-        "path": "/models/samples/model_7cd3e5d3-73b.glb.glb",
+        "path": "/models/samples/model_7cd3e5d3-73b.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -74911,7 +74913,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7dd071e2-42f",
-        "path": "/models/samples/model_7dd071e2-42f.glb.glb",
+        "path": "/models/samples/model_7dd071e2-42f.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -74982,7 +74984,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7e270461-09f",
-        "path": "/models/samples/model_7e270461-09f.glb.glb",
+        "path": "/models/samples/model_7e270461-09f.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -75048,7 +75050,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7e2f9384-a39",
-        "path": "/models/samples/model_7e2f9384-a39.glb.glb",
+        "path": "/models/samples/model_7e2f9384-a39.glb",
         "category": "prop",
         "subCategory": "miniature",
         "keywords": {
@@ -75115,7 +75117,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7f99d291-4b4",
-        "path": "/models/samples/model_7f99d291-4b4.glb.glb",
+        "path": "/models/samples/model_7f99d291-4b4.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -75184,7 +75186,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_7fcf1b2e-9cc",
-        "path": "/models/samples/model_7fcf1b2e-9cc.glb.glb",
+        "path": "/models/samples/model_7fcf1b2e-9cc.glb",
         "category": "prop",
         "subCategory": "industrial",
         "keywords": {
@@ -75248,7 +75250,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_81502a49-a76",
-        "path": "/models/samples/model_81502a49-a76.glb.glb",
+        "path": "/models/samples/model_81502a49-a76.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -75314,7 +75316,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_818c6699-100",
-        "path": "/models/samples/model_818c6699-100.glb.glb",
+        "path": "/models/samples/model_818c6699-100.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -75384,7 +75386,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_820c5597-d6c",
-        "path": "/models/samples/model_820c5597-d6c.glb.glb",
+        "path": "/models/samples/model_820c5597-d6c.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -75449,7 +75451,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_821d7ef7-46d",
-        "path": "/models/samples/model_821d7ef7-46d.glb.glb",
+        "path": "/models/samples/model_821d7ef7-46d.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -75516,7 +75518,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_826ab42e-146",
-        "path": "/models/samples/model_826ab42e-146.glb.glb",
+        "path": "/models/samples/model_826ab42e-146.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -75588,7 +75590,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_83590595-f7b",
-        "path": "/models/samples/model_83590595-f7b.glb.glb",
+        "path": "/models/samples/model_83590595-f7b.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -75654,7 +75656,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_848e2c98-2a9",
-        "path": "/models/samples/model_848e2c98-2a9.glb.glb",
+        "path": "/models/samples/model_848e2c98-2a9.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -75723,7 +75725,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8506b1a5-5b5",
-        "path": "/models/samples/model_8506b1a5-5b5.glb.glb",
+        "path": "/models/samples/model_8506b1a5-5b5.glb",
         "category": "prop",
         "subCategory": "particle",
         "keywords": {
@@ -75788,7 +75790,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_85903796-a0b",
-        "path": "/models/samples/model_85903796-a0b.glb.glb",
+        "path": "/models/samples/model_85903796-a0b.glb",
         "category": "prop",
         "subCategory": "model",
         "keywords": {
@@ -75856,7 +75858,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_861b6368-f12",
-        "path": "/models/samples/model_861b6368-f12.glb.glb",
+        "path": "/models/samples/model_861b6368-f12.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -75928,7 +75930,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_865cf0ba-2c1",
-        "path": "/models/samples/model_865cf0ba-2c1.glb.glb",
+        "path": "/models/samples/model_865cf0ba-2c1.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -75995,7 +75997,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_872cead7-b2a",
-        "path": "/models/samples/model_872cead7-b2a.glb.glb",
+        "path": "/models/samples/model_872cead7-b2a.glb",
         "category": "prop",
         "subCategory": "dagger",
         "keywords": {
@@ -76069,7 +76071,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8758563e-6d0",
-        "path": "/models/samples/model_8758563e-6d0.glb.glb",
+        "path": "/models/samples/model_8758563e-6d0.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -76137,7 +76139,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8953543a-9fc",
-        "path": "/models/samples/model_8953543a-9fc.glb.glb",
+        "path": "/models/samples/model_8953543a-9fc.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -76204,7 +76206,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8a5bb11a-f24",
-        "path": "/models/samples/model_8a5bb11a-f24.glb.glb",
+        "path": "/models/samples/model_8a5bb11a-f24.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -76270,7 +76272,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8a6839a3-0d9",
-        "path": "/models/samples/model_8a6839a3-0d9.glb.glb",
+        "path": "/models/samples/model_8a6839a3-0d9.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -76337,7 +76339,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8a79e0ff-4b9",
-        "path": "/models/samples/model_8a79e0ff-4b9.glb.glb",
+        "path": "/models/samples/model_8a79e0ff-4b9.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -76401,7 +76403,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8a7bdbf3-34a",
-        "path": "/models/samples/model_8a7bdbf3-34a.glb.glb",
+        "path": "/models/samples/model_8a7bdbf3-34a.glb",
         "category": "structure",
         "subCategory": "ruin",
         "keywords": {
@@ -76469,7 +76471,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8a94fad3-036",
-        "path": "/models/samples/model_8a94fad3-036.glb.glb",
+        "path": "/models/samples/model_8a94fad3-036.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -76536,7 +76538,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8ad79961-226",
-        "path": "/models/samples/model_8ad79961-226.glb.glb",
+        "path": "/models/samples/model_8ad79961-226.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -76611,7 +76613,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8b212824-f1f",
-        "path": "/models/samples/model_8b212824-f1f.glb.glb",
+        "path": "/models/samples/model_8b212824-f1f.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -76676,7 +76678,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8c134eec-a13",
-        "path": "/models/samples/model_8c134eec-a13.glb.glb",
+        "path": "/models/samples/model_8c134eec-a13.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -76750,7 +76752,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8c4fe65f-7aa",
-        "path": "/models/samples/model_8c4fe65f-7aa.glb.glb",
+        "path": "/models/samples/model_8c4fe65f-7aa.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -76822,7 +76824,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8ce8a9cf-1fd",
-        "path": "/models/samples/model_8ce8a9cf-1fd.glb.glb",
+        "path": "/models/samples/model_8ce8a9cf-1fd.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -76890,7 +76892,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8d0593a2-c73",
-        "path": "/models/samples/model_8d0593a2-c73.glb.glb",
+        "path": "/models/samples/model_8d0593a2-c73.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -76957,7 +76959,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8d7b8b87-2c7",
-        "path": "/models/samples/model_8d7b8b87-2c7.glb.glb",
+        "path": "/models/samples/model_8d7b8b87-2c7.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -77030,7 +77032,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8db63546-ac4",
-        "path": "/models/samples/model_8db63546-ac4.glb.glb",
+        "path": "/models/samples/model_8db63546-ac4.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -77098,7 +77100,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8e1d8db1-b39",
-        "path": "/models/samples/model_8e1d8db1-b39.glb.glb",
+        "path": "/models/samples/model_8e1d8db1-b39.glb",
         "category": "prop",
         "subCategory": "metal piece",
         "keywords": {
@@ -77161,7 +77163,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8e455f37-a76",
-        "path": "/models/samples/model_8e455f37-a76.glb.glb",
+        "path": "/models/samples/model_8e455f37-a76.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -77228,7 +77230,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8e6f6c4e-dba",
-        "path": "/models/samples/model_8e6f6c4e-dba.glb.glb",
+        "path": "/models/samples/model_8e6f6c4e-dba.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -77301,7 +77303,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8ecff261-650",
-        "path": "/models/samples/model_8ecff261-650.glb.glb",
+        "path": "/models/samples/model_8ecff261-650.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -77370,7 +77372,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_8f0c1d57-f7f",
-        "path": "/models/samples/model_8f0c1d57-f7f.glb.glb",
+        "path": "/models/samples/model_8f0c1d57-f7f.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -77437,7 +77439,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_903416f8-79e",
-        "path": "/models/samples/model_903416f8-79e.glb.glb",
+        "path": "/models/samples/model_903416f8-79e.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -77501,7 +77503,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_90c7020d-1f1",
-        "path": "/models/samples/model_90c7020d-1f1.glb.glb",
+        "path": "/models/samples/model_90c7020d-1f1.glb",
         "category": "prop",
         "subCategory": "flag",
         "keywords": {
@@ -77574,7 +77576,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_914760d4-256",
-        "path": "/models/samples/model_914760d4-256.glb.glb",
+        "path": "/models/samples/model_914760d4-256.glb",
         "category": "prop",
         "subCategory": "clock",
         "keywords": {
@@ -77641,7 +77643,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_91b0924d-be0",
-        "path": "/models/samples/model_91b0924d-be0.glb.glb",
+        "path": "/models/samples/model_91b0924d-be0.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -77713,7 +77715,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_931f2e35-0ab",
-        "path": "/models/samples/model_931f2e35-0ab.glb.glb",
+        "path": "/models/samples/model_931f2e35-0ab.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -77776,7 +77778,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_93217842-b43",
-        "path": "/models/samples/model_93217842-b43.glb.glb",
+        "path": "/models/samples/model_93217842-b43.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -77843,7 +77845,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_939669db-d08",
-        "path": "/models/samples/model_939669db-d08.glb.glb",
+        "path": "/models/samples/model_939669db-d08.glb",
         "category": "prop",
         "subCategory": "dagger",
         "keywords": {
@@ -77918,7 +77920,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_94641a3c-4a7",
-        "path": "/models/samples/model_94641a3c-4a7.glb.glb",
+        "path": "/models/samples/model_94641a3c-4a7.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -77991,7 +77993,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_951a4c89-b28",
-        "path": "/models/samples/model_951a4c89-b28.glb.glb",
+        "path": "/models/samples/model_951a4c89-b28.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -78058,7 +78060,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9591d704-da7",
-        "path": "/models/samples/model_9591d704-da7.glb.glb",
+        "path": "/models/samples/model_9591d704-da7.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -78124,7 +78126,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9708f413-455",
-        "path": "/models/samples/model_9708f413-455.glb.glb",
+        "path": "/models/samples/model_9708f413-455.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -78188,7 +78190,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_973795c2-755",
-        "path": "/models/samples/model_973795c2-755.glb.glb",
+        "path": "/models/samples/model_973795c2-755.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -78253,7 +78255,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_977734fe-afc",
-        "path": "/models/samples/model_977734fe-afc.glb.glb",
+        "path": "/models/samples/model_977734fe-afc.glb",
         "category": "prop",
         "subCategory": "dust",
         "keywords": {
@@ -78316,7 +78318,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_97902287-589",
-        "path": "/models/samples/model_97902287-589.glb.glb",
+        "path": "/models/samples/model_97902287-589.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -78382,7 +78384,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_97a9c001-9a3",
-        "path": "/models/samples/model_97a9c001-9a3.glb.glb",
+        "path": "/models/samples/model_97a9c001-9a3.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -78448,7 +78450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9943a455-106",
-        "path": "/models/samples/model_9943a455-106.glb.glb",
+        "path": "/models/samples/model_9943a455-106.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -78514,7 +78516,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9b4ff57d-c87",
-        "path": "/models/samples/model_9b4ff57d-c87.glb.glb",
+        "path": "/models/samples/model_9b4ff57d-c87.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -78584,7 +78586,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9b5085b5-5e1",
-        "path": "/models/samples/model_9b5085b5-5e1.glb.glb",
+        "path": "/models/samples/model_9b5085b5-5e1.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -78657,7 +78659,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9ba49c74-2ed",
-        "path": "/models/samples/model_9ba49c74-2ed.glb.glb",
+        "path": "/models/samples/model_9ba49c74-2ed.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -78720,7 +78722,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9d4bd2ba-06e",
-        "path": "/models/samples/model_9d4bd2ba-06e.glb.glb",
+        "path": "/models/samples/model_9d4bd2ba-06e.glb",
         "category": "prop",
         "subCategory": "tablet",
         "keywords": {
@@ -78791,7 +78793,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9db0be83-2cc",
-        "path": "/models/samples/model_9db0be83-2cc.glb.glb",
+        "path": "/models/samples/model_9db0be83-2cc.glb",
         "category": "prop",
         "subCategory": "stick",
         "keywords": {
@@ -78860,7 +78862,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9dc11d33-f01",
-        "path": "/models/samples/model_9dc11d33-f01.glb.glb",
+        "path": "/models/samples/model_9dc11d33-f01.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -78925,7 +78927,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9dd20045-aee",
-        "path": "/models/samples/model_9dd20045-aee.glb.glb",
+        "path": "/models/samples/model_9dd20045-aee.glb",
         "category": "prop",
         "subCategory": "wood piece",
         "keywords": {
@@ -78991,7 +78993,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9dd918cd-f18",
-        "path": "/models/samples/model_9dd918cd-f18.glb.glb",
+        "path": "/models/samples/model_9dd918cd-f18.glb",
         "category": "prop",
         "subCategory": "mirror",
         "keywords": {
@@ -79060,7 +79062,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9df4ab5f-2ec",
-        "path": "/models/samples/model_9df4ab5f-2ec.glb.glb",
+        "path": "/models/samples/model_9df4ab5f-2ec.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -79127,7 +79129,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9dfa6387-4f1",
-        "path": "/models/samples/model_9dfa6387-4f1.glb.glb",
+        "path": "/models/samples/model_9dfa6387-4f1.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -79195,7 +79197,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_9f14603b-9ef",
-        "path": "/models/samples/model_9f14603b-9ef.glb.glb",
+        "path": "/models/samples/model_9f14603b-9ef.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -79268,7 +79270,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a0745221-f6c",
-        "path": "/models/samples/model_a0745221-f6c.glb.glb",
+        "path": "/models/samples/model_a0745221-f6c.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -79339,7 +79341,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a077bff9-d75",
-        "path": "/models/samples/model_a077bff9-d75.glb.glb",
+        "path": "/models/samples/model_a077bff9-d75.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -79405,7 +79407,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a07969d3-6d3",
-        "path": "/models/samples/model_a07969d3-6d3.glb.glb",
+        "path": "/models/samples/model_a07969d3-6d3.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -79470,7 +79472,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a15ed272-471",
-        "path": "/models/samples/model_a15ed272-471.glb.glb",
+        "path": "/models/samples/model_a15ed272-471.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -79537,7 +79539,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a1898185-ed1",
-        "path": "/models/samples/model_a1898185-ed1.glb.glb",
+        "path": "/models/samples/model_a1898185-ed1.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -79605,7 +79607,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a1e26ab5-fb7",
-        "path": "/models/samples/model_a1e26ab5-fb7.glb.glb",
+        "path": "/models/samples/model_a1e26ab5-fb7.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -79680,7 +79682,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a3276f54-2ef",
-        "path": "/models/samples/model_a3276f54-2ef.glb.glb",
+        "path": "/models/samples/model_a3276f54-2ef.glb",
         "category": "prop",
         "subCategory": "decorative",
         "keywords": {
@@ -79745,7 +79747,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a3db3629-211",
-        "path": "/models/samples/model_a3db3629-211.glb.glb",
+        "path": "/models/samples/model_a3db3629-211.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -79807,7 +79809,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a5b149eb-fce",
-        "path": "/models/samples/model_a5b149eb-fce.glb.glb",
+        "path": "/models/samples/model_a5b149eb-fce.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -79874,7 +79876,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a60c6ac0-396",
-        "path": "/models/samples/model_a60c6ac0-396.glb.glb",
+        "path": "/models/samples/model_a60c6ac0-396.glb",
         "category": "prop",
         "subCategory": "unknown",
         "keywords": {
@@ -79937,7 +79939,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a6205e59-c16",
-        "path": "/models/samples/model_a6205e59-c16.glb.glb",
+        "path": "/models/samples/model_a6205e59-c16.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -80001,7 +80003,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a62a0689-a8f",
-        "path": "/models/samples/model_a62a0689-a8f.glb.glb",
+        "path": "/models/samples/model_a62a0689-a8f.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -80066,7 +80068,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a6702109-209",
-        "path": "/models/samples/model_a6702109-209.glb.glb",
+        "path": "/models/samples/model_a6702109-209.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -80140,7 +80142,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a6ca5e4b-5b3",
-        "path": "/models/samples/model_a6ca5e4b-5b3.glb.glb",
+        "path": "/models/samples/model_a6ca5e4b-5b3.glb",
         "category": "prop",
         "subCategory": "component",
         "keywords": {
@@ -80201,7 +80203,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a7900c23-d17",
-        "path": "/models/samples/model_a7900c23-d17.glb.glb",
+        "path": "/models/samples/model_a7900c23-d17.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -80269,7 +80271,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a8fee894-aa2",
-        "path": "/models/samples/model_a8fee894-aa2.glb.glb",
+        "path": "/models/samples/model_a8fee894-aa2.glb",
         "category": "prop",
         "subCategory": "brick",
         "keywords": {
@@ -80332,7 +80334,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a9100a65-b11",
-        "path": "/models/samples/model_a9100a65-b11.glb.glb",
+        "path": "/models/samples/model_a9100a65-b11.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -80402,7 +80404,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a9203561-e20",
-        "path": "/models/samples/model_a9203561-e20.glb.glb",
+        "path": "/models/samples/model_a9203561-e20.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -80472,7 +80474,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a93a2cec-b8e",
-        "path": "/models/samples/model_a93a2cec-b8e.glb.glb",
+        "path": "/models/samples/model_a93a2cec-b8e.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -80536,7 +80538,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_a956e9db-07a",
-        "path": "/models/samples/model_a956e9db-07a.glb.glb",
+        "path": "/models/samples/model_a956e9db-07a.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -80609,7 +80611,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_aa014453-648",
-        "path": "/models/samples/model_aa014453-648.glb.glb",
+        "path": "/models/samples/model_aa014453-648.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -80677,7 +80679,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_aa498820-63c",
-        "path": "/models/samples/model_aa498820-63c.glb.glb",
+        "path": "/models/samples/model_aa498820-63c.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -80744,7 +80746,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_aa82fb6a-126",
-        "path": "/models/samples/model_aa82fb6a-126.glb.glb",
+        "path": "/models/samples/model_aa82fb6a-126.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -80812,7 +80814,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ac1d0a8c-109",
-        "path": "/models/samples/model_ac1d0a8c-109.glb.glb",
+        "path": "/models/samples/model_ac1d0a8c-109.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -80876,7 +80878,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ad0c1afa-f8f",
-        "path": "/models/samples/model_ad0c1afa-f8f.glb.glb",
+        "path": "/models/samples/model_ad0c1afa-f8f.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -80952,7 +80954,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ad92253f-0a8",
-        "path": "/models/samples/model_ad92253f-0a8.glb.glb",
+        "path": "/models/samples/model_ad92253f-0a8.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -81016,7 +81018,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_aed9682f-9f8",
-        "path": "/models/samples/model_aed9682f-9f8.glb.glb",
+        "path": "/models/samples/model_aed9682f-9f8.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -81080,7 +81082,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_aef47f78-1ea",
-        "path": "/models/samples/model_aef47f78-1ea.glb.glb",
+        "path": "/models/samples/model_aef47f78-1ea.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -81147,7 +81149,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_afc28cad-022",
-        "path": "/models/samples/model_afc28cad-022.glb.glb",
+        "path": "/models/samples/model_afc28cad-022.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -81220,7 +81222,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_afd3a410-a7e",
-        "path": "/models/samples/model_afd3a410-a7e.glb.glb",
+        "path": "/models/samples/model_afd3a410-a7e.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -81284,7 +81286,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_afd71af1-468",
-        "path": "/models/samples/model_afd71af1-468.glb.glb",
+        "path": "/models/samples/model_afd71af1-468.glb",
         "category": "prop",
         "subCategory": "metal part",
         "keywords": {
@@ -81346,7 +81348,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_afebe841-ac8",
-        "path": "/models/samples/model_afebe841-ac8.glb.glb",
+        "path": "/models/samples/model_afebe841-ac8.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -81415,7 +81417,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b0208a3a-9cf",
-        "path": "/models/samples/model_b0208a3a-9cf.glb.glb",
+        "path": "/models/samples/model_b0208a3a-9cf.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -81484,7 +81486,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b0d1266f-9f9",
-        "path": "/models/samples/model_b0d1266f-9f9.glb.glb",
+        "path": "/models/samples/model_b0d1266f-9f9.glb",
         "category": "prop",
         "subCategory": "metal scrap",
         "keywords": {
@@ -81547,7 +81549,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b0f9eebc-639",
-        "path": "/models/samples/model_b0f9eebc-639.glb.glb",
+        "path": "/models/samples/model_b0f9eebc-639.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -81622,7 +81624,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b1bc954e-134",
-        "path": "/models/samples/model_b1bc954e-134.glb.glb",
+        "path": "/models/samples/model_b1bc954e-134.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -81693,7 +81695,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b2246c95-22f",
-        "path": "/models/samples/model_b2246c95-22f.glb.glb",
+        "path": "/models/samples/model_b2246c95-22f.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -81759,7 +81761,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b33125ef-435",
-        "path": "/models/samples/model_b33125ef-435.glb.glb",
+        "path": "/models/samples/model_b33125ef-435.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -81826,7 +81828,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b38493ef-56f",
-        "path": "/models/samples/model_b38493ef-56f.glb.glb",
+        "path": "/models/samples/model_b38493ef-56f.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -81901,7 +81903,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b3f56e38-960",
-        "path": "/models/samples/model_b3f56e38-960.glb.glb",
+        "path": "/models/samples/model_b3f56e38-960.glb",
         "category": "prop",
         "subCategory": "lamp",
         "keywords": {
@@ -81970,7 +81972,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b4546734-fe6",
-        "path": "/models/samples/model_b4546734-fe6.glb.glb",
+        "path": "/models/samples/model_b4546734-fe6.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -82036,7 +82038,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b4669237-a52",
-        "path": "/models/samples/model_b4669237-a52.glb.glb",
+        "path": "/models/samples/model_b4669237-a52.glb",
         "category": "prop",
         "subCategory": "lamp",
         "keywords": {
@@ -82108,7 +82110,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b4c079c9-676",
-        "path": "/models/samples/model_b4c079c9-676.glb.glb",
+        "path": "/models/samples/model_b4c079c9-676.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -82177,7 +82179,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b530c034-560",
-        "path": "/models/samples/model_b530c034-560.glb.glb",
+        "path": "/models/samples/model_b530c034-560.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -82243,7 +82245,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b5f2d03a-8cd",
-        "path": "/models/samples/model_b5f2d03a-8cd.glb.glb",
+        "path": "/models/samples/model_b5f2d03a-8cd.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -82311,7 +82313,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b69687b6-927",
-        "path": "/models/samples/model_b69687b6-927.glb.glb",
+        "path": "/models/samples/model_b69687b6-927.glb",
         "category": "prop",
         "subCategory": "wrench",
         "keywords": {
@@ -82373,7 +82375,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b712b2b3-1ac",
-        "path": "/models/samples/model_b712b2b3-1ac.glb.glb",
+        "path": "/models/samples/model_b712b2b3-1ac.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -82439,7 +82441,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b73e0b81-e5b",
-        "path": "/models/samples/model_b73e0b81-e5b.glb.glb",
+        "path": "/models/samples/model_b73e0b81-e5b.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -82504,7 +82506,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b7b52f23-c6f",
-        "path": "/models/samples/model_b7b52f23-c6f.glb.glb",
+        "path": "/models/samples/model_b7b52f23-c6f.glb",
         "category": "prop",
         "subCategory": "stone tablet",
         "keywords": {
@@ -82573,7 +82575,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b7bf1970-2b8",
-        "path": "/models/samples/model_b7bf1970-2b8.glb.glb",
+        "path": "/models/samples/model_b7bf1970-2b8.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -82638,7 +82640,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b839d245-7a3",
-        "path": "/models/samples/model_b839d245-7a3.glb.glb",
+        "path": "/models/samples/model_b839d245-7a3.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -82706,7 +82708,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b841b2db-d53",
-        "path": "/models/samples/model_b841b2db-d53.glb.glb",
+        "path": "/models/samples/model_b841b2db-d53.glb",
         "category": "prop",
         "subCategory": "plate",
         "keywords": {
@@ -82769,7 +82771,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b85eecc5-b0c",
-        "path": "/models/samples/model_b85eecc5-b0c.glb.glb",
+        "path": "/models/samples/model_b85eecc5-b0c.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -82835,7 +82837,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_b9908061-8b4",
-        "path": "/models/samples/model_b9908061-8b4.glb.glb",
+        "path": "/models/samples/model_b9908061-8b4.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -82902,7 +82904,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ba094f95-fd6",
-        "path": "/models/samples/model_ba094f95-fd6.glb.glb",
+        "path": "/models/samples/model_ba094f95-fd6.glb",
         "category": "prop",
         "subCategory": "panel",
         "keywords": {
@@ -82969,7 +82971,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bb1e31be-8e3",
-        "path": "/models/samples/model_bb1e31be-8e3.glb.glb",
+        "path": "/models/samples/model_bb1e31be-8e3.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -83036,7 +83038,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bb650703-a20",
-        "path": "/models/samples/model_bb650703-a20.glb.glb",
+        "path": "/models/samples/model_bb650703-a20.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -83107,7 +83109,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bb8eccc2-1a0",
-        "path": "/models/samples/model_bb8eccc2-1a0.glb.glb",
+        "path": "/models/samples/model_bb8eccc2-1a0.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -83176,7 +83178,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bbba8700-cc8",
-        "path": "/models/samples/model_bbba8700-cc8.glb.glb",
+        "path": "/models/samples/model_bbba8700-cc8.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -83249,7 +83251,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bbfd9a36-4ae",
-        "path": "/models/samples/model_bbfd9a36-4ae.glb.glb",
+        "path": "/models/samples/model_bbfd9a36-4ae.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -83316,7 +83318,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bc5c053b-6b8",
-        "path": "/models/samples/model_bc5c053b-6b8.glb.glb",
+        "path": "/models/samples/model_bc5c053b-6b8.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -83383,7 +83385,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bc8407a3-861",
-        "path": "/models/samples/model_bc8407a3-861.glb.glb",
+        "path": "/models/samples/model_bc8407a3-861.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -83449,7 +83451,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bc8aee66-020",
-        "path": "/models/samples/model_bc8aee66-020.glb.glb",
+        "path": "/models/samples/model_bc8aee66-020.glb",
         "category": "prop",
         "subCategory": "jar",
         "keywords": {
@@ -83520,7 +83522,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_bcaf6746-de1",
-        "path": "/models/samples/model_bcaf6746-de1.glb.glb",
+        "path": "/models/samples/model_bcaf6746-de1.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -83588,7 +83590,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_be4bda23-1c7",
-        "path": "/models/samples/model_be4bda23-1c7.glb.glb",
+        "path": "/models/samples/model_be4bda23-1c7.glb",
         "category": "prop",
         "subCategory": "object",
         "keywords": {
@@ -83654,7 +83656,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_be8924d5-c65",
-        "path": "/models/samples/model_be8924d5-c65.glb.glb",
+        "path": "/models/samples/model_be8924d5-c65.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -83724,7 +83726,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c1d60b5f-82a",
-        "path": "/models/samples/model_c1d60b5f-82a.glb.glb",
+        "path": "/models/samples/model_c1d60b5f-82a.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -83792,7 +83794,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c29e1da8-b8b",
-        "path": "/models/samples/model_c29e1da8-b8b.glb.glb",
+        "path": "/models/samples/model_c29e1da8-b8b.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -83857,7 +83859,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c3987744-ec5",
-        "path": "/models/samples/model_c3987744-ec5.glb.glb",
+        "path": "/models/samples/model_c3987744-ec5.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -83918,7 +83920,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c423ab76-e31",
-        "path": "/models/samples/model_c423ab76-e31.glb.glb",
+        "path": "/models/samples/model_c423ab76-e31.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -83992,7 +83994,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c444ba25-97e",
-        "path": "/models/samples/model_c444ba25-97e.glb.glb",
+        "path": "/models/samples/model_c444ba25-97e.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -84053,7 +84055,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c4c118aa-bfa",
-        "path": "/models/samples/model_c4c118aa-bfa.glb.glb",
+        "path": "/models/samples/model_c4c118aa-bfa.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -84121,7 +84123,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c4e4b8aa-a8d",
-        "path": "/models/samples/model_c4e4b8aa-a8d.glb.glb",
+        "path": "/models/samples/model_c4e4b8aa-a8d.glb",
         "category": "prop",
         "subCategory": "bead",
         "keywords": {
@@ -84184,7 +84186,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c5ebde8e-590",
-        "path": "/models/samples/model_c5ebde8e-590.glb.glb",
+        "path": "/models/samples/model_c5ebde8e-590.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -84249,7 +84251,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c6475352-ab0",
-        "path": "/models/samples/model_c6475352-ab0.glb.glb",
+        "path": "/models/samples/model_c6475352-ab0.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -84314,7 +84316,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c7399ba0-576",
-        "path": "/models/samples/model_c7399ba0-576.glb.glb",
+        "path": "/models/samples/model_c7399ba0-576.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -84380,7 +84382,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c7aaa41e-d88",
-        "path": "/models/samples/model_c7aaa41e-d88.glb.glb",
+        "path": "/models/samples/model_c7aaa41e-d88.glb",
         "category": "prop",
         "subCategory": "abstract",
         "keywords": {
@@ -84448,7 +84450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c8f214ff-5da",
-        "path": "/models/samples/model_c8f214ff-5da.glb.glb",
+        "path": "/models/samples/model_c8f214ff-5da.glb",
         "category": "prop",
         "subCategory": "miniature",
         "keywords": {
@@ -84514,7 +84516,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_c97d0688-9d7",
-        "path": "/models/samples/model_c97d0688-9d7.glb.glb",
+        "path": "/models/samples/model_c97d0688-9d7.glb",
         "category": "prop",
         "subCategory": "floor lamp",
         "keywords": {
@@ -84580,7 +84582,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cbaf22e0-241",
-        "path": "/models/samples/model_cbaf22e0-241.glb.glb",
+        "path": "/models/samples/model_cbaf22e0-241.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -84648,7 +84650,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cbb1f63e-909",
-        "path": "/models/samples/model_cbb1f63e-909.glb.glb",
+        "path": "/models/samples/model_cbb1f63e-909.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -84717,7 +84719,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cbd86306-ab3",
-        "path": "/models/samples/model_cbd86306-ab3.glb.glb",
+        "path": "/models/samples/model_cbd86306-ab3.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -84783,7 +84785,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cc83da49-17e",
-        "path": "/models/samples/model_cc83da49-17e.glb.glb",
+        "path": "/models/samples/model_cc83da49-17e.glb",
         "category": "prop",
         "subCategory": "metal part",
         "keywords": {
@@ -84845,7 +84847,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ccae3ba8-412",
-        "path": "/models/samples/model_ccae3ba8-412.glb.glb",
+        "path": "/models/samples/model_ccae3ba8-412.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -84915,7 +84917,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ccd0e302-53c",
-        "path": "/models/samples/model_ccd0e302-53c.glb.glb",
+        "path": "/models/samples/model_ccd0e302-53c.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -84981,7 +84983,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cdaf8464-0df",
-        "path": "/models/samples/model_cdaf8464-0df.glb.glb",
+        "path": "/models/samples/model_cdaf8464-0df.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -85049,7 +85051,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cdc0585e-37d",
-        "path": "/models/samples/model_cdc0585e-37d.glb.glb",
+        "path": "/models/samples/model_cdc0585e-37d.glb",
         "category": "prop",
         "subCategory": "orb",
         "keywords": {
@@ -85116,7 +85118,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cdf6df67-fe9",
-        "path": "/models/samples/model_cdf6df67-fe9.glb.glb",
+        "path": "/models/samples/model_cdf6df67-fe9.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -85189,7 +85191,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cdfeb29b-b5e",
-        "path": "/models/samples/model_cdfeb29b-b5e.glb.glb",
+        "path": "/models/samples/model_cdfeb29b-b5e.glb",
         "category": "prop",
         "subCategory": "metal part",
         "keywords": {
@@ -85252,7 +85254,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ce74927a-c3f",
-        "path": "/models/samples/model_ce74927a-c3f.glb.glb",
+        "path": "/models/samples/model_ce74927a-c3f.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -85326,7 +85328,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cec6713a-e4c",
-        "path": "/models/samples/model_cec6713a-e4c.glb.glb",
+        "path": "/models/samples/model_cec6713a-e4c.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -85399,7 +85401,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_cff80aa0-ab6",
-        "path": "/models/samples/model_cff80aa0-ab6.glb.glb",
+        "path": "/models/samples/model_cff80aa0-ab6.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -85470,7 +85472,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d027a82e-1cd",
-        "path": "/models/samples/model_d027a82e-1cd.glb.glb",
+        "path": "/models/samples/model_d027a82e-1cd.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -85537,7 +85539,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d0a14d35-a9a",
-        "path": "/models/samples/model_d0a14d35-a9a.glb.glb",
+        "path": "/models/samples/model_d0a14d35-a9a.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -85603,7 +85605,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d0c029e9-5ff",
-        "path": "/models/samples/model_d0c029e9-5ff.glb.glb",
+        "path": "/models/samples/model_d0c029e9-5ff.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -85676,7 +85678,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d0d4c8ef-251",
-        "path": "/models/samples/model_d0d4c8ef-251.glb.glb",
+        "path": "/models/samples/model_d0d4c8ef-251.glb",
         "category": "prop",
         "subCategory": "plank",
         "keywords": {
@@ -85741,7 +85743,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d1140ab6-6f7",
-        "path": "/models/samples/model_d1140ab6-6f7.glb.glb",
+        "path": "/models/samples/model_d1140ab6-6f7.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -85805,7 +85807,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d1b6ae44-8ac",
-        "path": "/models/samples/model_d1b6ae44-8ac.glb.glb",
+        "path": "/models/samples/model_d1b6ae44-8ac.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -85874,7 +85876,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d2279ea8-74c",
-        "path": "/models/samples/model_d2279ea8-74c.glb.glb",
+        "path": "/models/samples/model_d2279ea8-74c.glb",
         "category": "prop",
         "subCategory": "bucket",
         "keywords": {
@@ -85941,7 +85943,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d2620506-13d",
-        "path": "/models/samples/model_d2620506-13d.glb.glb",
+        "path": "/models/samples/model_d2620506-13d.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -86009,7 +86011,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d2c30b63-4f4",
-        "path": "/models/samples/model_d2c30b63-4f4.glb.glb",
+        "path": "/models/samples/model_d2c30b63-4f4.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -86073,7 +86075,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d2faa1df-81a",
-        "path": "/models/samples/model_d2faa1df-81a.glb.glb",
+        "path": "/models/samples/model_d2faa1df-81a.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -86139,7 +86141,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d32d552a-117",
-        "path": "/models/samples/model_d32d552a-117.glb.glb",
+        "path": "/models/samples/model_d32d552a-117.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -86205,7 +86207,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d4b3b231-38a",
-        "path": "/models/samples/model_d4b3b231-38a.glb.glb",
+        "path": "/models/samples/model_d4b3b231-38a.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -86272,7 +86274,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d4d9d53a-f4c",
-        "path": "/models/samples/model_d4d9d53a-f4c.glb.glb",
+        "path": "/models/samples/model_d4d9d53a-f4c.glb",
         "category": "prop",
         "subCategory": "sphere",
         "keywords": {
@@ -86341,7 +86343,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d4e325c0-ca2",
-        "path": "/models/samples/model_d4e325c0-ca2.glb.glb",
+        "path": "/models/samples/model_d4e325c0-ca2.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -86408,7 +86410,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d4eca46e-5c1",
-        "path": "/models/samples/model_d4eca46e-5c1.glb.glb",
+        "path": "/models/samples/model_d4eca46e-5c1.glb",
         "category": "prop",
         "subCategory": "dust",
         "keywords": {
@@ -86471,7 +86473,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d4fe17dd-4fd",
-        "path": "/models/samples/model_d4fe17dd-4fd.glb.glb",
+        "path": "/models/samples/model_d4fe17dd-4fd.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -86535,7 +86537,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d693b39d-538",
-        "path": "/models/samples/model_d693b39d-538.glb.glb",
+        "path": "/models/samples/model_d693b39d-538.glb",
         "category": "prop",
         "subCategory": "metal piece",
         "keywords": {
@@ -86600,7 +86602,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d7386ebe-3c0",
-        "path": "/models/samples/model_d7386ebe-3c0.glb.glb",
+        "path": "/models/samples/model_d7386ebe-3c0.glb",
         "category": "prop",
         "subCategory": "pedestal",
         "keywords": {
@@ -86663,7 +86665,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d8e2ebd4-49c",
-        "path": "/models/samples/model_d8e2ebd4-49c.glb.glb",
+        "path": "/models/samples/model_d8e2ebd4-49c.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -86732,7 +86734,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d93158e9-522",
-        "path": "/models/samples/model_d93158e9-522.glb.glb",
+        "path": "/models/samples/model_d93158e9-522.glb",
         "category": "prop",
         "subCategory": "plate",
         "keywords": {
@@ -86797,7 +86799,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d97bc02e-d9c",
-        "path": "/models/samples/model_d97bc02e-d9c.glb.glb",
+        "path": "/models/samples/model_d97bc02e-d9c.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -86864,7 +86866,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_d9c612bd-31f",
-        "path": "/models/samples/model_d9c612bd-31f.glb.glb",
+        "path": "/models/samples/model_d9c612bd-31f.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -86932,7 +86934,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_da163e91-586",
-        "path": "/models/samples/model_da163e91-586.glb.glb",
+        "path": "/models/samples/model_da163e91-586.glb",
         "category": "prop",
         "subCategory": "candle",
         "keywords": {
@@ -87005,7 +87007,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_db13e457-827",
-        "path": "/models/samples/model_db13e457-827.glb.glb",
+        "path": "/models/samples/model_db13e457-827.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -87075,7 +87077,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_db2321c0-133",
-        "path": "/models/samples/model_db2321c0-133.glb.glb",
+        "path": "/models/samples/model_db2321c0-133.glb",
         "category": "prop",
         "subCategory": "laboratory equipment",
         "keywords": {
@@ -87136,7 +87138,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dbd88b8a-f2a",
-        "path": "/models/samples/model_dbd88b8a-f2a.glb.glb",
+        "path": "/models/samples/model_dbd88b8a-f2a.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -87207,7 +87209,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dd0823c9-59c",
-        "path": "/models/samples/model_dd0823c9-59c.glb.glb",
+        "path": "/models/samples/model_dd0823c9-59c.glb",
         "category": "prop",
         "subCategory": "dagger",
         "keywords": {
@@ -87280,7 +87282,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dd087f76-5df",
-        "path": "/models/samples/model_dd087f76-5df.glb.glb",
+        "path": "/models/samples/model_dd087f76-5df.glb",
         "category": "prop",
         "subCategory": "dust",
         "keywords": {
@@ -87343,7 +87345,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dd55e3c2-fe1",
-        "path": "/models/samples/model_dd55e3c2-fe1.glb.glb",
+        "path": "/models/samples/model_dd55e3c2-fe1.glb",
         "category": "furniture",
         "subCategory": "bench",
         "keywords": {
@@ -87415,7 +87417,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dda9071f-016",
-        "path": "/models/samples/model_dda9071f-016.glb.glb",
+        "path": "/models/samples/model_dda9071f-016.glb",
         "category": "prop",
         "subCategory": "metal part",
         "keywords": {
@@ -87478,7 +87480,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ddc5d7d2-e7b",
-        "path": "/models/samples/model_ddc5d7d2-e7b.glb.glb",
+        "path": "/models/samples/model_ddc5d7d2-e7b.glb",
         "category": "furniture",
         "subCategory": "shelf",
         "keywords": {
@@ -87545,7 +87547,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ddebaec6-dbf",
-        "path": "/models/samples/model_ddebaec6-dbf.glb.glb",
+        "path": "/models/samples/model_ddebaec6-dbf.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -87621,7 +87623,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_df977e78-571",
-        "path": "/models/samples/model_df977e78-571.glb.glb",
+        "path": "/models/samples/model_df977e78-571.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -87686,7 +87688,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_dfd35b24-20d",
-        "path": "/models/samples/model_dfd35b24-20d.glb.glb",
+        "path": "/models/samples/model_dfd35b24-20d.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -87751,7 +87753,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e0f28728-2e2",
-        "path": "/models/samples/model_e0f28728-2e2.glb.glb",
+        "path": "/models/samples/model_e0f28728-2e2.glb",
         "category": "prop",
         "subCategory": "unknown",
         "keywords": {
@@ -87817,7 +87819,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e1cc5d2b-8ce",
-        "path": "/models/samples/model_e1cc5d2b-8ce.glb.glb",
+        "path": "/models/samples/model_e1cc5d2b-8ce.glb",
         "category": "structure",
         "subCategory": "statue",
         "keywords": {
@@ -87889,7 +87891,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e1e29c43-5eb",
-        "path": "/models/samples/model_e1e29c43-5eb.glb.glb",
+        "path": "/models/samples/model_e1e29c43-5eb.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -87958,7 +87960,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e2920a39-48a",
-        "path": "/models/samples/model_e2920a39-48a.glb.glb",
+        "path": "/models/samples/model_e2920a39-48a.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -88028,7 +88030,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e32c88b3-0be",
-        "path": "/models/samples/model_e32c88b3-0be.glb.glb",
+        "path": "/models/samples/model_e32c88b3-0be.glb",
         "category": "prop",
         "subCategory": "small object",
         "keywords": {
@@ -88096,7 +88098,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e34a018d-ca9",
-        "path": "/models/samples/model_e34a018d-ca9.glb.glb",
+        "path": "/models/samples/model_e34a018d-ca9.glb",
         "category": "prop",
         "subCategory": "stand",
         "keywords": {
@@ -88159,7 +88161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e3f82d01-354",
-        "path": "/models/samples/model_e3f82d01-354.glb.glb",
+        "path": "/models/samples/model_e3f82d01-354.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -88234,7 +88236,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e4bcb83c-18c",
-        "path": "/models/samples/model_e4bcb83c-18c.glb.glb",
+        "path": "/models/samples/model_e4bcb83c-18c.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -88300,7 +88302,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e62c71bd-144",
-        "path": "/models/samples/model_e62c71bd-144.glb.glb",
+        "path": "/models/samples/model_e62c71bd-144.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -88366,7 +88368,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e6575280-200",
-        "path": "/models/samples/model_e6575280-200.glb.glb",
+        "path": "/models/samples/model_e6575280-200.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -88439,7 +88441,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e69bcc63-c34",
-        "path": "/models/samples/model_e69bcc63-c34.glb.glb",
+        "path": "/models/samples/model_e69bcc63-c34.glb",
         "category": "prop",
         "subCategory": "slab",
         "keywords": {
@@ -88508,7 +88510,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_e80d9f2b-7ff",
-        "path": "/models/samples/model_e80d9f2b-7ff.glb.glb",
+        "path": "/models/samples/model_e80d9f2b-7ff.glb",
         "category": "prop",
         "subCategory": "container",
         "keywords": {
@@ -88572,7 +88574,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_eb131f00-2c3",
-        "path": "/models/samples/model_eb131f00-2c3.glb.glb",
+        "path": "/models/samples/model_eb131f00-2c3.glb",
         "category": "prop",
         "subCategory": "pillar",
         "keywords": {
@@ -88644,7 +88646,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_eb2d7523-082",
-        "path": "/models/samples/model_eb2d7523-082.glb.glb",
+        "path": "/models/samples/model_eb2d7523-082.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -88716,7 +88718,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_eb4d6a13-ca4",
-        "path": "/models/samples/model_eb4d6a13-ca4.glb.glb",
+        "path": "/models/samples/model_eb4d6a13-ca4.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -88788,7 +88790,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ec6b9814-05c",
-        "path": "/models/samples/model_ec6b9814-05c.glb.glb",
+        "path": "/models/samples/model_ec6b9814-05c.glb",
         "category": "structure",
         "subCategory": "structure",
         "keywords": {
@@ -88854,7 +88856,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ed1058c9-b9e",
-        "path": "/models/samples/model_ed1058c9-b9e.glb.glb",
+        "path": "/models/samples/model_ed1058c9-b9e.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -88919,7 +88921,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ed25e36b-caf",
-        "path": "/models/samples/model_ed25e36b-caf.glb.glb",
+        "path": "/models/samples/model_ed25e36b-caf.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -88987,7 +88989,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ed9ee2e6-4fe",
-        "path": "/models/samples/model_ed9ee2e6-4fe.glb.glb",
+        "path": "/models/samples/model_ed9ee2e6-4fe.glb",
         "category": "structure",
         "subCategory": "pillar base",
         "keywords": {
@@ -89058,7 +89060,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_eef315f3-a71",
-        "path": "/models/samples/model_eef315f3-a71.glb.glb",
+        "path": "/models/samples/model_eef315f3-a71.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -89127,7 +89129,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ef0825e6-7ab",
-        "path": "/models/samples/model_ef0825e6-7ab.glb.glb",
+        "path": "/models/samples/model_ef0825e6-7ab.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -89198,7 +89200,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_ef611be9-f95",
-        "path": "/models/samples/model_ef611be9-f95.glb.glb",
+        "path": "/models/samples/model_ef611be9-f95.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -89264,7 +89266,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_efa74db6-33a",
-        "path": "/models/samples/model_efa74db6-33a.glb.glb",
+        "path": "/models/samples/model_efa74db6-33a.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -89331,7 +89333,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f0a300e0-68b",
-        "path": "/models/samples/model_f0a300e0-68b.glb.glb",
+        "path": "/models/samples/model_f0a300e0-68b.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -89398,7 +89400,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f0d5d20c-288",
-        "path": "/models/samples/model_f0d5d20c-288.glb.glb",
+        "path": "/models/samples/model_f0d5d20c-288.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -89461,7 +89463,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f0e31075-8a3",
-        "path": "/models/samples/model_f0e31075-8a3.glb.glb",
+        "path": "/models/samples/model_f0e31075-8a3.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -89525,7 +89527,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f1431dfd-6e9",
-        "path": "/models/samples/model_f1431dfd-6e9.glb.glb",
+        "path": "/models/samples/model_f1431dfd-6e9.glb",
         "category": "prop",
         "subCategory": "tablet",
         "keywords": {
@@ -89596,7 +89598,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f1994e0f-2c0",
-        "path": "/models/samples/model_f1994e0f-2c0.glb.glb",
+        "path": "/models/samples/model_f1994e0f-2c0.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -89664,7 +89666,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f1e7458b-159",
-        "path": "/models/samples/model_f1e7458b-159.glb.glb",
+        "path": "/models/samples/model_f1e7458b-159.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -89731,7 +89733,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f1ed6ad1-d54",
-        "path": "/models/samples/model_f1ed6ad1-d54.glb.glb",
+        "path": "/models/samples/model_f1ed6ad1-d54.glb",
         "category": "structure",
         "subCategory": "pillar",
         "keywords": {
@@ -89802,7 +89804,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f33bbd68-b9a",
-        "path": "/models/samples/model_f33bbd68-b9a.glb.glb",
+        "path": "/models/samples/model_f33bbd68-b9a.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -89872,7 +89874,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f397d7ef-2a6",
-        "path": "/models/samples/model_f397d7ef-2a6.glb.glb",
+        "path": "/models/samples/model_f397d7ef-2a6.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -89939,7 +89941,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f4b87b96-c56",
-        "path": "/models/samples/model_f4b87b96-c56.glb.glb",
+        "path": "/models/samples/model_f4b87b96-c56.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -90007,7 +90009,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f4eaac36-c6f",
-        "path": "/models/samples/model_f4eaac36-c6f.glb.glb",
+        "path": "/models/samples/model_f4eaac36-c6f.glb",
         "category": "prop",
         "subCategory": "sculpture",
         "keywords": {
@@ -90075,7 +90077,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f6e3b0dc-e5a",
-        "path": "/models/samples/model_f6e3b0dc-e5a.glb.glb",
+        "path": "/models/samples/model_f6e3b0dc-e5a.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -90142,7 +90144,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_f73f5d73-788",
-        "path": "/models/samples/model_f73f5d73-788.glb.glb",
+        "path": "/models/samples/model_f73f5d73-788.glb",
         "category": "prop",
         "subCategory": "bucket",
         "keywords": {
@@ -90209,7 +90211,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fa9c4d3f-544",
-        "path": "/models/samples/model_fa9c4d3f-544.glb.glb",
+        "path": "/models/samples/model_fa9c4d3f-544.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -90275,7 +90277,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fb3f9cc1-f65",
-        "path": "/models/samples/model_fb3f9cc1-f65.glb.glb",
+        "path": "/models/samples/model_fb3f9cc1-f65.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -90346,7 +90348,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fb611993-efd",
-        "path": "/models/samples/model_fb611993-efd.glb.glb",
+        "path": "/models/samples/model_fb611993-efd.glb",
         "category": "prop",
         "subCategory": "candle holder",
         "keywords": {
@@ -90418,7 +90420,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fbac7d31-dde",
-        "path": "/models/samples/model_fbac7d31-dde.glb.glb",
+        "path": "/models/samples/model_fbac7d31-dde.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -90487,7 +90489,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fc2e6a27-c5c",
-        "path": "/models/samples/model_fc2e6a27-c5c.glb.glb",
+        "path": "/models/samples/model_fc2e6a27-c5c.glb",
         "category": "prop",
         "subCategory": "statue",
         "keywords": {
@@ -90559,7 +90561,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fca00348-326",
-        "path": "/models/samples/model_fca00348-326.glb.glb",
+        "path": "/models/samples/model_fca00348-326.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -90633,7 +90635,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fdb3fabc-376",
-        "path": "/models/samples/model_fdb3fabc-376.glb.glb",
+        "path": "/models/samples/model_fdb3fabc-376.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -90698,7 +90700,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fdcfac2d-15c",
-        "path": "/models/samples/model_fdcfac2d-15c.glb.glb",
+        "path": "/models/samples/model_fdcfac2d-15c.glb",
         "category": "prop",
         "subCategory": "bottle",
         "keywords": {
@@ -90766,7 +90768,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fddc5f43-8b9",
-        "path": "/models/samples/model_fddc5f43-8b9.glb.glb",
+        "path": "/models/samples/model_fddc5f43-8b9.glb",
         "category": "nature",
         "subCategory": "rock",
         "keywords": {
@@ -90837,7 +90839,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fdfb7519-95e",
-        "path": "/models/samples/model_fdfb7519-95e.glb.glb",
+        "path": "/models/samples/model_fdfb7519-95e.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -90903,7 +90905,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_model_fe8040e1-71a",
-        "path": "/models/samples/model_fe8040e1-71a.glb.glb",
+        "path": "/models/samples/model_fe8040e1-71a.glb",
         "category": "prop",
         "subCategory": "box",
         "keywords": {
@@ -90970,7 +90972,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_module_600",
-        "path": "/models/samples/module_600.glb.glb",
+        "path": "/models/samples/module_600.glb",
         "category": "structure",
         "subCategory": "wall",
         "keywords": {
@@ -91041,17 +91043,19 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_moltenDagger",
-        "path": "/models/samples/moltenDagger.glb.glb",
+        "path": "/models/samples/moltenDagger.glb",
         "category": "prop",
         "subCategory": "dagger",
         "keywords": {
             "ko": [
+                "단검",
                 "불",
                 "화염",
                 "판타지",
                 "던전",
-                "방패",
-                "횃불"
+                "무기",
+                "작은",
+                "소품"
             ],
             "en": [
                 "molten",
@@ -91067,6 +91071,9 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
                 "fiery",
                 "dangerous",
                 "powerful",
+                "small",
+                "item",
+                "prop",
                 "dungeon",
                 "fantasy battlefield",
                 "volcano",
@@ -91112,7 +91119,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_MosquitoInAmber",
-        "path": "/models/samples/MosquitoInAmber.glb.glb",
+        "path": "/models/samples/MosquitoInAmber.glb",
         "category": "prop",
         "subCategory": "preserved specimen",
         "keywords": {
@@ -91179,7 +91186,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_MultiUVTest",
-        "path": "/models/samples/MultiUVTest.glb.glb",
+        "path": "/models/samples/MultiUVTest.glb",
         "category": "prop",
         "subCategory": "test",
         "keywords": {
@@ -91238,7 +91245,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_obelisk1",
-        "path": "/models/samples/obelisk1.glb.glb",
+        "path": "/models/samples/obelisk1.glb",
         "category": "structure",
         "subCategory": "obelisk",
         "keywords": {
@@ -91308,7 +91315,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_obelisk2",
-        "path": "/models/samples/obelisk2.glb.glb",
+        "path": "/models/samples/obelisk2.glb",
         "category": "structure",
         "subCategory": "obelisk",
         "keywords": {
@@ -91377,7 +91384,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_octopus_customRig",
-        "path": "/models/samples/octopus_customRig.glb.glb",
+        "path": "/models/samples/octopus_customRig.glb",
         "category": "character",
         "subCategory": "octopus",
         "keywords": {
@@ -91440,7 +91447,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_OrientationTest",
-        "path": "/models/samples/OrientationTest.glb.glb",
+        "path": "/models/samples/OrientationTest.glb",
         "category": "prop",
         "subCategory": "test",
         "keywords": {
@@ -91498,7 +91505,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_PBR_Spheres",
-        "path": "/models/samples/PBR_Spheres.glb.glb",
+        "path": "/models/samples/PBR_Spheres.glb",
         "category": "prop",
         "subCategory": "spheres",
         "keywords": {
@@ -91561,7 +91568,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_pill",
-        "path": "/models/samples/pill.glb.glb",
+        "path": "/models/samples/pill.glb",
         "category": "prop",
         "subCategory": "pill",
         "keywords": {
@@ -91624,7 +91631,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_pinkEnergyBall",
-        "path": "/models/samples/pinkEnergyBall.glb.glb",
+        "path": "/models/samples/pinkEnergyBall.glb",
         "category": "prop",
         "subCategory": "energy",
         "keywords": {
@@ -91685,7 +91692,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_pirateFort",
-        "path": "/models/samples/pirateFort.glb.glb",
+        "path": "/models/samples/pirateFort.glb",
         "category": "structure",
         "subCategory": "fort",
         "keywords": {
@@ -91748,7 +91755,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-moving",
-        "path": "/models/samples/platformer-kit_block-moving.glb.glb",
+        "path": "/models/samples/platformer-kit_block-moving.glb",
         "category": "prop",
         "subCategory": "platform",
         "keywords": {
@@ -91814,7 +91821,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-moving-blue",
-        "path": "/models/samples/platformer-kit_block-moving-blue.glb.glb",
+        "path": "/models/samples/platformer-kit_block-moving-blue.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -91879,7 +91886,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-moving-large",
-        "path": "/models/samples/platformer-kit_block-moving-large.glb.glb",
+        "path": "/models/samples/platformer-kit_block-moving-large.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -91942,7 +91949,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-corner-overhang",
-        "path": "/models/samples/platformer-kit_block-snow-corner-overhang.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-corner-overhang.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92004,7 +92011,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-corner-overhang-low",
-        "path": "/models/samples/platformer-kit_block-snow-corner-overhang-low.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-corner-overhang-low.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92065,7 +92072,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-curve",
-        "path": "/models/samples/platformer-kit_block-snow-curve.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-curve.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92129,7 +92136,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-curve-half",
-        "path": "/models/samples/platformer-kit_block-snow-curve-half.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-curve-half.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92191,7 +92198,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-curve-low",
-        "path": "/models/samples/platformer-kit_block-snow-curve-low.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-curve-low.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92257,7 +92264,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-edge",
-        "path": "/models/samples/platformer-kit_block-snow-edge.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-edge.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92319,7 +92326,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-large-slope",
-        "path": "/models/samples/platformer-kit_block-snow-large-slope.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-large-slope.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92381,7 +92388,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-large-slope-steep",
-        "path": "/models/samples/platformer-kit_block-snow-large-slope-steep.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-large-slope-steep.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92442,7 +92449,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-corner",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-corner.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-corner.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92503,7 +92510,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-edge",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-edge.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-edge.glb",
         "category": "structure",
         "subCategory": "block",
         "keywords": {
@@ -92567,7 +92574,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-large",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-large.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-large.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92631,7 +92638,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-large-slope",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-large-slope.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-large-slope.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92692,7 +92699,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-large-slope-steep",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-large-slope-steep.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-large-slope-steep.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92758,7 +92765,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-large-tall",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-large-tall.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-large-tall.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92822,7 +92829,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-long",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-long.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-long.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -92884,7 +92891,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-low",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-low.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-low.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -92946,7 +92953,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-low-large",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-low-large.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-low-large.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93010,7 +93017,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_block-snow-overhang-low-long",
-        "path": "/models/samples/platformer-kit_block-snow-overhang-low-long.glb.glb",
+        "path": "/models/samples/platformer-kit_block-snow-overhang-low-long.glb",
         "category": "prop",
         "subCategory": "platformer block",
         "keywords": {
@@ -93071,7 +93078,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_bomb",
-        "path": "/models/samples/platformer-kit_bomb.glb.glb",
+        "path": "/models/samples/platformer-kit_bomb.glb",
         "category": "prop",
         "subCategory": "bomb",
         "keywords": {
@@ -93138,7 +93145,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_brick",
-        "path": "/models/samples/platformer-kit_brick.glb.glb",
+        "path": "/models/samples/platformer-kit_brick.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93207,7 +93214,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_button-round",
-        "path": "/models/samples/platformer-kit_button-round.glb.glb",
+        "path": "/models/samples/platformer-kit_button-round.glb",
         "category": "prop",
         "subCategory": "button",
         "keywords": {
@@ -93271,7 +93278,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_button-square",
-        "path": "/models/samples/platformer-kit_button-square.glb.glb",
+        "path": "/models/samples/platformer-kit_button-square.glb",
         "category": "prop",
         "subCategory": "button",
         "keywords": {
@@ -93341,7 +93348,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_conveyor-belt",
-        "path": "/models/samples/platformer-kit_conveyor-belt.glb.glb",
+        "path": "/models/samples/platformer-kit_conveyor-belt.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93407,7 +93414,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_hedge-corner",
-        "path": "/models/samples/platformer-kit_hedge-corner.glb.glb",
+        "path": "/models/samples/platformer-kit_hedge-corner.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93479,7 +93486,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_ladder-broken",
-        "path": "/models/samples/platformer-kit_ladder-broken.glb.glb",
+        "path": "/models/samples/platformer-kit_ladder-broken.glb",
         "category": "prop",
         "subCategory": "ladder",
         "keywords": {
@@ -93547,7 +93554,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_ladder-long",
-        "path": "/models/samples/platformer-kit_ladder-long.glb.glb",
+        "path": "/models/samples/platformer-kit_ladder-long.glb",
         "category": "prop",
         "subCategory": "ladder",
         "keywords": {
@@ -93618,7 +93625,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_lever",
-        "path": "/models/samples/platformer-kit_lever.glb.glb",
+        "path": "/models/samples/platformer-kit_lever.glb",
         "category": "prop",
         "subCategory": "lever",
         "keywords": {
@@ -93686,7 +93693,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_pipe",
-        "path": "/models/samples/platformer-kit_pipe.glb.glb",
+        "path": "/models/samples/platformer-kit_pipe.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93751,7 +93758,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_platform-fortified",
-        "path": "/models/samples/platformer-kit_platform-fortified.glb.glb",
+        "path": "/models/samples/platformer-kit_platform-fortified.glb",
         "category": "prop",
         "subCategory": "platform",
         "keywords": {
@@ -93819,7 +93826,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_poles",
-        "path": "/models/samples/platformer-kit_poles.glb.glb",
+        "path": "/models/samples/platformer-kit_poles.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93887,7 +93894,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_saw",
-        "path": "/models/samples/platformer-kit_saw.glb.glb",
+        "path": "/models/samples/platformer-kit_saw.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -93952,7 +93959,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_spike-block",
-        "path": "/models/samples/platformer-kit_spike-block.glb.glb",
+        "path": "/models/samples/platformer-kit_spike-block.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -94015,7 +94022,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_spike-block-wide",
-        "path": "/models/samples/platformer-kit_spike-block-wide.glb.glb",
+        "path": "/models/samples/platformer-kit_spike-block-wide.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -94083,7 +94090,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_spring",
-        "path": "/models/samples/platformer-kit_spring.glb.glb",
+        "path": "/models/samples/platformer-kit_spring.glb",
         "category": "prop",
         "subCategory": "platformer",
         "keywords": {
@@ -94150,7 +94157,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_trap-spikes",
-        "path": "/models/samples/platformer-kit_trap-spikes.glb.glb",
+        "path": "/models/samples/platformer-kit_trap-spikes.glb",
         "category": "prop",
         "subCategory": "trap",
         "keywords": {
@@ -94221,7 +94228,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_platformer-kit_trap-spikes-large",
-        "path": "/models/samples/platformer-kit_trap-spikes-large.glb.glb",
+        "path": "/models/samples/platformer-kit_trap-spikes-large.glb",
         "category": "prop",
         "subCategory": "trap",
         "keywords": {
@@ -94292,7 +94299,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_PlaysetLightTest",
-        "path": "/models/samples/PlaysetLightTest.glb.glb",
+        "path": "/models/samples/PlaysetLightTest.glb",
         "category": "prop",
         "subCategory": "playset",
         "keywords": {
@@ -94351,7 +94358,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_PointLightIntensityTest",
-        "path": "/models/samples/PointLightIntensityTest.glb.glb",
+        "path": "/models/samples/PointLightIntensityTest.glb",
         "category": "prop",
         "subCategory": "point light",
         "keywords": {
@@ -94415,7 +94422,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_PotOfCoals",
-        "path": "/models/samples/PotOfCoals.glb.glb",
+        "path": "/models/samples/PotOfCoals.glb",
         "category": "prop",
         "subCategory": "pot",
         "keywords": {
@@ -94484,7 +94491,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_PotOfCoalsAnimationPointer",
-        "path": "/models/samples/PotOfCoalsAnimationPointer.glb.glb",
+        "path": "/models/samples/PotOfCoalsAnimationPointer.glb",
         "category": "prop",
         "subCategory": "pot",
         "keywords": {
@@ -94552,7 +94559,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_previewSphere",
-        "path": "/models/samples/previewSphere.glb.glb",
+        "path": "/models/samples/previewSphere.glb",
         "category": "prop",
         "subCategory": "preview",
         "keywords": {
@@ -94615,7 +94622,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_r_hand_lhs",
-        "path": "/models/samples/r_hand_lhs.glb.glb",
+        "path": "/models/samples/r_hand_lhs.glb",
         "category": "prop",
         "subCategory": "hand",
         "keywords": {
@@ -94678,7 +94685,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_r_hand_rhs",
-        "path": "/models/samples/r_hand_rhs.glb.glb",
+        "path": "/models/samples/r_hand_rhs.glb",
         "category": "prop",
         "subCategory": "hand",
         "keywords": {
@@ -94743,7 +94750,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_RecursiveSkeletons",
-        "path": "/models/samples/RecursiveSkeletons.glb.glb",
+        "path": "/models/samples/RecursiveSkeletons.glb",
         "category": "prop",
         "subCategory": "skeleton",
         "keywords": {
@@ -94810,7 +94817,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_RiggedFigure",
-        "path": "/models/samples/RiggedFigure.glb.glb",
+        "path": "/models/samples/RiggedFigure.glb",
         "category": "character",
         "subCategory": "humanoid",
         "keywords": {
@@ -94877,7 +94884,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_riggedMesh",
-        "path": "/models/samples/riggedMesh.glb.glb",
+        "path": "/models/samples/riggedMesh.glb",
         "category": "prop",
         "subCategory": "rigged",
         "keywords": {
@@ -94939,7 +94946,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_RiggedSimple",
-        "path": "/models/samples/RiggedSimple.glb.glb",
+        "path": "/models/samples/RiggedSimple.glb",
         "category": "prop",
         "subCategory": "rigged",
         "keywords": {
@@ -94999,7 +95006,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_right",
-        "path": "/models/samples/right.glb.glb",
+        "path": "/models/samples/right.glb",
         "category": "prop",
         "subCategory": "arrow",
         "keywords": {
@@ -95065,7 +95072,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Road_corner",
-        "path": "/models/samples/Road corner.glb.glb",
+        "path": "/models/samples/Road corner.glb",
         "category": "environment",
         "subCategory": "road",
         "keywords": {
@@ -95129,7 +95136,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_road_gap",
-        "path": "/models/samples/road gap.glb.glb",
+        "path": "/models/samples/road gap.glb",
         "category": "environment",
         "subCategory": "road",
         "keywords": {
@@ -95192,7 +95199,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_roundedCube",
-        "path": "/models/samples/roundedCube.glb.glb",
+        "path": "/models/samples/roundedCube.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -95255,7 +95262,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_roundedCylinder",
-        "path": "/models/samples/roundedCylinder.glb.glb",
+        "path": "/models/samples/roundedCylinder.glb",
         "category": "prop",
         "subCategory": "cylinder",
         "keywords": {
@@ -95321,7 +95328,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_sarcophagus",
-        "path": "/models/samples/sarcophagus.glb.glb",
+        "path": "/models/samples/sarcophagus.glb",
         "category": "prop",
         "subCategory": "sarcophagus",
         "keywords": {
@@ -95390,7 +95397,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_sarcophagusOpen",
-        "path": "/models/samples/sarcophagusOpen.glb.glb",
+        "path": "/models/samples/sarcophagusOpen.glb",
         "category": "prop",
         "subCategory": "sarcophagus",
         "keywords": {
@@ -95460,7 +95467,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_sawMill",
-        "path": "/models/samples/sawMill.glb.glb",
+        "path": "/models/samples/sawMill.glb",
         "category": "structure",
         "subCategory": "mill",
         "keywords": {
@@ -95530,7 +95537,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_seagulf",
-        "path": "/models/samples/seagulf.glb.glb",
+        "path": "/models/samples/seagulf.glb",
         "category": "character",
         "subCategory": "bird",
         "keywords": {
@@ -95594,7 +95601,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_shaderBall",
-        "path": "/models/samples/shaderBall.glb.glb",
+        "path": "/models/samples/shaderBall.glb",
         "category": "prop",
         "subCategory": "shader",
         "keywords": {
@@ -95652,7 +95659,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_shaderBall_rotation",
-        "path": "/models/samples/shaderBall_rotation.glb.glb",
+        "path": "/models/samples/shaderBall_rotation.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -95711,7 +95718,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_shark",
-        "path": "/models/samples/shark.glb.glb",
+        "path": "/models/samples/shark.glb",
         "category": "character",
         "subCategory": "fish",
         "keywords": {
@@ -95774,7 +95781,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_sign",
-        "path": "/models/samples/sign.glb.glb",
+        "path": "/models/samples/sign.glb",
         "category": "prop",
         "subCategory": "sign",
         "keywords": {
@@ -95846,7 +95853,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_signboard1",
-        "path": "/models/samples/signboard1.glb.glb",
+        "path": "/models/samples/signboard1.glb",
         "category": "prop",
         "subCategory": "signboard",
         "keywords": {
@@ -95915,7 +95922,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_signboard2",
-        "path": "/models/samples/signboard2.glb.glb",
+        "path": "/models/samples/signboard2.glb",
         "category": "prop",
         "subCategory": "signboard",
         "keywords": {
@@ -95987,7 +95994,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_snowBall",
-        "path": "/models/samples/snowBall.glb.glb",
+        "path": "/models/samples/snowBall.glb",
         "category": "prop",
         "subCategory": "snow",
         "keywords": {
@@ -96051,7 +96058,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_snowField",
-        "path": "/models/samples/snowField.glb.glb",
+        "path": "/models/samples/snowField.glb",
         "category": "environment",
         "subCategory": "field",
         "keywords": {
@@ -96118,7 +96125,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_solar_system",
-        "path": "/models/samples/solar_system.glb.glb",
+        "path": "/models/samples/solar_system.glb",
         "category": "prop",
         "subCategory": "system",
         "keywords": {
@@ -96179,7 +96186,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_solid",
-        "path": "/models/samples/solid.glb.glb",
+        "path": "/models/samples/solid.glb",
         "category": "prop",
         "subCategory": "cube",
         "keywords": {
@@ -96244,7 +96251,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_SpecGlossVsMetalRough",
-        "path": "/models/samples/SpecGlossVsMetalRough.glb.glb",
+        "path": "/models/samples/SpecGlossVsMetalRough.glb",
         "category": "prop",
         "subCategory": "display",
         "keywords": {
@@ -96304,7 +96311,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_spellDisk",
-        "path": "/models/samples/spellDisk.glb.glb",
+        "path": "/models/samples/spellDisk.glb",
         "category": "prop",
         "subCategory": "spell",
         "keywords": {
@@ -96372,7 +96379,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_straight",
-        "path": "/models/samples/straight.glb.glb",
+        "path": "/models/samples/straight.glb",
         "category": "prop",
         "subCategory": "stick",
         "keywords": {
@@ -96439,7 +96446,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_stud",
-        "path": "/models/samples/stud.glb.glb",
+        "path": "/models/samples/stud.glb",
         "category": "prop",
         "subCategory": "metal fitting",
         "keywords": {
@@ -96501,7 +96508,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_stump",
-        "path": "/models/samples/stump.glb.glb",
+        "path": "/models/samples/stump.glb",
         "category": "nature",
         "subCategory": "stump",
         "keywords": {
@@ -96572,7 +96579,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_stump1",
-        "path": "/models/samples/stump1.glb.glb",
+        "path": "/models/samples/stump1.glb",
         "category": "nature",
         "subCategory": "stump",
         "keywords": {
@@ -96645,7 +96652,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_stump2",
-        "path": "/models/samples/stump2.glb.glb",
+        "path": "/models/samples/stump2.glb",
         "category": "nature",
         "subCategory": "stump",
         "keywords": {
@@ -96716,7 +96723,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_SunglassesKhronos",
-        "path": "/models/samples/SunglassesKhronos.glb.glb",
+        "path": "/models/samples/SunglassesKhronos.glb",
         "category": "prop",
         "subCategory": "sunglasses",
         "keywords": {
@@ -96779,7 +96786,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_target",
-        "path": "/models/samples/target.glb.glb",
+        "path": "/models/samples/target.glb",
         "category": "prop",
         "subCategory": "target",
         "keywords": {
@@ -96842,7 +96849,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_TextureCoordinateTest",
-        "path": "/models/samples/TextureCoordinateTest.glb.glb",
+        "path": "/models/samples/TextureCoordinateTest.glb",
         "category": "prop",
         "subCategory": "test",
         "keywords": {
@@ -96903,7 +96910,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_TextureEncodingTest",
-        "path": "/models/samples/TextureEncodingTest.glb.glb",
+        "path": "/models/samples/TextureEncodingTest.glb",
         "category": "prop",
         "subCategory": "test",
         "keywords": {
@@ -96963,7 +96970,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_TextureSettingsTest",
-        "path": "/models/samples/TextureSettingsTest.glb.glb",
+        "path": "/models/samples/TextureSettingsTest.glb",
         "category": "prop",
         "subCategory": "settings",
         "keywords": {
@@ -97020,7 +97027,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_TextureTransformMultiTest",
-        "path": "/models/samples/TextureTransformMultiTest.glb.glb",
+        "path": "/models/samples/TextureTransformMultiTest.glb",
         "category": "prop",
         "subCategory": "test",
         "keywords": {
@@ -97081,7 +97088,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_bath_day",
-        "path": "/models/samples/three.js-examples_bath_day.glb.glb",
+        "path": "/models/samples/three.js-examples_bath_day.glb",
         "category": "prop",
         "subCategory": "bathroom",
         "keywords": {
@@ -97147,7 +97154,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_coffeemat",
-        "path": "/models/samples/three.js-examples_coffeemat.glb.glb",
+        "path": "/models/samples/three.js-examples_coffeemat.glb",
         "category": "prop",
         "subCategory": "mat",
         "keywords": {
@@ -97212,7 +97219,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_coffeeMug",
-        "path": "/models/samples/three.js-examples_coffeeMug.glb.glb",
+        "path": "/models/samples/three.js-examples_coffeeMug.glb",
         "category": "prop",
         "subCategory": "mug",
         "keywords": {
@@ -97280,7 +97287,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_collision-world",
-        "path": "/models/samples/three.js-examples_collision-world.glb.glb",
+        "path": "/models/samples/three.js-examples_collision-world.glb",
         "category": "prop",
         "subCategory": "scene",
         "keywords": {
@@ -97343,7 +97350,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_duck",
-        "path": "/models/samples/three.js-examples_duck.glb.glb",
+        "path": "/models/samples/three.js-examples_duck.glb",
         "category": "prop",
         "subCategory": "toy",
         "keywords": {
@@ -97404,7 +97411,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_facecap",
-        "path": "/models/samples/three.js-examples_facecap.glb.glb",
+        "path": "/models/samples/three.js-examples_facecap.glb",
         "category": "prop",
         "subCategory": "data",
         "keywords": {
@@ -97467,7 +97474,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_ferrari",
-        "path": "/models/samples/three.js-examples_ferrari.glb.glb",
+        "path": "/models/samples/three.js-examples_ferrari.glb",
         "category": "prop",
         "subCategory": "sports car",
         "keywords": {
@@ -97536,7 +97543,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Flamingo",
-        "path": "/models/samples/three.js-examples_Flamingo.glb.glb",
+        "path": "/models/samples/three.js-examples_Flamingo.glb",
         "category": "prop",
         "subCategory": "decoration",
         "keywords": {
@@ -97601,7 +97608,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_gears",
-        "path": "/models/samples/three.js-examples_gears.glb.glb",
+        "path": "/models/samples/three.js-examples_gears.glb",
         "category": "prop",
         "subCategory": "gear",
         "keywords": {
@@ -97662,7 +97669,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_godrays_demo",
-        "path": "/models/samples/three.js-examples_godrays_demo.glb.glb",
+        "path": "/models/samples/three.js-examples_godrays_demo.glb",
         "category": "prop",
         "subCategory": "light effect",
         "keywords": {
@@ -97729,7 +97736,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_IridescentDishWithOlives",
-        "path": "/models/samples/three.js-examples_IridescentDishWithOlives.glb.glb",
+        "path": "/models/samples/three.js-examples_IridescentDishWithOlives.glb",
         "category": "prop",
         "subCategory": "dish",
         "keywords": {
@@ -97795,7 +97802,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_kira",
-        "path": "/models/samples/three.js-examples_kira.glb.glb",
+        "path": "/models/samples/three.js-examples_kira.glb",
         "category": "prop",
         "subCategory": "example",
         "keywords": {
@@ -97862,7 +97869,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_LeePerrySmith",
-        "path": "/models/samples/three.js-examples_LeePerrySmith.glb.glb",
+        "path": "/models/samples/three.js-examples_LeePerrySmith.glb",
         "category": "prop",
         "subCategory": "head",
         "keywords": {
@@ -97923,7 +97930,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_LittlestTokyo",
-        "path": "/models/samples/three.js-examples_LittlestTokyo.glb.glb",
+        "path": "/models/samples/three.js-examples_LittlestTokyo.glb",
         "category": "structure",
         "subCategory": "city",
         "keywords": {
@@ -97989,7 +97996,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Michelle",
-        "path": "/models/samples/three.js-examples_Michelle.glb.glb",
+        "path": "/models/samples/three.js-examples_Michelle.glb",
         "category": "character",
         "subCategory": "human",
         "keywords": {
@@ -98059,7 +98066,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Nefertiti",
-        "path": "/models/samples/three.js-examples_Nefertiti.glb.glb",
+        "path": "/models/samples/three.js-examples_Nefertiti.glb",
         "category": "prop",
         "subCategory": "bust",
         "keywords": {
@@ -98125,7 +98132,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_nemetona",
-        "path": "/models/samples/three.js-examples_nemetona.glb.glb",
+        "path": "/models/samples/three.js-examples_nemetona.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -98193,7 +98200,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Parrot",
-        "path": "/models/samples/three.js-examples_Parrot.glb.glb",
+        "path": "/models/samples/three.js-examples_Parrot.glb",
         "category": "character",
         "subCategory": "bird",
         "keywords": {
@@ -98256,7 +98263,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_pool",
-        "path": "/models/samples/three.js-examples_pool.glb.glb",
+        "path": "/models/samples/three.js-examples_pool.glb",
         "category": "prop",
         "subCategory": "pool",
         "keywords": {
@@ -98324,7 +98331,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_PrimaryIonDrive",
-        "path": "/models/samples/three.js-examples_PrimaryIonDrive.glb.glb",
+        "path": "/models/samples/three.js-examples_PrimaryIonDrive.glb",
         "category": "prop",
         "subCategory": "spaceship part",
         "keywords": {
@@ -98387,7 +98394,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_readyplayer_me",
-        "path": "/models/samples/three.js-examples_readyplayer.me.glb.glb",
+        "path": "/models/samples/three.js-examples_readyplayer.me.glb",
         "category": "character",
         "subCategory": "avatar",
         "keywords": {
@@ -98453,7 +98460,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_RobotExpressive",
-        "path": "/models/samples/three.js-examples_RobotExpressive.glb.glb",
+        "path": "/models/samples/three.js-examples_RobotExpressive.glb",
         "category": "prop",
         "subCategory": "robot",
         "keywords": {
@@ -98517,7 +98524,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_rolex",
-        "path": "/models/samples/three.js-examples_rolex.glb.glb",
+        "path": "/models/samples/three.js-examples_rolex.glb",
         "category": "prop",
         "subCategory": "watch",
         "keywords": {
@@ -98587,7 +98594,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_ShaderBall",
-        "path": "/models/samples/three.js-examples_ShaderBall.glb.glb",
+        "path": "/models/samples/three.js-examples_ShaderBall.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -98648,7 +98655,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_ShaderBall2",
-        "path": "/models/samples/three.js-examples_ShaderBall2.glb.glb",
+        "path": "/models/samples/three.js-examples_ShaderBall2.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -98709,7 +98716,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_ShadowmappableMesh",
-        "path": "/models/samples/three.js-examples_ShadowmappableMesh.glb.glb",
+        "path": "/models/samples/three.js-examples_ShadowmappableMesh.glb",
         "category": "prop",
         "subCategory": "generic",
         "keywords": {
@@ -98770,7 +98777,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_steampunk_camera",
-        "path": "/models/samples/three.js-examples_steampunk_camera.glb.glb",
+        "path": "/models/samples/three.js-examples_steampunk_camera.glb",
         "category": "prop",
         "subCategory": "camera",
         "keywords": {
@@ -98836,7 +98843,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Stork",
-        "path": "/models/samples/three.js-examples_Stork.glb.glb",
+        "path": "/models/samples/three.js-examples_Stork.glb",
         "category": "character",
         "subCategory": "bird",
         "keywords": {
@@ -98905,7 +98912,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_venice_mask",
-        "path": "/models/samples/three.js-examples_venice_mask.glb.glb",
+        "path": "/models/samples/three.js-examples_venice_mask.glb",
         "category": "prop",
         "subCategory": "mask",
         "keywords": {
@@ -98973,7 +98980,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_three_js-examples_Xbot",
-        "path": "/models/samples/three.js-examples_Xbot.glb.glb",
+        "path": "/models/samples/three.js-examples_Xbot.glb",
         "category": "character",
         "subCategory": "humanoid",
         "keywords": {
@@ -99034,7 +99041,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_toast_acrobatics",
-        "path": "/models/samples/toast_acrobatics.glb.glb",
+        "path": "/models/samples/toast_acrobatics.glb",
         "category": "prop",
         "subCategory": "acrobatics",
         "keywords": {
@@ -99101,7 +99108,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_transfiguration_class",
-        "path": "/models/samples/transfiguration_class.glb.glb",
+        "path": "/models/samples/transfiguration_class.glb",
         "category": "prop",
         "subCategory": "classroom",
         "keywords": {
@@ -99168,7 +99175,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_ufo",
-        "path": "/models/samples/ufo.glb.glb",
+        "path": "/models/samples/ufo.glb",
         "category": "prop",
         "subCategory": "ufo",
         "keywords": {
@@ -99231,7 +99238,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_underwaterGround",
-        "path": "/models/samples/underwaterGround.glb.glb",
+        "path": "/models/samples/underwaterGround.glb",
         "category": "environment",
         "subCategory": "underwater",
         "keywords": {
@@ -99298,7 +99305,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_underwaterScene",
-        "path": "/models/samples/underwaterScene.glb.glb",
+        "path": "/models/samples/underwaterScene.glb",
         "category": "environment",
         "subCategory": "underwater",
         "keywords": {
@@ -99364,7 +99371,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_underwaterSceneNavMesh",
-        "path": "/models/samples/underwaterSceneNavMesh.glb.glb",
+        "path": "/models/samples/underwaterSceneNavMesh.glb",
         "category": "prop",
         "subCategory": "underwater",
         "keywords": {
@@ -99427,7 +99434,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_valleyvillage",
-        "path": "/models/samples/valleyvillage.glb.glb",
+        "path": "/models/samples/valleyvillage.glb",
         "category": "structure",
         "subCategory": "village",
         "keywords": {
@@ -99502,7 +99509,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_village",
-        "path": "/models/samples/village.glb.glb",
+        "path": "/models/samples/village.glb",
         "category": "structure",
         "subCategory": "village",
         "keywords": {
@@ -99575,7 +99582,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_VirtualCity",
-        "path": "/models/samples/VirtualCity.glb.glb",
+        "path": "/models/samples/VirtualCity.glb",
         "category": "structure",
         "subCategory": "city",
         "keywords": {
@@ -99642,7 +99649,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_wagon",
-        "path": "/models/samples/wagon.glb.glb",
+        "path": "/models/samples/wagon.glb",
         "category": "prop",
         "subCategory": "wagon",
         "keywords": {
@@ -99712,7 +99719,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_waterwell",
-        "path": "/models/samples/waterwell.glb.glb",
+        "path": "/models/samples/waterwell.glb",
         "category": "prop",
         "subCategory": "waterwell",
         "keywords": {
@@ -99779,7 +99786,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_Xbot",
-        "path": "/models/samples/Xbot.glb.glb",
+        "path": "/models/samples/Xbot.glb",
         "category": "character",
         "subCategory": "robot",
         "keywords": {
@@ -99842,7 +99849,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_yellowEnergyBall",
-        "path": "/models/samples/yellowEnergyBall.glb.glb",
+        "path": "/models/samples/yellowEnergyBall.glb",
         "category": "prop",
         "subCategory": "ball",
         "keywords": {
@@ -99906,7 +99913,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "samples_YetiSmall",
-        "path": "/models/samples/YetiSmall.glb.glb",
+        "path": "/models/samples/YetiSmall.glb",
         "category": "character",
         "subCategory": "yeti",
         "keywords": {
@@ -99967,7 +99974,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "sketchfab_food_Low-poly_Fangding_food_vessel",
-        "path": "/models/sketchfab/food/Low-poly_Fangding_food_vessel.glb.glb",
+        "path": "/models/sketchfab/food/Low-poly_Fangding_food_vessel.glb",
         "category": "prop",
         "subCategory": "vessel",
         "keywords": {
@@ -100036,7 +100043,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "sketchfab_food_Lower-poly_Liding_food_vessel__12th-11th_C_BCE",
-        "path": "/models/sketchfab/food/Lower-poly_Liding_food_vessel__12th-11th_C_BCE.glb.glb",
+        "path": "/models/sketchfab/food/Lower-poly_Liding_food_vessel__12th-11th_C_BCE.glb",
         "category": "prop",
         "subCategory": "vessel",
         "keywords": {
@@ -100104,7 +100111,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_acrobaticPlane_variants",
-        "path": "/models/vehicles/acrobaticPlane_variants.glb.glb",
+        "path": "/models/vehicles/acrobaticPlane_variants.glb",
         "category": "prop",
         "subCategory": "plane",
         "keywords": {
@@ -100167,7 +100174,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_aerobatic_plane",
-        "path": "/models/vehicles/aerobatic_plane.glb.glb",
+        "path": "/models/vehicles/aerobatic_plane.glb",
         "category": "prop",
         "subCategory": "aeroplane",
         "keywords": {
@@ -100231,7 +100238,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_babylon-assets_Buggy",
-        "path": "/models/vehicles/babylon-assets_Buggy.glb.glb",
+        "path": "/models/vehicles/babylon-assets_Buggy.glb",
         "category": "prop",
         "subCategory": "buggy",
         "keywords": {
@@ -100301,7 +100308,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_babylon-assets_CesiumMilkTruck",
-        "path": "/models/vehicles/babylon-assets_CesiumMilkTruck.glb.glb",
+        "path": "/models/vehicles/babylon-assets_CesiumMilkTruck.glb",
         "category": "prop",
         "subCategory": "truck",
         "keywords": {
@@ -100367,7 +100374,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car",
-        "path": "/models/vehicles/car.glb.glb",
+        "path": "/models/vehicles/car.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -100438,7 +100445,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_ambulance",
-        "path": "/models/vehicles/car-kit_ambulance.glb.glb",
+        "path": "/models/vehicles/car-kit_ambulance.glb",
         "category": "prop",
         "subCategory": "ambulance",
         "keywords": {
@@ -100503,7 +100510,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_box",
-        "path": "/models/vehicles/car-kit_box.glb.glb",
+        "path": "/models/vehicles/car-kit_box.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -100567,7 +100574,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_cone",
-        "path": "/models/vehicles/car-kit_cone.glb.glb",
+        "path": "/models/vehicles/car-kit_cone.glb",
         "category": "prop",
         "subCategory": "cone",
         "keywords": {
@@ -100632,7 +100639,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_cone-flat",
-        "path": "/models/vehicles/car-kit_cone-flat.glb.glb",
+        "path": "/models/vehicles/car-kit_cone-flat.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -100701,7 +100708,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-bolt",
-        "path": "/models/vehicles/car-kit_debris-bolt.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-bolt.glb",
         "category": "prop",
         "subCategory": "debris",
         "keywords": {
@@ -100766,7 +100773,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-bumper",
-        "path": "/models/vehicles/car-kit_debris-bumper.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-bumper.glb",
         "category": "prop",
         "subCategory": "car part",
         "keywords": {
@@ -100831,7 +100838,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-drivetrain",
-        "path": "/models/vehicles/car-kit_debris-drivetrain.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-drivetrain.glb",
         "category": "prop",
         "subCategory": "drivetrain",
         "keywords": {
@@ -100895,7 +100902,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-drivetrain-axle",
-        "path": "/models/vehicles/car-kit_debris-drivetrain-axle.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-drivetrain-axle.glb",
         "category": "prop",
         "subCategory": "drivetrain",
         "keywords": {
@@ -100961,7 +100968,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-nut",
-        "path": "/models/vehicles/car-kit_debris-nut.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-nut.glb",
         "category": "prop",
         "subCategory": "debris",
         "keywords": {
@@ -101025,7 +101032,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-plate-a",
-        "path": "/models/vehicles/car-kit_debris-plate-a.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-plate-a.glb",
         "category": "prop",
         "subCategory": "debris",
         "keywords": {
@@ -101089,7 +101096,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-plate-b",
-        "path": "/models/vehicles/car-kit_debris-plate-b.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-plate-b.glb",
         "category": "prop",
         "subCategory": "car part",
         "keywords": {
@@ -101154,7 +101161,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-plate-small-a",
-        "path": "/models/vehicles/car-kit_debris-plate-small-a.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-plate-small-a.glb",
         "category": "prop",
         "subCategory": "debris",
         "keywords": {
@@ -101219,7 +101226,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-plate-small-b",
-        "path": "/models/vehicles/car-kit_debris-plate-small-b.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-plate-small-b.glb",
         "category": "prop",
         "subCategory": "debris",
         "keywords": {
@@ -101285,7 +101292,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-spoiler-a",
-        "path": "/models/vehicles/car-kit_debris-spoiler-a.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-spoiler-a.glb",
         "category": "prop",
         "subCategory": "spoiler",
         "keywords": {
@@ -101348,7 +101355,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-spoiler-b",
-        "path": "/models/vehicles/car-kit_debris-spoiler-b.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-spoiler-b.glb",
         "category": "prop",
         "subCategory": "spoiler",
         "keywords": {
@@ -101411,7 +101418,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_debris-tire",
-        "path": "/models/vehicles/car-kit_debris-tire.glb.glb",
+        "path": "/models/vehicles/car-kit_debris-tire.glb",
         "category": "prop",
         "subCategory": "tire",
         "keywords": {
@@ -101476,7 +101483,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_delivery",
-        "path": "/models/vehicles/car-kit_delivery.glb.glb",
+        "path": "/models/vehicles/car-kit_delivery.glb",
         "category": "prop",
         "subCategory": "delivery",
         "keywords": {
@@ -101542,7 +101549,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_delivery-flat",
-        "path": "/models/vehicles/car-kit_delivery-flat.glb.glb",
+        "path": "/models/vehicles/car-kit_delivery-flat.glb",
         "category": "prop",
         "subCategory": "delivery car",
         "keywords": {
@@ -101605,7 +101612,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_firetruck",
-        "path": "/models/vehicles/car-kit_firetruck.glb.glb",
+        "path": "/models/vehicles/car-kit_firetruck.glb",
         "category": "prop",
         "subCategory": "firetruck",
         "keywords": {
@@ -101674,7 +101681,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_garbage-truck",
-        "path": "/models/vehicles/car-kit_garbage-truck.glb.glb",
+        "path": "/models/vehicles/car-kit_garbage-truck.glb",
         "category": "prop",
         "subCategory": "truck",
         "keywords": {
@@ -101741,7 +101748,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_hatchback-sports",
-        "path": "/models/vehicles/car-kit_hatchback-sports.glb.glb",
+        "path": "/models/vehicles/car-kit_hatchback-sports.glb",
         "category": "prop",
         "subCategory": "hatchback",
         "keywords": {
@@ -101811,7 +101818,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_kart-oobi",
-        "path": "/models/vehicles/car-kit_kart-oobi.glb.glb",
+        "path": "/models/vehicles/car-kit_kart-oobi.glb",
         "category": "prop",
         "subCategory": "kart",
         "keywords": {
@@ -101875,7 +101882,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_kart-oodi",
-        "path": "/models/vehicles/car-kit_kart-oodi.glb.glb",
+        "path": "/models/vehicles/car-kit_kart-oodi.glb",
         "category": "prop",
         "subCategory": "kart",
         "keywords": {
@@ -101940,7 +101947,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_kart-ooli",
-        "path": "/models/vehicles/car-kit_kart-ooli.glb.glb",
+        "path": "/models/vehicles/car-kit_kart-ooli.glb",
         "category": "prop",
         "subCategory": "kart",
         "keywords": {
@@ -102005,7 +102012,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_kart-oopi",
-        "path": "/models/vehicles/car-kit_kart-oopi.glb.glb",
+        "path": "/models/vehicles/car-kit_kart-oopi.glb",
         "category": "prop",
         "subCategory": "kart",
         "keywords": {
@@ -102070,7 +102077,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_kart-oozi",
-        "path": "/models/vehicles/car-kit_kart-oozi.glb.glb",
+        "path": "/models/vehicles/car-kit_kart-oozi.glb",
         "category": "prop",
         "subCategory": "kart",
         "keywords": {
@@ -102136,7 +102143,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_police",
-        "path": "/models/vehicles/car-kit_police.glb.glb",
+        "path": "/models/vehicles/car-kit_police.glb",
         "category": "prop",
         "subCategory": "police car",
         "keywords": {
@@ -102201,7 +102208,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_race",
-        "path": "/models/vehicles/car-kit_race.glb.glb",
+        "path": "/models/vehicles/car-kit_race.glb",
         "category": "prop",
         "subCategory": "race car",
         "keywords": {
@@ -102267,7 +102274,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_race-future",
-        "path": "/models/vehicles/car-kit_race-future.glb.glb",
+        "path": "/models/vehicles/car-kit_race-future.glb",
         "category": "prop",
         "subCategory": "future car",
         "keywords": {
@@ -102333,7 +102340,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_sedan",
-        "path": "/models/vehicles/car-kit_sedan.glb.glb",
+        "path": "/models/vehicles/car-kit_sedan.glb",
         "category": "prop",
         "subCategory": "sedan",
         "keywords": {
@@ -102399,7 +102406,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_sedan-sports",
-        "path": "/models/vehicles/car-kit_sedan-sports.glb.glb",
+        "path": "/models/vehicles/car-kit_sedan-sports.glb",
         "category": "prop",
         "subCategory": "sports car",
         "keywords": {
@@ -102470,7 +102477,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_suv",
-        "path": "/models/vehicles/car-kit_suv.glb.glb",
+        "path": "/models/vehicles/car-kit_suv.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -102540,7 +102547,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_suv-luxury",
-        "path": "/models/vehicles/car-kit_suv-luxury.glb.glb",
+        "path": "/models/vehicles/car-kit_suv-luxury.glb",
         "category": "prop",
         "subCategory": "suv",
         "keywords": {
@@ -102611,7 +102618,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_taxi",
-        "path": "/models/vehicles/car-kit_taxi.glb.glb",
+        "path": "/models/vehicles/car-kit_taxi.glb",
         "category": "prop",
         "subCategory": "taxi",
         "keywords": {
@@ -102676,7 +102683,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_tractor",
-        "path": "/models/vehicles/car-kit_tractor.glb.glb",
+        "path": "/models/vehicles/car-kit_tractor.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -102741,7 +102748,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_tractor-police",
-        "path": "/models/vehicles/car-kit_tractor-police.glb.glb",
+        "path": "/models/vehicles/car-kit_tractor-police.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -102807,7 +102814,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_tractor-shovel",
-        "path": "/models/vehicles/car-kit_tractor-shovel.glb.glb",
+        "path": "/models/vehicles/car-kit_tractor-shovel.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -102872,7 +102879,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_truck",
-        "path": "/models/vehicles/car-kit_truck.glb.glb",
+        "path": "/models/vehicles/car-kit_truck.glb",
         "category": "prop",
         "subCategory": "truck",
         "keywords": {
@@ -102937,7 +102944,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_truck-flat",
-        "path": "/models/vehicles/car-kit_truck-flat.glb.glb",
+        "path": "/models/vehicles/car-kit_truck-flat.glb",
         "category": "prop",
         "subCategory": "truck",
         "keywords": {
@@ -103003,7 +103010,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_van",
-        "path": "/models/vehicles/car-kit_van.glb.glb",
+        "path": "/models/vehicles/car-kit_van.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -103071,7 +103078,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-dark",
-        "path": "/models/vehicles/car-kit_wheel-dark.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-dark.glb",
         "category": "prop",
         "subCategory": "wheel",
         "keywords": {
@@ -103136,7 +103143,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-default",
-        "path": "/models/vehicles/car-kit_wheel-default.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-default.glb",
         "category": "prop",
         "subCategory": "wheel",
         "keywords": {
@@ -103201,7 +103208,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-racing",
-        "path": "/models/vehicles/car-kit_wheel-racing.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-racing.glb",
         "category": "prop",
         "subCategory": "racing car wheel",
         "keywords": {
@@ -103265,7 +103272,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-tractor-back",
-        "path": "/models/vehicles/car-kit_wheel-tractor-back.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-tractor-back.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -103331,7 +103338,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-tractor-dark-back",
-        "path": "/models/vehicles/car-kit_wheel-tractor-dark-back.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-tractor-dark-back.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -103394,7 +103401,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-tractor-dark-front",
-        "path": "/models/vehicles/car-kit_wheel-tractor-dark-front.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-tractor-dark-front.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -103457,7 +103464,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-tractor-front",
-        "path": "/models/vehicles/car-kit_wheel-tractor-front.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-tractor-front.glb",
         "category": "prop",
         "subCategory": "tractor",
         "keywords": {
@@ -103521,7 +103528,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_car-kit_wheel-truck",
-        "path": "/models/vehicles/car-kit_wheel-truck.glb.glb",
+        "path": "/models/vehicles/car-kit_wheel-truck.glb",
         "category": "prop",
         "subCategory": "wheel",
         "keywords": {
@@ -103586,7 +103593,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_CarbonFiberWheel",
-        "path": "/models/vehicles/CarbonFiberWheel.glb.glb",
+        "path": "/models/vehicles/CarbonFiberWheel.glb",
         "category": "prop",
         "subCategory": "wheel",
         "keywords": {
@@ -103648,7 +103655,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_CarbonFibre",
-        "path": "/models/vehicles/CarbonFibre.glb.glb",
+        "path": "/models/vehicles/CarbonFibre.glb",
         "category": "prop",
         "subCategory": "panel",
         "keywords": {
@@ -103713,7 +103720,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_CarConcept",
-        "path": "/models/vehicles/CarConcept.glb.glb",
+        "path": "/models/vehicles/CarConcept.glb",
         "category": "prop",
         "subCategory": "concept car",
         "keywords": {
@@ -103781,7 +103788,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_CesiumMilkTruck",
-        "path": "/models/vehicles/CesiumMilkTruck.glb.glb",
+        "path": "/models/vehicles/CesiumMilkTruck.glb",
         "category": "prop",
         "subCategory": "truck",
         "keywords": {
@@ -103844,7 +103851,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_ClearCoatCarPaint",
-        "path": "/models/vehicles/ClearCoatCarPaint.glb.glb",
+        "path": "/models/vehicles/ClearCoatCarPaint.glb",
         "category": "prop",
         "subCategory": "car paint",
         "keywords": {
@@ -103908,7 +103915,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_fantasy-town-kit_cart",
-        "path": "/models/vehicles/fantasy-town-kit_cart.glb.glb",
+        "path": "/models/vehicles/fantasy-town-kit_cart.glb",
         "category": "prop",
         "subCategory": "cart",
         "keywords": {
@@ -103977,7 +103984,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_fantasy-town-kit_cart-high",
-        "path": "/models/vehicles/fantasy-town-kit_cart-high.glb.glb",
+        "path": "/models/vehicles/fantasy-town-kit_cart-high.glb",
         "category": "prop",
         "subCategory": "cart",
         "keywords": {
@@ -104045,7 +104052,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_graveyard-kit_pumpkin-carved",
-        "path": "/models/vehicles/graveyard-kit_pumpkin-carved.glb.glb",
+        "path": "/models/vehicles/graveyard-kit_pumpkin-carved.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -104112,7 +104119,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_graveyard-kit_pumpkin-tall-carved",
-        "path": "/models/vehicles/graveyard-kit_pumpkin-tall-carved.glb.glb",
+        "path": "/models/vehicles/graveyard-kit_pumpkin-tall-carved.glb",
         "category": "prop",
         "subCategory": "graveyard",
         "keywords": {
@@ -104181,7 +104188,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_highPolyPlane",
-        "path": "/models/vehicles/highPolyPlane.glb.glb",
+        "path": "/models/vehicles/highPolyPlane.glb",
         "category": "prop",
         "subCategory": "plane",
         "keywords": {
@@ -104244,7 +104251,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_pumpkinBucketCarved",
-        "path": "/models/vehicles/pumpkinBucketCarved.glb.glb",
+        "path": "/models/vehicles/pumpkinBucketCarved.glb",
         "category": "prop",
         "subCategory": "car",
         "keywords": {
@@ -104311,7 +104318,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_three_js-examples_space_ship_hallway",
-        "path": "/models/vehicles/three.js-examples_space_ship_hallway.glb.glb",
+        "path": "/models/vehicles/three.js-examples_space_ship_hallway.glb",
         "category": "prop",
         "subCategory": "spaceship",
         "keywords": {
@@ -104378,7 +104385,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "vehicles_ToyCar",
-        "path": "/models/vehicles/ToyCar.glb.glb",
+        "path": "/models/vehicles/ToyCar.glb",
         "category": "prop",
         "subCategory": "toy car",
         "keywords": {
@@ -104443,7 +104450,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_babylon-assets_DamagedHelmet",
-        "path": "/models/weapons/babylon-assets_DamagedHelmet.glb.glb",
+        "path": "/models/weapons/babylon-assets_DamagedHelmet.glb",
         "category": "prop",
         "subCategory": "helmet",
         "keywords": {
@@ -104510,7 +104517,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_bowlingBall",
-        "path": "/models/weapons/bowlingBall.glb.glb",
+        "path": "/models/weapons/bowlingBall.glb",
         "category": "prop",
         "subCategory": "bowling ball",
         "keywords": {
@@ -104571,7 +104578,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_bowlingPinpin",
-        "path": "/models/weapons/bowlingPinpin.glb.glb",
+        "path": "/models/weapons/bowlingPinpin.glb",
         "category": "prop",
         "subCategory": "bowling pin",
         "keywords": {
@@ -104632,7 +104639,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_DamagedHelmet",
-        "path": "/models/weapons/DamagedHelmet.glb.glb",
+        "path": "/models/weapons/DamagedHelmet.glb",
         "category": "prop",
         "subCategory": "helmet",
         "keywords": {
@@ -104705,7 +104712,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_flightHelmet",
-        "path": "/models/weapons/flightHelmet.glb.glb",
+        "path": "/models/weapons/flightHelmet.glb",
         "category": "prop",
         "subCategory": "helmet",
         "keywords": {
@@ -104768,7 +104775,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_frostAxe",
-        "path": "/models/weapons/frostAxe.glb.glb",
+        "path": "/models/weapons/frostAxe.glb",
         "category": "prop",
         "subCategory": "axe",
         "keywords": {
@@ -104838,7 +104845,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_frostAxe_noMorph",
-        "path": "/models/weapons/frostAxe_noMorph.glb.glb",
+        "path": "/models/weapons/frostAxe_noMorph.glb",
         "category": "prop",
         "subCategory": "axe",
         "keywords": {
@@ -104907,7 +104914,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_graveyard-kit_detail-bowl",
-        "path": "/models/weapons/graveyard-kit_detail-bowl.glb.glb",
+        "path": "/models/weapons/graveyard-kit_detail-bowl.glb",
         "category": "prop",
         "subCategory": "graveyard decor",
         "keywords": {
@@ -104974,7 +104981,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_arrow",
-        "path": "/models/weapons/platformer-kit_arrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_arrow.glb",
         "category": "prop",
         "subCategory": "arrow",
         "keywords": {
@@ -105039,7 +105046,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_arrows",
-        "path": "/models/weapons/platformer-kit_arrows.glb.glb",
+        "path": "/models/weapons/platformer-kit_arrows.glb",
         "category": "prop",
         "subCategory": "arrow",
         "keywords": {
@@ -105104,7 +105111,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-large-slope-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-large-slope-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-large-slope-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105165,7 +105172,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-large-slope-steep-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-large-slope-steep-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-large-slope-steep-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105227,7 +105234,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-low-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-low-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-low-narrow.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -105290,7 +105297,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-narrow.glb",
         "category": "prop",
         "subCategory": "block",
         "keywords": {
@@ -105353,7 +105360,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-overhang-large-slope-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-overhang-large-slope-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-overhang-large-slope-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105416,7 +105423,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-overhang-large-slope-steep-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-overhang-large-slope-steep-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-overhang-large-slope-steep-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105480,7 +105487,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-overhang-low-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-overhang-low-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-overhang-low-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105541,7 +105548,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_platformer-kit_block-snow-overhang-narrow",
-        "path": "/models/weapons/platformer-kit_block-snow-overhang-narrow.glb.glb",
+        "path": "/models/weapons/platformer-kit_block-snow-overhang-narrow.glb",
         "category": "structure",
         "subCategory": "platform",
         "keywords": {
@@ -105602,7 +105609,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_runeSword",
-        "path": "/models/weapons/runeSword.glb.glb",
+        "path": "/models/weapons/runeSword.glb",
         "category": "prop",
         "subCategory": "sword",
         "keywords": {
@@ -105678,7 +105685,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_stumpAxe",
-        "path": "/models/weapons/stumpAxe.glb.glb",
+        "path": "/models/weapons/stumpAxe.glb",
         "category": "prop",
         "subCategory": "axe",
         "keywords": {
@@ -105744,7 +105751,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         "id": "weapons_sword_noMat",
-        "path": "/models/weapons/sword_noMat.glb.glb",
+        "path": "/models/weapons/sword_noMat.glb",
         "category": "prop",
         "subCategory": "sword",
         "keywords": {

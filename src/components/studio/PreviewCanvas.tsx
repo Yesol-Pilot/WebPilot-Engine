@@ -18,10 +18,15 @@ import { useSafeGLTF } from '@/hooks/useSafeGLTF';
 import * as THREE from 'three';
 import { SceneNode, SemanticRole } from '@/lib/schema/scene';
 import { autoScaleAssetSync, autoScaleAssetSemantic, registerContainerForScaling } from '@/utils/autoScaleAsset';
+import { PhysicsInferenceQueue } from '@/services/PhysicsInferenceQueue';
+import { PBRMaterialConverter } from '@/services/ai-pipeline/PBRMaterialConverter';
+import { UnifiedSceneNode } from '@/services/ai-pipeline/UnifiedSceneGenerationService';
 import { SemanticScaleResolver, createSemanticScaleResolver } from '@/services/ai-pipeline/SemanticScaleResolver';
 import ObjectInfoPopup from './ObjectInfoPopup';
 import ParticleSystem from '@/components/effects/ParticleSystem';
 import BGMControlButton from '@/components/ui/BGMControlButton';
+import { EffectComposer, Bloom, Vignette, SSAO, BrightnessContrast, HueSaturation } from '@react-three/postprocessing';
+import { BlendFunction } from 'postprocessing';
 
 
 
@@ -89,6 +94,78 @@ function ExposureController() {
             hasLoggedRef.current = true;
         }
     }, [gl, exposure]);
+
+    return null;
+}
+
+/**
+ * WebGLMonitor: 컨텍스트 유실 감시 및 자동 복구 유도
+ */
+function WebGLMonitor() {
+    const { gl } = useThree();
+
+    useEffect(() => {
+        const canvas = gl.domElement;
+
+        const handleContextLost = (e: Event) => {
+            e.preventDefault();
+            console.error('[PreviewCanvas] 🚨 WebGL Context Lost! GPU 메모리 초과 또는 드라이버 크래시 의심.');
+            window.dispatchEvent(new CustomEvent('webglStatus', { detail: { status: 'lost' } }));
+        };
+
+        const handleContextRestored = () => {
+            console.log('[PreviewCanvas] ✨ WebGL Context Restored. 씬 재구성 중...');
+            window.location.reload(); // 단순 복구보다는 페이지 새로고침이 안전
+        };
+
+        canvas.addEventListener('webglcontextlost', handleContextLost, false);
+        canvas.addEventListener('webglcontextrestored', handleContextRestored, false);
+
+        return () => {
+            canvas.removeEventListener('webglcontextlost', handleContextLost);
+            canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+        };
+    }, [gl]);
+
+    return null;
+}
+
+/**
+ * CaptureScene: 외부 요청 시 현재 캔버스를 캡처하여 전달 (v4.0 MACR 기반)
+ */
+function CaptureScene() {
+    const { gl, scene, camera } = useThree();
+
+    useEffect(() => {
+        const handleCapture = (e: Event) => {
+            const customEvent = e as CustomEvent;
+            const { requestId, callback } = customEvent.detail;
+
+            try {
+                // 1. 강제 렌더링 (현재 프레임 보장)
+                gl.render(scene, camera);
+
+                // 2. Base64 추출 (WebP 권장)
+                const dataUrl = gl.domElement.toDataURL('image/webp', 0.8);
+
+                console.log(`[CaptureScene] 📸 캡처 완료 (requestId: ${requestId})`);
+
+                // 3. 콜백 실행 또는 이벤트 응답
+                if (callback) callback(dataUrl);
+                window.dispatchEvent(new CustomEvent(`captureResponse_${requestId}`, {
+                    detail: { dataUrl, success: true }
+                }));
+            } catch (err) {
+                console.error('[CaptureScene] ❌ 캡처 실패:', err);
+                window.dispatchEvent(new CustomEvent(`captureResponse_${requestId}`, {
+                    detail: { success: false, error: (err as Error).message }
+                }));
+            }
+        };
+
+        window.addEventListener('requestSceneCapture', handleCapture);
+        return () => window.removeEventListener('requestSceneCapture', handleCapture);
+    }, [gl, scene, camera]);
 
     return null;
 }
@@ -206,19 +283,23 @@ function PreviewNode({ node }: { node: SceneNode }) {
                     // 로컬 경로인 경우에만 /models/ prefix 적용
                     const isExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
                     const modelUrl = isExternalUrl
-                        ? rawUrl  // 외부 URL은 그대로
+                        ? rawUrl
                         : rawUrl.startsWith('/')
-                            ? rawUrl  // /로 시작하는 로컬 경로는 그대로
-                            : `/models/${rawUrl}.glb`;  // 그 외는 로컬 모델로 취급
+                            ? rawUrl
+                            : rawUrl.endsWith('.glb')
+                                ? `/models/${rawUrl}`
+                                : `/models/${rawUrl}.glb`;
                     console.log(`[PreviewNode] 📌 직접 지정: ${node.name} → ${modelUrl}`);
                     setModelPath(modelUrl);
                     setSearchAttempted(true);
                     return;
                 }
 
-                // 1단계: 로컬 에셋 검색 (AssetRegistry - 키워드 매칭)
+                // 1단계: 로컬 에셋 검색 (스킵 - v3.4 Fix 메모리 최적화)
+                // [v3.4 Fix] 클라이언트 사이드 AssetRegistry 로드 방지를 위해 로컬 검색을 최소화하거나 스킵함.
+                /*
                 const { searchAssets } = await import('@/data/AssetRegistry');
-                const matches = searchAssets(searchKey);
+                const matches = await searchAssets(searchKey);
 
                 if (matches.length > 0) {
                     const bestMatch = matches[0];
@@ -227,28 +308,35 @@ function PreviewNode({ node }: { node: SceneNode }) {
                     setSearchAttempted(true);
                     return;
                 }
+                */
 
                 // 2단계: API 폴백 (DB 기반 검색 - 2400+ 에셋)
-                console.log(`[PreviewNode] 🔍 API 검색 시도: "${searchKey}"`);
-                const response = await fetch('/api/resources/match', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ description: searchKey })
-                });
+                // type: 'asset' 필수 — API 라우트가 타입별 분기 처리
+                try {
+                    console.log(`[PreviewNode] 🔍 API 검색 시도: "${searchKey}"`);
+                    const response = await fetch('/api/resources/match', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: 'asset', description: searchKey })
+                    });
 
-                if (response.ok) {
-                    const result = await response.json();
-                    // ResourceMatcher는 filePath를 반환, 일부는 url 사용
-                    const modelUrl = result?.url || result?.filePath;
-                    if (modelUrl) {
-                        console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${modelUrl}`);
-                        setModelPath(modelUrl);
-                        setSearchAttempted(true);
-                        return;
+                    if (response.ok) {
+                        const result = await response.json();
+                        // ResourceMatcher는 filePath를 반환, 일부는 url 사용
+                        const modelUrl = result?.url || result?.filePath;
+                        if (modelUrl) {
+                            console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${modelUrl}`);
+                            setModelPath(modelUrl);
+                            setSearchAttempted(true);
+                            return;
+                        }
                     }
+                    // 404는 매칭 실패의 정상 케이스 — 조용히 처리
+                } catch {
+                    // API 서버 미응답 등 네트워크 에러 — 무시하고 폴백 진행
                 }
 
-                // 모든 매칭 실패
+                // 모든 매칭 실패 — 절차적 메시로 폴백
                 console.log(`[PreviewNode] ❌ 매칭 실패: "${searchKey}" (${node.type})`);
                 setSearchAttempted(true);
 
@@ -464,6 +552,34 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
         return finalScale;
     }, [scene, scale, path]);
 
+    // [Phase 3.3] 리소스 해제 강화 (Memory Leak & WebGL Context Loss 방지)
+    useEffect(() => {
+        return () => {
+            if (clonedScene) {
+                console.log(`[PreviewCanvas] 🧹 리소스 정밀 해제: ${path.split('/').pop()}`);
+                clonedScene.traverse((obj: any) => {
+                    if (obj.isMesh) {
+                        // Geometry 해제
+                        if (obj.geometry) obj.geometry.dispose();
+
+                        // Material 및 Texture 해제
+                        const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+                        materials.forEach((m: any) => {
+                            if (!m) return;
+                            // 텍스처 맵 전수 조사 및 해제
+                            Object.keys(m).forEach(key => {
+                                if (m[key] && m[key].isTexture) {
+                                    m[key].dispose();
+                                }
+                            });
+                            m.dispose();
+                        });
+                    }
+                });
+            }
+        };
+    }, [clonedScene, path]);
+
     // GLB 메타데이터에서 라이팅 설정 확인 및 자동 적용
     useEffect(() => {
         if (!scene) {
@@ -539,6 +655,19 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
             setExposure(lighting.exposure);
         }
     }, [scene, userData, gltf, path, onError, setExposure, setMetadata]);
+
+    // [v4.0] PBR 재질 자동 변환 (Premium Visuals)
+    useEffect(() => {
+        if (!clonedScene) return;
+
+        // 1. 시맨틱 역할(SemanticRole) 추출
+        const semanticRole = (userData as any)?.semanticRole || (userData as any)?.category || 'prop';
+
+        // 2. PBR 변환 및 물성 최적화 적용
+        PBRMaterialConverter.applyByRole(clonedScene, semanticRole);
+
+        console.log(`[GLBModelInner] 💎 PBR 변환 적용됨 (${semanticRole}): ${path.split('/').pop()}`);
+    }, [clonedScene, userData, path]);
 
 
     // [Matcap Integration] matcap 텍스처 적용
@@ -616,15 +745,18 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
         async function matchEnvironmentFromPrompt() {
             if (!prompt) return;
 
+            // [v3.4 Fix] 환경 에셋 매칭도 서버 API 또는 사전에 필터링된 데이터만 사용하도록 유도
+            // 여기서는 일단 직접적인 registry 검색을 주석 처리하여 메모리 세이브
+            /*
             const { searchAssets } = await import('@/data/AssetRegistry');
-            const matches = searchAssets(prompt);
+            const matches = await searchAssets(prompt);
             const envMatch = matches.find(m => m.category === 'environment');
 
             if (envMatch) {
-                // 환경 매칭은 한 번만 로그
                 console.log(`[PreviewNodes] 🌍 환경 에셋 로드: "${prompt}" → ${envMatch.path}`);
                 setDirectEnvironmentMatch(envMatch.path);
             }
+            */
         }
         matchEnvironmentFromPrompt();
     }, [prompt]);
@@ -798,22 +930,16 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                     shadows
                     gl={{
                         toneMappingExposure: exposureValue,
-                        antialias: false, // [Phase 5] WebGL 메모리 절약
-                        powerPreference: 'default', // GPU 전력/메모리 균형
+                        antialias: true,
+                        powerPreference: 'high-performance',
                         failIfMajorPerformanceCaveat: false,
-                    }}
-                    onCreated={({ gl }) => {
-                        // [Phase 5] WebGL Context Lost/Restore 핸들러
-                        const canvas = gl.domElement;
-                        canvas.addEventListener('webglcontextlost', (e) => {
-                            e.preventDefault();
-                            console.warn('[WebGL] ⚠️ Context Lost - 자동 복구 시도...');
-                        });
-                        canvas.addEventListener('webglcontextrestored', () => {
-                            console.log('[WebGL] ✅ Context Restored');
-                        });
+                        stencil: false,
+                        depth: true,
+                        preserveDrawingBuffer: true, // v4.0 캡처 기능을 위해 true로 설정
                     }}
                 >
+                    <WebGLMonitor />
+                    <CaptureScene />
 
                     <Suspense fallback={null}>
                         {/* 동적 Exposure 업데이트 */}
@@ -871,6 +997,46 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                             enableRotate={true}
                             maxPolarAngle={Math.PI / 2}
                         />
+
+                        {/* [Phase 4] Premium Post-processing (Stage 12) */}
+                        <EffectComposer>
+                            {[
+                                /* 1. Bloom (빛 번짐) */
+                                aiPostProcessing?.bloom ? (
+                                    <Bloom
+                                        key="effect-bloom"
+                                        intensity={aiPostProcessing.bloomIntensity ?? 0.5}
+                                        luminanceThreshold={0.9}
+                                        luminanceSmoothing={0.025}
+                                        mipmapBlur
+                                    />
+                                ) : null,
+
+                                /* 2. Vignette (외곽 어두움) */
+                                aiPostProcessing?.vignette ? (
+                                    <Vignette key="effect-vignette" eskil={false} offset={0.1} darkness={1.1} />
+                                ) : null,
+
+                                /* 3. SSAO (기본 앰비언트 오클루전) */
+                                <SSAO
+                                    key="effect-ssao"
+                                    blendFunction={BlendFunction.MULTIPLY}
+                                    samples={31}
+                                    radius={0.1}
+                                    intensity={15}
+                                    luminanceInfluence={0.6}
+                                    color={new THREE.Color('#000000')}
+                                />,
+
+                                /* 4. Color Grading */
+                                aiPostProcessing?.colorGrading === 'warm' ? (
+                                    <BrightnessContrast key="effect-warm" brightness={0.05} contrast={0.1} />
+                                ) : null,
+                                aiPostProcessing?.colorGrading === 'cyberpunk' ? (
+                                    <HueSaturation key="effect-cyberpunk" hue={0.1} saturation={0.5} />
+                                ) : null
+                            ].filter((c): c is React.ReactElement => c !== null)}
+                        </EffectComposer>
                     </Suspense>
                 </Canvas>
 
