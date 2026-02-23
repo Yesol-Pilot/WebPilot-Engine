@@ -2,6 +2,7 @@
 // 오디오 관리 서비스 (BGM, SFX)
 // Howler.js 기반 싱글톤 패턴
 // [Phase 5] SFX 사전 로드 + 인스턴스 재사용으로 Audio Pool 고갈 방지
+// [v4.0 Hotfix] 모든 SFX를 Google Actions Sounds OGG로 통일 (외부 CDN 403 에러 해결)
 
 import { Howl, Howler } from 'howler';
 
@@ -12,8 +13,9 @@ class AudioManager {
     private bgm: Howl | null = null;
     private currentGenre: Genre | null = null;
     private muted: boolean = false;
+    private pendingBgmGenre: Genre | null = null; // 자동재생 차단 시 대기 상태
 
-    // BGM 소스 (장르별 프리셋)
+    // BGM 소스 (장르별 프리셋 — 모두 Google Actions Sounds, 안정적 OGG)
     private bgmSources: Record<Genre, string> = {
         fantasy: 'https://actions.google.com/sounds/v1/ambiences/fire.ogg',
         'sci-fi': 'https://actions.google.com/sounds/v1/science_fiction/space_ambience_industrial.ogg',
@@ -22,12 +24,12 @@ class AudioManager {
         modern: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg'
     };
 
-    // SFX 소스 정의
+    // SFX 소스 정의 — 모두 Google Actions Sounds OGG로 통일 (403 에러 방지)
     private sfxSources = {
         click: 'https://actions.google.com/sounds/v1/cartoon/pop.ogg',
-        success: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/escape.wav',
-        footstep: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/numkey.wav',
-        pickup: 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects/squit.mp3'
+        success: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
+        footstep: 'https://actions.google.com/sounds/v1/foley/footsteps_on_wood.ogg',
+        pickup: 'https://actions.google.com/sounds/v1/cartoon/wood_plank_flick.ogg'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)
@@ -37,6 +39,29 @@ class AudioManager {
         Howler.volume(0.5);
         // SFX를 사전 로드하여 풀에 저장
         this.preloadSFX();
+        // 사용자 상호작용 감지 — 자동재생 차단 해제용
+        this.setupAutoplayUnlock();
+    }
+
+    /**
+     * [v4.0 Hotfix] 사용자 상호작용 시 대기 중인 BGM 자동 재생
+     * Chrome/Safari의 자동재생 정책 우회
+     */
+    private setupAutoplayUnlock(): void {
+        const unlock = () => {
+            if (this.pendingBgmGenre) {
+                console.log('[BGM] 🎵 사용자 상호작용 감지 - 대기 BGM 재생 시도');
+                this.playBGM(this.pendingBgmGenre);
+                this.pendingBgmGenre = null;
+            }
+            // 한 번만 실행 후 리스너 제거
+            document.removeEventListener('click', unlock);
+            document.removeEventListener('touchstart', unlock);
+            document.removeEventListener('keydown', unlock);
+        };
+        document.addEventListener('click', unlock, { once: true });
+        document.addEventListener('touchstart', unlock, { once: true });
+        document.addEventListener('keydown', unlock, { once: true });
     }
 
     /**
@@ -74,7 +99,7 @@ class AudioManager {
         // 이전 BGM 페이드 아웃 및 즉시 언로드 예약
         if (this.bgm) {
             const oldBgm = this.bgm;
-            oldBgm.fade(oldBgm.volume(), 0, 500); // 페이드 시간을 당겨 더 빨리 해제
+            oldBgm.fade(oldBgm.volume(), 0, 500);
             setTimeout(() => {
                 oldBgm.stop();
                 oldBgm.unload(); // [Phase 5] 강제 언로드로 Audio Pool 확보
@@ -94,14 +119,16 @@ class AudioManager {
             volume: 0,
             onloaderror: (_id, err) => console.warn(`[Audio] BGM 로드 실패: ${err}`),
             onplayerror: (_id, err) => {
-                console.warn(`[Audio] BGM 재생 실패 (Autoplay?): ${err}`);
-                // 재생 실패 시 사용자 상호작용 후 재시도할 수 있도록 상태 유지
+                console.warn(`[Audio] BGM 재생 실패: ${err}`);
+                // [v4.0 Hotfix] 자동재생 차단 시 대기 상태로 전환
+                this.pendingBgmGenre = targetGenre;
+                this.currentGenre = null; // 재시도 허용
             }
         });
 
         this.bgm.play();
         this.bgm.fade(0, 0.5, 1000);
-        console.log(`[Audio] BGM 재생 시작: ${targetGenre}`);
+        console.log(`[Audio] BGM 재생: ${targetGenre}`);
     }
 
     public playBGMFromUrl(url: string) {
