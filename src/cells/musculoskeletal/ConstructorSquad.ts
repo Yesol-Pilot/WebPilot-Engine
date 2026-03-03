@@ -38,7 +38,7 @@ import { SpatialHashGrid } from '@/lib/geometry/SpatialHashGrid';
 import { getUnifiedStore } from '@/store/unifiedStore';
 
 // ── 시공 상수 ──
-const MAX_PLACEMENT_RETRIES = 3;   // 위치 재탐색 최대 횟수
+const MAX_PLACEMENT_RETRIES = 10;   // 위치 재탐색 최대 횟수 상향 (3->10)
 const PLACEMENT_ALARM_THRESHOLD = 0.5;  // 배치 성공률 임계치 (50%)
 
 // ══════════════════════════════════════════════════════════
@@ -411,7 +411,7 @@ export class ConstructorSquad extends BaseCell {
     private seededRandomPosition(
         dims: { width: number; height: number; depth: number }
     ): [number, number, number] {
-        const MAX_FALLBACK_ATTEMPTS = 10;
+        const MAX_FALLBACK_ATTEMPTS = 30; // 폴백 시도 횟수 상향 (10->30)
         const MIN_DISTANCE = 1.5;  // 최소 간격 (미터)
 
         for (let attempt = 0; attempt < MAX_FALLBACK_ATTEMPTS; attempt++) {

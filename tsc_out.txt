@@ -1,0 +1,9 @@
+﻿src/components/scene/GeneratedModel.tsx(7,30): error TS2307: Cannot find module '@/store/game' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(8,32): error TS2307: Cannot find module '@/components/interaction/InteractionManager' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(9,31): error TS2307: Cannot find module '@/machines/objectMachine' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(10,32): error TS2307: Cannot find module '@/store/useObjectStore' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(11,39): error TS2307: Cannot find module '@/services/PhysicsInferenceQueue' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(12,50): error TS2307: Cannot find module '@/hooks/useProceduralAnim' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(13,39): error TS2307: Cannot find module '@/services/CollisionSoundManager' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(14,29): error TS2307: Cannot find module '@/components/3d/AssetLoader' or its corresponding type declarations.
+src/components/scene/GeneratedModel.tsx(69,27): error TS2554: Expected 2 arguments, but got 1.

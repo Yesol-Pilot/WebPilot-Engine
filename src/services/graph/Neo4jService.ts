@@ -11,6 +11,7 @@ export class Neo4jServiceClass {
     private driver: Driver | null = null;
     private isInitialized = false;
     private useMock = false;
+    private static hasShownMockWarning = false;
 
     // In-Memory Mock Graph Store (Node, Relationship)
     private mockNodes: Map<string, any> = new Map();
@@ -27,7 +28,10 @@ export class Neo4jServiceClass {
         const password = process.env.NEO4J_PASSWORD;
 
         if (!uri || !user || !password) {
-            console.warn('[Neo4j] 환경 변수 누락. Mock Mode로 시작합니다.');
+            if (!Neo4jServiceClass.hasShownMockWarning) {
+                console.info('[Neo4j] 환경 변수 누락. Mock Mode로 시작합니다 (이후 경고 생략).');
+                Neo4jServiceClass.hasShownMockWarning = true;
+            }
             this.activateMockMode();
             this.isInitialized = true;
             return;
@@ -42,7 +46,10 @@ export class Neo4jServiceClass {
             await this.driver.verifyConnectivity();
             console.log('[Neo4j] ✅ 데이터베이스 연결 성공');
         } catch (error) {
-            console.warn('[Neo4j] ⚠️ 연결 실패. Mock Mode로 전환합니다.', error);
+            if (!Neo4jServiceClass.hasShownMockWarning) {
+                console.warn('[Neo4j] ⚠️ 연결 실패. Mock Mode로 전환합니다.', error);
+                Neo4jServiceClass.hasShownMockWarning = true;
+            }
             this.activateMockMode();
         }
 

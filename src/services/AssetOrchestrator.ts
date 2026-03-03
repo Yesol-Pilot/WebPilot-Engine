@@ -266,6 +266,16 @@ export class AssetOrchestrator {
         if (!validation.exists) {
             this.stats.failCount++;
             this.stats.fallbackUsageCount++;
+
+            // [FIX] 검증(HEAD) 실패 시에도 누락 리소스로 기록 (사용자가 404 발생 에셋을 파악할 수 있도록)
+            MissingResourceTracker.getInstance().record({
+                concept: path.split('/').pop()?.replace('.glb', '') || path,
+                resourceType: 'model',
+                source: 'not_found',
+                filePath: path,
+                errorMessage: `자산 없음 (HTTP ${validation.errorCode})`,
+            });
+
             return {
                 success: false,
                 fallback: 'missing_asset',

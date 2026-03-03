@@ -49,7 +49,10 @@ class Neo4jService {
         const password = process.env.NEO4J_PASSWORD;
 
         if (!uri || !user || !password) {
-            console.warn('[Neo4j] 환경 변수 미설정 - Mock 모드로 동작');
+            if (!(Neo4jService as any).hasShownMockWarning) {
+                console.info('[Neo4j/lib] 환경 변수 미설정 - Mock 모드로 동작 (이후 생략)');
+                (Neo4jService as any).hasShownMockWarning = true;
+            }
             return false;
         }
 

@@ -36,6 +36,9 @@
 | `POLY_PIZZA_API_KEY` | Poly Pizza 3D 검색 | [Poly Pizza](https://polypizza.xyz/) |
 | `FREESOUND_CLIENT_ID` | Freesound 클라이언트 ID | [Freesound API](https://freesound.org/apiv2/apply/) |
 | `FREESOUND_API_KEY` | Freesound CC0 효과음 수집 | 위와 동일 |
+| `NEO4J_URI` | Neo4j Aura 접속 주소 | [Neo4j Aura](https://console.neo4j.io/) |
+| `NEO4J_USER` | Neo4j 계정 사용자 (`753384a9`) | 위와 동일 |
+| `NEO4J_PASSWORD` | Neo4j 계정 비밀번호 | 위와 동일 |
 
 ---
 

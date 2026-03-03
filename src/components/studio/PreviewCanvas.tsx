@@ -844,6 +844,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
     // [Phase 6] 오브젝트 상세 정보 팝업 상태
     const [selectedNode, setSelectedNode] = useState<SceneNode | null>(null);
     const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+    const [contextLost, setContextLost] = useState(false); // [Fix] WebGL Context Lost 방어 상태
 
     // [Phase 6] 오브젝트 클릭 이벤트 리스너
     useEffect(() => {
@@ -928,6 +929,17 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                 <Canvas
                     camera={{ position: [5, 5, 5], fov: 50 }}
                     shadows
+                    onCreated={({ gl }) => {
+                        gl.domElement.addEventListener('webglcontextlost', (e) => {
+                            e.preventDefault();
+                            console.error('[PreviewCanvas] 💥 THREE.WebGLRenderer: Context Lost. VRAM 초과됨.');
+                            setContextLost(true);
+                        }, false);
+                        gl.domElement.addEventListener('webglcontextrestored', () => {
+                            console.log('[PreviewCanvas] 🔧 THREE.WebGLRenderer: Context Restored.');
+                            setContextLost(false);
+                        }, false);
+                    }}
                     gl={{
                         toneMappingExposure: exposureValue,
                         antialias: true,
@@ -999,7 +1011,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         />
 
                         {/* [Phase 4] Premium Post-processing (Stage 12) */}
-                        <EffectComposer>
+                        <EffectComposer enableNormalPass={true}>
                             {[
                                 /* 1. Bloom (빛 번짐) */
                                 aiPostProcessing?.bloom ? (
@@ -1078,6 +1090,27 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         position={popupPosition}
                         onClose={() => setSelectedNode(null)}
                     />
+                )}
+
+                {/* [Fix] Context Lost 에러 오버레이 */}
+                {contextLost && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-50 backdrop-blur-sm">
+                        <div className="text-center bg-red-950/80 p-8 rounded-2xl border border-red-500/50 shadow-2xl max-w-md">
+                            <p className="text-5xl mb-4">💥</p>
+                            <h3 className="text-2xl font-bold text-white mb-3">VRAM 리소스 초과</h3>
+                            <p className="text-red-200/80 text-sm mb-6 leading-relaxed">
+                                브라우저가 화면 렌더링 처리를 중단했습니다 (Context Lost).<br />
+                                환경에 배치된 에셋이 너무 많거나 고해상도 텍스처로 인해<br />
+                                기기의 그래픽 메모리가 초과되었습니다.
+                            </p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-xl font-bold shadow-lg transition-all active:scale-95"
+                            >
+                                안전하게 페이지 새로고침
+                            </button>
+                        </div>
+                    </div>
                 )}
             </div>
         </GLBMetadataContext.Provider>
