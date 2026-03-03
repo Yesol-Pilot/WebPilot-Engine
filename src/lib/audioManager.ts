@@ -11,6 +11,7 @@ type Genre = 'fantasy' | 'sci-fi' | 'horror' | 'modern' | 'mystery';
 
 // SSR 환경 체크 유틸리티
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
+import { getAssetUrl } from '@/lib/assetConfig';
 
 class AudioManager {
     private static instance: AudioManager;
@@ -21,19 +22,19 @@ class AudioManager {
 
     // BGM 소스 (장르별 프리셋 — 로컬 자산 경로 사용)
     private bgmSources: Record<Genre, string> = {
-        fantasy: '/sounds/bgm/fantasy.ogg',
-        'sci-fi': '/sounds/bgm/sci_fi.ogg',
-        horror: '/sounds/bgm/horror.ogg',
-        mystery: '/sounds/bgm/mystery.ogg',
-        modern: '/sounds/bgm/modern.ogg'
+        fantasy: getAssetUrl('/sounds/bgm/fantasy.ogg'),
+        'sci-fi': getAssetUrl('/sounds/bgm/sci_fi.ogg'),
+        horror: getAssetUrl('/sounds/bgm/horror.ogg'),
+        mystery: getAssetUrl('/sounds/bgm/mystery.ogg'),
+        modern: getAssetUrl('/sounds/bgm/modern.ogg')
     };
 
     // SFX 소스 정의 — 로컬 자산 경로로 통일 (외부 CDN 404 에러 방지)
     private sfxSources = {
-        click: '/sounds/sfx/click.ogg',
-        success: '/sounds/sfx/success.ogg',
-        footstep: '/sounds/sfx/footstep.ogg',
-        pickup: '/sounds/sfx/pickup.ogg'
+        click: getAssetUrl('/sounds/sfx/click.ogg'),
+        success: getAssetUrl('/sounds/sfx/success.ogg'),
+        footstep: getAssetUrl('/sounds/sfx/footstep.ogg'),
+        pickup: getAssetUrl('/sounds/sfx/pickup.ogg')
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)
