@@ -19,21 +19,21 @@ class AudioManager {
     private muted: boolean = false;
     private pendingBgmGenre: Genre | null = null; // 자동재생 차단 시 대기 상태
 
-    // BGM 소스 (장르별 프리셋 — 모두 Google Actions Sounds, 안정적 OGG)
+    // BGM 소스 (장르별 프리셋 — 로컬 자산 경로 사용)
     private bgmSources: Record<Genre, string> = {
-        fantasy: 'https://actions.google.com/sounds/v1/ambiences/fire.ogg',
-        'sci-fi': 'https://actions.google.com/sounds/v1/science_fiction/space_ambience_industrial.ogg',
-        horror: 'https://actions.google.com/sounds/v1/ambiences/thunderstorm.ogg',
-        mystery: 'https://actions.google.com/sounds/v1/ambiences/wind_chimes.ogg',
-        modern: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg'
+        fantasy: '/sounds/bgm/fantasy.ogg',
+        'sci-fi': '/sounds/bgm/sci_fi.ogg',
+        horror: '/sounds/bgm/horror.ogg',
+        mystery: '/sounds/bgm/mystery.ogg',
+        modern: '/sounds/bgm/modern.ogg'
     };
 
-    // SFX 소스 정의 — 모두 Google Actions Sounds OGG로 통일 (403 에러 방지)
+    // SFX 소스 정의 — 로컬 자산 경로로 통일 (외부 CDN 404 에러 방지)
     private sfxSources = {
-        click: 'https://actions.google.com/sounds/v1/cartoon/pop.ogg',
-        success: 'https://actions.google.com/sounds/v1/cartoon/instrument_strum.ogg',
-        footstep: 'https://actions.google.com/sounds/v1/foley/footsteps_on_wood.ogg',
-        pickup: 'https://actions.google.com/sounds/v1/cartoon/wood_plank_flick.ogg'
+        click: '/sounds/sfx/click.ogg',
+        success: '/sounds/sfx/success.ogg',
+        footstep: '/sounds/sfx/footstep.ogg',
+        pickup: '/sounds/sfx/pickup.ogg'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)

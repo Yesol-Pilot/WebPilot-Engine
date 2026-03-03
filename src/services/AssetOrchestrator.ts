@@ -19,6 +19,7 @@ import { GLTFLoader, GLTF } from 'three-stdlib';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import * as THREE from 'three';
 import { MissingResourceTracker } from './MissingResourceTracker';
+import { getAssetUrl } from '../lib/assetConfig';
 
 // 자산 로딩 결과 타입
 export interface AssetLoadResult {
@@ -205,18 +206,20 @@ export class AssetOrchestrator {
      * 자산 존재 여부 사전 검증 (HEAD 요청)
      */
     async validateAsset(path: string): Promise<AssetValidationResult> {
+        const url = getAssetUrl(path);
+
         // 캐시 확인
-        if (this.validationCache.has(path)) {
-            return this.validationCache.get(path)!;
+        if (this.validationCache.has(url)) {
+            return this.validationCache.get(url)!;
         }
 
         // 블랙리스트 확인
-        if (this.failedPaths.has(path)) {
+        if (this.failedPaths.has(url)) {
             return { exists: false, errorCode: 404 };
         }
 
         try {
-            const response = await fetch(path, { method: 'HEAD' });
+            const response = await fetch(url, { method: 'HEAD' });
 
             const result: AssetValidationResult = {
                 exists: response.ok,
@@ -226,19 +229,19 @@ export class AssetOrchestrator {
             };
 
             // 캐시에 저장
-            this.validationCache.set(path, result);
+            this.validationCache.set(url, result);
 
             if (!result.exists) {
-                console.warn(`[AssetOrchestrator] 자산 검증 실패: ${path} (${result.errorCode})`);
-                this.failedPaths.add(path);
+                console.warn(`[AssetOrchestrator] 자산 검증 실패: ${url} (${result.errorCode})`);
+                this.failedPaths.add(url);
             }
 
             return result;
         } catch (error) {
-            console.error(`[AssetOrchestrator] 자산 검증 네트워크 오류: ${path}`, error);
+            console.error(`[AssetOrchestrator] 자산 검증 네트워크 오류: ${url}`, error);
             const result: AssetValidationResult = { exists: false, errorCode: 0 };
-            this.validationCache.set(path, result);
-            this.failedPaths.add(path);
+            this.validationCache.set(url, result);
+            this.failedPaths.add(url);
             return result;
         }
     }
@@ -247,12 +250,13 @@ export class AssetOrchestrator {
      * 안전한 자산 로드 (검증 → 로드 → 폴백)
      */
     async loadAssetSafe(path: string): Promise<AssetLoadResult> {
+        const url = getAssetUrl(path);
         const startTime = performance.now();
         this.stats.totalRequests++;
 
         // 1. 블랙리스트 확인
-        if (this.failedPaths.has(path)) {
-            console.log(`[AssetOrchestrator] 블랙리스트 자산 스킵: ${path}`);
+        if (this.failedPaths.has(url)) {
+            console.log(`[AssetOrchestrator] 블랙리스트 자산 스킵: ${url}`);
             this.stats.fallbackUsageCount++;
             return {
                 success: false,
@@ -262,17 +266,17 @@ export class AssetOrchestrator {
         }
 
         // 2. 사전 검증
-        const validation = await this.validateAsset(path);
+        const validation = await this.validateAsset(url);
         if (!validation.exists) {
             this.stats.failCount++;
             this.stats.fallbackUsageCount++;
 
             // [FIX] 검증(HEAD) 실패 시에도 누락 리소스로 기록 (사용자가 404 발생 에셋을 파악할 수 있도록)
             MissingResourceTracker.getInstance().record({
-                concept: path.split('/').pop()?.replace('.glb', '') || path,
+                concept: url.split('/').pop()?.replace('.glb', '') || url,
                 resourceType: 'model',
                 source: 'not_found',
-                filePath: path,
+                filePath: url,
                 errorMessage: `자산 없음 (HTTP ${validation.errorCode})`,
             });
 
@@ -285,13 +289,13 @@ export class AssetOrchestrator {
 
         // 3. 실제 로드 시도
         try {
-            const gltf = await this.loadGLTFAsync(path);
+            const gltf = await this.loadGLTFAsync(url);
             const loadTime = performance.now() - startTime;
 
             this.stats.successCount++;
             this.updateAverageLoadTime(loadTime);
 
-            console.log(`[AssetOrchestrator] 로드 성공: ${path} (${loadTime.toFixed(0)}ms)`);
+            console.log(`[AssetOrchestrator] 로드 성공: ${url} (${loadTime.toFixed(0)}ms)`);
 
             return {
                 success: true,
@@ -306,13 +310,13 @@ export class AssetOrchestrator {
             if (error.message?.includes('BYTES_PER_ELEMENT') ||
                 error.message?.includes('Draco')) {
                 this.stats.dracoDecodeFailures++;
-                console.error(`[AssetOrchestrator] Draco 디코딩 실패: ${path}`, error);
+                console.error(`[AssetOrchestrator] Draco 디코딩 실패: ${url}`, error);
             } else {
-                console.error(`[AssetOrchestrator] 로드 실패: ${path}`, error);
+                console.error(`[AssetOrchestrator] 로드 실패: ${url}`, error);
             }
 
             // 블랙리스트에 추가
-            this.failedPaths.add(path);
+            this.failedPaths.add(url);
             this.stats.fallbackUsageCount++;
 
             // 누락 리소스 자동 기록
@@ -320,10 +324,10 @@ export class AssetOrchestrator {
                 ? 'decode_error' as const
                 : error.message?.includes('404') ? 'not_found' as const : 'load_failure' as const;
             MissingResourceTracker.getInstance().record({
-                concept: path.split('/').pop()?.replace('.glb', '') || path,
+                concept: url.split('/').pop()?.replace('.glb', '') || url,
                 resourceType: 'model',
                 source: errorType,
-                filePath: path,
+                filePath: url,
                 errorMessage: error.message,
             });
 

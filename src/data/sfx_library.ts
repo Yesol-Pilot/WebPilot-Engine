@@ -44,7 +44,7 @@ try {
 // Kenney SFX CDN (GitHub jsdelivr)
 // Fallback Audio CDN (Phaser Examples & Google Actions) due to KenneyNL availability issues
 const PHASER_SFX_CDN = 'https://cdn.jsdelivr.net/gh/photonstorm/phaser-examples@master/examples/assets/audio/SoundEffects';
-const GOOGLE_SFX_CDN = 'https://actions.google.com/sounds/v1/cartoon';
+const GOOGLE_SFX_CDN = '/sounds/sfx';
 const KENNEY_SFX_CDN = PHASER_SFX_CDN; // Backwards compatibility for variable name
 
 export const SFX_LIBRARY: Record<string, SFXData> = {
