@@ -43,10 +43,10 @@ class AudioManager {
 
     // SFX 소스 정의 — 항상 상대경로로 통일 (CDN CORS 에러 방지)
     private sfxSources = {
-        click: '/sounds/sfx/click.ogg',
-        success: '/sounds/sfx/success.ogg',
-        footstep: '/sounds/sfx/footstep.ogg',
-        pickup: '/sounds/sfx/pickup.ogg'
+        click: '/sounds/sfx/click.mp3',
+        success: '/sounds/sfx/success.mp3',
+        footstep: '/sounds/sfx/footstep.mp3',
+        pickup: '/sounds/sfx/pickup.mp3'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)

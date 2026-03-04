@@ -254,17 +254,19 @@ function PreviewNode({ node }: { node: SceneNode }) {
     const nodeAny = node as any;
     const matcapTextureUrl = nodeAny.matcapTexture || undefined;
 
+    // [v4.1 Fix] VRAM 누수 및 API 무한 호출 방지를 위한 원시값 추출
+    // node(객체 참조) 전체를 의존성으로 두면 물리 엔진이나 부모 컴포넌트 변화 시 무한 재렌더 및 핑퐁 현상이 발생함.
+    const searchKey = node.description || node.name || node.id;
+    const nodeModelUrl = nodeAny.modelUrl;
+    const nodeType = node.type;
+
     // 에셋 검색: modelUrl → 로컬 → API 폴백
     useEffect(() => {
         async function findModel() {
-            const searchKey = node.description || node.name || node.id;
-
             try {
                 // 0단계: modelUrl이 직접 지정된 경우 최우선 사용
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const nodeWithUrl = node as any;
-                if (nodeWithUrl.modelUrl) {
-                    const rawUrl = nodeWithUrl.modelUrl;
+                if (nodeModelUrl) {
+                    const rawUrl = nodeModelUrl;
 
                     // [Mod] Procedural Asset Handling (AI Pipeline)
                     if (rawUrl.includes('__PROCEDURAL__')) {
@@ -289,7 +291,7 @@ function PreviewNode({ node }: { node: SceneNode }) {
                             : rawUrl.endsWith('.glb')
                                 ? `/models/${rawUrl}`
                                 : `/models/${rawUrl}.glb`;
-                    console.log(`[PreviewNode] 📌 직접 지정: ${node.name} → ${modelUrl}`);
+                    console.log(`[PreviewNode] 📌 직접 지정: ${searchKey} → ${modelUrl}`);
                     setModelPath(modelUrl);
                     setSearchAttempted(true);
                     return;
@@ -337,16 +339,18 @@ function PreviewNode({ node }: { node: SceneNode }) {
                 }
 
                 // 모든 매칭 실패 — 절차적 메시로 폴백
-                console.log(`[PreviewNode] ❌ 매칭 실패: "${searchKey}" (${node.type})`);
+                console.log(`[PreviewNode] ❌ 매칭 실패: "${searchKey}" (${nodeType})`);
                 setSearchAttempted(true);
 
             } catch (err) {
-                console.warn(`[PreviewNode] 에셋 로드 실패 (${node.name}):`, err);
+                console.warn(`[PreviewNode] 에셋 로드 실패 (${searchKey}):`, err);
                 setSearchAttempted(true);
             }
         }
         findModel();
-    }, [node]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchKey, nodeModelUrl, nodeType]); // node 전체 대신 원시값에만 의존
+
     // [Phase 6] Interaction Handler (Hook은 조건부 return 전에 호출!)
     const handleNodeClick = useCallback((e: any) => {
         e.stopPropagation();
@@ -550,7 +554,8 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
         ];
 
         return finalScale;
-    }, [scene, scale, path]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [scene, path, scale[0], scale[1], scale[2]]); // 배열 분해로 요소값 의존 (VRAM 및 무한 로그 루프 차단)
 
     // [Phase 3.3] 리소스 해제 강화 (Memory Leak & WebGL Context Loss 방지)
     useEffect(() => {
