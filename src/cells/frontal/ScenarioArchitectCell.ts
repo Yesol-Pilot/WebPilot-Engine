@@ -139,7 +139,7 @@ export class ScenarioArchitectCell extends BaseCell {
 
 규칙:
 1. elements의 name은 반드시 영문 (에셋 검색 호환) — 하드코딩 금지
-2. 씬 복잡도에 따라 적절한 오브젝트 수 결정 (5~25개)
+2. ⚠️ VRAM 고갈 방지를 위해 씬 복잡도와 무관하게 오브젝트 수는 "반드시 8개 이하"로 엄격히 제한 (권장: 4~6개)
 3. role: "focal"(주목 1~3개), "support"(지원), "ambient"(분위기), "structural"(구조물)
 4. dimensions는 미터 단위
 5. constraints 예: ["wall_mount", "floor", "ceiling_hang", "floating"]
@@ -280,7 +280,10 @@ ${feedback}
         draft: z.infer<typeof ScenarioSchema>,
         narrative: NarrativeResult
     ): ScenarioData {
-        const elements: ElementSpec[] = draft.elements.map((el) => ({
+        // [v4.2 Fix] LLM이 프롬프트를 무시하고 8개를 초과해 생성할 경우를 대비한 강제 차단 (Context Lost 폭발 방지)
+        const safeElements = draft.elements.slice(0, 8);
+
+        const elements: ElementSpec[] = safeElements.map((el) => ({
             name: el.name,
             role: el.role,
             quantity: el.quantity,
