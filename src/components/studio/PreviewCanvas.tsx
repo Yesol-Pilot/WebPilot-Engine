@@ -557,25 +557,37 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
         return () => {
             if (clonedScene) {
                 console.log(`[PreviewCanvas] 🧹 리소스 정밀 해제: ${path.split('/').pop()}`);
-                clonedScene.traverse((obj: any) => {
-                    if (obj.isMesh) {
-                        // Geometry 해제
-                        if (obj.geometry) obj.geometry.dispose();
+                try {
+                    clonedScene.traverse((obj: any) => {
+                        if (obj.isMesh) {
+                            // Geometry 해제 방어
+                            try {
+                                if (obj.geometry) obj.geometry.dispose();
+                            } catch (e) {
+                                console.warn(`[PreviewCanvas] Geometry 🧹 실패:`, e);
+                            }
 
-                        // Material 및 Texture 해제
-                        const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
-                        materials.forEach((m: any) => {
-                            if (!m) return;
-                            // 텍스처 맵 전수 조사 및 해제
-                            Object.keys(m).forEach(key => {
-                                if (m[key] && m[key].isTexture) {
-                                    m[key].dispose();
-                                }
-                            });
-                            m.dispose();
-                        });
-                    }
-                });
+                            // Material 및 Texture 해제 방어
+                            try {
+                                const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
+                                materials.forEach((m: any) => {
+                                    if (!m) return;
+                                    // 텍스처 맵 전수 조사 및 해제
+                                    Object.keys(m).forEach(key => {
+                                        if (m[key] && m[key].isTexture) {
+                                            try { m[key].dispose(); } catch (e) { }
+                                        }
+                                    });
+                                    m.dispose();
+                                });
+                            } catch (e) {
+                                console.warn(`[PreviewCanvas] Material/Texture 🧹 실패:`, e);
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('[PreviewCanvas] 🚨 리소스 해제 중 치명적 에러 (Context Lost 방어):', e);
+                }
             }
         };
     }, [clonedScene, path]);
