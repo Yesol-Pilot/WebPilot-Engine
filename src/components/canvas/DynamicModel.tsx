@@ -137,106 +137,27 @@ function LoadedModel({
             console.warn(`[LoadedModel] ⚠️ Unit Awareness 가드 (cm→m): ${filePath.split('/').pop()}`);
         }
 
-        // 목표 크기 결정 (targetSize가 없으면 파일 경로에서 추론)
-        // [Phase 2.5] 스케일 밸런싱 - 씬 뷰포트에 적합한 크기로 조정
-        let goalSize = targetSize;
-        if (!goalSize) {
-            const lowerPath = filePath.toLowerCase();
-
-            // 대형 환경/건물 (씬의 배경 역할)
-            if (lowerPath.includes('hogwarts') || lowerPath.includes('grand_hall') ||
-                lowerPath.includes('castle') || lowerPath.includes('fortress') ||
-                lowerPath.includes('cathedral') || lowerPath.includes('palace')) {
-                goalSize = 4; // 대형 건물: 4m (이전 8m에서 축소)
-            }
-            // 중형 구조물
-            else if (lowerPath.includes('building') || lowerPath.includes('hall') ||
-                lowerPath.includes('tower') || lowerPath.includes('house')) {
-                goalSize = 3; // 중형 건물: 3m
-            }
-            // 자연물
-            else if (lowerPath.includes('tree')) {
-                goalSize = 2.5; // 나무: 2.5m
-            } else if (lowerPath.includes('stone') || lowerPath.includes('rock')) {
-                goalSize = 0.6; // 돌: 0.6m
-            }
-            // 가구
-            else if (lowerPath.includes('table') || lowerPath.includes('desk') ||
-                lowerPath.includes('bench') || lowerPath.includes('chair')) {
-                goalSize = 0.8; // 테이블/가구: 0.8m
-            }
-            // 소형 소품
-            else if (lowerPath.includes('candle') || lowerPath.includes('lamp') ||
-                lowerPath.includes('torch') || lowerPath.includes('light')) {
-                goalSize = 0.2; // 소형 소품: 0.2m (이전 0.3m에서 축소)
-            } else if (lowerPath.includes('floating') || lowerPath.includes('prop')) {
-                goalSize = 0.4; // 일반 소품: 0.4m
-            }
-            // 기본값
-            else {
-                goalSize = 0.8; // 기본: 0.8m (이전 1m에서 축소)
-            }
-        }
-
-        // [Phase 2.5] 스케일 정규화 로직 개선
-        // 원칙: 큰 모델은 축소, 작은 모델은 확대하지 않음 (원본 유지)
-        // 대형 건물/환경 에셋은 MAX_SCALE 제한 적용
-
-        const lowerPath = filePath.toLowerCase();
-        const isLargeEnvironment = lowerPath.includes('hogwarts') ||
-            lowerPath.includes('grand_hall') ||
-            lowerPath.includes('castle') ||
-            lowerPath.includes('fortress') ||
-            lowerPath.includes('cathedral') ||
-            lowerPath.includes('palace') ||
-            lowerPath.includes('building');
-
-        // 대형 환경 에셋의 최대 스케일 (씬 뷰포트에 맞게 제한)
-        const MAX_ENVIRONMENT_SIZE = 8; // 최대 8m로 제한
-
+        // 목표 크기 결정 (targetSize가 없으면 1.0 기본 지정)
+        // [하드코딩 제거] 파일명/키워드(예: hogwarts, tree 등) 기반의 하드코딩 분기 전면 금지.
+        let goalSize = targetSize || 1.0;
         let normalizeFactor = 1.0;
 
-        if (isLargeEnvironment) {
-            // 대형 건물: 원본이 MAX_ENVIRONMENT_SIZE보다 크면 축소
-            if (maxDimension > MAX_ENVIRONMENT_SIZE) {
-                normalizeFactor = MAX_ENVIRONMENT_SIZE / maxDimension;
-                console.log(`[LoadedModel] 📏 대형 에셋 축소: ${filePath.split('/').pop()}`);
-                console.log(`  원본: ${maxDimension.toFixed(2)}m → 목표: ${MAX_ENVIRONMENT_SIZE}m (×${normalizeFactor.toFixed(4)})`);
-            } else {
-                // 원본이 충분히 작으면 그대로 유지
-                normalizeFactor = 1.0;
-                console.log(`[LoadedModel] 📏 대형 에셋 원본 유지: ${filePath.split('/').pop()} (${maxDimension.toFixed(2)}m)`);
-            }
-        } else {
-            // 일반 에셋: 목표 크기 기반 정규화 (goalSize 사용)
-            let goalSize = targetSize;
-            if (!goalSize) {
-                if (lowerPath.includes('tree')) {
-                    goalSize = 2.5;
-                } else if (lowerPath.includes('stone') || lowerPath.includes('rock')) {
-                    goalSize = 0.6;
-                } else if (lowerPath.includes('table') || lowerPath.includes('desk') ||
-                    lowerPath.includes('bench') || lowerPath.includes('chair')) {
-                    goalSize = 0.8;
-                } else if (lowerPath.includes('candle') || lowerPath.includes('lamp') ||
-                    lowerPath.includes('torch') || lowerPath.includes('light')) {
-                    goalSize = 0.2;
-                } else if (lowerPath.includes('floating') || lowerPath.includes('prop')) {
-                    goalSize = 0.4;
-                } else {
-                    goalSize = 0.8;
-                }
-            }
+        // 대형 환경 에셋 여부를 특정 키워드가 아닌, 크기 자체로 판단 (단순 크기 캡)
+        // 원칙: 너무 거대한 오브젝트만 제한, 나머지는 목표 크기 혹은 축소 위주 적용
+        const ABSOLUTE_MAX_SIZE = 15.0;
 
-            // 축소만 허용 (확대 X)
-            if (maxDimension > goalSize) {
-                normalizeFactor = goalSize / maxDimension;
-            } else {
-                normalizeFactor = 1.0; // 원본이 작으면 그대로 유지
-            }
-
+        if (maxDimension > ABSOLUTE_MAX_SIZE) {
+            normalizeFactor = ABSOLUTE_MAX_SIZE / maxDimension;
+            console.log(`[LoadedModel] 📏 비정상적 대형 에셋 축소: ${filePath.split('/').pop()}`);
+            console.log(`  원본: ${maxDimension.toFixed(2)}m → 제한: ${ABSOLUTE_MAX_SIZE}m (×${normalizeFactor.toFixed(4)})`);
+        } else if (maxDimension > goalSize) {
+            // 원본이 목표보다 크면 축소 (확대는 하지 않음)
+            normalizeFactor = goalSize / maxDimension;
             console.log(`[LoadedModel] 📏 스케일: ${filePath.split('/').pop()}`);
             console.log(`  원본: ${maxDimension.toFixed(2)}m, 목표: ${goalSize}m (×${normalizeFactor.toFixed(4)})`);
+        } else {
+            // 원본이 작으면 그대로 유지
+            normalizeFactor = 1.0;
         }
 
         // 최종 스케일 = 사용자 지정 스케일 × 정규화 팩터 × Unit Awareness 팩터

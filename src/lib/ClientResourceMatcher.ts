@@ -1,13 +1,10 @@
 /**
  * ClientResourceMatcher.ts
  * 
- * 클라이언트 사이드에서 즉시 실행 가능한 리소스 매칭 로직.
- * 정적 라이브러리(Static Assets)와 리모트 CDN(Remote Assets)을 검색합니다.
- * DB 접근이나 무거운 연산은 포함하지 않습니다.
+ * [하드코딩 제거 조치]
+ * 기존 클라이언트 사이드 키워드 매칭은 하드코딩 룰을 위반하므로 모두 비활성화되었습니다.
+ * 이제 이 함수는 항상 null을 반환하여, 호출자(DynamicModel)가 무조건 Vector DB (Semantic Search)를 사용하도록 강제합니다.
  */
-
-import { ASSET_LIBRARY, findAssetByKeyword } from '@/data/assets';
-import { findRemoteAsset } from '@/data/remote_assets';
 
 export interface ClientMatchResult {
     type: 'asset';
@@ -17,57 +14,10 @@ export interface ClientMatchResult {
     similarity: number;
 }
 
-/**
- * 설명에서 의미 있는 단어를 추출
- * 한국어/영어 모두 지원, 2글자 이상 단어만 추출
- */
-function extractKeywords(description: string): string[] {
-    // 소문자 변환 후 단어 분리
-    const words = description.toLowerCase()
-        .replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣]/g, ' ') // 특수문자 제거
-        .split(/\s+/)
-        .filter(w => w.length >= 2); // 2글자 이상
-
-    // 중복 제거
-    return [...new Set(words)];
-}
-
 export function matchStaticOrRemote(description: string): ClientMatchResult | null {
-    // 1. 단어 추출
-    const keywords = extractKeywords(description);
-    console.log(`[ClientMatcher] 추출된 키워드: ${keywords.join(', ')}`);
-
-    // 2. 모든 키워드에 대한 최적 매칭 수집 (v3: 즉시 반환 → 다중 후보 비교)
-    let bestResult: ClientMatchResult | null = null;
-    let bestScore = 0;
-
-    for (const keyword of keywords) {
-        const libraryPath = findAssetByKeyword(keyword);
-        if (libraryPath) {
-            // 키워드 길이 기반 관련성 점수: 긴 키워드 = 더 구체적 = 더 높은 점수
-            const score = keyword.length / (keyword.length + 2);
-            if (score > bestScore) {
-                bestScore = score;
-                bestResult = {
-                    type: 'asset',
-                    source: 'library',
-                    id: keyword.replace(/\s+/g, '_'),
-                    filePath: libraryPath,
-                    similarity: score
-                };
-            }
-        }
-    }
-
-    if (bestResult) {
-        console.log(`[ClientMatcher] Static 최적 매칭: "${bestResult.id}" → ${bestResult.filePath} (score: ${bestScore.toFixed(3)})`);
-        return bestResult;
-    }
-
-    // 3. Remote CDN 검색 (현재 비활성화)
-    // [FIX] Poly Pizza CORS/Auth Issues - Temporarily Disabled
-
-    console.log(`[ClientMatcher] 매칭 실패: ${description}`);
+    // [Zero-Hardcode] 클라이언트 단의 정적/키워드 기반 강제 매칭을 전면 폐기함.
+    // 모든 에셋 매칭은 AI 기반의 Semantic Search(/api/resources/match)에 의존해야 함.
+    console.log(`[ClientMatcher] 정적 하드코딩 매칭 비활성화. 서버 DB 검색으로 위임: ${description}`);
     return null;
 }
 

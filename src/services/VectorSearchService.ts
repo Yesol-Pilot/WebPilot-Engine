@@ -283,36 +283,13 @@ class VectorSearchServiceClass {
     }
 
     /**
-     * 키워드 기반 Fallback 검색 (Legacy - 사용 안 함)
+     * 키워드 기반 Fallback 검색 (Legacy - 사용자 요청에 의해 전면 폐기됨)
+     * 하드코딩 매핑 금지 원칙에 따라, 이제 시맨틱 검색 실패 시 강제로 쓰레기 키워드 검색을 수행하지 않습니다.
      */
     private keywordFallback(query: string, topK: number): SearchResult[] {
-        const queryLower = query.toLowerCase();
-        const queryTerms = queryLower.split(/\s+/);
-
-        const scored = SEMANTIC_ASSETS.map(asset => {
-            const assetText = [asset.id.replace(/_/g, ' '), asset.category, ...asset.keywords.ko, ...asset.keywords.en, ...(asset.tags || [])].join(' ').toLowerCase();
-            let score = 0;
-
-            for (const term of queryTerms) {
-                if (assetText.includes(term)) {
-                    score += 1;
-                }
-            }
-
-            return { asset, score };
-        });
-
-        scored.sort((a, b) => b.score - a.score);
-        const topResults = scored.slice(0, topK).filter(r => r.score > 0);
-        const maxScore = topResults[0]?.score || 1;
-
-        return topResults.map(r => ({
-            asset: r.asset,
-            score: r.score / queryTerms.length,
-            confidence: r.score / maxScore,
-        }));
+        console.warn(`[VectorSearch] 하드코딩된 키워드 Fallback이 호출되었으나, 보안 및 무결성 규칙에 의해 강제 차단됨: ${query}`);
+        return [];
     }
-
     /**
      * 개선된 시맨틱 키워드 검색
      * - SEMANTIC_ASSETS의 구조화된 키워드(ko/en) 활용

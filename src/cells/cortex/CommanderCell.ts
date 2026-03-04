@@ -480,7 +480,7 @@ export class CommanderCell extends BaseCell {
      */
     private createFallbackScenario(
         prompt: string,
-        intent: { theme?: string; keywords?: string[] },
+        intent: { theme?: string | null; keywords?: string[] | null },
         narrative: NarrativeResult
     ): ScenarioData {
         // 프롬프트에서 키워드 추출 (공백 분할 → 영문/숫자만 필터)

@@ -37,59 +37,14 @@ export class TextureManager {
             return remoteTex.maps.color;
         }
 
-        // [NEW] 금속 계열
-        if (lowerDesc.includes('metal') || lowerDesc.includes('steel') || lowerDesc.includes('chrome') || lowerDesc.includes('iron') || lowerDesc.includes('금속') || lowerDesc.includes('철')) {
-            return LOCAL_TEXTURES.METAL;
-        }
-        // [NEW] 대리석/고급 계열
-        if (lowerDesc.includes('marble') || lowerDesc.includes('luxury') || lowerDesc.includes('대리석')) {
-            return LOCAL_TEXTURES.MARBLE;
-        }
-        // [NEW] 잔디/자연 계열
-        if (lowerDesc.includes('grass') || lowerDesc.includes('lawn') || lowerDesc.includes('잔디') || lowerDesc.includes('풀밭')) {
-            return LOCAL_TEXTURES.GRASS;
-        }
-        // [NEW] 모래 계열
-        if (lowerDesc.includes('sand') || lowerDesc.includes('desert') || lowerDesc.includes('beach') || lowerDesc.includes('모래') || lowerDesc.includes('사막') || lowerDesc.includes('해변')) {
-            return LOCAL_TEXTURES.SAND;
-        }
-
-        // 기존 매핑
-        // Bilingual & Theme Mapping
-        if (lowerDesc.includes('wood') || lowerDesc.includes('plank') || lowerDesc.includes('oak') || lowerDesc.includes('floor') || lowerDesc.includes('나무') || lowerDesc.includes('바닥')) {
-            return LOCAL_TEXTURES.WOOD;
-        }
-        if (lowerDesc.includes('concrete') || lowerDesc.includes('cement') || lowerDesc.includes('grey') || lowerDesc.includes('stone') || lowerDesc.includes('brick') || lowerDesc.includes('medieval') || lowerDesc.includes('돌') || lowerDesc.includes('벽돌') || lowerDesc.includes('성벽')) {
-            return LOCAL_TEXTURES.CONCRETE;
-        }
-        if (lowerDesc.includes('tile') || lowerDesc.includes('gold') || lowerDesc.includes('royal') || lowerDesc.includes('고급') || lowerDesc.includes('황금')) {
-            return LOCAL_TEXTURES.TILE;
-        }
-        if (lowerDesc.includes('fabric') || lowerDesc.includes('carpet') || lowerDesc.includes('rug') || lowerDesc.includes('cloth') || lowerDesc.includes('천') || lowerDesc.includes('카펫')) {
-            return LOCAL_TEXTURES.FABRIC;
-        }
-        if (lowerDesc.includes('magic') || lowerDesc.includes('glowing') || lowerDesc.includes('mystic') || lowerDesc.includes('마법') || lowerDesc.includes('신비')) {
-            return LOCAL_TEXTURES.TILE; // Tile looks more "finished" for magic
-        }
-
+        // [하드코딩 제거] 키워드 기반 로컬 텍스처 하드코딩 매핑 전면 금지.
+        // 시맨틱 검색에서 실패할 경우 오직 기본 기본값(GRID) 하나만 반환합니다.
         return LOCAL_TEXTURES.GRID;
     }
 
     static getTextureTint(description: string = ""): string {
-        const lowerDesc = description.toLowerCase();
-
-        // Specific Theme Tints
-        if (lowerDesc.includes('dark') || lowerDesc.includes('night')) return '#222222';
-        if (lowerDesc.includes('magic') || lowerDesc.includes('신비')) return '#4488ff'; // Arcane blue
-        if (lowerDesc.includes('luxury') || lowerDesc.includes('royal') || lowerDesc.includes('고급') || lowerDesc.includes('gold')) return '#ffd700'; // Gold
-        if (lowerDesc.includes('nature') || lowerDesc.includes('forest') || lowerDesc.includes('숲')) return '#228b22'; // Forest Green
-        if (lowerDesc.includes('warm') || lowerDesc.includes('home')) return '#ccaa88'; // Warm beige
-        if (lowerDesc.includes('blood') || lowerDesc.includes('horror') || lowerDesc.includes('피')) return '#880000'; // Dark Red
-
-        // Base color fallbacks
-        if (lowerDesc.includes('wood') || lowerDesc.includes('나무')) return '#8b4513';
-        if (lowerDesc.includes('stone') || lowerDesc.includes('돌')) return '#808080';
-
+        // [하드코딩 제거] 특정 키워드에 따른 틴트 색상 강제 지정 룰 전면 금지.
+        // 모든 베이스 틴트는 기본값 화이트로 처리하여 본연의 텍스처/재질 색상을 존중합니다.
         return '#ffffff';
     }
 }

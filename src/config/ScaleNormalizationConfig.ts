@@ -53,18 +53,10 @@ export const CATEGORY_SCALE_TABLE: Record<string, number> = {
 
 /**
  * 키워드 기반 카테고리 추론 헬퍼
- * (Asset Index에 카테고리가 없을 경우를 위한 Fallback)
+ * [하드코딩 제거] 특정 키워드 기반 카테고리 매핑 전면 금지.
+ * 시맨틱 기반 스케일링으로 일원화
  */
-export const KEYWORD_CATEGORY_MAP: Record<string, string[]> = {
-    'buildings': ['castle', 'tower', 'house', 'building', 'palace', 'temple'],
-    'environment_container': ['grand_hall', 'great_hall', 'hogwarts', 'throne_room', 'cathedral', 'ballroom', 'arena', 'colosseum', 'gryffindor', 'slytherin', 'hufflepuff', 'ravenclaw', 'common_room', 'dorm_room', 'dormitory', 'field', 'plain', 'ocean', 'forest', 'desert', 'valley'],
-    'environment': ['dungeon', 'cave', 'terrain', 'ground', 'floor', 'sky', 'wall', 'ceiling'],
-    'characters': ['man', 'woman', 'hero', 'villain', 'npc'],
-    'creatures': ['monster', 'beast', 'dragon', 'animal', 'wolf'],
-    'furniture': ['table', 'chair', 'desk', 'bed', 'sofa', 'shelf', 'bookcase'],
-    'lighting': ['lamp', 'candle', 'light', 'torch', 'lantern'],
-    'nature': ['tree', 'bush', 'flower', 'grass', 'plant'],
-};
+export const KEYWORD_CATEGORY_MAP: Record<string, string[]> = {};
 
 /**
  * [P0] mm 단위 모델 감지 임계값
@@ -77,22 +69,13 @@ export const MM_TO_METER_SCALE = 0.001; // mm → m 변환 계수
 
 /**
  * 폴더 경로 기반 카테고리 추론 테이블
- * (inferCategory 함수에서 사용)
+ * [하드코딩 제거] 폴더 패턴 억지 매핑 전면 금지.
  */
-export const FOLDER_CATEGORY_MAP: Record<string, string[]> = {
-    environment_container: ['/hogwarts/', '/grand_hall/', '/great_hall/', '/throne/'],
-    buildings: ['/buildings/', '/architecture/', '/structures/'],
-    furniture: ['/furniture/', '/interiors/'],
-    characters: ['/characters/', '/people/', '/humans/'],
-    creatures: ['/creatures/', '/animals/', '/monsters/'],
-    props: ['/props/', '/objects/', '/items/'],
-    nature: ['/nature/', '/plants/', '/trees/', '/rocks/'],
-    vehicles: ['/vehicles/', '/cars/', '/transportation/'],
-};
+export const FOLDER_CATEGORY_MAP: Record<string, string[]> = {};
 
 /**
  * [Zero-Hardcode] 축 방향 추론 카테고리 테이블
- * detectDominantAxis 함수에서 사용
+ * [하드코딩 제거] 고정된 카테고리 기반 축 방향 고정도 모두 비워냄.
  */
-export const VERTICAL_CATEGORIES = ['characters', 'creatures', 'nature', 'furniture'];
-export const HORIZONTAL_CATEGORIES = ['vehicles', 'buildings'];
+export const VERTICAL_CATEGORIES: string[] = [];
+export const HORIZONTAL_CATEGORIES: string[] = [];

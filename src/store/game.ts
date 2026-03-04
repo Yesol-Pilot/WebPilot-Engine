@@ -1,13 +1,11 @@
 import { create } from 'zustand';
 import { devtools, subscribeWithSelector } from 'zustand/middleware';
 import { Scenario, SceneNode } from '../lib/schema/scene';
-import { ASSET_LIBRARY } from '../data/assets';
 import { RoomArchitecture } from '../types/schema';
 import { toast } from '../components/ui/ToastNotification';
 
-// 기본 폴백 모델 경로 (에셋 없을 때 사용)
-const DEFAULT_FALLBACK_MODEL = process.env.NEXT_PUBLIC_FALLBACK_MODEL
-    || '/assets/models/basic/cube.glb';
+// [하드코딩 제거] `DEFAULT_FALLBACK_MODEL` 정적 변수 제거됨.
+// 에셋 로딩은 이제 `DynamicModel` 컴포넌트 내 AI 검색에 온연히 맡김.
 
 /**
  * [NSSE] Transient 상태 - 렌더 루프에서 직접 변이
@@ -252,11 +250,12 @@ export const useGameStore = create<GameState>()(
                     }
                 } else if (cmd.type === 'spawn_actor') {
                     const { id, type, name, position, description } = cmd.payload;
-                    const assetKey = name.toLowerCase().replace(/\s+/g, '_');
-                    // 에셋 라이브러리에서 검색, 없으면 상수 폴백 사용
-                    const modelPath = ASSET_LIBRARY[assetKey as keyof typeof ASSET_LIBRARY]
-                        || ASSET_LIBRARY['default']
-                        || DEFAULT_FALLBACK_MODEL;
+                    // [하드코딩 제거 조치]
+                    // 기존 ASSET_LIBRARY 및 DEFAULT_FALLBACK_MODEL을 이용한 억지 지정 및
+                    // string 하드코딩 방식 전면 폐지.
+                    // modelUrl은 명시적으로 내려오지 않는 이상 undefined로 처리하여
+                    // DynamicModel 컴포넌트가 Vector DB 검색 (Semantic Search)을 거치도록 강제함.
+                    const modelPath = cmd.payload.modelUrl || undefined;
 
                     state.addNode({
                         id: id || `actor_${Date.now()}`,
