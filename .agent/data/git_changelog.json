@@ -1,6 +1,20 @@
 {
-    "lastUpdated": "2026-03-02T15:50:00+09:00",
+    "lastUpdated": "2026-03-04T12:05:00+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-04T12:05:00+09:00",
+            "commits": [
+                {
+                    "hash": "a4be91d",
+                    "message": "fix: GLB 404 해결 - useSafeGLTF/MainScene/AssetOrchestrator에 getAssetUrl CDN 변환 적용",
+                    "filesChanged": 4,
+                    "insertions": 34,
+                    "deletions": 8
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "[fix] GLB 404 해결 — useSafeGLTF 자동 CDN 변환, MainScene useGLTF CDN 적용, AssetOrchestrator 이중 변환 수정"
+        },
         {
             "timestamp": "2026-03-02T15:50:00+09:00",
             "commits": [
