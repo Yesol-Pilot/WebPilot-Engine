@@ -1,6 +1,9 @@
 import { getDailyReports, getDocReports, getDeploymentReports, getGitChangelog } from '@/lib/reports';
 import ReportsView from '@/components/ReportsView';
 
+// [v5.0] 빌드 시 정적 생성 강제 — Vercel 서버리스에서 fs 접근 불가 방지
+export const dynamic = 'force-static';
+
 export const metadata = {
     title: 'R&D Archive | WebPilot Engine',
     description: 'Engineering documentation, daily logs, and Git changelog.',

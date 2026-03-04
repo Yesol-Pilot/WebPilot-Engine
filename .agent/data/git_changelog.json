@@ -1,6 +1,20 @@
 {
-    "lastUpdated": "2026-03-04T12:05:00+09:00",
+    "lastUpdated": "2026-03-04T12:28:00+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-04T12:28:00+09:00",
+            "commits": [
+                {
+                    "hash": "52219c2",
+                    "message": "fix: Reports 페이지 접근 불가 수정 — .vercelignore content/ 패턴 및 환경변수",
+                    "filesChanged": 2,
+                    "insertions": 21,
+                    "deletions": 3
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "[fix] Reports 페이지 복구 — .vercelignore에서 src/content 배포 포함, GEMINI_API_KEY preview 등록"
+        },
         {
             "timestamp": "2026-03-04T12:05:00+09:00",
             "commits": [
