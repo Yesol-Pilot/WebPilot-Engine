@@ -102,8 +102,9 @@ tools/
 .agent/skills/
 .agent/workflows/
 .agent/knowledge/
-reports/
-docs/
+# 루트 디렉토리만 제외 (src/app/reports/, src/content/docs/ 등은 포함 필수!)
+/reports/
+/docs/
 docs_kenney_textures/
 7ffbf428-854b-4906-b2e4-*/
 # 루트 content 디렉토리만 제외 (src/content/는 Reports 페이지 데이터)
