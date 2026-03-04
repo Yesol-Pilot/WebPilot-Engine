@@ -85,21 +85,26 @@ Thumbs.db
 
 .vercel
 
-# Large Files (>100MB) - Vercel 파일 크기 제한
-# 모든 대용량 3D 모델 에셋 제외 — 런타임에서 외부 CDN 또는 R2로 제공
-public/models/buildings/
-public/models/samples/
-public/models/weapons/
-public/models/characters/
-public/models/dae_blacksmith_store.glb
-public/models/cartoon_bedroom.glb
-public/models/cartoon_two-story_villa_low_polygon_3d_model.glb
-public/models/low_poly__sofa.glb
-public/models/onigiri.glb
-public/models/tyrant_king_-_tyrannosaurus.glb
-public/models/cc0_axe.glb
-public/models/angelic child 3d model.glb
-public/models/_index.json
+# Large Files (>100MB) - Vercel 파일 제한
+# 모든 3D 모델 에셋 제외 (서버/CDN 로드를 위해 로컬 에셋 배포 원천 차단)
+public/models/
+
+# 기타 프로젝트 배포에 불필요한 대용량/에이전트/임시 폴더 제외
+Visual-Core/
+Logic-Weaver/
+QA-Pilot/
+Architect-01/
+temp_*/
+_backup_legacy/
+scripts/
+tools/
+.agent/
+reports/
+docs/
+docs_kenney_textures/
+7ffbf428-854b-4906-b2e4-*/
+content/
+tmp/
 .git
 
 # Large Serverless Functions (gltf-transform 라이브러리로 인해 제외)

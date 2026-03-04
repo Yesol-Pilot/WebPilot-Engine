@@ -20,10 +20,10 @@ import { z } from 'zod';
 // ── LLM 출력 스키마 — IntentAgent의 IntentSchema 확장 ──
 const IntentSchema = z.object({
     intent: z.enum(['create_world', 'move', 'interact', 'talk', 'unknown']),
-    theme: z.string().optional().describe('생성할 월드의 테마'),
+    theme: z.string().nullable().optional().describe('생성할 월드의 테마'),
     keywords: z.array(z.string()).describe('명시적 키워드 추출'),
-    conceptTags: z.array(z.string()).optional().describe('암묵적 시맨틱 태그'),
-    reasoning: z.string().optional().describe('판단 근거'),
+    conceptTags: z.array(z.string()).nullable().optional().describe('암묵적 시맨틱 태그'),
+    reasoning: z.string().nullable().optional().describe('판단 근거'),
 });
 
 // ── 시맨틱 태그 확장 테이블 (하드코딩 금지 원칙에 따라 LLM이 태그 생성) ──

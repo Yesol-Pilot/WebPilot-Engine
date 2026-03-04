@@ -1,6 +1,23 @@
 {
-    "lastUpdated": "2026-02-13T13:55:00+09:00",
+    "lastUpdated": "2026-03-03T12:09:29.961+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-03T12:09:29.961+09:00",
+            "commits": [
+                {
+                    "hash": "0a7f733",
+                    "message": "fix(assets): resolve Vercel 404s via CDN url mapping and fix dead audio links",
+                    "filesChanged": 3,
+                    "insertions": 38,
+                    "deletions": 34
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "Vercel CDN 자산 맵핑 추가 및 오디오 404 해결",
+            "category": [
+                "fix"
+            ]
+        },
         {
             "timestamp": "2026-02-13T13:55:00+09:00",
             "commits": [

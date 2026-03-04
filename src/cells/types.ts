@@ -78,10 +78,10 @@ export interface NeuralSignal {
 // IntentAnalystCell 출력
 export interface IntentResult {
     intent: 'create_world' | 'move' | 'interact' | 'talk' | 'unknown';
-    theme?: string;
+    theme?: string | null;
     keywords: string[];
     conceptTags: string[];   // 암묵적 태그 (예: "사이버펑크" → [네온, 비, 어두움])
-    reasoning?: string;
+    reasoning?: string | null;
 }
 
 // LoreWeaverCell 출력

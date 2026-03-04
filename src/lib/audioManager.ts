@@ -22,19 +22,19 @@ class AudioManager {
 
     // BGM 소스 (장르별 프리셋 — 로컬 자산 경로 사용)
     private bgmSources: Record<Genre, string> = {
-        fantasy: ,
-        'sci-fi': ,
-        horror: ,
-        mystery: ,
-        modern: 
+        fantasy: getAssetUrl('/sounds/bgm/fantasy.mp3'),
+        'sci-fi': getAssetUrl('/sounds/bgm/sci-fi.mp3'),
+        horror: getAssetUrl('/sounds/bgm/horror.mp3'),
+        mystery: getAssetUrl('/sounds/bgm/mystery.mp3'),
+        modern: getAssetUrl('/sounds/bgm/modern.mp3')
     };
 
     // SFX 소스 정의 — 로컬 자산 경로로 통일 (외부 CDN 404 에러 방지)
     private sfxSources = {
-        click: ,
-        success: ,
-        footstep: ,
-        pickup: 
+        click: getAssetUrl('/sounds/sfx/click.ogg'),
+        success: getAssetUrl('/sounds/sfx/success.ogg'),
+        footstep: getAssetUrl('/sounds/sfx/footstep.ogg'),
+        pickup: getAssetUrl('/sounds/sfx/pickup.ogg')
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)
