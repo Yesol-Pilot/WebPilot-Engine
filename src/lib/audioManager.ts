@@ -2,8 +2,8 @@
 // 오디오 관리 서비스 (BGM, SFX)
 // Howler.js 기반 싱글톤 패턴
 // [Phase 5] SFX 사전 로드 + 인스턴스 재사용으로 Audio Pool 고갈 방지
-// [v4.0 Hotfix] 모든 SFX를 Google Actions Sounds OGG로 통일 (외부 CDN 403 에러 해결)
-// [v4.0 Hotfix2] SSR/Prerendering 환경에서 document/window 접근 방지 (Vercel 빌드 에러 수정)
+// [v5.0] CDN(getAssetUrl) 미사용 — 사운드는 항상 상대경로로 로드
+//        public/sounds/ 폴더에 파일이 없으면 graceful no-op (에러 0건)
 
 import { Howl, Howler } from 'howler';
 
@@ -11,7 +11,17 @@ type Genre = 'fantasy' | 'sci-fi' | 'horror' | 'modern' | 'mystery';
 
 // SSR 환경 체크 유틸리티
 const isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
-import { getAssetUrl } from '@/lib/assetConfig';
+
+// [v5.0] 사운드 파일 존재 여부를 HEAD 요청으로 확인 (브라우저 환경에서만)
+async function checkSoundExists(url: string): Promise<boolean> {
+    if (!isBrowser) return false;
+    try {
+        const res = await fetch(url, { method: 'HEAD' });
+        return res.ok;
+    } catch {
+        return false;
+    }
+}
 
 class AudioManager {
     private static instance: AudioManager;
@@ -19,36 +29,55 @@ class AudioManager {
     private currentGenre: Genre | null = null;
     private muted: boolean = false;
     private pendingBgmGenre: Genre | null = null; // 자동재생 차단 시 대기 상태
+    private audioEnabled: boolean = false; // [v5.0] 사운드 파일 존재 시에만 true
 
-    // BGM 소스 (장르별 프리셋 — 로컬 자산 경로 사용)
+    // BGM 소스 (장르별 프리셋 — 항상 상대경로, CDN 미사용)
     private bgmSources: Record<Genre, string> = {
-        fantasy: getAssetUrl('/sounds/bgm/fantasy.mp3'),
-        'sci-fi': getAssetUrl('/sounds/bgm/sci-fi.mp3'),
-        horror: getAssetUrl('/sounds/bgm/horror.mp3'),
-        mystery: getAssetUrl('/sounds/bgm/mystery.mp3'),
-        modern: getAssetUrl('/sounds/bgm/modern.mp3')
+        fantasy: '/sounds/bgm/fantasy.mp3',
+        'sci-fi': '/sounds/bgm/sci-fi.mp3',
+        horror: '/sounds/bgm/horror.mp3',
+        mystery: '/sounds/bgm/mystery.mp3',
+        modern: '/sounds/bgm/modern.mp3'
     };
 
-    // SFX 소스 정의 — 로컬 자산 경로로 통일 (외부 CDN 404 에러 방지)
+    // SFX 소스 정의 — 항상 상대경로로 통일 (CDN CORS 에러 방지)
     private sfxSources = {
-        click: getAssetUrl('/sounds/sfx/click.ogg'),
-        success: getAssetUrl('/sounds/sfx/success.ogg'),
-        footstep: getAssetUrl('/sounds/sfx/footstep.ogg'),
-        pickup: getAssetUrl('/sounds/sfx/pickup.ogg')
+        click: '/sounds/sfx/click.ogg',
+        success: '/sounds/sfx/success.ogg',
+        footstep: '/sounds/sfx/footstep.ogg',
+        pickup: '/sounds/sfx/pickup.ogg'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)
     private sfxPool: Map<string, Howl> = new Map();
 
     private constructor() {
-        // [v4.0 Hotfix2] SSR 환경에서는 오디오 초기화 건너뛰기
+        // [v5.0] SSR 환경에서는 오디오 초기화 건너뛰기
         if (!isBrowser) return;
 
         Howler.volume(0.5);
-        // SFX를 사전 로드하여 풀에 저장
+        // [v5.0] 사운드 파일 존재 여부를 먼저 확인 후 초기화
+        this.initAudio();
+    }
+
+    /**
+     * [v5.0] 비동기 오디오 초기화
+     * 대표 SFX 파일 1개로 존재 여부를 확인하고, 없으면 전체 오디오 비활성화
+     */
+    private async initAudio(): Promise<void> {
+        const testFile = this.sfxSources.click;
+        const exists = await checkSoundExists(testFile);
+
+        if (!exists) {
+            console.log('[Audio] 사운드 파일 미감지 — 오디오 비활성화 (정상 동작)');
+            this.audioEnabled = false;
+            return;
+        }
+
+        this.audioEnabled = true;
         this.preloadSFX();
-        // 사용자 상호작용 감지 — 자동재생 차단 해제용
         this.setupAutoplayUnlock();
+        console.log('[Audio] 사운드 파일 감지 — 오디오 활성화');
     }
 
     /**
@@ -107,7 +136,7 @@ class AudioManager {
     }
 
     public playBGM(genre: string) {
-        if (!isBrowser) return;
+        if (!isBrowser || !this.audioEnabled) return;
         if (this.currentGenre === genre) return;
 
         // 이전 BGM 페이드 아웃 및 즉시 언로드 예약
@@ -146,7 +175,7 @@ class AudioManager {
     }
 
     public playBGMFromUrl(url: string) {
-        if (!isBrowser) return;
+        if (!isBrowser || !this.audioEnabled) return;
 
         if (this.bgm) {
             const oldBgm = this.bgm;
@@ -176,7 +205,7 @@ class AudioManager {
      * 매번 new Howl() 생성하지 않고 풀에서 가져와 .play() 호출
      */
     public playSFX(key: keyof typeof this.sfxSources) {
-        if (!isBrowser) return;
+        if (!isBrowser || !this.audioEnabled) return;
 
         const pooled = this.sfxPool.get(key);
         if (pooled) {
