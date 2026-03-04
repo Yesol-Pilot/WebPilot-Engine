@@ -1,6 +1,20 @@
 {
-    "lastUpdated": "2026-03-03T12:09:29.961+09:00",
+    "lastUpdated": "2026-03-02T15:50:00+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-02T15:50:00+09:00",
+            "commits": [
+                {
+                    "hash": "8f27937",
+                    "message": "fix(audio): R2 CDN CORS 에러 해결 — getAssetUrl 제거, graceful no-op 모드",
+                    "filesChanged": 1,
+                    "insertions": 49,
+                    "deletions": 20
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "[fix] 오디오 CORS 에러 해결 — CDN 경유 제거, 사운드 파일 미존재 시 완전 비활성화"
+        },
         {
             "timestamp": "2026-03-03T12:09:29.961+09:00",
             "commits": [

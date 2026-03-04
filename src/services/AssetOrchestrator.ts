@@ -265,8 +265,8 @@ export class AssetOrchestrator {
             };
         }
 
-        // 2. 사전 검증
-        const validation = await this.validateAsset(url);
+        // 2. 사전 검증 (원본 path 전달 — validateAsset 내부에서 getAssetUrl 적용)
+        const validation = await this.validateAsset(path);
         if (!validation.exists) {
             this.stats.failCount++;
             this.stats.fallbackUsageCount++;

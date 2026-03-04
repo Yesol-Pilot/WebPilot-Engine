@@ -6,8 +6,10 @@
  * [목적] drei의 useGLTF를 대체하는 안전한 GLTF 로더 훅
  * - Draco JS 디코더 강제 사용 (WASM 호환성 문제 해결)
  * - BYTES_PER_ELEMENT 에러 방지
+ * - [v5.0] getAssetUrl() 자동 적용 — CDN 배포 시 자동 URL 변환
  * 
  * [2026-02-02] Draco 구조적 문제 해결을 위해 생성
+ * [2026-03-04] getAssetUrl 통합 — 모든 GLB 경로를 CDN URL로 자동 변환
  */
 
 import { useLoader } from '@react-three/fiber';
@@ -16,6 +18,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
+import { getAssetUrl } from '@/lib/assetConfig';
 
 // Draco CDN 경로
 const DRACO_CDN = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
@@ -64,11 +67,15 @@ function getKTX2Loader(): KTX2Loader | null {
 /**
  * useGLTF 대체 훅
  * Draco JS 디코더를 강제 사용하여 BYTES_PER_ELEMENT 에러 방지
+ * [v5.0] getAssetUrl() 자동 적용 — 상대경로를 CDN URL로 변환
  */
 export function useSafeGLTF(path: string): GLTF {
+    // [v5.0] 상대경로를 CDN URL로 자동 변환 (이미 http(s)://면 그대로 반환)
+    const resolvedPath = getAssetUrl(path);
+
     const gltf = useLoader(
         GLTFLoader,
-        path,
+        resolvedPath,
         (loader) => {
             // GLTFLoader에 DRACOLoader 설정
             const dracoLoader = getDracoLoader();
@@ -88,6 +95,7 @@ export function useSafeGLTF(path: string): GLTF {
 /**
  * 프리로드 함수 (useGLTF.preload 대체)
  * [주의] 서버 사이드에서는 실행되지 않음 (Next.js SSR 호환성)
+ * [v5.0] getAssetUrl() 자동 적용
  */
 useSafeGLTF.preload = (path: string) => {
     // [SSR 호환성] 서버 환경에서는 preload 스킵
@@ -95,12 +103,15 @@ useSafeGLTF.preload = (path: string) => {
         return;
     }
 
+    // [v5.0] CDN URL 변환
+    const resolvedPath = getAssetUrl(path);
+
     const loader = new GLTFLoader();
     loader.setDRACOLoader(getDracoLoader());
     const ktx2 = getKTX2Loader();
     if (ktx2) loader.setKTX2Loader(ktx2);
-    loader.load(path, () => { }, undefined, (error) => {
-        console.warn(`[useSafeGLTF] 프리로드 실패: ${path}`, error);
+    loader.load(resolvedPath, () => { }, undefined, (error) => {
+        console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
     });
 };
 

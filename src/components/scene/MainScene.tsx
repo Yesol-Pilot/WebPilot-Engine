@@ -4,6 +4,7 @@ import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture } from '@react-three/drei';
 import { useSceneStore, SceneObject } from '../../store/useSceneStore';
+import { getAssetUrl } from '@/lib/assetConfig';
 
 // Model Loader Component
 import * as THREE from 'three';
@@ -12,7 +13,7 @@ import { LowPolyMaterialAdapter } from '../../services/LowPolyMaterialAdapter';
 // Model Loader Component
 // 일반 Model Component (PBR/기타)
 const ModelBase = ({ info }: { info: SceneObject }) => {
-    const { scene } = useGLTF(info.path);
+    const { scene } = useGLTF(getAssetUrl(info.path));
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
 
     return (
@@ -36,7 +37,7 @@ function MatcapLoader({ url, onLoad }: { url: string; onLoad: (tex: THREE.Textur
 
 // Matcap 전용 Model Component — useTexture 조건 분리
 const ModelWithMatcap = ({ info }: { info: SceneObject }) => {
-    const { scene } = useGLTF(info.path);
+    const { scene } = useGLTF(getAssetUrl(info.path));
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
     const group = useRef<THREE.Group>(null);
     const [loadedMatcap, setLoadedMatcap] = useState<THREE.Texture | undefined>(undefined);
