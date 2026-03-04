@@ -946,6 +946,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                 <Canvas
                     camera={{ position: [5, 5, 5], fov: 50 }}
                     shadows
+                    dpr={[1, 1.5]} // [v4.1 Fix] VRAM 초과(Context Lost) 원천 차단: 고해상도(Retina) 디스플레이에서 렌더 버퍼가 4배~9배 폭증하는 것을 방지
                     onCreated={({ gl }) => {
                         gl.domElement.addEventListener('webglcontextlost', (e) => {
                             e.preventDefault();
