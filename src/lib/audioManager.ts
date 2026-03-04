@@ -17,6 +17,7 @@ async function checkSoundExists(url: string): Promise<boolean> {
     if (!isBrowser) return false;
     try {
         const res = await fetch(url, { method: 'HEAD' });
+        // 404, 403, 401 등 모든 에러 대응
         return res.ok;
     } catch {
         return false;

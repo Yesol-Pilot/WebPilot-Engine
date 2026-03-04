@@ -218,6 +218,7 @@ export function autoScaleAssetSync(
         const rawScaleFactor = targetSize / currentSizeOnAxis;
 
         if (rawScaleFactor < 0.01 || rawScaleFactor > 100.0) {
+            // [v3.4 Fix] 무한루프 방지를 위해 한 번 출력 시 기록 등 처리는 별도 모듈에서 관리하거나, 단순히 제한
             console.warn(`[AutoScale] ⚠️ 스케일 이상치 감지 (${path.split('/').pop()}): ×${rawScaleFactor.toFixed(4)}`);
             scaleFactor = Math.min(Math.max(rawScaleFactor, 0.05), 10.0);
             console.log(`  - 🛡️ 안전 스케일로 보정됨: ×${scaleFactor.toFixed(4)}`);
@@ -318,7 +319,14 @@ export function autoScaleAssetSemantic(
         const currentSizeOnAxis = currentSize[dominantAxis];
 
         if (currentSizeOnAxis > 0 && isFinite(currentSizeOnAxis)) {
-            scaleFactor = targetSize / currentSizeOnAxis;
+            let rawScaleFactor = targetSize / currentSizeOnAxis;
+            if (rawScaleFactor < 0.01 || rawScaleFactor > 100.0) {
+                console.warn(`[AutoScale] ⚠️ 스케일 이상치 감지 (${path.split('/').pop()}): ×${rawScaleFactor.toFixed(4)}`);
+                scaleFactor = Math.min(Math.max(rawScaleFactor, 0.05), 10.0);
+                console.log(`  - 🛡️ 안전 스케일로 보정됨: ×${scaleFactor.toFixed(4)}`);
+            } else {
+                scaleFactor = rawScaleFactor;
+            }
         }
 
         console.log(`[AutoScale] 📦 카테고리 폴백: ${path.split('/').pop()} (${category})`);
