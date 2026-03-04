@@ -1,0 +1,12 @@
+{
+  "github": {
+    "enabled": false
+  },
+  "build": {
+    "env": {
+      "ENABLE_TURBO": "0",
+      "VERCEL_FORCE_NO_TURBO": "1",
+      "VERCEL_BUILD_MACHINE": "standard"
+    }
+  }
+}
