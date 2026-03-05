@@ -771,10 +771,33 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
     // 원본 prompt에서 환경 에셋 직접 매칭
     const [directEnvironmentMatch, setDirectEnvironmentMatch] = useState<string | null>(null);
 
+    // [v5.0] 점진적 로딩(Progressive Loading) — VRAM 폭파 방지
+    // 한 번에 모든 노드를 마운트하면 GLB가 동시에 GPU에 업로드되어 Context Lost 발생
+    // → 최대 BATCH_SIZE개씩 시간차로 마운트하여 GPU 부하 분산
+    const BATCH_SIZE = 3;
+    const BATCH_DELAY_MS = 1500; // 1.5초 간격으로 다음 배치 로드
+    const [visibleCount, setVisibleCount] = useState(Math.min(BATCH_SIZE, nodes.length));
+
+    // 노드가 변경될 때 점진적 로딩 재시작
+    useEffect(() => {
+        setVisibleCount(Math.min(BATCH_SIZE, nodes.length));
+    }, [nodes.length]);
+
+    // 점진적 로딩 타이머
+    useEffect(() => {
+        if (visibleCount >= nodes.length) return; // 모든 노드가 이미 표시됨
+
+        const timer = setTimeout(() => {
+            setVisibleCount(prev => Math.min(prev + BATCH_SIZE, nodes.length));
+        }, BATCH_DELAY_MS);
+
+        return () => clearTimeout(timer);
+    }, [visibleCount, nodes.length]);
+
     // 노드 변경 시 1회만 로그 출력
     useEffect(() => {
         if (!hasLoggedRef.current && nodes.length > 0) {
-            console.log('[PreviewNodes] 📦 Rendering nodes:', nodes.length, nodes);
+            console.log(`[PreviewNodes] 📦 점진적 로딩 시작: 총 ${nodes.length}개, ${BATCH_SIZE}개씩 ${BATCH_DELAY_MS}ms 간격`);
             hasLoggedRef.current = true;
         }
     }, [nodes]);
@@ -785,22 +808,13 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
     useEffect(() => {
         async function matchEnvironmentFromPrompt() {
             if (!prompt) return;
-
             // [v3.4 Fix] 환경 에셋 매칭도 서버 API 또는 사전에 필터링된 데이터만 사용하도록 유도
-            // 여기서는 일단 직접적인 registry 검색을 주석 처리하여 메모리 세이브
-            /*
-            const { searchAssets } = await import('@/data/AssetRegistry');
-            const matches = await searchAssets(prompt);
-            const envMatch = matches.find(m => m.category === 'environment');
-
-            if (envMatch) {
-                console.log(`[PreviewNodes] 🌍 환경 에셋 로드: "${prompt}" → ${envMatch.path}`);
-                setDirectEnvironmentMatch(envMatch.path);
-            }
-            */
         }
         matchEnvironmentFromPrompt();
     }, [prompt]);
+
+    // 현재까지 표시할 노드만 슬라이싱
+    const visibleNodes = processedNodes.slice(0, visibleCount);
 
     // 환경 에셋과 노드 모두 렌더링 (환경 에셋이 있어도 노드 생략 안 함!)
     return (
@@ -828,8 +842,8 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
                 </Suspense>
             )}
 
-            {/* 모든 노드 렌더링 - 환경 매칭 여부와 무관하게 항상! */}
-            {processedNodes.map((node, index) => (
+            {/* [v5.0] 점진적 렌더링 — visibleCount만큼만 마운트 */}
+            {visibleNodes.map((node, index) => (
                 <PreviewNode key={`${node.id}-${index}`} node={node as SceneNode} />
             ))}
         </group>
