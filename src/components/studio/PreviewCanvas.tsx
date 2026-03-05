@@ -117,7 +117,8 @@ function ExposureController() {
 }
 
 /**
- * WebGLMonitor: 컨텍스트 유실 감시 및 자동 복구 유도
+ * WebGLMonitor: 컨텍스트 유실 감시 (자동 복구 유도 — 새로고침 금지)
+ * [v5.1 Fix] window.location.reload()를 제거: Context Lost → Restored → reload → 다시 Context Lost → 무한 루프 방지
  */
 function WebGLMonitor() {
     const { gl } = useThree();
@@ -132,8 +133,9 @@ function WebGLMonitor() {
         };
 
         const handleContextRestored = () => {
-            console.log('[PreviewCanvas] ✨ WebGL Context Restored. 씬 재구성 중...');
-            window.location.reload(); // 단순 복구보다는 페이지 새로고침이 안전
+            // [v5.1 Fix] reload 대신 이벤트만 발행 — 무한 새로고침 루프 방지
+            console.log('[PreviewCanvas] ✨ WebGL Context Restored. (새로고침 없이 상태 복구)');
+            window.dispatchEvent(new CustomEvent('webglStatus', { detail: { status: 'restored' } }));
         };
 
         canvas.addEventListener('webglcontextlost', handleContextLost, false);
@@ -1025,19 +1027,21 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         />
 
 
-                        {/* 환경 - 스카이박스 URL이 있으면 HDRI 적용, 없으면 city 프리셋 */}
-                        {skyboxUrl ? (
-                            <Environment
-                                files={skyboxUrl}
-                                background={true}
-                                environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                            />
-                        ) : (
-                            <Environment
-                                preset="city"
-                                background={false}
-                                environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                            />
+                        {/* [v5.1 Fix] 환경맵 — 빈 씬/로딩 중에는 마운트하지 않음 (VRAM 절약) */}
+                        {!effectiveIsEmpty && !isGenerating && (
+                            skyboxUrl ? (
+                                <Environment
+                                    files={skyboxUrl}
+                                    background={true}
+                                    environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
+                                />
+                            ) : (
+                                <Environment
+                                    preset="city"
+                                    background={false}
+                                    environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
+                                />
+                            )
                         )}
 
                         {/* 씬 내용 */}
@@ -1067,8 +1071,8 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         />
 
                         {/* [Phase 4] Premium Post-processing (Stage 12) */}
-                        {/* [v5.0 Fix] 빈 씬에서는 EffectComposer를 마운트하지 않음 → VRAM 절약 (Normal Pass, SSAO 등 비활성화) */}
-                        {!effectiveIsEmpty && (
+                        {/* [v5.1 Fix] 빈 씬 또는 로딩 중에는 EffectComposer 비활성화 → VRAM 절약 */}
+                        {!effectiveIsEmpty && !isGenerating && (
                             <EffectComposer enableNormalPass={!!aiPostProcessing?.ssao}>
                                 {[
                                     /* 1. Bloom (빛 번짐) */
