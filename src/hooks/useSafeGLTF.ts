@@ -13,6 +13,7 @@
  */
 
 import { useLoader } from '@react-three/fiber';
+import { useState, useEffect } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
@@ -64,6 +65,9 @@ function getKTX2Loader(): KTX2Loader | null {
     return ktx2LoaderInstance;
 }
 
+// [Phase 6] 검증 캐시 (불필요한 중복 fetch 방지)
+const validationCache = new Map<string, boolean>();
+
 /**
  * useGLTF 대체 훅
  * Draco JS 디코더를 강제 사용하여 BYTES_PER_ELEMENT 에러 방지
@@ -73,6 +77,74 @@ export function useSafeGLTF(path: string): GLTF {
     // [v5.0] 상대경로를 CDN URL로 자동 변환 (이미 http(s)://면 그대로 반환)
     const resolvedPath = getAssetUrl(path);
 
+    // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
+    const [isValid, setIsValid] = useState<boolean | null>(
+        validationCache.has(resolvedPath) ? validationCache.get(resolvedPath)! : null
+    );
+
+    useEffect(() => {
+        if (isValid !== null) return;
+
+        let isMounted = true;
+
+        // 헤더 12바이트만 요청해서 파싱 에러 사전 방어 (Range 헤더 지원 안하는 서버라도 맨 앞은 받을 수 있음)
+        fetch(resolvedPath, { headers: { 'Range': 'bytes=0-11' } })
+            .then(res => res.arrayBuffer())
+            .then(buffer => {
+                if (!isMounted) return;
+
+                try {
+                    const dataView = new DataView(buffer);
+                    // glTF Binary 매직넘버: 0x46546C67 ("glTF")
+                    const magic = dataView.getUint32(0, true);
+                    const version = dataView.getUint32(4, true);
+
+                    if (magic === 0x46546C67 && version === 1) {
+                        console.error(`[useSafeGLTF] 🚨 Legacy binary file (glTF 1.0) 감지됨. 크래시 방어를 위해 로드 차단: ${resolvedPath}`);
+                        validationCache.set(resolvedPath, false);
+                        setIsValid(false);
+                    } else {
+                        validationCache.set(resolvedPath, true);
+                        setIsValid(true);
+                    }
+                } catch (e) {
+                    // JSON 타입의 일반 glTF이거나 비정상 파일 (GLTFLoader가 알아서 에러 뱉게 넘김)
+                    if (isMounted) {
+                        validationCache.set(resolvedPath, true);
+                        setIsValid(true);
+                    }
+                }
+            })
+            .catch(err => {
+                // Fetch 실패 (네트워크 등) - 마찬가지로 하위 로더에 위임
+                if (isMounted) {
+                    validationCache.set(resolvedPath, true);
+                    setIsValid(true);
+                }
+            });
+
+        return () => { isMounted = false; };
+    }, [resolvedPath, isValid]);
+
+    // R3F Suspense 규격: 아직 검증 중이면 Promise를 던져서 컴포넌트를 홀딩
+    if (isValid === null) {
+        throw new Promise(() => { }); // Pending
+    }
+
+    // 검증 실패(Legacy/Corrupted) 시 더미 빈 씬 반환 (렌더러 생존 유도)
+    if (isValid === false) {
+        return {
+            scene: new THREE.Scene(),
+            nodes: {},
+            materials: {},
+            animations: [],
+            cameras: [],
+            parser: {} as any,
+            userData: {}
+        } as unknown as GLTF;
+    }
+
+    // 검증 통과 시 원래 GLTFLoader 로직 강행
     const gltf = useLoader(
         GLTFLoader,
         resolvedPath,
