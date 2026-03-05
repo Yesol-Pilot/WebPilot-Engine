@@ -344,6 +344,7 @@ export class ResourceDecisionService {
                 bloom: theme.bloom,
                 bloomIntensity: theme.bloom ? 0.6 : 0,
                 vignette: theme.colorGrading === 'horror',
+                ssao: theme.colorGrading === 'horror' || theme.colorGrading === 'cyberpunk', // [v5.0] 특정 테마만 SSAO 활성화
                 colorGrading: theme.colorGrading,
             };
         }
@@ -352,6 +353,7 @@ export class ResourceDecisionService {
             bloom: false,
             bloomIntensity: 0,
             vignette: false,
+            ssao: false,
             colorGrading: 'none',
         };
     }

@@ -989,7 +989,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         failIfMajorPerformanceCaveat: false,
                         stencil: false,
                         depth: true,
-                        preserveDrawingBuffer: true, // v4.0 캡처 기능을 위해 true로 설정
+                        preserveDrawingBuffer: false, // [v5.0 Fix] VRAM 절약: 매 프레임 백버퍼 보존 비활성화 (캡처 시 CaptureScene이 toDataURL 직접 호출)
                     }}
                 >
                     <WebGLMonitor />
@@ -1053,44 +1053,49 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         />
 
                         {/* [Phase 4] Premium Post-processing (Stage 12) */}
-                        <EffectComposer enableNormalPass={true}>
-                            {[
-                                /* 1. Bloom (빛 번짐) */
-                                aiPostProcessing?.bloom ? (
-                                    <Bloom
-                                        key="effect-bloom"
-                                        intensity={aiPostProcessing.bloomIntensity ?? 0.5}
-                                        luminanceThreshold={0.9}
-                                        luminanceSmoothing={0.025}
-                                        mipmapBlur
-                                    />
-                                ) : null,
+                        {/* [v5.0 Fix] 빈 씬에서는 EffectComposer를 마운트하지 않음 → VRAM 절약 (Normal Pass, SSAO 등 비활성화) */}
+                        {!effectiveIsEmpty && (
+                            <EffectComposer enableNormalPass={!!aiPostProcessing?.ssao}>
+                                {[
+                                    /* 1. Bloom (빛 번짐) */
+                                    aiPostProcessing?.bloom ? (
+                                        <Bloom
+                                            key="effect-bloom"
+                                            intensity={aiPostProcessing.bloomIntensity ?? 0.5}
+                                            luminanceThreshold={0.9}
+                                            luminanceSmoothing={0.025}
+                                            mipmapBlur
+                                        />
+                                    ) : null,
 
-                                /* 2. Vignette (외곽 어두움) */
-                                aiPostProcessing?.vignette ? (
-                                    <Vignette key="effect-vignette" eskil={false} offset={0.1} darkness={1.1} />
-                                ) : null,
+                                    /* 2. Vignette (외곽 어두움) */
+                                    aiPostProcessing?.vignette ? (
+                                        <Vignette key="effect-vignette" eskil={false} offset={0.1} darkness={1.1} />
+                                    ) : null,
 
-                                /* 3. SSAO (기본 앰비언트 오클루전) */
-                                <SSAO
-                                    key="effect-ssao"
-                                    blendFunction={BlendFunction.MULTIPLY}
-                                    samples={31}
-                                    radius={0.1}
-                                    intensity={15}
-                                    luminanceInfluence={0.6}
-                                    color={new THREE.Color('#000000')}
-                                />,
+                                    /* 3. SSAO — AI가 요청한 경우에만 활성화 (기본 OFF → VRAM 절약) */
+                                    aiPostProcessing?.ssao ? (
+                                        <SSAO
+                                            key="effect-ssao"
+                                            blendFunction={BlendFunction.MULTIPLY}
+                                            samples={16}
+                                            radius={0.1}
+                                            intensity={10}
+                                            luminanceInfluence={0.6}
+                                            color={new THREE.Color('#000000')}
+                                        />
+                                    ) : null,
 
-                                /* 4. Color Grading */
-                                aiPostProcessing?.colorGrading === 'warm' ? (
-                                    <BrightnessContrast key="effect-warm" brightness={0.05} contrast={0.1} />
-                                ) : null,
-                                aiPostProcessing?.colorGrading === 'cyberpunk' ? (
-                                    <HueSaturation key="effect-cyberpunk" hue={0.1} saturation={0.5} />
-                                ) : null
-                            ].filter((c): c is React.ReactElement => c !== null)}
-                        </EffectComposer>
+                                    /* 4. Color Grading */
+                                    aiPostProcessing?.colorGrading === 'warm' ? (
+                                        <BrightnessContrast key="effect-warm" brightness={0.05} contrast={0.1} />
+                                    ) : null,
+                                    aiPostProcessing?.colorGrading === 'cyberpunk' ? (
+                                        <HueSaturation key="effect-cyberpunk" hue={0.1} saturation={0.5} />
+                                    ) : null
+                                ].filter((c): c is React.ReactElement => c !== null)}
+                            </EffectComposer>
+                        )}
                     </Suspense>
                 </Canvas>
 

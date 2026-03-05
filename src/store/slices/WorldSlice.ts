@@ -57,6 +57,7 @@ export interface PostProcessingConfig {
     bloom: boolean;
     bloomIntensity: number;
     vignette: boolean;
+    ssao: boolean; // [v5.0] SSAO 활성화 여부 (기본 OFF → VRAM 절약)
     colorGrading: ColorGradingType;
 }
 
@@ -142,6 +143,7 @@ const DEFAULT_POST_PROCESSING: PostProcessingConfig = {
     bloom: false,
     bloomIntensity: 0.5,
     vignette: false,
+    ssao: false, // [v5.0] 기본 OFF → 초기 VRAM 부하 제거
     colorGrading: 'none',
 };
 
