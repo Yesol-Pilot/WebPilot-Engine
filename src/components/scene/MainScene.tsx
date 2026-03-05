@@ -9,8 +9,27 @@ import { getAssetUrl } from '@/lib/assetConfig';
 // Model Loader Component
 import * as THREE from 'three';
 import { LowPolyMaterialAdapter } from '../../services/LowPolyMaterialAdapter';
+import { Component, ErrorInfo, ReactNode } from 'react';
 
-// Model Loader Component
+// [Phase 6] GLTF Parsing ErrorBoundary (Legacy Binary, Corrupted Data 대응)
+class GLBErrorBoundary extends Component<{ fallback: ReactNode, onError?: (err: Error) => void, children: ReactNode }, { hasError: boolean }> {
+    constructor(props: any) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError(_: Error) {
+        return { hasError: true };
+    }
+    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        console.error('[MainScene-GLBErrorBoundary] 🚨 에셋 파싱 치명적 에러 격리됨 (Context Lost 방어):', error);
+        if (this.props.onError) this.props.onError(error);
+    }
+    render() {
+        if (this.state.hasError) return this.props.fallback;
+        return this.props.children;
+    }
+}
+
 // 일반 Model Component (PBR/기타)
 const ModelBase = ({ info }: { info: SceneObject }) => {
     const { scene } = useGLTF(getAssetUrl(info.path));
@@ -74,11 +93,20 @@ const ModelWithMatcap = ({ info }: { info: SceneObject }) => {
 };
 
 // 라우터: renderStyle에 따라 적절한 컴포넌트 선택
+// 개별 모델 에러 격리를 위해 ErrorBoundary로 감쌈
 const Model = ({ info }: { info: SceneObject }) => {
-    if (info.renderStyle === 'matcap') {
-        return <ModelWithMatcap info={info} />;
-    }
-    return <ModelBase info={info} />;
+    const FallbackMesh = (
+        <mesh position={info.position} scale={info.scale}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="#FF6B6B" wireframe />
+        </mesh>
+    );
+
+    return (
+        <GLBErrorBoundary fallback={FallbackMesh}>
+            {info.renderStyle === 'matcap' ? <ModelWithMatcap info={info} /> : <ModelBase info={info} />}
+        </GLBErrorBoundary>
+    );
 };
 
 // Main 3D Scene

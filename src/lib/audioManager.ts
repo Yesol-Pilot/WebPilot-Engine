@@ -42,11 +42,12 @@ class AudioManager {
     };
 
     // SFX 소스 정의 — 항상 상대경로로 통일 (CDN CORS 에러 방지)
+    // [v5.1 Fix] 실제 존재하는 public 폴더 내의 유효 자산 경로로 변경하여 404 연쇄 발생 방어
     private sfxSources = {
-        click: '/sounds/sfx/click.mp3',
-        success: '/sounds/sfx/success.mp3',
-        footstep: '/sounds/sfx/footstep.mp3',
-        pickup: '/sounds/sfx/pickup.mp3'
+        click: '/sounds/sfx/ui/click_button.mp3',
+        success: '/sounds/sfx/ui/success.mp3',
+        footstep: '/sounds/sfx/character/footstep_grass.mp3',
+        pickup: '/sounds/sfx/ui/item_equip.mp3'
     };
 
     // [Phase 5] SFX 사전 로드된 인스턴스 풀 (매번 new Howl() 생성 방지)

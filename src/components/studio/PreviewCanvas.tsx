@@ -27,8 +27,26 @@ import ParticleSystem from '@/components/effects/ParticleSystem';
 import BGMControlButton from '@/components/ui/BGMControlButton';
 import { EffectComposer, Bloom, Vignette, SSAO, BrightnessContrast, HueSaturation } from '@react-three/postprocessing';
 import { BlendFunction } from 'postprocessing';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
-
+// [Phase 6] GLTF Parsing ErrorBoundary (Legacy Binary, Corrupted Data 대응)
+class GLBErrorBoundary extends Component<{ fallback: ReactNode, onError: (err: Error) => void, children: ReactNode }, { hasError: boolean }> {
+    constructor(props: any) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError(_: Error) {
+        return { hasError: true };
+    }
+    componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        console.error('[GLBErrorBoundary] 🚨 에셋 파싱 치명적 에러 격리됨 (Context Lost 방어):', error);
+        this.props.onError(error);
+    }
+    render() {
+        if (this.state.hasError) return this.props.fallback;
+        return this.props.children;
+    }
+}
 
 // GLB 메타데이터 전체 인터페이스 정의
 interface GLBMetadata {
@@ -493,16 +511,22 @@ function GLBModel({ path, position, rotation, scale, matcapUrl }: {
         return null;
     }
 
+    const FallbackMesh = (
+        <mesh position={position} scale={scale}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="#FF6B6B" wireframe />
+        </mesh>
+    );
+
     if (hasError) {
-        return (
-            <mesh position={position} scale={scale}>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshStandardMaterial color="#FF6B6B" wireframe />
-            </mesh>
-        );
+        return FallbackMesh;
     }
 
-    return <GLBModelInner path={finalPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapUrl} onError={() => setHasError(true)} />;
+    return (
+        <GLBErrorBoundary fallback={FallbackMesh} onError={() => setHasError(true)}>
+            <GLBModelInner path={finalPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapUrl} onError={() => setHasError(true)} />
+        </GLBErrorBoundary>
+    );
 }
 
 function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: {
