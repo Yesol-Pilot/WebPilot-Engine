@@ -139,7 +139,7 @@ export class ScenarioArchitectCell extends BaseCell {
 
 규칙:
 1. elements의 name은 반드시 영문 (에셋 검색 호환) — 하드코딩 금지
-2. 오브젝트 수는 씬 복잡도에 따라 다양성을 확보하되 최대 25개 이하로 허용 (권장: 10~15개)
+2. 오브젝트 수는 씬 복잡도에 따라 다양성을 확보하되 최대 15개 이하로 허용 (권장: 8~12개)
 3. role: "focal"(주목 1~3개), "support"(지원), "ambient"(분위기), "structural"(구조물)
 4. dimensions는 미터 단위
 5. constraints 예: ["wall_mount", "floor", "ceiling_hang", "floating"]
@@ -280,8 +280,8 @@ ${feedback}
         draft: z.infer<typeof ScenarioSchema>,
         narrative: NarrativeResult
     ): ScenarioData {
-        // [v6.0 Fix] Draco/WebP 압축 파이프라인 도입으로 VRAM 고갈 방지 제한(8)을 해제하고 최대 25개로 확장
-        const safeElements = draft.elements.slice(0, 25);
+        // [v6.1 Fix] VRAM 고갈 방지를 위해 최대 한도를 25개에서 15개로 하향 조정 (안정성 확보)
+        const safeElements = draft.elements.slice(0, 15);
 
         const elements: ElementSpec[] = safeElements.map((el) => ({
             name: el.name,

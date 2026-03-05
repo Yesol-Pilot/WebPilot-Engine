@@ -178,13 +178,43 @@ useSafeGLTF.preload = (path: string) => {
     // [v5.0] CDN URL 변환
     const resolvedPath = getAssetUrl(path);
 
-    const loader = new GLTFLoader();
-    loader.setDRACOLoader(getDracoLoader());
-    const ktx2 = getKTX2Loader();
-    if (ktx2) loader.setKTX2Loader(ktx2);
-    loader.load(resolvedPath, () => { }, undefined, (error) => {
-        console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
-    });
+    // [Fix] 프리로드 단계에서도 헤더 검증을 강제하여 Legacy Binary 크래시 방어
+    fetch(resolvedPath, { headers: { 'Range': 'bytes=0-11' } })
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+            try {
+                const dataView = new DataView(buffer);
+                const magic = dataView.getUint32(0, true);
+                const version = dataView.getUint32(4, true);
+
+                if (magic === 0x46546C67 && version === 1) {
+                    console.warn(`[useSafeGLTF.preload] 🚨 Legacy binary file 차단됨: ${resolvedPath}`);
+                    return; // 프리로드 중지
+                }
+            } catch (e) {
+                // Ignore parsing inner errors, let GLTFLoader handle them
+            }
+
+            // 검증 통과(또는 catch) 시에만 실제 프리로드 진행
+            const loader = new GLTFLoader();
+            loader.setDRACOLoader(getDracoLoader());
+            const ktx2 = getKTX2Loader();
+            if (ktx2) loader.setKTX2Loader(ktx2);
+
+            loader.load(resolvedPath, () => { }, undefined, (error) => {
+                console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
+            });
+        })
+        .catch(err => {
+            // Range Fetch가 네트워크 레벨에서 막힌 경우 (Fallback)
+            const loader = new GLTFLoader();
+            loader.setDRACOLoader(getDracoLoader());
+            const ktx2 = getKTX2Loader();
+            if (ktx2) loader.setKTX2Loader(ktx2);
+            loader.load(resolvedPath, () => { }, undefined, (error) => {
+                console.warn(`[useSafeGLTF] 프리로드 실패(Fallback): ${resolvedPath}`, error);
+            });
+        });
 };
 
 /**
