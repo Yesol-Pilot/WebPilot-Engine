@@ -51,55 +51,76 @@ export default function CreatorStudioPage() {
   // 게임 진입 상태
   const [isIngame, setIsIngame] = useState(false);
 
+  // Agent 초기화 상태
+  const [agentReady, setAgentReady] = useState(false);
+  const [agentError, setAgentError] = useState('');
+
   // 생성 가능 여부
   const canGenerate = inputMode === 'image' ? !!imagePreview : !!prompt.trim();
 
   // Agent Refs
   const directorRef = React.useRef<any>(null);
 
-  // [Phase 6] Initialize Agent System
+  // [Phase 6] Initialize Agent System (에러 핸들링 + 타임아웃 추가)
   React.useEffect(() => {
     const initAgents = async () => {
-      const { Neo4jService } = await import('@/services/graph/Neo4jService');
-      const { isFeatureEnabled } = await import('@/config/featureFlags');
+      try {
+        console.log('[System] Agent 시스템 초기화 시작...');
 
-      console.log('[System] Initializing Agent System...');
-      await Neo4jService.initialize();
+        // Neo4jService 초기화 (실패해도 Mock Mode로 전환됨)
+        try {
+          const { Neo4jService } = await import('@/services/graph/Neo4jService');
+          await Promise.race([
+            Neo4jService.initialize(),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Neo4j 타임아웃')), 5000))
+          ]);
+        } catch (neo4jErr) {
+          console.warn('[System] Neo4j 초기화 스킵 (Mock Mode):', neo4jErr);
+        }
 
-      if (isFeatureEnabled('ENABLE_SYNAPTIC_BRIDGE_MS1_5')) {
-        // MS1.5: 신경-유기적 파이프라인
-        const { CommanderCell } = await import('@/cells/cortex/CommanderCell');
-        const { SpatialZonerCell } = await import('@/cells/musculoskeletal/SpatialZonerCell');
-        const { PropMasterCell } = await import('@/cells/musculoskeletal/PropMasterCell');
-        const { AssetHunterCell } = await import('@/cells/musculoskeletal/AssetHunterCell');
-        const { ConstructorSquad } = await import('@/cells/musculoskeletal/ConstructorSquad');
-        // MS3: 면역 분대
-        const { SemanticNKCell } = await import('@/cells/immune/SemanticNKCell');
-        const { AestheticMacrophage } = await import('@/cells/immune/AestheticMacrophage');
+        const { isFeatureEnabled } = await import('@/config/featureFlags');
 
-        // 세포 인스턴스 생성 (BaseCell 생성자에서 자동 activate → MessageBus 구독)
-        const commander = new CommanderCell();
-        new SpatialZonerCell();
-        new PropMasterCell();
-        new AssetHunterCell();
-        new ConstructorSquad();
-        // 면역 세포 (PLACEMENT_DONE 수신 대기)
-        new SemanticNKCell();
-        new AestheticMacrophage();
+        if (isFeatureEnabled('ENABLE_SYNAPTIC_BRIDGE_MS1_5')) {
+          // MS1.5: 신경-유기적 파이프라인
+          const { CommanderCell } = await import('@/cells/cortex/CommanderCell');
+          const { SpatialZonerCell } = await import('@/cells/musculoskeletal/SpatialZonerCell');
+          const { PropMasterCell } = await import('@/cells/musculoskeletal/PropMasterCell');
+          const { AssetHunterCell } = await import('@/cells/musculoskeletal/AssetHunterCell');
+          const { ConstructorSquad } = await import('@/cells/musculoskeletal/ConstructorSquad');
+          // MS3: 면역 분대
+          const { SemanticNKCell } = await import('@/cells/immune/SemanticNKCell');
+          const { AestheticMacrophage } = await import('@/cells/immune/AestheticMacrophage');
 
-        // Commander를 directorRef에 저장 (호환 인터페이스)
-        (directorRef as any).current = commander;
-        console.log('[System] 🧬 Neuro-Organic Pipeline Ready (MS1.5 + MS3 Immune)');
-      } else {
-        // 레거시: DirectorAgent 파이프라인
-        const { DirectorAgent } = await import('@/services/a2a/DirectorAgent');
-        const { ArchitectAgent } = await import('@/services/a2a/ArchitectAgent');
-        const { VisualCoreAgent } = await import('@/services/a2a/VisualCoreAgent');
+          // 세포 인스턴스 생성
+          const commander = new CommanderCell();
+          new SpatialZonerCell();
+          new PropMasterCell();
+          new AssetHunterCell();
+          new ConstructorSquad();
+          new SemanticNKCell();
+          new AestheticMacrophage();
 
-        directorRef.current = new DirectorAgent();
-        new ArchitectAgent();
-        new VisualCoreAgent();
-        console.log('[System] All Agents Online & Ready. (Legacy)');
+          (directorRef as any).current = commander;
+          console.log('[System] 🧬 Neuro-Organic Pipeline Ready (MS1.5 + MS3 Immune)');
+        } else {
+          // 레거시: DirectorAgent 파이프라인
+          const { DirectorAgent } = await import('@/services/a2a/DirectorAgent');
+          const { ArchitectAgent } = await import('@/services/a2a/ArchitectAgent');
+          const { VisualCoreAgent } = await import('@/services/a2a/VisualCoreAgent');
+
+          directorRef.current = new DirectorAgent();
+          new ArchitectAgent();
+          new VisualCoreAgent();
+          console.log('[System] All Agents Online & Ready. (Legacy)');
+        }
+
+        setAgentReady(true);
+        console.log('[System] ✅ Agent 시스템 초기화 완료!');
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : '알 수 없는 오류';
+        console.error('[System] ❌ Agent 초기화 실패:', msg);
+        setAgentError(`Agent 초기화 실패: ${msg}`);
+        // 실패해도 UI는 동작 가능하게: agentReady는 false로 유지
       }
     };
 
@@ -462,6 +483,8 @@ export default function CreatorStudioPage() {
             <DirectorChatPanel
               directorRef={directorRef}
               isEmbedded={true}
+              agentReady={agentReady}
+              agentError={agentError}
             />
 
             {/* 축소된 설정 패널 */}

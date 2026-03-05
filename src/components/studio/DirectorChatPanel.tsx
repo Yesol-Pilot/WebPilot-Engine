@@ -23,15 +23,19 @@ interface ChatMessage {
 interface DirectorChatPanelProps {
     directorRef: React.RefObject<any>;
     isMinimized?: boolean;
-    isEmbedded?: boolean; // 좌측 패널에 임베드될 때
+    isEmbedded?: boolean;
+    agentReady?: boolean;
+    agentError?: string;
 }
 
-export default function DirectorChatPanel({ directorRef, isMinimized = false, isEmbedded = false }: DirectorChatPanelProps) {
+export default function DirectorChatPanel({ directorRef, isMinimized = false, isEmbedded = false, agentReady = false, agentError = '' }: DirectorChatPanelProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([
         {
             id: 'welcome',
             type: 'system',
-            content: '👋 WebPilot Director에게 월드를 설명해주세요!',
+            content: agentReady
+                ? '👋 WebPilot Director에게 월드를 설명해주세요!'
+                : '⏳ Agent 시스템 초기화 중...',
             timestamp: new Date()
         }
     ]);
@@ -59,6 +63,19 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
             prevObjectCount.current = objectCount;
         }
     }, [objectCount, isProcessing]);
+
+    // Agent 초기화 상태 변화 감지
+    useEffect(() => {
+        if (agentReady) {
+            addMessageDirect('system', '✅ Agent 시스템 준비 완료! 월드를 설명해주세요.');
+        }
+    }, [agentReady]);
+
+    useEffect(() => {
+        if (agentError) {
+            addMessageDirect('system', `❌ ${agentError}`);
+        }
+    }, [agentError]);
 
 
     // 고유 ID 생성 함수
@@ -124,7 +141,7 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || isProcessing) return;
+        if (!input.trim() || isProcessing || !agentReady) return;
 
         const userInput = input.trim();
         setInput('');
@@ -248,12 +265,12 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="월드를 설명해주세요... (예: 마법사의 서재)"
-                        disabled={isProcessing}
+                        disabled={isProcessing || !agentReady}
                         className="flex-1 px-4 py-2 bg-gray-800 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 disabled:opacity-50"
                     />
                     <button
                         type="submit"
-                        disabled={isProcessing || !input.trim()}
+                        disabled={isProcessing || !input.trim() || !agentReady}
                         className="px-4 py-2 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-lg text-white font-bold hover:scale-105 transition-transform disabled:opacity-50 disabled:hover:scale-100"
                     >
                         {isProcessing ? '⏳' : '→'}
