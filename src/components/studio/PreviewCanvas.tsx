@@ -93,6 +93,10 @@ const GLBMetadataContext = createContext<{
 // [Phase E] SemanticScaleResolver Context - 시맨틱 스케일링 전역 상태
 const ScaleResolverContext = createContext<SemanticScaleResolver | null>(null);
 
+// [v6.0] WebGL 상태 전파 Context — Canvas 내부 자식들이 Context Lost 상태를 구독
+// Context Lost 시 모델 로딩 중단, GPU 업로드 방지에 사용
+const WebGLStatusContext = createContext<{ contextLost: boolean }>({ contextLost: false });
+
 /**
  * ExposureController: 런타임에 toneMappingExposure 동적 업데이트
  * Canvas의 gl prop은 초기화 시에만 적용되므로 useThree로 직접 수정
@@ -119,24 +123,51 @@ function ExposureController() {
 }
 
 /**
- * WebGLMonitor: 컨텍스트 유실 감시 (자동 복구 유도 — 새로고침 금지)
- * [v5.1 Fix] window.location.reload()를 제거: Context Lost → Restored → reload → 다시 Context Lost → 무한 루프 방지
+ * WebGLMonitor: 컨텍스트 유실 감시 + 자동 복구 (forceContextRestore)
+ * [v6.0] Context Lost 시 3초 후 자동 복구 시도 (최대 3회)
+ * [v5.1 Fix] reload 제거 — 무한 새로고침 루프 방지
  */
 function WebGLMonitor() {
     const { gl } = useThree();
+    const retryCountRef = useRef(0);
+    const MAX_RESTORE_RETRIES = 3;
+    const RESTORE_DELAY_MS = 3000;
 
     useEffect(() => {
         const canvas = gl.domElement;
+        let restoreTimer: ReturnType<typeof setTimeout> | null = null;
 
         const handleContextLost = (e: Event) => {
-            e.preventDefault();
-            console.error('[PreviewCanvas] 🚨 WebGL Context Lost! GPU 메모리 초과 또는 드라이버 크래시 의심.');
+            e.preventDefault(); // 필수: 브라우저가 자체 복구를 시도할 수 있게 함
+            console.error(`[WebGLMonitor] 🚨 Context Lost! (복구 시도 ${retryCountRef.current}/${MAX_RESTORE_RETRIES})`);
             window.dispatchEvent(new CustomEvent('webglStatus', { detail: { status: 'lost' } }));
+
+            // 자동 복구 시도 (최대 횟수 미만일 때)
+            if (retryCountRef.current < MAX_RESTORE_RETRIES) {
+                restoreTimer = setTimeout(() => {
+                    try {
+                        console.log(`[WebGLMonitor] 🔄 forceContextRestore 시도 (${retryCountRef.current + 1}/${MAX_RESTORE_RETRIES})`);
+                        const ext = gl.getContext().getExtension('WEBGL_lose_context');
+                        if (ext) {
+                            ext.restoreContext();
+                        } else {
+                            // 확장 없으면 렌더러 자체 복구 시도
+                            (gl as any).forceContextRestore?.();
+                        }
+                        retryCountRef.current++;
+                    } catch (err) {
+                        console.warn('[WebGLMonitor] ⚠️ forceContextRestore 실패:', err);
+                        retryCountRef.current = MAX_RESTORE_RETRIES; // 더 이상 시도하지 않음
+                    }
+                }, RESTORE_DELAY_MS);
+            } else {
+                console.warn('[WebGLMonitor] ⛔ 최대 복구 시도 횟수 초과. 사용자 새로고침 필요.');
+            }
         };
 
         const handleContextRestored = () => {
-            // [v5.1 Fix] reload 대신 이벤트만 발행 — 무한 새로고침 루프 방지
-            console.log('[PreviewCanvas] ✨ WebGL Context Restored. (새로고침 없이 상태 복구)');
+            console.log('[WebGLMonitor] ✨ Context Restored! 렌더링 재개.');
+            retryCountRef.current = 0; // 성공하면 카운터 리셋
             window.dispatchEvent(new CustomEvent('webglStatus', { detail: { status: 'restored' } }));
         };
 
@@ -144,6 +175,7 @@ function WebGLMonitor() {
         canvas.addEventListener('webglcontextrestored', handleContextRestored, false);
 
         return () => {
+            if (restoreTimer) clearTimeout(restoreTimer);
             canvas.removeEventListener('webglcontextlost', handleContextLost);
             canvas.removeEventListener('webglcontextrestored', handleContextRestored);
         };
@@ -276,6 +308,9 @@ function PreviewNode({ node }: { node: SceneNode }) {
     const nodeAny = node as any;
     const matcapTextureUrl = nodeAny.matcapTexture || undefined;
 
+    // [v6.0] WebGL 상태 구독 — Context Lost 시 모델 로딩 중단
+    const { contextLost: glContextLost } = useContext(WebGLStatusContext);
+
     // [v4.1 Fix] VRAM 누수 및 API 무한 호출 방지를 위한 원시값 추출
     // node(객체 참조) 전체를 의존성으로 두면 물리 엔진이나 부모 컴포넌트 변화 시 무한 재렌더 및 핑퐁 현상이 발생함.
     const searchKey = node.description || node.name || node.id;
@@ -284,6 +319,11 @@ function PreviewNode({ node }: { node: SceneNode }) {
 
     // 에셋 검색: modelUrl → 로컬 → API 폴백
     useEffect(() => {
+        // [v6.0] Context Lost 상태면 GPU 업로드 불가 → 로딩 스킵
+        if (glContextLost) {
+            console.log(`[PreviewNode] ⏸️ Context Lost 상태 — 모델 로딩 중단: ${searchKey}`);
+            return;
+        }
         async function findModel() {
             try {
                 // 0단계: modelUrl이 직접 지정된 경우 최우선 사용
@@ -373,7 +413,7 @@ function PreviewNode({ node }: { node: SceneNode }) {
         }
         findModel();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchKey, nodeModelUrl, nodeType]); // node 전체 대신 원시값에만 의존
+    }, [searchKey, nodeModelUrl, nodeType, glContextLost]); // [v6.0] glContextLost 추가 — Context 복구 시 자동 재시도
 
     // [Phase 6] Interaction Handler (Hook은 조건부 return 전에 호출!)
     const handleNodeClick = useCallback((e: any) => {
@@ -997,114 +1037,116 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                         preserveDrawingBuffer: false, // [v5.0 Fix] VRAM 절약: 매 프레임 백버퍼 보존 비활성화
                     }}
                 >
-                    <WebGLMonitor />
-                    <KTX2Initializer />
-                    <CaptureScene />
+                    <WebGLStatusContext.Provider value={{ contextLost }}>
+                        <WebGLMonitor />
+                        <KTX2Initializer />
+                        <CaptureScene />
 
-                    <Suspense fallback={null}>
-                        {/* 동적 Exposure 업데이트 */}
-                        <ExposureController />
+                        <Suspense fallback={null}>
+                            {/* 동적 Exposure 업데이트 */}
+                            <ExposureController />
 
-                        {/* [Phase 4] 조명 - aiLighting 상태 기반 (에이전트가 테마에 맞게 결정) */}
-                        <ambientLight
-                            intensity={aiLighting?.ambientIntensity ?? glbMetadata.lighting.ambientIntensity ?? 0.4}
-                        />
-                        <directionalLight
-                            position={aiLighting?.directionalPosition ?? [5, 10, 5]}
-                            intensity={aiLighting?.directionalIntensity ?? 1}
-                            color={aiLighting?.directionalColor ?? '#ffffff'}
-                            castShadow
-                        />
-
-
-                        {/* [v5.1 Fix] 환경맵 — 빈 씬/로딩 중에는 마운트하지 않음 (VRAM 절약) */}
-                        {!effectiveIsEmpty && !isGenerating && (
-                            skyboxUrl ? (
-                                <Environment
-                                    files={skyboxUrl}
-                                    background={true}
-                                    environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                                />
-                            ) : (
-                                <Environment
-                                    preset="city"
-                                    background={false}
-                                    environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                                />
-                            )
-                        )}
-
-                        {/* 씬 내용 */}
-                        {isGenerating ? (
-                            <LoadingScene />
-                        ) : effectiveIsEmpty ? (
-                            <EmptyScene />
-                        ) : (
-                            <PreviewNodes nodes={allNodes} prompt={prompt} />
-                        )}
-
-                        {/* [Phase 4] 파티클 시스템 - 에이전트가 테마에 맞게 결정 */}
-                        {aiParticles?.type && aiParticles.type !== 'none' && (
-                            <ParticleSystem
-                                type={aiParticles.type}
-                                density={aiParticles.density ?? 0.5}
+                            {/* [Phase 4] 조명 - aiLighting 상태 기반 (에이전트가 테마에 맞게 결정) */}
+                            <ambientLight
+                                intensity={aiLighting?.ambientIntensity ?? glbMetadata.lighting.ambientIntensity ?? 0.4}
                             />
-                        )}
+                            <directionalLight
+                                position={aiLighting?.directionalPosition ?? [5, 10, 5]}
+                                intensity={aiLighting?.directionalIntensity ?? 1}
+                                color={aiLighting?.directionalColor ?? '#ffffff'}
+                                castShadow
+                            />
 
-                        {/* 컨트롤 */}
 
-                        <OrbitControls
-                            enablePan={true}
-                            enableZoom={true}
-                            enableRotate={true}
-                            maxPolarAngle={Math.PI / 2}
-                        />
+                            {/* [v5.1 Fix] 환경맵 — 빈 씬/로딩 중에는 마운트하지 않음 (VRAM 절약) */}
+                            {!effectiveIsEmpty && !isGenerating && (
+                                skyboxUrl ? (
+                                    <Environment
+                                        files={skyboxUrl}
+                                        background={true}
+                                        environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
+                                    />
+                                ) : (
+                                    <Environment
+                                        preset="city"
+                                        background={false}
+                                        environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
+                                    />
+                                )
+                            )}
 
-                        {/* [Phase 4] Premium Post-processing (Stage 12) */}
-                        {/* [v5.1 Fix] 빈 씬 또는 로딩 중에는 EffectComposer 비활성화 → VRAM 절약 */}
-                        {!effectiveIsEmpty && !isGenerating && (
-                            <EffectComposer enableNormalPass={!!aiPostProcessing?.ssao}>
-                                {[
-                                    /* 1. Bloom (빛 번짐) */
-                                    aiPostProcessing?.bloom ? (
-                                        <Bloom
-                                            key="effect-bloom"
-                                            intensity={aiPostProcessing.bloomIntensity ?? 0.5}
-                                            luminanceThreshold={0.9}
-                                            luminanceSmoothing={0.025}
-                                            mipmapBlur
-                                        />
-                                    ) : null,
+                            {/* 씬 내용 */}
+                            {isGenerating ? (
+                                <LoadingScene />
+                            ) : effectiveIsEmpty ? (
+                                <EmptyScene />
+                            ) : (
+                                <PreviewNodes nodes={allNodes} prompt={prompt} />
+                            )}
 
-                                    /* 2. Vignette (외곽 어두움) */
-                                    aiPostProcessing?.vignette ? (
-                                        <Vignette key="effect-vignette" eskil={false} offset={0.1} darkness={1.1} />
-                                    ) : null,
+                            {/* [Phase 4] 파티클 시스템 - 에이전트가 테마에 맞게 결정 */}
+                            {aiParticles?.type && aiParticles.type !== 'none' && (
+                                <ParticleSystem
+                                    type={aiParticles.type}
+                                    density={aiParticles.density ?? 0.5}
+                                />
+                            )}
 
-                                    /* 3. SSAO — AI가 요청한 경우에만 활성화 (기본 OFF → VRAM 절약) */
-                                    aiPostProcessing?.ssao ? (
-                                        <SSAO
-                                            key="effect-ssao"
-                                            blendFunction={BlendFunction.MULTIPLY}
-                                            samples={16}
-                                            radius={0.1}
-                                            intensity={10}
-                                            luminanceInfluence={0.6}
-                                            color={new THREE.Color('#000000')}
-                                        />
-                                    ) : null,
+                            {/* 컨트롤 */}
 
-                                    /* 4. Color Grading */
-                                    aiPostProcessing?.colorGrading === 'warm' ? (
-                                        <BrightnessContrast key="effect-warm" brightness={0.05} contrast={0.1} />
-                                    ) : null,
-                                    aiPostProcessing?.colorGrading === 'cyberpunk' ? (
-                                        <HueSaturation key="effect-cyberpunk" hue={0.1} saturation={0.5} />
-                                    ) : null
-                                ].filter((c): c is React.ReactElement => c !== null)}
-                            </EffectComposer>
-                        )}
-                    </Suspense>
+                            <OrbitControls
+                                enablePan={true}
+                                enableZoom={true}
+                                enableRotate={true}
+                                maxPolarAngle={Math.PI / 2}
+                            />
+
+                            {/* [Phase 4] Premium Post-processing (Stage 12) */}
+                            {/* [v5.1 Fix] 빈 씬 또는 로딩 중에는 EffectComposer 비활성화 → VRAM 절약 */}
+                            {!effectiveIsEmpty && !isGenerating && (
+                                <EffectComposer enableNormalPass={!!aiPostProcessing?.ssao}>
+                                    {[
+                                        /* 1. Bloom (빛 번짐) */
+                                        aiPostProcessing?.bloom ? (
+                                            <Bloom
+                                                key="effect-bloom"
+                                                intensity={aiPostProcessing.bloomIntensity ?? 0.5}
+                                                luminanceThreshold={0.9}
+                                                luminanceSmoothing={0.025}
+                                                mipmapBlur
+                                            />
+                                        ) : null,
+
+                                        /* 2. Vignette (외곽 어두움) */
+                                        aiPostProcessing?.vignette ? (
+                                            <Vignette key="effect-vignette" eskil={false} offset={0.1} darkness={1.1} />
+                                        ) : null,
+
+                                        /* 3. SSAO — AI가 요청한 경우에만 활성화 (기본 OFF → VRAM 절약) */
+                                        aiPostProcessing?.ssao ? (
+                                            <SSAO
+                                                key="effect-ssao"
+                                                blendFunction={BlendFunction.MULTIPLY}
+                                                samples={16}
+                                                radius={0.1}
+                                                intensity={10}
+                                                luminanceInfluence={0.6}
+                                                color={new THREE.Color('#000000')}
+                                            />
+                                        ) : null,
+
+                                        /* 4. Color Grading */
+                                        aiPostProcessing?.colorGrading === 'warm' ? (
+                                            <BrightnessContrast key="effect-warm" brightness={0.05} contrast={0.1} />
+                                        ) : null,
+                                        aiPostProcessing?.colorGrading === 'cyberpunk' ? (
+                                            <HueSaturation key="effect-cyberpunk" hue={0.1} saturation={0.5} />
+                                        ) : null
+                                    ].filter((c): c is React.ReactElement => c !== null)}
+                                </EffectComposer>
+                            )}
+                        </Suspense>
+                    </WebGLStatusContext.Provider>
                 </Canvas>
 
                 {/* 로딩 표시기 */}
