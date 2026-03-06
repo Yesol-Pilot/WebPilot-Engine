@@ -153,19 +153,19 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
 
     // ========================================
-    // 📚 FURNITURE/PROPS - In 'Character' folder (models/character)
+    // 📚 FURNITURE/PROPS - 경로 교정됨 (v6.0: character → 실제 위치)
     // ========================================
     {
         id: 'ancient_bookshelf',
-        path: '/models/character/detailed_realistic_model_ancientbookshelf_01.glb',
+        path: '/models/furniture/detailed_realistic_model_ancientbookshelf_01.glb',
         category: 'furniture',
         subCategory: 'bookshelf',
         keywords: { ko: ['고대책장', '마법책장'], en: ['ancient bookshelf', 'magic bookshelf'] },
         variants: 3
     },
     {
-        id: 'antique_shelf', // models/character/detailed_realistic_model_antiquebookshelf_*.glb
-        path: '/models/character/detailed_realistic_model_antiquebookshelf_02.glb',
+        id: 'antique_shelf', // models/furniture/detailed_realistic_model_antiquebookshelf_*.glb
+        path: '/models/furniture/detailed_realistic_model_antiquebookshelf_02.glb',
         category: 'furniture',
         subCategory: 'bookshelf',
         keywords: { ko: ['엔틱책장', '오래된책장'], en: ['antique bookshelf', 'old bookshelf'] },
@@ -173,7 +173,7 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         id: 'potion_shelf',
-        path: '/models/character/detailed_realistic_model_potionshelf_01.glb',
+        path: '/models/furniture/detailed_realistic_model_potionshelf_01.glb',
         category: 'furniture',
         subCategory: 'shelf',
         keywords: { ko: ['물약선반', '진열장'], en: ['potion shelf', 'display case'] },
@@ -181,23 +181,23 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     },
     {
         id: 'magic_portrait',
-        path: '/models/character/detailed_realistic_model_portrait_01.glb',
+        path: '/models/props/detailed_realistic_model_portrait_01.glb',
         category: 'prop',
         subCategory: 'decoration',
         keywords: { ko: ['초상화', '액자', '그림'], en: ['portrait', 'painting', 'frame'] },
         variants: 2
     },
     {
-        id: 'house_elf',
-        path: '/models/character/detailed_realistic_model_houseelf_01.glb',
+        id: 'house_elf_character',
+        path: '/models/buildings/detailed_realistic_model_houseelf_01.glb',
         category: 'character',
         subCategory: 'elf',
         keywords: { ko: ['집요정', '엘프', '도비'], en: ['house elf', 'elf', 'dobbie'] },
         variants: 2
     },
     {
-        id: 'ghost', // models/character/detailed_realistic_model_ghostly_01.glb
-        path: '/models/character/detailed_realistic_model_ghostly_01.glb',
+        id: 'ghost', // models/props/detailed_realistic_model_ghostly_01.glb
+        path: '/models/props/detailed_realistic_model_ghostly_01.glb',
         category: 'character',
         subCategory: 'ghost',
         keywords: { ko: ['유령', '귀신'], en: ['ghost', 'spirit'] }
@@ -208,14 +208,14 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
     // ========================================
     {
         id: 'stone_structure',
-        path: '/models/structure/detailed_realistic_model_stone_01.glb',
+        path: '/models/nature/detailed_realistic_model_stone_01.glb',
         category: 'structure',
         subCategory: 'wall',
         keywords: { ko: ['돌벽', '유적'], en: ['stone wall', 'ruins'] }
     },
     {
         id: 'small_house',
-        path: '/models/structure/detailed_realistic_model_house_01.glb',
+        path: '/models/buildings/detailed_realistic_model_house_01.glb',
         category: 'structure',
         subCategory: 'house',
         keywords: { ko: ['작은집', '오두막'], en: ['small house', 'hut', 'cabin'] }
