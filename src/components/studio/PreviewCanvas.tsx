@@ -890,9 +890,12 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
         } as SceneNode));
     }, [aiSceneObjects]);
 
-    // 기존 프롭스 노드 + 에이전트 노드 병합
+    // 기존 프롭스 노드 + 에이전트 노드 병합 (중복 방지)
+    // page.tsx가 이미 aiScene → previewNodes 동기화를 수행하므로,
+    // nodes에 데이터가 있으면 agentNodes와 중복됨 → 병합 스킵
     const allNodes = useMemo(() => {
-        return [...nodes, ...agentNodes];
+        if (nodes.length > 0) return nodes;
+        return agentNodes;
     }, [nodes, agentNodes]);
 
     // 에이전트가 생성한 객체가 있으면 '비어있음' 상태 해제

@@ -232,7 +232,7 @@ export default function CreatorStudioPage() {
       const nodes = aiSceneObjects.map((obj: any) => ({
         id: obj.id || obj.concept,
         name: obj.name || obj.concept,
-        modelUrl: obj.modelUrl || obj.file_path,
+        modelUrl: obj.path || obj.modelUrl || obj.file_path,
         position: obj.position || [0, 0, 0],
         rotation: obj.rotation || [0, 0, 0],
         scale: obj.scale || [1, 1, 1],
