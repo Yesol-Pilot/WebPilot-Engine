@@ -115,14 +115,14 @@ ${assetContext}
 ${ARCHITECT_SCHEMA}
 `;
 
-    // [v8.2] systemInstruction 적용을 통해 AI가 컨텍스트 제약을 강제로 따르도록 함
+    // [v8.2/v8.3] systemInstruction 적용을 통해 AI가 컨텍스트 제약을 강제로 따르도록 함
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash",
       systemInstruction: systemPrompt,
       generationConfig: { responseMimeType: "application/json" }
     });
 
-    console.log("[Spatial] Generating content with Gemini 2.5 Flash...");
+    console.log("[Spatial] Generating content with Gemini 3.1 Flash...");
     const result = await model.generateContent(prompt);
     const response = await result.response;
     let text = response.text();
@@ -134,6 +134,12 @@ ${ARCHITECT_SCHEMA}
     let parsedData: SpatialPlanResponse;
     try {
       parsedData = JSON.parse(text) as SpatialPlanResponse;
+
+      // [v8.3] Hard Slicing: 모바일 VRAM 안정성을 위해 레이아웃 아이템을 5개로 물리적 제한
+      if (parsedData && Array.isArray(parsedData.layout) && parsedData.layout.length > 5) {
+        console.warn(`[Spatial Architect API] AI가 5개를 초과하여 생성했습니다. 강제 슬라이싱 수행 (${parsedData.layout.length} -> 5)`);
+        parsedData.layout = parsedData.layout.slice(0, 5);
+      }
     } catch (parseError) {
       console.error("[Spatial] JSON Parse Error:", text);
       throw new Error("Invalid JSON from AI Model");
