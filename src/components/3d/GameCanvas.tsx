@@ -13,6 +13,7 @@ import { EditorControls } from './EditorControls';
 import * as THREE from 'three';
 import { AtmosphereManager } from './AtmosphereManager';
 import { FeedbackEffects } from './FeedbackEffects';
+import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 
 interface GameCanvasProps {
     scenarioTitle: string;
@@ -114,6 +115,8 @@ export const GameCanvas = ({
             >
                 {/* [New] Logger Component */}
                 <CoordinateLogger />
+                {/* [Phase 6] KTX2 싱글톤 초기화 (Canvas 렌더러 재사용) */}
+                <KTX2Initializer />
 
                 {/* [Performance] Monitor FPS and adjust quality */}
                 <PerformanceMonitor

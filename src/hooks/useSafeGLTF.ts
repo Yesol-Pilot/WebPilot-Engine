@@ -267,3 +267,13 @@ export function disposeDracoLoader() {
         ktx2LoaderInstance = null;
     }
 }
+
+/**
+ * [Phase 6] 외부에서 KTX2 싱글톤 초기화 (Canvas 내부 전용)
+ * KTX2Initializer 컴포넌트가 useThree()로 렌더러를 가져와 이 함수를 호출
+ */
+export function initializeKTX2(renderer: THREE.WebGLRenderer): void {
+    if (ktx2LoaderInstance) return; // 이미 초기화됨
+    getKTX2Loader(renderer);
+}
+

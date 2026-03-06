@@ -15,6 +15,7 @@ import { Suspense, useState, useEffect, useMemo, useRef, createContext, useConte
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@react-three/drei';
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
+import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 import * as THREE from 'three';
 import { SceneNode, SemanticRole } from '@/lib/schema/scene';
 import { autoScaleAssetSync, autoScaleAssetSemantic, registerContainerForScaling } from '@/utils/autoScaleAsset';
@@ -994,6 +995,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                     }}
                 >
                     <WebGLMonitor />
+                    <KTX2Initializer />
                     <CaptureScene />
 
                     <Suspense fallback={null}>

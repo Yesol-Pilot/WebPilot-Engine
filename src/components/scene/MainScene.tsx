@@ -2,7 +2,8 @@
 
 import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF, useTexture } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useTexture } from '@react-three/drei';
+import { useSafeGLTF } from '@/hooks/useSafeGLTF';
 import { useSceneStore, SceneObject } from '../../store/useSceneStore';
 import { getAssetUrl } from '@/lib/assetConfig';
 
@@ -32,7 +33,8 @@ class GLBErrorBoundary extends Component<{ fallback: ReactNode, onError?: (err: 
 
 // 일반 Model Component (PBR/기타)
 const ModelBase = ({ info }: { info: SceneObject }) => {
-    const { scene } = useGLTF(getAssetUrl(info.path));
+    // [리팩토링] useSafeGLTF 사용 — HEAD 검증 + 50MB 차단 + 세마포어 + Draco JS + KTX2
+    const { scene } = useSafeGLTF(info.path);
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
 
     return (
@@ -56,7 +58,8 @@ function MatcapLoader({ url, onLoad }: { url: string; onLoad: (tex: THREE.Textur
 
 // Matcap 전용 Model Component — useTexture 조건 분리
 const ModelWithMatcap = ({ info }: { info: SceneObject }) => {
-    const { scene } = useGLTF(getAssetUrl(info.path));
+    // [리팩토링] useSafeGLTF 사용 — 안전장치 통합
+    const { scene } = useSafeGLTF(info.path);
     const clonedScene = React.useMemo(() => scene.clone(), [scene]);
     const group = useRef<THREE.Group>(null);
     const [loadedMatcap, setLoadedMatcap] = useState<THREE.Texture | undefined>(undefined);
