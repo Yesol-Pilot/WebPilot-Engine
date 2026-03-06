@@ -60,7 +60,8 @@ function getKTX2Loader(renderer?: THREE.WebGLRenderer): KTX2Loader | null {
 
 // [v5.1 Fix] 동시 GLB 로딩 제한 세마포어
 // R2 CDN에서 동시 로딩 시 네트워크 + GPU 업로드가 겹쳐 VRAM 폭증
-const MAX_CONCURRENT_LOADS = 2;
+// [v8.1 Fix] 2 -> 1로 축소 (극단적 텍스처 업로드 직렬화, 모바일 크래시 원천 차단)
+const MAX_CONCURRENT_LOADS = 1;
 let currentLoads = 0;
 const loadQueue: (() => void)[] = [];
 

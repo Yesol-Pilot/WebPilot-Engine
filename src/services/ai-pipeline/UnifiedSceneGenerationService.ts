@@ -159,6 +159,7 @@ const UNIFIED_SCENE_PROMPT_TEMPLATE = `
    - 장식: 컨테이너의 0.5-2%
 4. **부유 오브젝트**: floatingRange로 높이 범위 지정
 5. **관계 추론**: inside, floating 등 공간 관계 명시
+6. **⚠️ 노드 개수 제한 (CRITICAL)**: 모바일 앱의 렌더링 성능(VRAM 초과 방어)을 위해 **최대 3~5개**의 노드만 응답하세요. 자잘한 장식들을 남발하지 마세요.
 
 ## ⚠️ 필수 필드 (CRITICAL - 누락 시 배치 실패)
 

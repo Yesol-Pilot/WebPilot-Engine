@@ -112,7 +112,7 @@ ${assetContext}
    - Include **Lighting** (Lamps, Candles) to creates atmosphere.
 
 5. **Density**:
-   - Place **10 to 15 items** total.
+   - Place **3 to 5 items** total. (STRICT LIMIT for mobile VRAM safety)
    - Balance the room; don't crowd one corner.
 
 **Output JSON Schema**:
