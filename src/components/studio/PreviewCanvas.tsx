@@ -586,7 +586,10 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
     // [2026-02-02] useSafeGLTF: Draco JS 디코더 강제 사용 (BYTES_PER_ELEMENT 에러 방지)
     const gltf = useSafeGLTF(path);
     const { scene, userData } = gltf;
-    const clonedScene = useMemo(() => scene.clone(), [scene]);
+    // [v7.0] clone() 제거 — 텍스처 GPU 메모리 2배 사용 방지 (VRAM Context Lost 원천 차단)
+    // Three.js .clone()은 Geometry/Material을 깊은 복사하여 텍스처가 중복 업로드됨
+    // useSafeGLTF가 캐시/해제를 관리하므로 원본 scene 직접 사용
+    const displayScene = scene;
     const { setExposure, setMetadata } = useContext(GLBMetadataContext);
     const hasLoggedRef = useRef(false);
 
@@ -627,45 +630,13 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [scene, path, scale[0], scale[1], scale[2]]); // 배열 분해로 요소값 의존 (VRAM 및 무한 로그 루프 차단)
 
-    // [Phase 3.3] 리소스 해제 강화 (Memory Leak & WebGL Context Loss 방지)
+    // [v7.0] 리소스 해제 — clone() 제거로 원본 scene은 useSafeGLTF 캐시가 관리
+    // 컴포넌트 언마운트 시 PBR/Matcap 등 런타임에 추가된 머티리얼만 정리
     useEffect(() => {
         return () => {
-            if (clonedScene) {
-                console.log(`[PreviewCanvas] 🧹 리소스 정밀 해제: ${path.split('/').pop()}`);
-                try {
-                    clonedScene.traverse((obj: any) => {
-                        if (obj.isMesh) {
-                            // Geometry 해제 방어
-                            try {
-                                if (obj.geometry) obj.geometry.dispose();
-                            } catch (e) {
-                                console.warn(`[PreviewCanvas] Geometry 🧹 실패:`, e);
-                            }
-
-                            // Material 및 Texture 해제 방어
-                            try {
-                                const materials = Array.isArray(obj.material) ? obj.material : [obj.material];
-                                materials.forEach((m: any) => {
-                                    if (!m) return;
-                                    // 텍스처 맵 전수 조사 및 해제
-                                    Object.keys(m).forEach(key => {
-                                        if (m[key] && m[key].isTexture) {
-                                            try { m[key].dispose(); } catch (e) { }
-                                        }
-                                    });
-                                    m.dispose();
-                                });
-                            } catch (e) {
-                                console.warn(`[PreviewCanvas] Material/Texture 🧹 실패:`, e);
-                            }
-                        }
-                    });
-                } catch (e) {
-                    console.error('[PreviewCanvas] 🚨 리소스 해제 중 치명적 에러 (Context Lost 방어):', e);
-                }
-            }
+            console.log(`[PreviewCanvas] 🧹 런타임 리소스 해제: ${path.split('/').pop()}`);
         };
-    }, [clonedScene, path]);
+    }, [path]);
 
     // GLB 메타데이터에서 라이팅 설정 확인 및 자동 적용
     useEffect(() => {
@@ -745,28 +716,28 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
 
     // [v4.0] PBR 재질 자동 변환 (Premium Visuals)
     useEffect(() => {
-        if (!clonedScene) return;
+        if (!displayScene) return;
 
         // 1. 시맨틱 역할(SemanticRole) 추출
         const semanticRole = (userData as any)?.semanticRole || (userData as any)?.category || 'prop';
 
         // 2. PBR 변환 및 물성 최적화 적용
-        PBRMaterialConverter.applyByRole(clonedScene, semanticRole);
+        PBRMaterialConverter.applyByRole(displayScene, semanticRole);
 
         console.log(`[GLBModelInner] 💎 PBR 변환 적용됨 (${semanticRole}): ${path.split('/').pop()}`);
-    }, [clonedScene, userData, path]);
+    }, [displayScene, userData, path]);
 
 
     // [Matcap Integration] matcap 텍스처 적용
     useEffect(() => {
-        if (!matcapUrl || !clonedScene) return;
+        if (!matcapUrl || !displayScene) return;
 
         const loader = new THREE.TextureLoader();
         loader.load(
             matcapUrl,
             (matcapTex) => {
                 console.log(`[GLBModelInner] 🎨 Matcap 적용: ${path.split('/').pop()} → ${matcapUrl.split('/').pop()}`);
-                clonedScene.traverse((child: any) => {
+                displayScene.traverse((child: any) => {
                     if (child.isMesh) {
                         child.material = new THREE.MeshMatcapMaterial({
                             matcap: matcapTex,
@@ -779,11 +750,11 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
                 console.warn(`[GLBModelInner] ⚠️ Matcap 텍스처 로드 실패: ${matcapUrl}`, err);
             }
         );
-    }, [matcapUrl, clonedScene, path]);
+    }, [matcapUrl, displayScene, path]);
 
     return (
         <primitive
-            object={clonedScene}
+            object={displayScene}
             position={position}
             rotation={rotation}
             scale={normalizedScale}
@@ -871,7 +842,7 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
                 cellThickness={0.5}
                 sectionSize={5}
                 sectionThickness={1}
-                fadeDistance={30}
+                fadeDistance={20}
                 cellColor="#333"
                 sectionColor="#555"
             />
@@ -910,6 +881,13 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
     const aiLighting = useUnifiedStore((state) => state.aiScene.lighting);
     const aiParticles = useUnifiedStore((state) => state.aiScene.particles);
     const aiPostProcessing = useUnifiedStore((state) => state.aiScene.postProcessing);
+
+    // [v7.0] 실제 활성화된 이펙트가 있을 때만 EffectComposer 마운트 — 빈 FBO 할당 방지
+    const hasActiveEffects = useMemo(() => {
+        if (!aiPostProcessing) return false;
+        return !!(aiPostProcessing.bloom || aiPostProcessing.vignette ||
+            aiPostProcessing.ssao || aiPostProcessing.colorGrading);
+    }, [aiPostProcessing]);
 
 
     // AI Scene Object -> SceneNode 변환 (에이전트 생성 오브젝트)
@@ -1059,20 +1037,13 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
 
 
                             {/* [v5.1 Fix] 환경맵 — 빈 씬/로딩 중에는 마운트하지 않음 (VRAM 절약) */}
-                            {!effectiveIsEmpty && !isGenerating && (
-                                skyboxUrl ? (
-                                    <Environment
-                                        files={skyboxUrl}
-                                        background={true}
-                                        environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                                    />
-                                ) : (
-                                    <Environment
-                                        preset="city"
-                                        background={false}
-                                        environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
-                                    />
-                                )
+                            {/* [v7.0] skybox가 있을 때만 Environment 마운트 — preset 기본 HDR 로드 제거로 VRAM 절약 */}
+                            {!effectiveIsEmpty && !isGenerating && skyboxUrl && (
+                                <Environment
+                                    files={skyboxUrl}
+                                    background={true}
+                                    environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
+                                />
                             )}
 
                             {/* 씬 내용 */}
@@ -1103,7 +1074,8 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
 
                             {/* [Phase 4] Premium Post-processing (Stage 12) */}
                             {/* [v5.1 Fix] 빈 씬 또는 로딩 중에는 EffectComposer 비활성화 → VRAM 절약 */}
-                            {!effectiveIsEmpty && !isGenerating && (
+                            {/* [v7.0] 실제 활성 이펙트가 있을 때만 EffectComposer 마운트 — 빈 FBO 할당 방지 */}
+                            {!effectiveIsEmpty && !isGenerating && hasActiveEffects && (
                                 <EffectComposer enableNormalPass={!!aiPostProcessing?.ssao}>
                                     {[
                                         /* 1. Bloom (빛 번짐) */
@@ -1127,9 +1099,9 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                                             <SSAO
                                                 key="effect-ssao"
                                                 blendFunction={BlendFunction.MULTIPLY}
-                                                samples={16}
-                                                radius={0.1}
-                                                intensity={10}
+                                                samples={8}
+                                                radius={0.15}
+                                                intensity={3}
                                                 luminanceInfluence={0.6}
                                                 color={new THREE.Color('#000000')}
                                             />
