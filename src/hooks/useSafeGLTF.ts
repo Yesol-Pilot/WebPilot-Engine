@@ -12,8 +12,8 @@
  * [2026-03-04] getAssetUrl 통합 — 모든 GLB 경로를 CDN URL로 자동 변환
  */
 
-import { useLoader } from '@react-three/fiber';
-import { useState, useEffect } from 'react';
+import { useLoader, useThree } from '@react-three/fiber';
+import { useState, useEffect, useMemo } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
@@ -41,10 +41,8 @@ function getDracoLoader(): DRACOLoader {
     return dracoLoaderInstance;
 }
 
-// [v5.1 Fix] KTX2Loader — 임시 WebGLRenderer 생성 제거
-// 이전: detectSupport()를 위해 임시 WebGLRenderer를 생성했으나, 
-// 이것이 추가 WebGL 컨텍스트를 소모하여 기존 Canvas의 Context Lost를 유발함.
-// 수정: 실제 렌더러가 있을 때만 lazy 초기화 (GLTFLoader 내부에서 필요 시 설정)
+// [v5.2 Fix] KTX2Loader — 실제 Canvas 렌더러 재사용으로 Context Lost 방지
+// 임시 WebGLRenderer를 생성하지 않고, R3F Canvas의 기존 렌더러를 사용
 function getKTX2Loader(renderer?: THREE.WebGLRenderer): KTX2Loader | null {
     if (!ktx2LoaderInstance && typeof window !== 'undefined' && renderer) {
         try {
@@ -94,10 +92,22 @@ const validationCache = new Map<string, boolean>();
  * useGLTF 대체 훅
  * Draco JS 디코더를 강제 사용하여 BYTES_PER_ELEMENT 에러 방지
  * [v5.0] getAssetUrl() 자동 적용 — 상대경로를 CDN URL로 변환
+ * [v5.2] KTX2Loader 연결 — useThree로 렌더러를 가져와 KTX2 텍스처 로딩 지원
  */
 export function useSafeGLTF(path: string): GLTF {
     // [v5.0] 상대경로를 CDN URL로 자동 변환 (이미 http(s)://면 그대로 반환)
     const resolvedPath = getAssetUrl(path);
+
+    // [v5.2] R3F Canvas의 현재 WebGL 렌더러 참조
+    const { gl: renderer } = useThree();
+
+    // [v5.2] KTX2Loader를 렌더러로 초기화 (한 번만 실행, 싱글톤 패턴)
+    const ktx2Loader = useMemo(() => {
+        if (renderer) {
+            return getKTX2Loader(renderer);
+        }
+        return null;
+    }, [renderer]);
 
     // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
     const [isValid, setIsValid] = useState<boolean | null>(
@@ -165,7 +175,7 @@ export function useSafeGLTF(path: string): GLTF {
         } as unknown as GLTF;
     }
 
-    // [v5.1 Fix] 검증 통과 시 GLTFLoader 로직 실행 — KTX2는 렌더러 없이 설정 불가이므로 제외
+    // [v5.2 Fix] 검증 통과 시 GLTFLoader + Draco + KTX2 모두 연결
     const gltf = useLoader(
         GLTFLoader,
         resolvedPath,
@@ -173,7 +183,10 @@ export function useSafeGLTF(path: string): GLTF {
             // GLTFLoader에 DRACOLoader 설정
             const dracoLoader = getDracoLoader();
             loader.setDRACOLoader(dracoLoader);
-            // KTX2Loader는 렌더러 컨텍스트 내에서만 설정 가능 — 여기서는 생략
+            // [v5.2] KTX2Loader 연결 — KTX2 텍스처 포함 GLB 로딩 지원
+            if (ktx2Loader) {
+                loader.setKTX2Loader(ktx2Loader);
+            }
         }
     ) as GLTF;
 
@@ -214,6 +227,10 @@ useSafeGLTF.preload = (path: string) => {
             acquireLoadSlot().then(() => {
                 const loader = new GLTFLoader();
                 loader.setDRACOLoader(getDracoLoader());
+                // [v5.2] 이미 초기화된 KTX2Loader 싱글톤이 있으면 연결
+                if (ktx2LoaderInstance) {
+                    loader.setKTX2Loader(ktx2LoaderInstance);
+                }
                 loader.load(resolvedPath, () => {
                     releaseLoadSlot();
                 }, undefined, (error) => {
