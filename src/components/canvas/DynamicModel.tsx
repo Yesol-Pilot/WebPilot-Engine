@@ -468,9 +468,7 @@ export default function DynamicModel({
                 };
             }
 
-            // Using require inside component can be tricky, but keeping original pattern.
-            // Ideally should be imported top-level.
-            const { ProceduralMesh } = require('./ProceduralMesh');
+            // ProceduralMesh is already imported at the top of the file.
 
             return (
                 <RigidBody type="dynamic" colliders={colliderType || 'hull'} position={position} rotation={rotation}>
