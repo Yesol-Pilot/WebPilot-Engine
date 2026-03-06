@@ -115,11 +115,8 @@ export type UnifiedSceneResult = z.infer<typeof UnifiedSceneResultSchema>;
 // AI 프롬프트 템플릿
 // ============================================================
 
-const UNIFIED_SCENE_PROMPT_TEMPLATE = `
+const UNIFIED_SCENE_SYSTEM_INSTRUCTION = `
 당신은 3D 씬 아키텍트입니다. 사용자의 프롬프트를 분석하여 완전한 계층적 Scene Graph를 생성하세요.
-
-## 사용자 프롬프트
-{USER_PROMPT}
 
 ## 출력 형식 (JSON)
 다음 구조로 응답하세요:
@@ -159,8 +156,8 @@ const UNIFIED_SCENE_PROMPT_TEMPLATE = `
    - 장식: 컨테이너의 0.5-2%
 4. **부유 오브젝트**: floatingRange로 높이 범위 지정
 5. **관계 추론**: inside, floating 등 공간 관계 명시
-6. **⚠️ 노드 개수 제한 (CRITICAL)**: 모바일 앱의 렌더링 성능(VRAM 초과 방어)을 위해 **최대 3~5개**의 노드만 응답하세요. 자잘한 장식들을 남발하지 마세요.
-
+6. **⚠️ 노드 개수 제한 (CRITICAL)**: 모바일 앱 렌더링 한계를 위해 **절대 5개를 초과하는 노드를 생성하지 마시오. STRICT LIMIT OF MAXIMUM 5 NODES.**
+   - 자잘한 장식들을 제거하고 메인 에셋 1개, 보조 에셋 2~3개만 구성하세요.
 ## ⚠️ 필수 필드 (CRITICAL - 누락 시 배치 실패)
 
 모든 오브젝트 노드에 다음 필드 **반드시** 포함:
@@ -246,13 +243,14 @@ export const UnifiedSceneGenerationService = {
      * AI 통합 호출
      */
     callAI: async (userPrompt: string): Promise<UnifiedSceneResult | null> => {
-        const prompt = UNIFIED_SCENE_PROMPT_TEMPLATE.replace('{USER_PROMPT}', userPrompt);
-
         try {
             const response = await fetch('/api/ai/unified-scene', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt }),
+                body: JSON.stringify({
+                    prompt: userPrompt,
+                    systemInstruction: UNIFIED_SCENE_SYSTEM_INSTRUCTION
+                }),
             });
 
             if (!response.ok) {

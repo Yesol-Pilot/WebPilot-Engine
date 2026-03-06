@@ -39,10 +39,6 @@ export async function POST(req: Request) {
 
     // Initialize Gemini API (Scope: Per Request to avoid stale config)
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      generationConfig: { responseMimeType: "application/json" }
-    });
 
     const body = await req.json();
     const { prompt, genre } = body;
@@ -112,15 +108,22 @@ ${assetContext}
    - Include **Lighting** (Lamps, Candles) to creates atmosphere.
 
 5. **Density**:
-   - Place **3 to 5 items** total. (STRICT LIMIT for mobile VRAM safety)
+   - **절대 5개를 초과하는 노드를 생성하지 마시오. STRICT LIMIT OF MAXIMUM 5 NODES.** (STRICT LIMIT for mobile VRAM safety)
    - Balance the room; don't crowd one corner.
 
 **Output JSON Schema**:
 ${ARCHITECT_SCHEMA}
 `;
 
-    console.log("[Spatial] Generating content with Gemini...");
-    const result = await model.generateContent(systemPrompt);
+    // [v8.2] systemInstruction 적용을 통해 AI가 컨텍스트 제약을 강제로 따르도록 함
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction: systemPrompt,
+      generationConfig: { responseMimeType: "application/json" }
+    });
+
+    console.log("[Spatial] Generating content with Gemini 2.5 Flash...");
+    const result = await model.generateContent(prompt);
     const response = await result.response;
     let text = response.text();
     console.log(`[Spatial] Raw Response: ${text.slice(0, 100)}...`);

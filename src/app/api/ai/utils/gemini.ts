@@ -11,10 +11,10 @@ import { GoogleGenerativeAI, Part } from '@google/generative-ai';
  * AI 모델 티어 정의
  */
 export enum AIModelTier {
-    ULTRA = 'gemini-2.0-pro-exp',   // 최고 지능 (전략/평가)
-    PRO = 'gemini-2.0-pro',         // 고지능 (비평/심층 분석)
-    FLASH = 'gemini-2.0-flash',     // 고속 (일반 배치/채팅/이미지 분석)
-    LITE = 'gemini-1.5-flash',      // 경량 (단순 처리)
+    ULTRA = 'gemini-2.5-pro',       // 최고 지능 (전략/평가)
+    PRO = 'gemini-2.5-pro',         // 고지능 (비평/심층 분석)
+    FLASH = 'gemini-2.5-flash',     // 고속 (일반 배치/채팅/이미지 분석)
+    LITE = 'gemini-2.5-flash-lite', // 경량 (단순 처리)
     EMBEDDING = 'text-embedding-004' // 임베딩
 }
 
@@ -45,17 +45,26 @@ export async function callGemini(
         temperature?: number;
         responseMimeType?: string;
         imageParts?: Part[]; // 멀티모달 지원
+        systemInstruction?: string; // [v8.2] systemInstruction 프롬프트 강제화
     } = {}
 ): Promise<string> {
     const genAI = getGeminiClient();
     const modelId = getModelForTier(tier);
-    const generativeModel = genAI.getGenerativeModel({
+
+    // 모델 초기화 파라미터 구성
+    const modelConfig: any = {
         model: modelId,
         generationConfig: {
             temperature: options.temperature ?? 1.0,
             responseMimeType: options.responseMimeType
         }
-    });
+    };
+
+    if (options.systemInstruction) {
+        modelConfig.systemInstruction = options.systemInstruction;
+    }
+
+    const generativeModel = genAI.getGenerativeModel(modelConfig);
 
     // 텍스트와 이미지 파트 결합
     const content = options.imageParts

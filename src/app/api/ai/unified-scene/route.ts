@@ -10,7 +10,7 @@ import { callGemini, AIModelTier } from '../utils/gemini';
 
 export async function POST(request: NextRequest) {
     try {
-        const { prompt } = await request.json();
+        const { prompt, systemInstruction } = await request.json();
 
         if (!prompt) {
             return NextResponse.json(
@@ -21,10 +21,11 @@ export async function POST(request: NextRequest) {
 
         console.log('[UnifiedScene API] 요청 수신 (Tier: ULTRA):', prompt.substring(0, 100));
 
-        // [v3.0] ULTRA 티어(gemini-2.0-pro-exp) 모델 사용
+        // [v8.2] systemInstruction을 포함하여 ULTRA 티어 최신 모델 호출
         const resultText = await callGemini(prompt, AIModelTier.ULTRA, {
             responseMimeType: 'application/json',
             temperature: 0.7,
+            systemInstruction: systemInstruction
         });
 
         // JSON 파싱
