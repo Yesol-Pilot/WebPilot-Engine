@@ -47,8 +47,6 @@ export class PBRMaterialConverter {
                 if (oldMat.dispose) oldMat.dispose();
 
                 child.material = newMat;
-                child.castShadow = true;
-                child.receiveShadow = true;
             }
         });
 

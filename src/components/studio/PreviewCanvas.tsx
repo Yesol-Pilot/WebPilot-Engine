@@ -732,13 +732,18 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
     useEffect(() => {
         if (!matcapUrl || !displayScene) return;
 
+        let activeMatcapTex: THREE.Texture | null = null;
+        let originalMaterials: Map<THREE.Object3D, THREE.Material | THREE.Material[]> = new Map();
+
         const loader = new THREE.TextureLoader();
         loader.load(
             matcapUrl,
             (matcapTex) => {
+                activeMatcapTex = matcapTex;
                 console.log(`[GLBModelInner] 🎨 Matcap 적용: ${path.split('/').pop()} → ${matcapUrl.split('/').pop()}`);
                 displayScene.traverse((child: any) => {
                     if (child.isMesh) {
+                        originalMaterials.set(child, child.material);
                         child.material = new THREE.MeshMatcapMaterial({
                             matcap: matcapTex,
                         });
@@ -750,6 +755,22 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
                 console.warn(`[GLBModelInner] ⚠️ Matcap 텍스처 로드 실패: ${matcapUrl}`, err);
             }
         );
+
+        return () => {
+            if (activeMatcapTex) {
+                activeMatcapTex.dispose();
+            }
+            originalMaterials.forEach((originalMat, child) => {
+                if ((child as any).isMesh) {
+                    const currentMat = (child as any).material;
+                    if (currentMat && currentMat.dispose) {
+                        currentMat.dispose();
+                    }
+                    (child as any).material = originalMat;
+                }
+            });
+            originalMaterials.clear();
+        };
     }, [matcapUrl, displayScene, path]);
 
     return (
@@ -992,8 +1013,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                 {/* 3D 캔버스 */}
                 <Canvas
                     camera={{ position: [5, 5, 5], fov: 50 }}
-                    shadows
-                    dpr={[1, 1.5]} // [v4.1 Fix] VRAM 초과(Context Lost) 원천 차단: 고해상도(Retina) 디스플레이에서 렌더 버퍼가 4배~9배 폭증하는 것을 방지
+                    dpr={1} // [v8.0 Fix] VRAM 초과 방지: 고해상도라도 1로 고정하여 Framebuffer 크기 최적화. shadows 제거.
                     onCreated={({ gl }) => {
                         gl.domElement.addEventListener('webglcontextlost', (e) => {
                             e.preventDefault();
@@ -1032,7 +1052,6 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                                 position={aiLighting?.directionalPosition ?? [5, 10, 5]}
                                 intensity={aiLighting?.directionalIntensity ?? 1}
                                 color={aiLighting?.directionalColor ?? '#ffffff'}
-                                castShadow
                             />
 
 

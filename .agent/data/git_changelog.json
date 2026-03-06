@@ -1,6 +1,23 @@
 {
-    "lastUpdated": "2026-03-04T12:28:00+09:00",
+    "lastUpdated": "2026-03-06T17:09:17+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-06T17:09:17+09:00",
+            "commits": [
+                {
+                    "hash": "8ef8c01",
+                    "message": "fix: VRAM Context Lost v7.0 — 근본 원인 5가지 원천 차단",
+                    "filesChanged": 1,
+                    "insertions": 35,
+                    "deletions": 63
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "[fix] VRAM Context Lost v7.0 — EffectComposer 빈 FBO 방지, scene.clone() 제거, SSAO 다운그레이드, Environment preset 스킵, Grid 축소",
+            "category": [
+                "fix"
+            ]
+        },
         {
             "timestamp": "2026-03-04T12:28:00+09:00",
             "commits": [

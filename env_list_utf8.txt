@@ -1,0 +1,20 @@
+﻿
+ name                                       value               environments        created    
+ GEMINI_API_KEY                             Encrypted           Development         2h ago     
+ GEMINI_API_KEY                             Encrypted           Preview             2h ago     
+ GEMINI_API_KEY                             Encrypted           Production          2h ago     
+ NEXT_PUBLIC_GEMINI_API_KEY                 Encrypted           Preview             3h ago     
+ NEXT_PUBLIC_ASSET_CDN_URL                  Encrypted           Preview             9d ago     
+ NEXT_PUBLIC_ASSET_CDN_URL                  Encrypted           Production          9d ago     
+ NEXT_PUBLIC_GEMINI_API_KEY                 Encrypted           Production          22d ago    
+ NEXT_PUBLIC_SLYTHERIN_GHOST                Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_ELEMENT              Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_ANIMAL               Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_COLORS               Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_FOUNDER              Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_MOTTO                Encrypted           Production          34d ago    
+ NEXT_PUBLIC_SLYTHERIN_HOUSE                Encrypted           Production          34d ago    
+ SLACK_WEBHOOK_URL                          Encrypted           Production          47d ago    
+ NEXT_PUBLIC_TRIPO_API_KEY                  Encrypted           Production          56d ago    
+ NEXT_PUBLIC_BLOCKADE_LABS_API_KEY          Encrypted           Production          56d ago    
+

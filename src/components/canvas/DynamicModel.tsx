@@ -53,14 +53,28 @@ function PlaceholderBox({
     scale,
     color = '#666',
     isLoading = false,
-    onClick
+    onClick,
+    onLoaded
 }: {
     position: [number, number, number];
     scale: [number, number, number];
     color?: string;
     isLoading?: boolean;
     onClick?: () => void;
+    onLoaded?: () => void;
 }) {
+    // Store latest onLoaded to prevent infinite loops
+    const onLoadedRef = React.useRef(onLoaded);
+    React.useEffect(() => {
+        onLoadedRef.current = onLoaded;
+    }, [onLoaded]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            onLoadedRef.current?.();
+        }
+    }, [isLoading]);
+
     return (
         <RigidBody type="fixed" colliders="cuboid" position={position}>
             <mesh castShadow receiveShadow scale={scale} onClick={(e) => { (e as any).stopPropagation(); onClick?.(); }}>
@@ -178,7 +192,8 @@ function LoadedModel({
 
     useEffect(() => {
         onLoaded?.();
-    }, [onLoaded]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const clonedScene = useMemo(() => scene.clone(), [scene]);
 
@@ -280,6 +295,7 @@ export default function DynamicModel({
                     type={procType}
                     params={procParams}
                     onClick={onClick}
+                    onLoaded={onLoaded}
                 />
             </RigidBody>
         );
@@ -440,6 +456,7 @@ export default function DynamicModel({
                 color={typeColor}
                 isLoading={true}
                 onClick={onClick}
+            // do not call onLoaded here because it's still loading
             />
         );
     }
@@ -476,6 +493,7 @@ export default function DynamicModel({
                         type={procType}
                         params={procParams}
                         onClick={onClick}
+                        onLoaded={onLoaded}
                     />
                 </RigidBody>
             );
@@ -485,7 +503,7 @@ export default function DynamicModel({
         if (matchResult.filePath) {
             return (
                 <AssetErrorBoundary
-                    fallback={<PlaceholderBox position={position} scale={scale} color="red" onClick={onClick} />}
+                    fallback={<PlaceholderBox position={position} scale={scale} color="red" onClick={onClick} onLoaded={onLoaded} />}
                     onError={() => handleAssetError(matchResult.filePath)}
                 >
                     <Suspense fallback={
@@ -516,6 +534,7 @@ export default function DynamicModel({
             scale={scale}
             color={typeColor}
             onClick={onClick}
+            onLoaded={onLoaded}
         />
     );
 }

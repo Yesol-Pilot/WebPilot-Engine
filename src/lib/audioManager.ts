@@ -34,11 +34,11 @@ class AudioManager {
 
     // BGM 소스 (장르별 프리셋 — 항상 상대경로, CDN 미사용)
     private bgmSources: Record<Genre, string> = {
-        fantasy: '/sounds/bgm/fantasy.mp3',
-        'sci-fi': '/sounds/bgm/sci-fi.mp3',
-        horror: '/sounds/bgm/horror.mp3',
-        mystery: '/sounds/bgm/mystery.mp3',
-        modern: '/sounds/bgm/modern.mp3'
+        fantasy: '/sounds/bgm/fantasy/bgm_fantasy_epic.mp3',
+        'sci-fi': '/sounds/bgm/scifi/bgm_scifi_cyberpunk.mp3',
+        horror: '/sounds/bgm/mood/bgm_mood_horror.mp3',
+        mystery: '/sounds/bgm/mood/bgm_mood_melancholy.mp3',
+        modern: '/sounds/bgm/interior/bgm_interior_cafe.mp3'
     };
 
     // SFX 소스 정의 — 항상 상대경로로 통일 (CDN CORS 에러 방지)

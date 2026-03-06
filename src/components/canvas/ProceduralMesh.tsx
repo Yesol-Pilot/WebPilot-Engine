@@ -7,6 +7,7 @@ interface ProceduralMeshProps {
     type: string;
     params: any;
     onClick?: (e: any) => void;
+    onLoaded?: () => void;
 }
 
 const COLORS: Record<string, string> = {
@@ -25,7 +26,13 @@ const COLORS: Record<string, string> = {
  * Procedural Asset Renderer
  * Renders simple geometry based on procedural parameters.
  */
-export function ProceduralMesh({ type, params, onClick }: ProceduralMeshProps) {
+export function ProceduralMesh({ type, params, onClick, onLoaded }: ProceduralMeshProps) {
+    // [Fix] Call onLoaded immediately since procedural mesh renders synchronously
+    React.useEffect(() => {
+        onLoaded?.();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // [Fix] Allow direct color override (from procedural string parsing)
     const materialColor = params.color || COLORS[params.material] || COLORS.none;
     const secondaryColor = COLORS.metal; // Default secondary
