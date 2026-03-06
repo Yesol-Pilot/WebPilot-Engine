@@ -949,28 +949,10 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
 
     const exposureValue = Math.pow(2, glbMetadata.lighting.exposure);
 
-    // 로딩 중일 때 (조건부 return은 모든 Hook 호출 후에!)
-    if (isGenerating) {
-        return (
-            <div className="w-full h-full bg-gray-950 rounded-2xl flex flex-col items-center justify-center p-8 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10 animate-pulse-slow"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v40H0z' fill='none'/%3E%3Cpath d='M40 0v40M0 0h40' stroke='%234a5568' stroke-width='0.5'/%3E%3C/svg%3E")`, backgroundSize: '40px 40px' }}></div>
-                <div className="relative z-10 flex flex-col items-center gap-6">
-                    <Loader />
-                    <div className="text-center space-y-2">
-                        <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                            AI가 상상하고 있어요...
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                            "마법사의 서재, 고대 유적, 사이버펑크 도시..."
-                        </p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-
+    // [v5.2 Fix] isGenerating 시 Canvas를 언마운트하는 early return 제거!
+    // 이전: isGenerating=true → Canvas 없는 HTML 반환 → Canvas 언마운트 → WebGL 컨텍스트 파괴
+    //       isGenerating=false → Canvas 재마운트 → 새 WebGL 컨텍스트 생성 → 브라우저 한도 초과
+    // 수정: Canvas는 항상 마운트 상태 유지, isGenerating 중에는 oㅏ버레이로 덮음
 
 
 
@@ -1000,12 +982,12 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                     }}
                     gl={{
                         toneMappingExposure: exposureValue,
-                        antialias: true,
+                        antialias: false, // [v5.2 Fix] MSAA 비활성화 — VRAM 50%+ 절약 (4x MSAA 렌더버퍼 제거)
                         powerPreference: 'high-performance',
                         failIfMajorPerformanceCaveat: false,
                         stencil: false,
                         depth: true,
-                        preserveDrawingBuffer: false, // [v5.0 Fix] VRAM 절약: 매 프레임 백버퍼 보존 비활성화 (캡처 시 CaptureScene이 toDataURL 직접 호출)
+                        preserveDrawingBuffer: false, // [v5.0 Fix] VRAM 절약: 매 프레임 백버퍼 보존 비활성화
                     }}
                 >
                     <WebGLMonitor />
