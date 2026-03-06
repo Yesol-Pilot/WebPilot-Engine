@@ -213,13 +213,6 @@ export const SEMANTIC_ASSETS: SemanticAsset[] = [
         subCategory: 'wall',
         keywords: { ko: ['돌벽', '유적'], en: ['stone wall', 'ruins'] }
     },
-    {
-        id: 'small_house',
-        path: '/models/buildings/detailed_realistic_model_house_01.glb',
-        category: 'structure',
-        subCategory: 'house',
-        keywords: { ko: ['작은집', '오두막'], en: ['small house', 'hut', 'cabin'] }
-    },
 
     // ========================================
     // 🌲 NATURE (models/nature) - 숲/자연 테마
