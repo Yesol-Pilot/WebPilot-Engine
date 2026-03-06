@@ -41,28 +41,50 @@ function getDracoLoader(): DRACOLoader {
     return dracoLoaderInstance;
 }
 
-function getKTX2Loader(): KTX2Loader | null {
-    if (!ktx2LoaderInstance && typeof window !== 'undefined') {
+// [v5.1 Fix] KTX2Loader — 임시 WebGLRenderer 생성 제거
+// 이전: detectSupport()를 위해 임시 WebGLRenderer를 생성했으나, 
+// 이것이 추가 WebGL 컨텍스트를 소모하여 기존 Canvas의 Context Lost를 유발함.
+// 수정: 실제 렌더러가 있을 때만 lazy 초기화 (GLTFLoader 내부에서 필요 시 설정)
+function getKTX2Loader(renderer?: THREE.WebGLRenderer): KTX2Loader | null {
+    if (!ktx2LoaderInstance && typeof window !== 'undefined' && renderer) {
         try {
             ktx2LoaderInstance = new KTX2Loader();
             ktx2LoaderInstance.setTranscoderPath(KTX2_CDN);
-
-            // GPU 지원 감지를 위한 임시 렌더러
-            const tempCanvas = document.createElement('canvas');
-            const tempRenderer = new THREE.WebGLRenderer({
-                canvas: tempCanvas,
-                context: tempCanvas.getContext('webgl2') || undefined,
-            });
-            ktx2LoaderInstance.detectSupport(tempRenderer);
-            tempRenderer.dispose();
-
-            console.log('[useSafeGLTF] KTX2Loader 초기화 완료');
+            ktx2LoaderInstance.detectSupport(renderer); // 기존 렌더러 재사용
+            console.log('[useSafeGLTF] KTX2Loader 초기화 완료 (기존 렌더러 사용)');
         } catch (e) {
             console.warn('[useSafeGLTF] KTX2Loader 초기화 실패 (무시):', e);
             ktx2LoaderInstance = null;
         }
     }
     return ktx2LoaderInstance;
+}
+
+// [v5.1 Fix] 동시 GLB 로딩 제한 세마포어
+// R2 CDN에서 동시 로딩 시 네트워크 + GPU 업로드가 겹쳐 VRAM 폭증
+const MAX_CONCURRENT_LOADS = 2;
+let currentLoads = 0;
+const loadQueue: (() => void)[] = [];
+
+function acquireLoadSlot(): Promise<void> {
+    if (currentLoads < MAX_CONCURRENT_LOADS) {
+        currentLoads++;
+        return Promise.resolve();
+    }
+    return new Promise(resolve => {
+        loadQueue.push(() => {
+            currentLoads++;
+            resolve();
+        });
+    });
+}
+
+function releaseLoadSlot() {
+    currentLoads--;
+    if (loadQueue.length > 0) {
+        const next = loadQueue.shift()!;
+        next();
+    }
 }
 
 // [Phase 6] 검증 캐시 (불필요한 중복 fetch 방지)
@@ -87,36 +109,35 @@ export function useSafeGLTF(path: string): GLTF {
 
         let isMounted = true;
 
-        // 헤더 12바이트만 요청해서 파싱 에러 사전 방어 (Range 헤더 지원 안하는 서버라도 맨 앞은 받을 수 있음)
-        fetch(resolvedPath, { headers: { 'Range': 'bytes=0-11' } })
-            .then(res => res.arrayBuffer())
-            .then(buffer => {
+        // [v5.1 Fix] R2 CDN 호환: Range 요청 대신 HEAD 요청으로 존재 확인
+        // R2/Cloudflare는 Range 헤더 미지원 시 전체 파일을 다운로드하여 VRAM 낭비
+        // HEAD 요청은 본문 없이 헤더만 확인 — Content-Type으로 GLB 유효성 판단
+        fetch(resolvedPath, { method: 'HEAD' })
+            .then(res => {
                 if (!isMounted) return;
 
-                try {
-                    const dataView = new DataView(buffer);
-                    // glTF Binary 매직넘버: 0x46546C67 ("glTF")
-                    const magic = dataView.getUint32(0, true);
-                    const version = dataView.getUint32(4, true);
-
-                    if (magic === 0x46546C67 && version === 1) {
-                        console.error(`[useSafeGLTF] 🚨 Legacy binary file (glTF 1.0) 감지됨. 크래시 방어를 위해 로드 차단: ${resolvedPath}`);
-                        validationCache.set(resolvedPath, false);
-                        setIsValid(false);
-                    } else {
-                        validationCache.set(resolvedPath, true);
-                        setIsValid(true);
-                    }
-                } catch (e) {
-                    // JSON 타입의 일반 glTF이거나 비정상 파일 (GLTFLoader가 알아서 에러 뱉게 넘김)
-                    if (isMounted) {
-                        validationCache.set(resolvedPath, true);
-                        setIsValid(true);
-                    }
+                if (!res.ok) {
+                    // 404 등 — 유효하지 않은 에셋
+                    console.warn(`[useSafeGLTF] ⚠️ 에셋 미존재 (${res.status}): ${resolvedPath}`);
+                    validationCache.set(resolvedPath, false);
+                    setIsValid(false);
+                    return;
                 }
+
+                // Content-Length 기반 VRAM 보호: 50MB 초과 GLB 차단
+                const contentLength = parseInt(res.headers.get('content-length') || '0', 10);
+                if (contentLength > 50 * 1024 * 1024) {
+                    console.error(`[useSafeGLTF] 🚨 GLB 파일 크기 초과 (${(contentLength / 1024 / 1024).toFixed(1)}MB): ${resolvedPath}`);
+                    validationCache.set(resolvedPath, false);
+                    setIsValid(false);
+                    return;
+                }
+
+                validationCache.set(resolvedPath, true);
+                setIsValid(true);
             })
             .catch(err => {
-                // Fetch 실패 (네트워크 등) - 마찬가지로 하위 로더에 위임
+                // Fetch 실패 (네트워크/CORS 등) — 하위 로더에 위임
                 if (isMounted) {
                     validationCache.set(resolvedPath, true);
                     setIsValid(true);
@@ -144,7 +165,7 @@ export function useSafeGLTF(path: string): GLTF {
         } as unknown as GLTF;
     }
 
-    // 검증 통과 시 원래 GLTFLoader 로직 강행
+    // [v5.1 Fix] 검증 통과 시 GLTFLoader 로직 실행 — KTX2는 렌더러 없이 설정 불가이므로 제외
     const gltf = useLoader(
         GLTFLoader,
         resolvedPath,
@@ -152,12 +173,7 @@ export function useSafeGLTF(path: string): GLTF {
             // GLTFLoader에 DRACOLoader 설정
             const dracoLoader = getDracoLoader();
             loader.setDRACOLoader(dracoLoader);
-
-            // KTX2Loader 설정
-            const ktx2Loader = getKTX2Loader();
-            if (ktx2Loader) {
-                loader.setKTX2Loader(ktx2Loader);
-            }
+            // KTX2Loader는 렌더러 컨텍스트 내에서만 설정 가능 — 여기서는 생략
         }
     ) as GLTF;
 
@@ -179,41 +195,36 @@ useSafeGLTF.preload = (path: string) => {
     const resolvedPath = getAssetUrl(path);
 
     // [Fix] 프리로드 단계에서도 헤더 검증을 강제하여 Legacy Binary 크래시 방어
-    fetch(resolvedPath, { headers: { 'Range': 'bytes=0-11' } })
-        .then(res => res.arrayBuffer())
-        .then(buffer => {
-            try {
-                const dataView = new DataView(buffer);
-                const magic = dataView.getUint32(0, true);
-                const version = dataView.getUint32(4, true);
-
-                if (magic === 0x46546C67 && version === 1) {
-                    console.warn(`[useSafeGLTF.preload] 🚨 Legacy binary file 차단됨: ${resolvedPath}`);
-                    return; // 프리로드 중지
-                }
-            } catch (e) {
-                // Ignore parsing inner errors, let GLTFLoader handle them
+    // [v5.1 Fix] R2 호환: HEAD 요청으로 존재 확인 후 프리로드
+    fetch(resolvedPath, { method: 'HEAD' })
+        .then(res => {
+            if (!res.ok) {
+                console.warn(`[useSafeGLTF.preload] ⚠️ 에셋 미존재 (${res.status}): ${resolvedPath}`);
+                return;
             }
 
-            // 검증 통과(또는 catch) 시에만 실제 프리로드 진행
-            const loader = new GLTFLoader();
-            loader.setDRACOLoader(getDracoLoader());
-            const ktx2 = getKTX2Loader();
-            if (ktx2) loader.setKTX2Loader(ktx2);
+            // 대용량 GLB 프리로드 방지
+            const contentLength = parseInt(res.headers.get('content-length') || '0', 10);
+            if (contentLength > 50 * 1024 * 1024) {
+                console.warn(`[useSafeGLTF.preload] 🚨 대용량 GLB 프리로드 스킵 (${(contentLength / 1024 / 1024).toFixed(1)}MB): ${resolvedPath}`);
+                return;
+            }
 
-            loader.load(resolvedPath, () => { }, undefined, (error) => {
-                console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
+            // 검증 통과 시 실제 프리로드 진행 (세마포어로 동시 로딩 제한)
+            acquireLoadSlot().then(() => {
+                const loader = new GLTFLoader();
+                loader.setDRACOLoader(getDracoLoader());
+                loader.load(resolvedPath, () => {
+                    releaseLoadSlot();
+                }, undefined, (error) => {
+                    releaseLoadSlot();
+                    console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
+                });
             });
         })
         .catch(err => {
-            // Range Fetch가 네트워크 레벨에서 막힌 경우 (Fallback)
-            const loader = new GLTFLoader();
-            loader.setDRACOLoader(getDracoLoader());
-            const ktx2 = getKTX2Loader();
-            if (ktx2) loader.setKTX2Loader(ktx2);
-            loader.load(resolvedPath, () => { }, undefined, (error) => {
-                console.warn(`[useSafeGLTF] 프리로드 실패(Fallback): ${resolvedPath}`, error);
-            });
+            // HEAD 요청 자체 실패 시 프리로드 스킵
+            console.warn(`[useSafeGLTF.preload] HEAD 요청 실패: ${resolvedPath}`);
         });
 };
 
