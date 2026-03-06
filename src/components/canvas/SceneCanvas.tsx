@@ -6,6 +6,7 @@ import { OrbitControls, Stats } from '@react-three/drei';
 import { Suspense, useState, useCallback, useRef } from 'react';
 import ThirdPersonController from '../scene/ThirdPersonController'; // Import Controller
 import VFXSystem from '../scene/VFXSystem';
+import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 
 /**
  * SceneCanvas
@@ -41,14 +42,10 @@ export default function SceneCanvas({ children, cameraMode = 'follow' }: SceneCa
         // WebGL 컨텍스트 손실 이벤트
         canvas.addEventListener('webglcontextlost', (event) => {
             event.preventDefault();
-            console.error('[SceneCanvas] ⚠️ WebGL 컨텍스트 손실! 3초 후 자동 복구 시도...');
+            console.error('[SceneCanvas] ⚠️ WebGL 컨텍스트 손실!');
             setContextLost(true);
-
-            // [Fix] 3초 후 자동 페이지 새로고침으로 복구 시도
-            setTimeout(() => {
-                console.log('[SceneCanvas] 🔄 자동 복구 시도: 페이지 새로고침');
-                window.location.reload();
-            }, 3000);
+            // [리팩토링] 자동 reload 제거 — 무한 루프 방지
+            // Context Lost → Restored → reload → 다시 Context Lost 루프 방지
         });
 
         // WebGL 컨텍스트 복구 이벤트
@@ -75,10 +72,16 @@ export default function SceneCanvas({ children, cameraMode = 'follow' }: SceneCa
             <Canvas
                 shadows
                 camera={{ position: [0, 5, 10], fov: 50 }}
-                dpr={[1, 2]} // Handle high-DPI screens
-                gl={{ preserveDrawingBuffer: true }}
+                dpr={[1, 1.5]} // [리팩토링] VRAM 보호: dpr 상한 1.5로 제한 (2→1.5)
+                gl={{
+                    preserveDrawingBuffer: false, // [리팩토링] VRAM 절약: 백버퍼 보존 비활성화
+                    antialias: false, // [리팩토링] MSAA 비활성화 — VRAM 50%+ 절약
+                    powerPreference: 'high-performance',
+                    stencil: false,
+                }}
                 onCreated={handleCreated}
             >
+                <KTX2Initializer />
                 <Stats />
 
                 {/* External AtmosphereController is injected as child or sibling if needed, 
