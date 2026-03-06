@@ -17,6 +17,7 @@ import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@r
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
 import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 import * as THREE from 'three';
+import { getAssetUrl } from '@/lib/assetConfig';
 import { SceneNode, SemanticRole } from '@/lib/schema/scene';
 import { autoScaleAssetSync, autoScaleAssetSemantic, registerContainerForScaling } from '@/utils/autoScaleAsset';
 import { PhysicsInferenceQueue } from '@/services/PhysicsInferenceQueue';
@@ -302,16 +303,16 @@ function PreviewNode({ node }: { node: SceneNode }) {
                         return;
                     }
 
-                    // 외부 URL (https:// 또는 http://)은 그대로 사용
-                    // 로컬 경로인 경우에만 /models/ prefix 적용
+                    // [FIX] R2 CDN URL 변환 — getAssetUrl()로 로컬→CDN 통합 처리
                     const isExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                    const modelUrl = isExternalUrl
+                    const normalizedPath = isExternalUrl
                         ? rawUrl
                         : rawUrl.startsWith('/')
                             ? rawUrl
                             : rawUrl.endsWith('.glb')
                                 ? `/models/${rawUrl}`
                                 : `/models/${rawUrl}.glb`;
+                    const modelUrl = getAssetUrl(normalizedPath);
                     console.log(`[PreviewNode] 📌 직접 지정: ${searchKey} → ${modelUrl}`);
                     setModelPath(modelUrl);
                     setSearchAttempted(true);
@@ -346,10 +347,12 @@ function PreviewNode({ node }: { node: SceneNode }) {
                     if (response.ok) {
                         const result = await response.json();
                         // ResourceMatcher는 filePath를 반환, 일부는 url 사용
-                        const modelUrl = result?.url || result?.filePath;
-                        if (modelUrl) {
-                            console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${modelUrl}`);
-                            setModelPath(modelUrl);
+                        const rawModelUrl = result?.url || result?.filePath;
+                        if (rawModelUrl) {
+                            // [FIX] API 결과도 R2 CDN URL 변환 적용
+                            const cdnModelUrl = getAssetUrl(rawModelUrl);
+                            console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${cdnModelUrl}`);
+                            setModelPath(cdnModelUrl);
                             setSearchAttempted(true);
                             return;
                         }
