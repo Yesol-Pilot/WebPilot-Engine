@@ -131,9 +131,21 @@ export default function CreatorStudioPage() {
   const unifiedStore = useUnifiedStore();
 
   React.useEffect(() => {
-    // 1. 씬 데이터 동기화
+    // 1. 씬 데이터 동기화 (path → modelUrl 매핑 필수)
     if (unifiedStore.aiScene?.objects) {
-      setPreviewNodes(unifiedStore.aiScene.objects as any);
+      // [FIX] aiScene.objects는 `path` 필드 사용, previewNodes는 `modelUrl` 기대
+      // as any 캐스팅으로 인한 필드명 불일치 방지
+      const mappedNodes = unifiedStore.aiScene.objects.map((obj: any) => ({
+        id: obj.id || obj.concept,
+        name: obj.name || obj.description || obj.id,
+        modelUrl: obj.path || obj.modelUrl || obj.file_path,
+        position: obj.position || [0, 0, 0],
+        rotation: obj.rotation || [0, 0, 0],
+        scale: obj.scale || [1, 1, 1],
+        renderStyle: obj.renderStyle,
+        matcapTexture: obj.matcapTexture,
+      }));
+      setPreviewNodes(mappedNodes as any);
 
       // 레거시 호환: SceneContext도 업데이트 (PreviewCanvas가 사용)
       if (unifiedStore.aiScene.objects.length > 0) {
