@@ -11,10 +11,10 @@ import { GoogleGenerativeAI, Part } from '@google/generative-ai';
  * AI 모델 티어 정의
  */
 export enum AIModelTier {
-    ULTRA = 'gemini-2.5-pro',                // 최고 지능 (전략/평가) — 안정 GA 모델
-    PRO = 'gemini-2.5-pro',                  // 고지능 (비평/심층 분석)
-    FLASH = 'gemini-2.5-flash',              // 고속 (일반 배치/채팅/이미지 분석) — 안정 GA 모델
-    LITE = 'gemini-2.5-flash-lite',          // 경량 (단순 처리)
+    ULTRA = 'gemini-3.1-pro-preview',        // 최고 지능 (전략/평가) — 3.1 Preview
+    PRO = 'gemini-3.1-pro-preview',          // 고지능 (비평/심층 분석)
+    FLASH = 'gemini-2.5-flash',              // 고속 — 3.1 flash 단독 없음, 2.5 GA 유지
+    LITE = 'gemini-3.1-flash-lite-preview',  // 경량 (단순 처리) — 3.1 Preview
     EMBEDDING = 'text-embedding-004'         // 임베딩
 }
 
