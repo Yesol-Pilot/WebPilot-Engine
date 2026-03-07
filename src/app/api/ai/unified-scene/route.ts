@@ -40,10 +40,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // [v8.3] Hard Slicing: VRAM 보호를 위해 AI가 초과 생성 시 물리적으로 5개에서 자름
-        if (parsed && Array.isArray(parsed.nodes) && parsed.nodes.length > 5) {
-            console.warn(`[UnifiedScene API] AI가 5개를 초과하여 생성했습니다. 강제 슬라이싱 수행 (${parsed.nodes.length} -> 5)`);
-            parsed.nodes = parsed.nodes.slice(0, 5);
+        // [v8.4] Hard Slicing 완화: 월드의 풍성함을 위해 최대 20개까지 허용 (R2 병목+VRAM 방어 마지노선)
+        if (parsed && Array.isArray(parsed.nodes) && parsed.nodes.length > 20) {
+            console.warn(`[UnifiedScene API] AI가 20개를 초과하여 생성했습니다. 강제 슬라이싱 수행 (${parsed.nodes.length} -> 20)`);
+            parsed.nodes = parsed.nodes.slice(0, 20);
         }
 
         console.log('[UnifiedScene API] 최종 응답 노드 수:', parsed.nodes?.length || 0);

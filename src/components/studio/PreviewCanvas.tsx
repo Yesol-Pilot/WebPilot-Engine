@@ -809,11 +809,11 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
     // 원본 prompt에서 환경 에셋 직접 매칭
     const [directEnvironmentMatch, setDirectEnvironmentMatch] = useState<string | null>(null);
 
-    // [v5.1 Fix] 점진적 로딩(Progressive Loading) — R2 CDN VRAM 폭파 방지
-    // R2 CDN에서는 네트워크 지연이 크므로 이전 배치의 GPU 업로드가 완료되기 전에
-    // 다음 배치가 시작되면 VRAM이 폭증함 → 배치 크기 축소 + 지연 증가
-    const BATCH_SIZE = 2;  // [v5.1] 3→2: R2 CDN 동시 로드 부하 감소
-    const BATCH_DELAY_MS = 3000; // [v5.1] 1.5초→3초: GPU 업로드 완료 대기 시간 확보
+    // [v8.4] 점진적 로딩 완화(Progressive Loading) — R2 다운로드 병목 완화 적용 (API 최대 20개 지원)
+    // 한 번에 너무 많은 요청이 가면 브라우저 커넥션 제한(6개) 및 GPU 업로드 시 VRAM 폭증 발생
+    // v8.4에서 VRAM 방어가 견고해졌으므로 템포를 상향 (4개씩 1.5초 간격)
+    const BATCH_SIZE = 4;  // [v8.4] 2→4: 로딩 체감 속도 향상
+    const BATCH_DELAY_MS = 1500; // [v8.4] 3000→1500: 업로드 인터벌 단축
     const [visibleCount, setVisibleCount] = useState(Math.min(BATCH_SIZE, nodes.length));
 
     // 노드가 변경될 때 점진적 로딩 재시작

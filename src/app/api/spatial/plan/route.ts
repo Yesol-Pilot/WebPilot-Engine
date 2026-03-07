@@ -108,7 +108,7 @@ ${assetContext}
    - Include **Lighting** (Lamps, Candles) to creates atmosphere.
 
 5. **Density**:
-   - **절대 5개를 초과하는 노드를 생성하지 마시오. STRICT LIMIT OF MAXIMUM 5 NODES.** (STRICT LIMIT for mobile VRAM safety)
+   - **모바일 VRAM과 R2 로딩 병목 방어를 위해 최대 20개의 아이템만 배치하세요. (MAX 20 NODES LIMIT)**
    - Balance the room; don't crowd one corner.
 
 **Output JSON Schema**:
@@ -135,10 +135,10 @@ ${ARCHITECT_SCHEMA}
     try {
       parsedData = JSON.parse(text) as SpatialPlanResponse;
 
-      // [v8.3] Hard Slicing: 모바일 VRAM 안정성을 위해 레이아웃 아이템을 5개로 물리적 제한
-      if (parsedData && Array.isArray(parsedData.layout) && parsedData.layout.length > 5) {
-        console.warn(`[Spatial Architect API] AI가 5개를 초과하여 생성했습니다. 강제 슬라이싱 수행 (${parsedData.layout.length} -> 5)`);
-        parsedData.layout = parsedData.layout.slice(0, 5);
+      // [v8.4] Hard Slicing 완화: 월드 퀄리티 유지를 위해 레이아웃 아이템을 20개로 제한
+      if (parsedData && Array.isArray(parsedData.layout) && parsedData.layout.length > 20) {
+        console.warn(`[Spatial Architect API] AI가 20개를 초과하여 생성했습니다. 강제 슬라이싱 수행 (${parsedData.layout.length} -> 20)`);
+        parsedData.layout = parsedData.layout.slice(0, 20);
       }
     } catch (parseError) {
       console.error("[Spatial] JSON Parse Error:", text);
