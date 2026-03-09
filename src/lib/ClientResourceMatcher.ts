@@ -1,10 +1,19 @@
 /**
  * ClientResourceMatcher.ts
  * 
- * [하드코딩 제거 조치]
- * 기존 클라이언트 사이드 키워드 매칭은 하드코딩 룰을 위반하므로 모두 비활성화되었습니다.
- * 이제 이 함수는 항상 null을 반환하여, 호출자(DynamicModel)가 무조건 Vector DB (Semantic Search)를 사용하도록 강제합니다.
+ * [v9.0] 클라이언트 사이드 퍼지 매칭 복원
+ * 
+ * 배경:
+ * - 기존 "Zero-Hardcode" 정책으로 항상 null 반환 → 서버 DB(Neo4j) 의존
+ * - 그러나 서버가 Mock Mode(Neo4j 환경변수 누락)일 때 전면 장애 발생
+ * - 해결: 빌드 타임 에셋 인덱스(searchableAssets.ts)를 활용한 퍼지 키워드 매칭
+ * 
+ * 원칙:
+ * - ❌ 하드코딩된 키워드→경로 매핑 금지
+ * - ✅ 파일명 기반 동적 퍼지 검색 (인덱스는 스크립트로 자동 생성)
+ * - ✅ 서버 검색 실패 시 로컬 폴백으로 동작
  */
+import { searchAssets } from '@/data/searchableAssets';
 
 export interface ClientMatchResult {
     type: 'asset';
@@ -14,10 +23,37 @@ export interface ClientMatchResult {
     similarity: number;
 }
 
+/**
+ * 클라이언트 사이드 퍼지 매칭
+ * 
+ * description에서 키워드를 추출하여 searchableAssets 인덱스에서 매칭.
+ * 서버 Semantic Search 실패/Mock Mode 시 로컬 폴백으로 동작.
+ * 
+ * @param description - 씬 노드의 설명 (예: "enchanted sword on a stone pedestal")
+ * @returns 매칭 결과 또는 null (매칭 실패 시 서버 API로 위임)
+ */
 export function matchStaticOrRemote(description: string): ClientMatchResult | null {
-    // [Zero-Hardcode] 클라이언트 단의 정적/키워드 기반 강제 매칭을 전면 폐기함.
-    // 모든 에셋 매칭은 AI 기반의 Semantic Search(/api/resources/match)에 의존해야 함.
-    console.log(`[ClientMatcher] 정적 하드코딩 매칭 비활성화. 서버 DB 검색으로 위임: ${description}`);
-    return null;
-}
+    if (!description || description.trim().length === 0) {
+        return null;
+    }
 
+    // 1. searchAssets로 퍼지 매칭 수행
+    const results = searchAssets(description);
+
+    if (results.length === 0) {
+        console.log(`[ClientMatcher] 로컬 퍼지 매칭 실패, 서버 검색으로 위임: "${description}"`);
+        return null;
+    }
+
+    // 2. 최상위 결과를 반환
+    const bestMatch = results[0];
+    console.log(`[ClientMatcher] ✅ 로컬 퍼지 매칭 성공: "${description}" → ${bestMatch} (후보 ${results.length}개)`);
+
+    return {
+        type: 'asset',
+        source: 'library',
+        id: bestMatch.split('/').pop()?.replace('.glb', '') || 'unknown',
+        filePath: bestMatch,
+        similarity: 0.7, // 퍼지 매칭 기본 유사도
+    };
+}

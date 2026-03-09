@@ -270,6 +270,8 @@ export default function DynamicModel({
     const [loading, setLoading] = useState(true);
     const [failedPaths, setFailedPaths] = useState<Set<string>>(new Set());
     const [modelLoaded, setModelLoaded] = useState(false);
+    // [v9.0 Fix] URL당 재시도 카운터 (무한 루프 방지 — 최대 2회)
+    const [retryCount, setRetryCount] = useState<Map<string, number>>(new Map());
 
     // [MegaFix] 1. Resolve effective URL
     // Legacy support: use node.modelUrl if available, otherwise undefined
@@ -314,12 +316,23 @@ export default function DynamicModel({
     // 리소스 매칭 및 생성
     useEffect(() => {
         // [MegaFix] If effectiveUrl is present (and not procedural since handled above), we might skip matching
-        // OR we use it as a direct hit.
         if (effectiveUrl && !effectiveUrl.startsWith('__PROCEDURAL__')) {
             if (effectiveUrl.startsWith('/') || effectiveUrl.startsWith('http')) {
-                setMatchResult({ filePath: effectiveUrl, type: 'asset', confidence: 1 } as unknown as MatchResult);
-                setLoading(false);
-                return;
+                // [v9.0 Fix] failedPaths에 포함된 URL이면 매칭 스킵 → findResource()로 폴백
+                const urlRetries = retryCount.get(effectiveUrl) || 0;
+                if (failedPaths.has(effectiveUrl)) {
+                    if (urlRetries >= 2) {
+                        console.warn(`[DynamicModel] effectiveUrl 재시도 한도 도달 (${urlRetries}/2): ${effectiveUrl}`);
+                        setLoading(false);
+                        return; // 재시도 중단 → Placeholder 유지
+                    }
+                    console.warn(`[DynamicModel] effectiveUrl 이전 실패 → 서버 매칭/생성 API 폴백: ${effectiveUrl}`);
+                    // findResource()로 진행 (아래 코드 계속)
+                } else {
+                    setMatchResult({ filePath: effectiveUrl, type: 'asset', confidence: 1 } as unknown as MatchResult);
+                    setLoading(false);
+                    return;
+                }
             }
         }
 
@@ -422,26 +435,33 @@ export default function DynamicModel({
     }, [description, theme, tags, onError, failedPaths, effectiveUrl]); // failedPaths 변경 시 재실행
 
     // 에러 발생 시 처리 (Failed Path 등록 -> useEffect 재실행)
+    // [v9.0 Fix] 재시도 카운터 + failedPaths 동기 갱신
     const handleAssetError = (filePath: string) => {
-        console.error(`[DynamicModel] 에러 감지! 경로 블랙리스트 추가: ${filePath}`);
+        const currentRetries = retryCount.get(filePath) || 0;
+        console.error(`[DynamicModel] 에러 감지! 경로 블랙리스트 추가 (${currentRetries + 1}/2): ${filePath}`);
+        setRetryCount(prev => {
+            const newMap = new Map(prev);
+            newMap.set(filePath, currentRetries + 1);
+            return newMap;
+        });
         setFailedPaths(prev => {
             const newSet = new Set(prev);
             newSet.add(filePath);
             return newSet;
         });
-        // 상태 변경으로 useEffect가 다시 실행되며, 이번에는 result=null이 되어 API 생성을 시도함.
     };
 
-    // [Watchdog] 로딩 타임아웃 감지 (5초)
+    // [Watchdog] 로딩 타임아웃 감지
+    // [v9.0 Fix] 5초 → 15초 확장 (세마포어 MAX_CONCURRENT_LOADS=2 대기열 고려)
     useEffect(() => {
         let timer: NodeJS.Timeout;
 
-        // 매칭은 됐으나(filePath 존재), 5초 동안 modelLoaded가 false라면? -> Hang 상태
+        // 매칭은 됐으나(filePath 존재), 15초 동안 modelLoaded가 false라면? -> Hang 상태
         if (matchResult && !modelLoaded) {
             timer = setTimeout(() => {
-                console.warn(`[Watchdog] 로딩 시간 초과 (5s): ${matchResult.filePath}`);
+                console.warn(`[Watchdog] 로딩 시간 초과 (15s): ${matchResult.filePath}`);
                 handleAssetError(matchResult.filePath);
-            }, 5000);
+            }, 15000);
         }
 
         return () => clearTimeout(timer);

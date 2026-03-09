@@ -60,8 +60,8 @@ function getKTX2Loader(renderer?: THREE.WebGLRenderer): KTX2Loader | null {
 
 // [v5.1 Fix] 동시 GLB 로딩 제한 세마포어
 // R2 CDN에서 동시 로딩 시 네트워크 + GPU 업로드가 겹쳐 VRAM 폭증
-// [v8.1 Fix] 2 -> 1로 축소 (극단적 텍스처 업로드 직렬화, 모바일 크래시 원천 차단)
-const MAX_CONCURRENT_LOADS = 1;
+// [v9.0 Fix] 1 → 2로 상향 (세마포어 직렬화 + Watchdog 15초 균형)
+const MAX_CONCURRENT_LOADS = 2;
 let currentLoads = 0;
 const loadQueue: (() => void)[] = [];
 
@@ -87,7 +87,21 @@ function releaseLoadSlot() {
 }
 
 // [Phase 6] 검증 캐시 (불필요한 중복 fetch 방지)
-const validationCache = new Map<string, boolean>();
+// [v9.0 Fix] TTL(60초) 지원 — R2/CDN 캐시 갱신 및 업로드 타이밍 변수 흡수
+const VALIDATION_CACHE_TTL_MS = 60_000;
+interface ValidationEntry { valid: boolean; timestamp: number; }
+const validationCache = new Map<string, ValidationEntry>();
+
+function getCachedValidation(path: string): boolean | null {
+    const entry = validationCache.get(path);
+    if (!entry) return null;
+    // TTL 만료 시 캐시 무효화 → 재검증 유도
+    if (Date.now() - entry.timestamp > VALIDATION_CACHE_TTL_MS) {
+        validationCache.delete(path);
+        return null;
+    }
+    return entry.valid;
+}
 
 /**
  * useGLTF 대체 훅
@@ -111,8 +125,9 @@ export function useSafeGLTF(path: string): GLTF {
     }, [renderer]);
 
     // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
+    // [v9.0 Fix] TTL 기반 캐시 조회
     const [isValid, setIsValid] = useState<boolean | null>(
-        validationCache.has(resolvedPath) ? validationCache.get(resolvedPath)! : null
+        getCachedValidation(resolvedPath)
     );
 
     useEffect(() => {
@@ -130,7 +145,7 @@ export function useSafeGLTF(path: string): GLTF {
                 if (!res.ok) {
                     // 404 등 — 유효하지 않은 에셋
                     console.warn(`[useSafeGLTF] ⚠️ 에셋 미존재 (${res.status}): ${resolvedPath}`);
-                    validationCache.set(resolvedPath, false);
+                    validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
                     setIsValid(false);
                     return;
                 }
@@ -139,18 +154,18 @@ export function useSafeGLTF(path: string): GLTF {
                 const contentLength = parseInt(res.headers.get('content-length') || '0', 10);
                 if (contentLength > 50 * 1024 * 1024) {
                     console.error(`[useSafeGLTF] 🚨 GLB 파일 크기 초과 (${(contentLength / 1024 / 1024).toFixed(1)}MB): ${resolvedPath}`);
-                    validationCache.set(resolvedPath, false);
+                    validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
                     setIsValid(false);
                     return;
                 }
 
-                validationCache.set(resolvedPath, true);
+                validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
                 setIsValid(true);
             })
             .catch(err => {
                 // Fetch 실패 (네트워크/CORS 등) — 하위 로더에 위임
                 if (isMounted) {
-                    validationCache.set(resolvedPath, true);
+                    validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
                     setIsValid(true);
                 }
             });
@@ -163,17 +178,11 @@ export function useSafeGLTF(path: string): GLTF {
         throw new Promise(() => { }); // Pending
     }
 
-    // 검증 실패(Legacy/Corrupted) 시 더미 빈 씬 반환 (렌더러 생존 유도)
+    // [v9.0 Fix] 검증 실패(404/Corrupted) 시 Error throw → ErrorBoundary에서 폴백 처리
+    // 기존: 빈 Scene 반환 → ErrorBoundary 미트리거 → Tripo3D 폴백 봉쇄
+    // 수정: Error throw → AssetErrorBoundary → handleAssetError() → 생성형 폴백 점화
     if (isValid === false) {
-        return {
-            scene: new THREE.Scene(),
-            nodes: {},
-            materials: {},
-            animations: [],
-            cameras: [],
-            parser: {} as any,
-            userData: {}
-        } as unknown as GLTF;
+        throw new Error(`[useSafeGLTF] 에셋 로드 실패 (404/Corrupted): ${resolvedPath}`);
     }
 
     // [v5.2 Fix] 검증 통과 시 GLTFLoader + Draco + KTX2 모두 연결
