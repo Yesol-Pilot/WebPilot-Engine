@@ -15,6 +15,7 @@ import { Suspense, useState, useEffect, useMemo, useRef, createContext, useConte
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@react-three/drei';
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
+import { useAssetAdmission } from '@/hooks/useAssetAdmission';
 import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 import * as THREE from 'three';
 import { getAssetUrl } from '@/lib/assetConfig';
@@ -337,7 +338,7 @@ function LoadingScene() {
  * 2. smartAssetSearch (시맨틱 키워드 매칭)
  * 3. API 폴백 (/api/resources/match) - DB 기반 검색
  */
-function PreviewNode({ node }: { node: SceneNode }) {
+function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number }) {
     const [modelPath, setModelPath] = useState<string | null>(null);
     const [proceduralData, setProceduralData] = useState<{ type: string; color: string } | null>(null);
     const [searchAttempted, setSearchAttempted] = useState(false);
@@ -490,8 +491,16 @@ function PreviewNode({ node }: { node: SceneNode }) {
         );
     }
 
-    // GLB 모델이 있으면 로드
+    // [P0 Bundle-A] GPU 마운트 게이트 — modelPath가 있을 때만 활성화
+    const admissionId = `preview-${node.id}`;
+    const { admitted, onLoaded: admissionLoaded, onFailed: admissionFailed } = useAssetAdmission(admissionId, index, !!modelPath);
+
+    // GLB 모델이 있으면 게이트 확인 후 로드
     if (modelPath) {
+        if (!admitted) {
+            // 게이트 대기 중 — 와이어프레임 플레이스홀더
+            return <PlaceholderBox position={position} scale={scale} color="#00BFFF" />;
+        }
         return (
             <Suspense fallback={<PlaceholderBox position={position} scale={scale} color="#8B5CF6" />}>
                 <GLBModel path={modelPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapTextureUrl} />
@@ -922,7 +931,7 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
 
             {/* [v5.0] 점진적 렌더링 — visibleCount만큼만 마운트 */}
             {visibleNodes.map((node, index) => (
-                <PreviewNode key={`${node.id}-${index}`} node={node as SceneNode} />
+                <PreviewNode key={`${node.id}-${index}`} node={node as SceneNode} index={index} />
             ))}
         </group>
     );

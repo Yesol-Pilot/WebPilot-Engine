@@ -167,7 +167,8 @@ function releaseSlot(id: string) {
  */
 export function useAssetAdmission(
     modelId: string,
-    priority: number = 999
+    priority: number = 999,
+    enabled: boolean = true
 ): {
     admitted: boolean;
     onLoaded: () => void;
@@ -188,8 +189,13 @@ export function useAssetAdmission(
         };
     }, []);
 
-    // 입장권 요청
+    // 입장권 요청 — enabled=false이면 요청하지 않음
     useEffect(() => {
+        if (!enabled) {
+            setAdmitted(false);
+            return;
+        }
+
         let cancelled = false;
 
         requestAdmission(idRef.current, priority).then(() => {
@@ -203,7 +209,7 @@ export function useAssetAdmission(
             releaseSlot(idRef.current);
             setAdmitted(false);
         };
-    }, [modelId, priority]);
+    }, [modelId, priority, enabled]);
 
     const onLoaded = useCallback(() => {
         markLoaded(idRef.current);
