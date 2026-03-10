@@ -277,6 +277,9 @@ export default function DynamicModel({
     // Legacy support: use node.modelUrl if available, otherwise undefined
     const effectiveUrl = node?.modelUrl;
 
+    // [Probe] 장애 판별 로그 — DynamicModel 마운트
+    console.log(`[Probe] DynamicModel mount: description="${description}", effectiveUrl="${effectiveUrl || 'undefined'}"`);
+
     // [MegaFix] 2. INSTANT Procedural Check (No Async, No Fetch)
     // If it looks like a procedural tag, RENDER IT NOW.
     if (effectiveUrl && typeof effectiveUrl === 'string' && effectiveUrl.startsWith('__PROCEDURAL__')) {

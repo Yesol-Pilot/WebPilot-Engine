@@ -131,6 +131,8 @@ export default function CreatorStudioPage() {
   const unifiedStore = useUnifiedStore();
 
   React.useEffect(() => {
+    // [Probe] 장애 판별 로그 — SSOT 구독부
+    console.log(`[Probe] aiScene.objects = ${unifiedStore.aiScene?.objects?.length ?? 0}`);
     // 1. 씬 데이터 동기화 (path → modelUrl 매핑 필수)
     if (unifiedStore.aiScene?.objects) {
       const objectCount = unifiedStore.aiScene.objects.length;

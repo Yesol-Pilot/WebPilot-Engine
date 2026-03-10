@@ -473,6 +473,8 @@ export class ConstructorSquad extends BaseCell {
      * SSOT(UnifiedStore)에 최종 결과 커밋
      */
     private commitToStore(placed: PlacedObject[]): void {
+        // [Probe] 장애 판별 로그 — pre-commit
+        console.log(`[Probe] pre-commit objects = ${placed.length}`);
         try {
             const store = getUnifiedStore();
             const sceneObjects = placed.map(obj => ({
@@ -487,6 +489,8 @@ export class ConstructorSquad extends BaseCell {
                 matcapTexture: obj.matcapTexture,
             }));
             store.setAIScene(sceneObjects);
+            // [Probe] 장애 판별 로그 — post-commit
+            console.log(`[Probe] post-commit done (${sceneObjects.length}개 커밋 완료)`);
             console.log(`[ConstructorSquad] 💾 SSOT 커밋: ${placed.length}개 오브젝트`);
         } catch (error: any) {
             console.error(`[ConstructorSquad] ❌ SSOT 커밋 실패: ${error.message}`);
