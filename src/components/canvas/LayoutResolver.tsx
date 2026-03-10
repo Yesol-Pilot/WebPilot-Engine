@@ -188,8 +188,8 @@ export default function LayoutResolver() {
             <RoomGenerator architecture={resolvedArchitecture} />
 
             {/* 노드 렌더링 */}
-            {nodeList.map((node) => (
-                <SceneNodeRenderer key={node.id} node={node as SceneNode} theme={theme} />
+            {nodeList.map((node, index) => (
+                <SceneNodeRenderer key={node.id} node={node as SceneNode} theme={theme} index={index} />
             ))}
         </group>
     );
@@ -206,7 +206,7 @@ extend({ ToonShaderMaterial });
  * description을 기반으로 DynamicModel을 통해 실제 3D 모델을 로드합니다.
  * [NEW] InteractionManager에 객체를 등록하여 상호작용 지원
  */
-const SceneNodeRenderer = ({ node, theme }: { node: SceneNode, theme: string }) => {
+const SceneNodeRenderer = ({ node, theme, index = 999 }: { node: SceneNode, theme: string, index?: number }) => {
     // InteractionManager 연동
     const { registerObject, unregisterObject, setActiveObject } = useInteraction();
 
@@ -291,6 +291,7 @@ const SceneNodeRenderer = ({ node, theme }: { node: SceneNode, theme: string }) 
             type={node.type}
             theme={theme}
             tags={node.tags}
+            index={index} // [P0 Bundle-A] 우선순위 전달
             colliderType={(node as any).colliderType !== undefined ? (node as any).colliderType : 'hull'}
             onClick={() => {
                 if (node.type === 'interactive_prop' || node.type === 'npc') {

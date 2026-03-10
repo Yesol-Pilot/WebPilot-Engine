@@ -143,8 +143,8 @@ export function useSafeGLTF(path: string): GLTF {
                 if (!isMounted) return;
 
                 if (!res.ok) {
-                    // 404 등 — 유효하지 않은 에셋
-                    console.warn(`[useSafeGLTF] ⚠️ 에셋 미존재 (${res.status}): ${resolvedPath}`);
+                    // 404 등 — 유효하지 않은 에셋 [P0 Bundle-A] 가시화 강화
+                    console.error(`[useSafeGLTF] 🚫 에셋 404 (${res.status}): %c${resolvedPath}`, 'color: red; font-weight: bold');
                     validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
                     setIsValid(false);
                     return;

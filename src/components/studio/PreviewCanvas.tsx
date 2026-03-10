@@ -12,7 +12,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useRef, createContext, useContext, useCallback } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@react-three/drei';
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
 import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
@@ -187,6 +187,46 @@ function WebGLMonitor() {
 /**
  * CaptureScene: 외부 요청 시 현재 캔버스를 캡처하여 전달 (v4.0 MACR 기반)
  */
+
+/**
+ * GPUTelemetry: GPU 메모리 지표 모니터링
+ * [P0 Bundle-A] renderer.info를 5초 간격으로 콘솔 출력
+ * Context Lost 선제 감지 및 VRAM 사용량 모니터링에 활용
+ */
+function GPUTelemetry() {
+    const { gl } = useThree();
+    const lastLogRef = useRef(0);
+    const INTERVAL_MS = 5000; // 5초 간격
+
+    useFrame(() => {
+        const now = Date.now();
+        if (now - lastLogRef.current < INTERVAL_MS) return;
+        lastLogRef.current = now;
+
+        try {
+            const mem = gl.info.memory;
+            const render = gl.info.render;
+
+            // useAssetAdmission의 전역 카운터 접근
+            let activeCount = 0;
+            let inflightCount = 0;
+            let queueLen = 0;
+            try {
+                const admission = require('@/hooks/useAssetAdmission');
+                activeCount = admission.getActiveCount();
+                inflightCount = admission.getInflightCount();
+                queueLen = admission.getQueueLength();
+            } catch { /* 가져오기 실패 무시 */ }
+
+            console.log(`[GPUTelemetry] 📊 tex=${mem.textures} geo=${mem.geometries} | draw=${render.calls} tri=${render.triangles} | active=${activeCount} inflight=${inflightCount} queue=${queueLen}`);
+        } catch {
+            // 렌더러 비활성 상태 무시
+        }
+    });
+
+    return null;
+}
+
 function CaptureScene() {
     const { gl, scene, camera } = useThree();
 
@@ -1037,6 +1077,7 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                 >
                     <WebGLStatusContext.Provider value={{ contextLost }}>
                         <WebGLMonitor />
+                        <GPUTelemetry />
                         <KTX2Initializer />
                         <CaptureScene />
 

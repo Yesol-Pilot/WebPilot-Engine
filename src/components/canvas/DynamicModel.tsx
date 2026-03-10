@@ -13,9 +13,10 @@
 
 'use client';
 
-import React, { Suspense, useState, useEffect, useMemo } from 'react';
+import React, { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSafeGLTF } from '@/hooks/useSafeGLTF';
 import { RigidBody } from '@react-three/rapier';
+import { useAssetAdmission } from '@/hooks/useAssetAdmission';
 
 import type { MatchResult } from '@/lib/ResourceMatcher'; // Type only import is safe
 // import { matchAsset } from '@/lib/ResourceMatcher'; // REMOVED: Server-only code
@@ -40,6 +41,8 @@ interface DynamicModelProps {
     onError?: (error: Error) => void;
     onClick?: () => void;
     colliderType?: 'hull' | 'cuboid' | 'trimesh' | false;
+    /** [P0 Bundle-A] 렌더링 순서 인덱스 — 우선순위로 사용 */
+    index?: number;
 }
 
 // Mock 모드 확인
@@ -264,7 +267,8 @@ export default function DynamicModel({
     onLoaded,
     onError,
     onClick,
-    colliderType = 'hull'
+    colliderType = 'hull',
+    index = 999
 }: DynamicModelProps & { node?: any }) {
     const [matchResult, setMatchResult] = useState<MatchResult | null>(null);
     const [loading, setLoading] = useState(true);
@@ -273,12 +277,17 @@ export default function DynamicModel({
     // [v9.0 Fix] URL당 재시도 카운터 (무한 루프 방지 — 최대 2회)
     const [retryCount, setRetryCount] = useState<Map<string, number>>(new Map());
 
+    // [P0 Bundle-A] 마운트 게이트 — GPU 메모리 보호
+    // admitted=false이면 PlaceholderBox만 표시, true이면 실제 GLB 로딩 진행
+    const admissionId = node?.id || `dm-${description}`;
+    const { admitted, onLoaded: admissionLoaded, onFailed: admissionFailed } = useAssetAdmission(admissionId, index);
+
     // [MegaFix] 1. Resolve effective URL
     // Legacy support: use node.modelUrl if available, otherwise undefined
     const effectiveUrl = node?.modelUrl;
 
-    // [Probe] 장애 판별 로그 — DynamicModel 마운트
-    console.log(`[Probe] DynamicModel mount: description="${description}", effectiveUrl="${effectiveUrl || 'undefined'}"`);
+    // [Probe] 장애 판별 로그 — DynamicModel 마운트 (입장 상태 포함)
+    console.log(`[Probe] DynamicModel mount: description="${description}", effectiveUrl="${effectiveUrl || 'undefined'}", admitted=${admitted}`);
 
     // [MegaFix] 2. INSTANT Procedural Check (No Async, No Fetch)
     // If it looks like a procedural tag, RENDER IT NOW.
@@ -524,10 +533,26 @@ export default function DynamicModel({
 
         // CASE B: GLB Model (Remote or Generated)
         if (matchResult.filePath) {
+            // [P0 Bundle-A] 게이트 체크 — admitted=false이면 대기 Placeholder
+            if (!admitted) {
+                return (
+                    <PlaceholderBox
+                        position={position}
+                        scale={scale}
+                        color={typeColor}
+                        isLoading={true}
+                        onClick={onClick}
+                    />
+                );
+            }
+
             return (
                 <AssetErrorBoundary
                     fallback={<PlaceholderBox position={position} scale={scale} color="red" onClick={onClick} onLoaded={onLoaded} />}
-                    onError={() => handleAssetError(matchResult.filePath)}
+                    onError={() => {
+                        handleAssetError(matchResult.filePath);
+                        admissionFailed(); // [P0] 슬롯 해제 → 다음 승격
+                    }}
                 >
                     <Suspense fallback={
                         <PlaceholderBox position={position} scale={scale} color={typeColor} isLoading={true} onClick={onClick} />
@@ -539,6 +564,7 @@ export default function DynamicModel({
                             scale={scale}
                             onLoaded={() => {
                                 setModelLoaded(true);
+                                admissionLoaded(); // [P0] inflight→active 전환 + 다음 승격
                                 onLoaded?.();
                             }}
                             onClick={onClick}
