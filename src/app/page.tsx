@@ -133,6 +133,15 @@ export default function CreatorStudioPage() {
   React.useEffect(() => {
     // 1. 씬 데이터 동기화 (path → modelUrl 매핑 필수)
     if (unifiedStore.aiScene?.objects) {
+      const objectCount = unifiedStore.aiScene.objects.length;
+      console.log(`[Studio] 🔄 aiScene 변경 감지: ${objectCount}개 오브젝트`);
+
+      // 빈 배열인 경우 아직 파이프라인 미완료 — setPreviewNodes 호출 방지
+      if (objectCount === 0) {
+        console.warn('[Studio] ⚠️ aiScene.objects가 빈 배열 — 파이프라인 미완료 상태');
+        return;
+      }
+
       // [FIX] aiScene.objects는 `path` 필드 사용, previewNodes는 `modelUrl` 기대
       // as any 캐스팅으로 인한 필드명 불일치 방지
       const mappedNodes = unifiedStore.aiScene.objects.map((obj: any) => ({
@@ -145,6 +154,7 @@ export default function CreatorStudioPage() {
         renderStyle: obj.renderStyle,
         matcapTexture: obj.matcapTexture,
       }));
+      console.log(`[Studio] ✅ ${objectCount}개 오브젝트 매핑 완료 → setPreviewNodes`);
       setPreviewNodes(mappedNodes as any);
 
       // 레거시 호환: SceneContext도 업데이트 (PreviewCanvas가 사용)

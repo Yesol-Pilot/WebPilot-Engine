@@ -199,6 +199,9 @@ export abstract class BaseCell {
                 console.error(
                     `[${this.cellType}] ❌ 신호 처리 실패: ${signalType} — ${err.message}`
                 );
+                // 에러를 상위 messageBus.publish()로 전파
+                // (이전: 에러 삼킴으로 인해 파이프라인 체인 중단이 감지되지 않음)
+                throw err;
             }
             return;
         }

@@ -101,7 +101,10 @@ class AgentMessageBus {
             }
 
         } catch (error) {
-            console.error('[A2A] Error publishing message:', error);
+            console.error('[A2A] ❌ Error publishing message:', error);
+            // 에러를 상위로 전파하여 orchestrate() 등에서 감지 가능하도록 함
+            // (이전: 에러 삼킴으로 인해 전체 파이프라인 사일런트 실패 유발)
+            throw error;
         }
     }
 

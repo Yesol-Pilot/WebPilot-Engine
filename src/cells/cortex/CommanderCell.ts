@@ -272,11 +272,25 @@ export class CommanderCell extends BaseCell {
         const store = getUnifiedStore();
         store.setLoading(true, '3D 세계를 건설하고 있습니다...');
 
-        await this.transmit('SPATIAL_ZONER', SIGNALS.PLAN_COMPLETED, {
-            scenario,
-            narrative,  // 서사적 DNA 주입
-            traceId: this.traceId,
-        });
+        // 파이프라인 타임아웃 보호 (60초)
+        const PRODUCTION_TIMEOUT_MS = 60_000;
+        const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(
+                () => reject(new Error(`[Commander] ⏰ 제작 파이프라인 타임아웃 (${PRODUCTION_TIMEOUT_MS / 1000}초 초과)`)),
+                PRODUCTION_TIMEOUT_MS
+            )
+        );
+
+        await Promise.race([
+            this.transmit('SPATIAL_ZONER', SIGNALS.PLAN_COMPLETED, {
+                scenario,
+                narrative,  // 서사적 DNA 주입
+                traceId: this.traceId,
+            }),
+            timeoutPromise,
+        ]);
+
+        console.log('[Commander] ✅ 제작 파이프라인 전체 체인 완료 (SpatialZoner → PropMaster → AssetHunter → ConstructorSquad)');
 
         this.state = 'VALIDATING';
         this.logState('검증 대기');
