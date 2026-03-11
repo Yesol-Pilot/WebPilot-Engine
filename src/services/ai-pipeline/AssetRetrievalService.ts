@@ -19,6 +19,15 @@ import { AssetManager } from '../AssetManager';
 import { VectorSearchService } from '../VectorSearchService';
 import { MissingResourceTracker } from '../MissingResourceTracker';
 
+// [F-005] Legacy GLB 방어 블랙리스트 (서버/클라이언트 범용 사용을 위해 이중 정의 허용)
+const LEGACY_GLB_BLACKLIST = [
+    'babylon-assets_WalkingLady.glb',
+];
+
+function isBlacklistedLegacyGLB(path: string): boolean {
+    return LEGACY_GLB_BLACKLIST.some(name => path.includes(name));
+}
+
 // ============================================================
 // Zod 스키마 정의
 // ============================================================
@@ -357,6 +366,12 @@ export const AssetRetrievalService = {
 
         if (result) {
             console.log(`[AssetRetrieval] 🔍 HybridSearch 결과: ${result.asset?.id} (RRF: ${result.rrfScore.toFixed(4)}, confidence: ${result.confidence.toFixed(2)})`);
+
+            // [F-005] Legacy GLB 방어 - 블랙리스트 확인
+            if (isBlacklistedLegacyGLB(result.asset.path)) {
+                console.warn(`[AssetRetrieval] 🏚️ Legacy GLB 검색 차단됨: ${result.asset.path}`);
+                return null;
+            }
 
             // [Phase 5] 신뢰도 임계값 강화: 0.3 → 0.5 (관련 없는 에셋 매칭 방지)
             if (result.confidence > 0.5) {

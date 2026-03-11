@@ -14,7 +14,7 @@
 import { Suspense, useState, useEffect, useMemo, useRef, createContext, useContext, useCallback } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@react-three/drei';
-import { useSafeGLTF } from '@/hooks/useSafeGLTF';
+import { useSafeGLTF, isBlacklistedLegacyGLB } from '@/hooks/useSafeGLTF';
 import { useAssetAdmission } from '@/hooks/useAssetAdmission';
 import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 import * as THREE from 'three';
@@ -331,138 +331,103 @@ function LoadingScene() {
 }
 
 /**
- * 개별 노드 렌더링 (GLB 모델 로드)
- * 
- * 에셋 매칭 파이프라인:
- * 1. node.modelUrl 직접 지정 → 최우선 사용
- * 2. smartAssetSearch (시맨틱 키워드 매칭)
- * 3. API 폴백 (/api/resources/match) - DB 기반 검색
+ * 로컬/서버 공통: 절차적 메시(Procedural Mesh) 렌더러
+ */
+function ProceduralBox({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], color }: any) {
+    return (
+        <mesh position={position} rotation={rotation} scale={scale} castShadow receiveShadow>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color={color} />
+        </mesh>
+    );
+}
+
+/**
+ * 로컬/서버 공통: 로딩 및 장애 폴백 박스
+ */
+function FallbackBox({ position = [0, 0, 0], rotation = [0, 0, 0], scale = [1, 1, 1], color, isLegacy }: any) {
+    return (
+        <mesh position={position} rotation={rotation} scale={scale} castShadow receiveShadow>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color={color} wireframe={isLegacy} />
+        </mesh>
+    );
+}
+
+/**
+ * P0 수정: 개별 노드 렌더링 (GLB 모델 로드) Wrapper 분리
+ * (Hook 규칙 위반 방지를 위해 분기에 따라 컴포넌트를 분리)
  */
 function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number }) {
-    const [modelPath, setModelPath] = useState<string | null>(null);
-    const [proceduralData, setProceduralData] = useState<{ type: string; color: string } | null>(null);
-    const [searchAttempted, setSearchAttempted] = useState(false);
-    const position = (node.transform?.position || [0, 0, 0]) as [number, number, number];
-    const rotation = (node.transform?.rotation || [0, 0, 0]) as [number, number, number];
-    const scale = (node.transform?.scale || [1, 1, 1]) as [number, number, number];
-    // [Matcap Integration] node에서 matcap 정보 추출
-    const nodeAny = node as any;
-    const matcapTextureUrl = nodeAny.matcapTexture || undefined;
-
     // [v6.0] WebGL 상태 구독 — Context Lost 시 모델 로딩 중단
     const { contextLost: glContextLost } = useContext(WebGLStatusContext);
 
-    // [v4.1 Fix] VRAM 누수 및 API 무한 호출 방지를 위한 원시값 추출
-    // node(객체 참조) 전체를 의존성으로 두면 물리 엔진이나 부모 컴포넌트 변화 시 무한 재렌더 및 핑퐁 현상이 발생함.
-    const searchKey = node.description || node.name || node.id;
-    // [F-003 Fix] SSOT 우선순위 해소 — modelUrl뿐 아니라 path/modelPath/filePath도 체크
+    const nodeAny = node as any;
+    // [F-003 Fix] SSOT 경로 우선순위 — API 재검색 코드 전면 삭제
     const resolvedSSOTPath = nodeAny.modelUrl || nodeAny.path || nodeAny.modelPath || nodeAny.filePath || null;
-    const nodeType = node.type;
+    const searchKey = node.description || node.name || node.id;
 
-    // 에셋 검색: SSOT path → API 폴백 (SSOT가 있으면 API 검색 완전 차단)
-    useEffect(() => {
-        // [v6.0] Context Lost 상태면 GPU 업로드 불가 → 로딩 스킵
-        if (glContextLost) {
-            console.log(`[PreviewNode] ⏸️ Context Lost 상태 — 모델 로딩 중단: ${searchKey}`);
-            return;
-        }
-        async function findModel() {
-            try {
-                // 0단계: SSOT에서 에셋 경로가 resolve된 경우 → 최우선 사용, API 재검색 금지
-                if (resolvedSSOTPath) {
-                    const rawUrl = resolvedSSOTPath;
-                    console.log(`[PreviewNode] 🔒 SSOT path 사용: "${searchKey}" → ${rawUrl}`);
+    if (glContextLost) {
+        // GPU 크래시 시 아무것도 렌더링하지 않음
+        return null;
+    }
 
-                    // [Mod] Procedural Asset Handling (AI Pipeline)
-                    if (rawUrl.includes('__PROCEDURAL__')) {
-                        console.log(`[PreviewNode] 🧊 절차적 에셋 감지: ${rawUrl}`);
-                        // Example: "__PROCEDURAL__:box:#CCCCCC.glb" -> type="box", color="#CCCCCC"
-                        const parts = rawUrl.split(':');
-                        const colorPart = parts.find((p: string) => p.startsWith('#'));
-                        const color = colorPart ? colorPart.split('.')[0] : '#999999';
+    if (!resolvedSSOTPath) {
+        // 경로가 아예 없는 경우 (SSOT 장애 시)
+        console.warn(`[PreviewNode] ❌ SSOT 경로 없음: ${searchKey}`);
+        return <FallbackBox position={node.transform?.position} rotation={node.transform?.rotation} scale={node.transform?.scale} color="#666" />;
+    }
 
-                        setProceduralData({ type: 'box', color });
-                        setSearchAttempted(true);
-                        return;
-                    }
+    // 1) Procedural Asset 감지
+    if (resolvedSSOTPath.includes('__PROCEDURAL__')) {
+        console.log(`[PreviewNode] 🧊 절차적 에셋 렌더링: ${resolvedSSOTPath}`);
+        const parts = resolvedSSOTPath.split(':');
+        const colorPart = parts.find((p: string) => p.startsWith('#'));
+        const color = colorPart ? colorPart.split('.')[0] : '#999999';
+        return <ProceduralBox position={node.transform?.position} rotation={node.transform?.rotation} scale={node.transform?.scale} color={color} />;
+    }
 
-                    // [FIX] R2 CDN URL 변환 — getAssetUrl()로 로컬→CDN 통합 처리
-                    const isExternalUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://');
-                    const normalizedPath = isExternalUrl
-                        ? rawUrl
-                        : rawUrl.startsWith('/')
-                            ? rawUrl
-                            : rawUrl.endsWith('.glb')
-                                ? `/models/${rawUrl}`
-                                : `/models/${rawUrl}.glb`;
-                    const modelUrl = getAssetUrl(normalizedPath);
-                    console.log(`[PreviewNode] 📌 SSOT 확정: ${searchKey} → ${modelUrl}`);
-                    setModelPath(modelUrl);
-                    setSearchAttempted(true);
-                    return;
-                }
+    // 2) [F-005] Legacy GLB 방어 블랙리스트
+    if (isBlacklistedLegacyGLB(resolvedSSOTPath)) {
+        console.warn(`[PreviewNode] 🏚️ Legacy GLB 차단됨: ${resolvedSSOTPath}`);
+        return <FallbackBox position={node.transform?.position} rotation={node.transform?.rotation} scale={node.transform?.scale} color="#FF4444" isLegacy />;
+    }
 
-                // 1단계: 로컬 에셋 검색 (스킵 - v3.4 Fix 메모리 최적화)
-                // [v3.4 Fix] 클라이언트 사이드 AssetRegistry 로드 방지를 위해 로컬 검색을 최소화하거나 스킵함.
-                /*
-                const { searchAssets } = await import('@/data/AssetRegistry');
-                const matches = await searchAssets(searchKey);
+    // 3) 정상 GLB — 경로 정규화 후 렌더러로 이관
+    // [FIX] R2 CDN URL 변환 — getAssetUrl()로 로컬→CDN 통합 처리
+    const isExternalUrl = resolvedSSOTPath.startsWith('http://') || resolvedSSOTPath.startsWith('https://');
+    const normalizedPath = isExternalUrl
+        ? resolvedSSOTPath
+        : resolvedSSOTPath.startsWith('/')
+            ? resolvedSSOTPath
+            : resolvedSSOTPath.endsWith('.glb')
+                ? `/models/${resolvedSSOTPath}`
+                : `/models/${resolvedSSOTPath}.glb`;
+                
+    const finalModelUrl = getAssetUrl(normalizedPath);
 
-                if (matches.length > 0) {
-                    const bestMatch = matches[0];
-                    console.log(`[PreviewNode] ✅ 로컬 매칭: "${searchKey}" → ${bestMatch.path}`);
-                    setModelPath(bestMatch.path);
-                    setSearchAttempted(true);
-                    return;
-                }
-                */
+    // 실제 Hooks (useAssetAdmission 등)은 GLBModelWrapper 안에서만 호출
+    return <GLBModelWrapper node={node} path={finalModelUrl} index={index} />;
+}
 
-                // 2단계: API 폴백 (DB 기반 검색 - 2400+ 에셋)
-                // type: 'asset' 필수 — API 라우트가 타입별 분기 처리
-                try {
-                    console.log(`[PreviewNode] 🔍 API 검색 시도: "${searchKey}"`);
-                    const response = await fetch('/api/resources/match', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ type: 'asset', description: searchKey })
-                    });
+/**
+ * 컴포넌트 내부에서만 Three.js Hooks (마운트) 호출
+ */
+function GLBModelWrapper({ node, path, index }: { node: SceneNode; path: string; index: number }) {
+    // [P0 Bundle-A] GPU 마운트 게이트
+    const admissionId = `preview-${node.id}`;
+    const { admitted } = useAssetAdmission(admissionId, index, true);
+    
+    const position = (node.transform?.position || [0, 0, 0]) as [number, number, number];
+    const rotation = (node.transform?.rotation || [0, 0, 0]) as [number, number, number];
+    const scale = (node.transform?.scale || [1, 1, 1]) as [number, number, number];
+    const nodeAny = node as any;
+    const matcapTextureUrl = nodeAny.matcapTexture || undefined;
 
-                    if (response.ok) {
-                        const result = await response.json();
-                        // ResourceMatcher는 filePath를 반환, 일부는 url 사용
-                        const rawModelUrl = result?.url || result?.filePath;
-                        if (rawModelUrl) {
-                            // [FIX] API 결과도 R2 CDN URL 변환 적용
-                            const cdnModelUrl = getAssetUrl(rawModelUrl);
-                            console.log(`[PreviewNode] ✅ API 매칭: "${searchKey}" → ${cdnModelUrl}`);
-                            setModelPath(cdnModelUrl);
-                            setSearchAttempted(true);
-                            return;
-                        }
-                    }
-                    // 404는 매칭 실패의 정상 케이스 — 조용히 처리
-                } catch {
-                    // API 서버 미응답 등 네트워크 에러 — 무시하고 폴백 진행
-                }
-
-                // 모든 매칭 실패 — 절차적 메시로 폴백
-                console.log(`[PreviewNode] ❌ 매칭 실패: "${searchKey}" (${nodeType})`);
-                setSearchAttempted(true);
-
-            } catch (err) {
-                console.warn(`[PreviewNode] 에셋 로드 실패 (${searchKey}):`, err);
-                setSearchAttempted(true);
-            }
-        }
-        findModel();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchKey, resolvedSSOTPath, nodeType, glContextLost]); // [F-003] resolvedSSOTPath로 변경 — SSOT 경로 변경 시에만 재실행
-
-    // [Phase 6] Interaction Handler (Hook은 조건부 return 전에 호출!)
+    // Interaction Handler
     const handleNodeClick = useCallback((e: any) => {
         e.stopPropagation();
         console.log('[Interaction] Object Clicked:', node);
-        // 커스텀 이벤트로 팝업 트리거
         window.dispatchEvent(new CustomEvent('objectClick', {
             detail: {
                 node,
@@ -472,58 +437,21 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
         }));
     }, [node]);
 
-    // 폴백 색상 결정 함수
-    const getColor = (type: string) => {
-        switch (type) {
-            case 'static_mesh': return '#444';
-            case 'interactive_prop': return '#8B5CF6';
-            case 'light': return '#FFD700';
-            case 'spawn_point': return '#00FF00';
-            default: return '#666';
-        }
-    };
-
-    // [Mod] 절차적 에셋 렌더링
-    if (proceduralData) {
-        return (
-            <mesh position={position} rotation={rotation} scale={scale} castShadow receiveShadow>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshStandardMaterial color={proceduralData.color} />
-            </mesh>
-        );
-    }
-
-    // [P0 Bundle-A] GPU 마운트 게이트 — modelPath가 있을 때만 활성화
-    const admissionId = `preview-${node.id}`;
-    const { admitted, onLoaded: admissionLoaded, onFailed: admissionFailed } = useAssetAdmission(admissionId, index, !!modelPath);
-
-    // GLB 모델이 있으면 게이트 확인 후 로드
-    if (modelPath) {
-        if (!admitted) {
-            // 게이트 대기 중 — 와이어프레임 플레이스홀더
-            return <PlaceholderBox position={position} scale={scale} color="#00BFFF" />;
-        }
-        return (
-            <Suspense fallback={<PlaceholderBox position={position} scale={scale} color="#8B5CF6" />}>
-                <GLBModel path={modelPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapTextureUrl} />
-            </Suspense>
-        );
+    if (!admitted) {
+        // 마운트 큐 대기 중
+        return <PlaceholderBox position={position} scale={scale} color="#00BFFF" />;
     }
 
     return (
-        <mesh
-            position={position}
-            rotation={rotation}
-            scale={scale}
-            castShadow
-            receiveShadow
-            onClick={handleNodeClick} // Interaction
+        <group 
+            onClick={handleNodeClick}
             onPointerOver={() => document.body.style.cursor = 'pointer'}
             onPointerOut={() => document.body.style.cursor = 'default'}
         >
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color={getColor(node.type)} />
-        </mesh>
+            <Suspense fallback={<PlaceholderBox position={position} scale={scale} color="#8B5CF6" />}>
+                <GLBModel path={path} position={position} rotation={rotation} scale={scale} matcapUrl={matcapTextureUrl} />
+            </Suspense>
+        </group>
     );
 }
 
@@ -933,9 +861,11 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
             )}
 
             {/* [v5.0] 점진적 렌더링 — visibleCount만큼만 마운트 */}
-            {visibleNodes.map((node, index) => (
-                <PreviewNode key={`${node.id}-${index}`} node={node as SceneNode} index={index} />
-            ))}
+            {visibleNodes.map((node, index) => {
+                const nodeAny = node as any;
+                const safeKey = node.id ?? `${node.name}:${nodeAny.modelUrl}:${node.transform?.position?.join(',')}`;
+                return <PreviewNode key={safeKey} node={node as SceneNode} index={index} />;
+            })}
         </group>
     );
 }

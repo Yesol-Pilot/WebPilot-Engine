@@ -1,6 +1,21 @@
 {
-    "lastUpdated": "2026-03-06T17:09:17+09:00",
+    "lastUpdated": "2026-03-11T10:30:00+09:00",
     "pushHistory": [
+        {
+            "timestamp": "2026-03-11T10:30:00+09:00",
+            "commits": [
+                {
+                    "hash": "c267fb4",
+                    "message": "fix(P0): F-001~F-004 통합 패치 — Context Lost 진단+안정화, SSOT 차단, 오브젝트 상한",
+                    "filesChanged": 3,
+                    "insertions": 51,
+                    "deletions": 14
+                }
+            ],
+            "totalCommits": 1,
+            "summary": "[fix] F-001 Canvas Context Lost (powerPreference default), F-003 SSOT path 우선, F-002 배포 검증 로그, F-004 MITOSIS 0.85 + MAX_COMMIT_OBJECTS 20",
+            "category": ["fix"]
+        },
         {
             "timestamp": "2026-03-06T17:09:17+09:00",
             "commits": [

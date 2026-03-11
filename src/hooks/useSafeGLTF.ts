@@ -38,7 +38,7 @@ const LEGACY_GLB_BLACKLIST = [
 /**
  * 블랙리스트 체크 — 경로에 Legacy GLB 파일명이 포함되어 있는지 확인
  */
-function isBlacklistedLegacyGLB(path: string): boolean {
+export function isBlacklistedLegacyGLB(path: string): boolean {
     return LEGACY_GLB_BLACKLIST.some(name => path.includes(name));
 }
 
