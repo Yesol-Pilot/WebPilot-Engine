@@ -858,11 +858,10 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
     // 원본 prompt에서 환경 에셋 직접 매칭
     const [directEnvironmentMatch, setDirectEnvironmentMatch] = useState<string | null>(null);
 
-    // [v8.4] 점진적 로딩 완화(Progressive Loading) — R2 다운로드 병목 완화 적용 (API 최대 20개 지원)
-    // 한 번에 너무 많은 요청이 가면 브라우저 커넥션 제한(6개) 및 GPU 업로드 시 VRAM 폭증 발생
-    // v8.4에서 VRAM 방어가 견고해졌으므로 템포를 상향 (4개씩 1.5초 간격)
-    const BATCH_SIZE = 4;  // [v8.4] 2→4: 로딩 체감 속도 향상
-    const BATCH_DELAY_MS = 1500; // [v8.4] 3000→1500: 업로드 인터벌 단축
+    // [v8.4→P0 Fix] 점진적 로딩 — Context Lost 방지를 위해 보수적 설정 복원
+    // GPU에 한꺼번에 업로드되는 GLB 수를 최소화하여 VRAM 폭증 방지
+    const BATCH_SIZE = 2;  // [P0 Fix] 4→2: Context Lost 방지 최우선
+    const BATCH_DELAY_MS = 3000; // [P0 Fix] 1500→3000: GPU 업로드 간격 확대
     const [visibleCount, setVisibleCount] = useState(Math.min(BATCH_SIZE, nodes.length));
 
     // 노드가 변경될 때 점진적 로딩 재시작
@@ -998,6 +997,23 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
     const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
     const [contextLost, setContextLost] = useState(false); // [Fix] WebGL Context Lost 방어 상태
 
+    // [P0 Fix] HDRI/Environment 지연 마운트 — GLB 노드가 먼저 GPU에 안착한 후 HDRI 로드
+    // isGenerating→false 전환 시 모든 리소스가 동시 마운트되면서 VRAM 폭증 → Context Lost 발생
+    const [hdriReady, setHdriReady] = useState(false);
+    useEffect(() => {
+        // isGenerating이 true로 전환되면 hdriReady 초기화
+        if (isGenerating || effectiveIsEmpty) {
+            setHdriReady(false);
+            return;
+        }
+        // isGenerating=false가 되면 5초 후 HDRI 마운트 허용
+        const timer = setTimeout(() => {
+            setHdriReady(true);
+            console.log('[PreviewCanvas] 🌅 HDRI 마운트 지연 완료 — Environment 활성화');
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [isGenerating, effectiveIsEmpty]);
+
     // [Phase 6] 오브젝트 클릭 이벤트 리스너
     useEffect(() => {
         const handleObjectClick = (e: CustomEvent) => {
@@ -1105,9 +1121,8 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                             />
 
 
-                            {/* [v5.1 Fix] 환경맵 — 빈 씬/로딩 중에는 마운트하지 않음 (VRAM 절약) */}
-                            {/* [v7.0] skybox가 있을 때만 Environment 마운트 — preset 기본 HDR 로드 제거로 VRAM 절약 */}
-                            {!effectiveIsEmpty && !isGenerating && skyboxUrl && (
+                            {/* [P0 Fix] HDRI 지연 마운트 — GLB 로드 후 5초 대기 후 Environment 마운트 */}
+                            {!effectiveIsEmpty && !isGenerating && skyboxUrl && hdriReady && (
                                 <Environment
                                     files={skyboxUrl}
                                     background={true}
@@ -1124,8 +1139,8 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                                 <PreviewNodes nodes={allNodes} prompt={prompt} />
                             )}
 
-                            {/* [Phase 4] 파티클 시스템 - 에이전트가 테마에 맞게 결정 */}
-                            {aiParticles?.type && aiParticles.type !== 'none' && (
+                            {/* [P0 Fix] 파티클도 HDRI처럼 지연 마운트 — GPU 부하 분산 */}
+                            {hdriReady && aiParticles?.type && aiParticles.type !== 'none' && (
                                 <ParticleSystem
                                     type={aiParticles.type}
                                     density={aiParticles.density ?? 0.5}
