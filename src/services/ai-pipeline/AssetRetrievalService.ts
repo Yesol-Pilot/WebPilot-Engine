@@ -19,14 +19,8 @@ import { AssetManager } from '../AssetManager';
 import { VectorSearchService } from '../VectorSearchService';
 import { MissingResourceTracker } from '../MissingResourceTracker';
 
-// [F-005] Legacy GLB 방어 블랙리스트 (서버/클라이언트 범용 사용을 위해 이중 정의 허용)
-const LEGACY_GLB_BLACKLIST = [
-    'babylon-assets_WalkingLady.glb',
-];
-
-function isBlacklistedLegacyGLB(path: string): boolean {
-    return LEGACY_GLB_BLACKLIST.some(name => path.includes(name));
-}
+// [F-005] Legacy GLB 방어 블랙리스트 — 공용 util에서 import (이중 정의 제거)
+import { isBlacklistedLegacyGLB } from '@/utils/legacyGLBBlacklist';
 
 // ============================================================
 // Zod 스키마 정의
@@ -155,6 +149,13 @@ export const AssetRetrievalService = {
         const deduplicatedResults = zoneResults.map(zoneResult => {
             const deduplicatedAssets = zoneResult.assets.filter(asset => {
                 const filePath = asset.file_path;
+
+                // [P1 Fix] Legacy GLB 블랙리스트 — 선정 단계에서 즉시 차단
+                if (isBlacklistedLegacyGLB(filePath)) {
+                    console.warn(`[AssetRetrieval] 🏚️ 블랙리스트 스킵: ${filePath}`);
+                    removedCount++;
+                    return false;
+                }
 
                 // Procedural 에셋은 중복 허용
                 if (filePath.startsWith('__PROCEDURAL__')) {

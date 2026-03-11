@@ -22,25 +22,15 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as THREE from 'three';
 import { getAssetUrl } from '@/lib/assetConfig';
+import { isBlacklistedLegacyGLB } from '@/utils/legacyGLBBlacklist';
 
 // Draco CDN 경로
 const DRACO_CDN = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
 const KTX2_CDN = 'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/';
 
-// [F-005/F-006] Legacy GLB 블랙리스트
-// GLB v1.0(Binary glTF v1) 포맷 — Three.js GLTFLoader가 명시적으로 거부
-// 이 파일들은 preload/render 양쪽에서 즉시 스킵
-const LEGACY_GLB_BLACKLIST = [
-    'babylon-assets_WalkingLady.glb',
-    // 추후 Legacy GLB 발견 시 여기에 추가
-];
-
-/**
- * 블랙리스트 체크 — 경로에 Legacy GLB 파일명이 포함되어 있는지 확인
- */
-export function isBlacklistedLegacyGLB(path: string): boolean {
-    return LEGACY_GLB_BLACKLIST.some(name => path.includes(name));
-}
+// [F-005/F-006] Legacy GLB 블랙리스트 — 공용 util로 통합 (src/utils/legacyGLBBlacklist.ts)
+// isBlacklistedLegacyGLB는 preload 함수에서 사용
+// useSafeGLTF Hook 본문에서는 호출하지 않음 (Hook topology 고정을 위해)
 
 // DRACOLoader 싱글톤 (메모리 효율)
 let dracoLoaderInstance: DRACOLoader | null = null;
@@ -141,10 +131,10 @@ export function useSafeGLTF(path: string): GLTF {
         return null;
     }, [renderer]);
 
-    // [F-005] Legacy GLB 블랙리스트 체크 — 즉시 에러 throw → ErrorBoundary 폴백
-    if (isBlacklistedLegacyGLB(resolvedPath)) {
-        throw new Error(`[useSafeGLTF] 🏚️ Legacy GLB 블랙리스트: ${resolvedPath}`);
-    }
+    // [P0 Fix] Legacy GLB 블랙리스트 체크는 여기서 하지 않음
+    // 이유: Hook #2(useMemo)와 #3(useState) 사이에서 throw하면
+    // React Hook topology 불일치 → "Rendered fewer hooks than expected" 크래시
+    // 블랙리스트 차단은 PreviewNode(Shell) 레벨에서 수행 (390행)
 
     // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
     // [v9.0 Fix] TTL 기반 캐시 조회

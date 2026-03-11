@@ -14,7 +14,8 @@
 import { Suspense, useState, useEffect, useMemo, useRef, createContext, useContext, useCallback } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Center, Loader, useTexture } from '@react-three/drei';
-import { useSafeGLTF, isBlacklistedLegacyGLB } from '@/hooks/useSafeGLTF';
+import { useSafeGLTF } from '@/hooks/useSafeGLTF';
+import { isBlacklistedLegacyGLB } from '@/utils/legacyGLBBlacklist';
 import { useAssetAdmission } from '@/hooks/useAssetAdmission';
 import { KTX2Initializer } from '@/components/providers/KTX2Initializer';
 import * as THREE from 'three';
@@ -861,9 +862,21 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
             )}
 
             {/* [v5.0] 점진적 렌더링 — visibleCount만큼만 마운트 */}
+            {/* [P0-C Fix] key 안정화 — index/modelUrl/position fallback 제거 */}
+            {/* node.id는 upstream(agentNodes 생성)에서 항상 보장됨 */}
+            {/* assetKind를 key에 포함하여 유형 전환(gltf↔proc↔legacy) 시 강제 remount */}
             {visibleNodes.map((node, index) => {
                 const nodeAny = node as any;
-                const safeKey = node.id ?? `${node.name}:${nodeAny.modelUrl}:${node.transform?.position?.join(',')}`;
+                const resolvedPath = nodeAny.modelUrl || nodeAny.path || nodeAny.modelPath || '';
+                const assetKind = resolvedPath.includes('__PROCEDURAL__')
+                    ? 'proc'
+                    : isBlacklistedLegacyGLB(resolvedPath)
+                        ? 'legacy'
+                        : resolvedPath
+                            ? 'gltf'
+                            : 'missing';
+                // stable key: node.id(항상 존재) + assetKind(유형 전환 시 remount)
+                const safeKey = `${node.id || `fallback-${index}`}:${assetKind}`;
                 return <PreviewNode key={safeKey} node={node as SceneNode} index={index} />;
             })}
         </group>
