@@ -7,9 +7,11 @@
  * - Draco JS 디코더 강제 사용 (WASM 호환성 문제 해결)
  * - BYTES_PER_ELEMENT 에러 방지
  * - [v5.0] getAssetUrl() 자동 적용 — CDN 배포 시 자동 URL 변환
+ * - [F-006 Fix] preload 세마포어 finally 보장 + Legacy GLB 블랙리스트
  * 
  * [2026-02-02] Draco 구조적 문제 해결을 위해 생성
  * [2026-03-04] getAssetUrl 통합 — 모든 GLB 경로를 CDN URL로 자동 변환
+ * [2026-03-11] F-006 패치 — preload 큐 정체 해소 + Legacy GLB 차단
  */
 
 import { useLoader, useThree } from '@react-three/fiber';
@@ -24,6 +26,21 @@ import { getAssetUrl } from '@/lib/assetConfig';
 // Draco CDN 경로
 const DRACO_CDN = 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/';
 const KTX2_CDN = 'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets/basis/';
+
+// [F-005/F-006] Legacy GLB 블랙리스트
+// GLB v1.0(Binary glTF v1) 포맷 — Three.js GLTFLoader가 명시적으로 거부
+// 이 파일들은 preload/render 양쪽에서 즉시 스킵
+const LEGACY_GLB_BLACKLIST = [
+    'babylon-assets_WalkingLady.glb',
+    // 추후 Legacy GLB 발견 시 여기에 추가
+];
+
+/**
+ * 블랙리스트 체크 — 경로에 Legacy GLB 파일명이 포함되어 있는지 확인
+ */
+function isBlacklistedLegacyGLB(path: string): boolean {
+    return LEGACY_GLB_BLACKLIST.some(name => path.includes(name));
+}
 
 // DRACOLoader 싱글톤 (메모리 효율)
 let dracoLoaderInstance: DRACOLoader | null = null;
@@ -124,6 +141,11 @@ export function useSafeGLTF(path: string): GLTF {
         return null;
     }, [renderer]);
 
+    // [F-005] Legacy GLB 블랙리스트 체크 — 즉시 에러 throw → ErrorBoundary 폴백
+    if (isBlacklistedLegacyGLB(resolvedPath)) {
+        throw new Error(`[useSafeGLTF] 🏚️ Legacy GLB 블랙리스트: ${resolvedPath}`);
+    }
+
     // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
     // [v9.0 Fix] TTL 기반 캐시 조회
     const [isValid, setIsValid] = useState<boolean | null>(
@@ -207,6 +229,7 @@ export function useSafeGLTF(path: string): GLTF {
  * 프리로드 함수 (useGLTF.preload 대체)
  * [주의] 서버 사이드에서는 실행되지 않음 (Next.js SSR 호환성)
  * [v5.0] getAssetUrl() 자동 적용
+ * [F-006 Fix] 세마포어 finally 보장 + Legacy 블랙리스트 체크
  */
 useSafeGLTF.preload = (path: string) => {
     // [SSR 호환성] 서버 환경에서는 preload 스킵
@@ -216,6 +239,12 @@ useSafeGLTF.preload = (path: string) => {
 
     // [v5.0] CDN URL 변환
     const resolvedPath = getAssetUrl(path);
+
+    // [F-005] Legacy GLB 블랙리스트 — preload 단계에서 즉시 스킵
+    if (isBlacklistedLegacyGLB(resolvedPath)) {
+        console.warn(`[useSafeGLTF.preload] 🏚️ Legacy GLB 블랙리스트 스킵: ${resolvedPath}`);
+        return;
+    }
 
     // [Fix] 프리로드 단계에서도 헤더 검증을 강제하여 Legacy Binary 크래시 방어
     // [v5.1 Fix] R2 호환: HEAD 요청으로 존재 확인 후 프리로드
@@ -233,7 +262,9 @@ useSafeGLTF.preload = (path: string) => {
                 return;
             }
 
-            // 검증 통과 시 실제 프리로드 진행 (세마포어로 동시 로딩 제한)
+            // [F-006 Fix] 세마포어 acquire → try/finally 패턴으로 release 보장
+            // 이전: 에러 콜백에서만 release → Legacy/네트워크 에러 시 슬롯 영구 점유 가능
+            // 수정: finally로 어떤 경로든 반드시 release
             acquireLoadSlot().then(() => {
                 const loader = new GLTFLoader();
                 loader.setDRACOLoader(getDracoLoader());
@@ -241,11 +272,28 @@ useSafeGLTF.preload = (path: string) => {
                 if (ktx2LoaderInstance) {
                     loader.setKTX2Loader(ktx2LoaderInstance);
                 }
-                loader.load(resolvedPath, () => {
+
+                // [F-006 Fix] Promise 래핑으로 finally 보장
+                new Promise<void>((resolve, reject) => {
+                    loader.load(
+                        resolvedPath,
+                        () => resolve(),   // 성공
+                        undefined,         // progress
+                        (error) => reject(error) // 실패
+                    );
+                })
+                .catch((error) => {
+                    // Legacy binary, 네트워크 에러 등 — 에러 소화
+                    const msg = error?.message || String(error);
+                    if (msg.includes('Legacy binary')) {
+                        console.warn(`[useSafeGLTF.preload] 🏚️ Legacy GLB 감지 (자동 스킵): ${resolvedPath}`);
+                    } else {
+                        console.warn(`[useSafeGLTF.preload] ⚠️ 프리로드 실패: ${resolvedPath}`, error);
+                    }
+                })
+                .finally(() => {
+                    // [핵심] 성공이든 실패든 반드시 세마포어 해제
                     releaseLoadSlot();
-                }, undefined, (error) => {
-                    releaseLoadSlot();
-                    console.warn(`[useSafeGLTF] 프리로드 실패: ${resolvedPath}`, error);
                 });
             });
         })
@@ -286,4 +334,3 @@ export function initializeKTX2(renderer: THREE.WebGLRenderer): void {
     if (ktx2LoaderInstance) return; // 이미 초기화됨
     getKTX2Loader(renderer);
 }
-

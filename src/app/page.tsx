@@ -572,8 +572,12 @@ export default function CreatorStudioPage() {
                 isEmpty={previewNodes.length === 0}
                 prompt={prompt}
               />
-              {/* Background Asset Preloader */}
-              {previewNodes.length > 0 && <AssetPreloader nodes={previewNodes} />}
+              {/* [F-006 Fix] AssetPreloader 임시 비활성화
+                * 원인: preload가 useSafeGLTF 세마포어(MAX=2)를 선점하여
+                *       visible 렌더링이 큐에서 정체 (active=0, inflight=3, queue=17)
+                * visible 로드는 PreviewNodes 점진적 배치가 직접 처리함
+                */}
+              {/* {previewNodes.length > 0 && <AssetPreloader nodes={previewNodes} />} */}
             </div>
 
             {/* 월드 입장 버튼 - Floating */}
