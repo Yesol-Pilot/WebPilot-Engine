@@ -355,10 +355,11 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
     // [v4.1 Fix] VRAM 누수 및 API 무한 호출 방지를 위한 원시값 추출
     // node(객체 참조) 전체를 의존성으로 두면 물리 엔진이나 부모 컴포넌트 변화 시 무한 재렌더 및 핑퐁 현상이 발생함.
     const searchKey = node.description || node.name || node.id;
-    const nodeModelUrl = nodeAny.modelUrl;
+    // [F-003 Fix] SSOT 우선순위 해소 — modelUrl뿐 아니라 path/modelPath/filePath도 체크
+    const resolvedSSOTPath = nodeAny.modelUrl || nodeAny.path || nodeAny.modelPath || nodeAny.filePath || null;
     const nodeType = node.type;
 
-    // 에셋 검색: modelUrl → 로컬 → API 폴백
+    // 에셋 검색: SSOT path → API 폴백 (SSOT가 있으면 API 검색 완전 차단)
     useEffect(() => {
         // [v6.0] Context Lost 상태면 GPU 업로드 불가 → 로딩 스킵
         if (glContextLost) {
@@ -367,9 +368,10 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
         }
         async function findModel() {
             try {
-                // 0단계: modelUrl이 직접 지정된 경우 최우선 사용
-                if (nodeModelUrl) {
-                    const rawUrl = nodeModelUrl;
+                // 0단계: SSOT에서 에셋 경로가 resolve된 경우 → 최우선 사용, API 재검색 금지
+                if (resolvedSSOTPath) {
+                    const rawUrl = resolvedSSOTPath;
+                    console.log(`[PreviewNode] 🔒 SSOT path 사용: "${searchKey}" → ${rawUrl}`);
 
                     // [Mod] Procedural Asset Handling (AI Pipeline)
                     if (rawUrl.includes('__PROCEDURAL__')) {
@@ -394,7 +396,7 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
                                 ? `/models/${rawUrl}`
                                 : `/models/${rawUrl}.glb`;
                     const modelUrl = getAssetUrl(normalizedPath);
-                    console.log(`[PreviewNode] 📌 직접 지정: ${searchKey} → ${modelUrl}`);
+                    console.log(`[PreviewNode] 📌 SSOT 확정: ${searchKey} → ${modelUrl}`);
                     setModelPath(modelUrl);
                     setSearchAttempted(true);
                     return;
@@ -454,7 +456,7 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
         }
         findModel();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchKey, nodeModelUrl, nodeType, glContextLost]); // [v6.0] glContextLost 추가 — Context 복구 시 자동 재시도
+    }, [searchKey, resolvedSSOTPath, nodeType, glContextLost]); // [F-003] resolvedSSOTPath로 변경 — SSOT 경로 변경 시에만 재실행
 
     // [Phase 6] Interaction Handler (Hook은 조건부 return 전에 호출!)
     const handleNodeClick = useCallback((e: any) => {
@@ -883,7 +885,9 @@ function PreviewNodes({ nodes, prompt }: { nodes: SceneNode[], prompt?: string }
     // 노드 변경 시 1회만 로그 출력
     useEffect(() => {
         if (!hasLoggedRef.current && nodes.length > 0) {
+            // [F-002] 설정값 런타임 로그 — 배포 반영 여부 검증용
             console.log(`[PreviewNodes] 📦 점진적 로딩 시작: 총 ${nodes.length}개, ${BATCH_SIZE}개씩 ${BATCH_DELAY_MS}ms 간격`);
+            console.log(`[PreviewNodesConfig]`, { BATCH_SIZE, BATCH_DELAY_MS, BUILD_ID: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA || 'local' });
             hasLoggedRef.current = true;
         }
     }, [nodes]);
@@ -1080,23 +1084,40 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                     camera={{ position: [5, 5, 5], fov: 50 }}
                     dpr={1} // [v8.0 Fix] VRAM 초과 방지: 고해상도라도 1로 고정하여 Framebuffer 크기 최적화. shadows 제거.
                     onCreated={({ gl }) => {
+                        // [F-001] CanvasProbe — 진단 로그
+                        const ctx = gl.getContext();
+                        console.log('[CanvasProbe] 🎯 Canvas created', {
+                            isContextLost: ctx.isContextLost?.(),
+                            maxTextureSize: ctx.getParameter?.(ctx.MAX_TEXTURE_SIZE),
+                            maxRenderbufferSize: ctx.getParameter?.(ctx.MAX_RENDERBUFFER_SIZE),
+                            drawingBuffer: [ctx.drawingBufferWidth, ctx.drawingBufferHeight],
+                        });
+
                         gl.domElement.addEventListener('webglcontextlost', (e) => {
                             e.preventDefault();
-                            console.error('[PreviewCanvas] 💥 THREE.WebGLRenderer: Context Lost. VRAM 초과됨.');
+                            console.error('[CanvasProbe] 💥 webglcontextlost', {
+                                textures: gl.info?.memory?.textures,
+                                geometries: gl.info?.memory?.geometries,
+                                programs: gl.info?.programs?.length,
+                            });
                             setContextLost(true);
                         }, false);
                         gl.domElement.addEventListener('webglcontextrestored', () => {
-                            console.log('[PreviewCanvas] 🔧 THREE.WebGLRenderer: Context Restored.');
+                            console.warn('[CanvasProbe] 🔧 webglcontextrestored');
                             setContextLost(false);
                         }, false);
+                        gl.domElement.addEventListener('webglcontextcreationerror', (e) => {
+                            console.error('[CanvasProbe] ❌ webglcontextcreationerror', e);
+                        });
                     }}
                     gl={{
                         toneMappingExposure: exposureValue,
                         antialias: false, // [v5.2 Fix] MSAA 비활성화 — VRAM 50%+ 절약 (4x MSAA 렌더버퍼 제거)
-                        powerPreference: 'high-performance',
+                        powerPreference: 'default', // [F-001 Fix] high-performance → default: 비통합 GPU 요구 제거로 Context Lost 방지
                         failIfMajorPerformanceCaveat: false,
                         stencil: false,
                         depth: true,
+                        alpha: false, // [F-001 Fix] 알파 채널 비활성화 — 메모리 절약
                         preserveDrawingBuffer: false, // [v5.0 Fix] VRAM 절약: 매 프레임 백버퍼 보존 비활성화
                     }}
                 >

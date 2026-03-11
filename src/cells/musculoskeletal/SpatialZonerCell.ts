@@ -36,7 +36,9 @@ const COMPLEXITY_THRESHOLD = {
 };
 
 // MS1.5: 세포 분열 임계값
-const MITOSIS_COMPLEXITY = 0.7; // 복잡도 0.7 초과 시 분열
+// [F-004 Fix] 0.7→0.85: 과도한 분열로 인한 오브젝트 폭증 방지 (9→31개 사례 차단)
+const MITOSIS_COMPLEXITY = 0.85; // 복잡도 0.85 초과 시 분열
+const MAX_FINAL_OBJECTS = 20;    // [F-004] 세포 분열 후 최종 결과물 상한선
 
 export class SpatialZonerCell extends BaseCell {
     constructor() {

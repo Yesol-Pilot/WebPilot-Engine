@@ -40,6 +40,7 @@ import { getUnifiedStore } from '@/store/unifiedStore';
 // ── 시공 상수 ──
 const MAX_PLACEMENT_RETRIES = 10;   // 위치 재탐색 최대 횟수 상향 (3->10)
 const PLACEMENT_ALARM_THRESHOLD = 0.5;  // 배치 성공률 임계치 (50%)
+const MAX_COMMIT_OBJECTS = 20;  // [F-004 Fix] SSOT 커밋 시 최대 오브젝트 수 상한 — GPU 과부하 방지
 
 // ══════════════════════════════════════════════════════════
 // Seeded PRNG — 결정적 난수 생성
@@ -473,11 +474,24 @@ export class ConstructorSquad extends BaseCell {
      * SSOT(UnifiedStore)에 최종 결과 커밋
      */
     private commitToStore(placed: PlacedObject[]): void {
+        // [F-004 Fix] 오브젝트 수 상한 적용 — GPU 과부하 방지
+        let finalPlaced = placed;
+        if (placed.length > MAX_COMMIT_OBJECTS) {
+            console.warn(
+                `[ConstructorSquad] ⚠️ 오브젝트 ${placed.length}개 → ${MAX_COMMIT_OBJECTS}개로 제한 (GPU 보호)`
+            );
+            // 우선순위: focal > structural > ambient
+            const priority: Record<string, number> = { focal: 0, structural: 1, ambient: 2 };
+            finalPlaced = [...placed]
+                .sort((a, b) => (priority[a.category] ?? 2) - (priority[b.category] ?? 2))
+                .slice(0, MAX_COMMIT_OBJECTS);
+        }
+
         // [Probe] 장애 판별 로그 — pre-commit
-        console.log(`[Probe] pre-commit objects = ${placed.length}`);
+        console.log(`[Probe] pre-commit objects = ${finalPlaced.length}`);
         try {
             const store = getUnifiedStore();
-            const sceneObjects = placed.map(obj => ({
+            const sceneObjects = finalPlaced.map(obj => ({
                 id: obj.id,
                 path: obj.path,
                 description: obj.name,
@@ -491,7 +505,7 @@ export class ConstructorSquad extends BaseCell {
             store.setAIScene(sceneObjects);
             // [Probe] 장애 판별 로그 — post-commit
             console.log(`[Probe] post-commit done (${sceneObjects.length}개 커밋 완료)`);
-            console.log(`[ConstructorSquad] 💾 SSOT 커밋: ${placed.length}개 오브젝트`);
+            console.log(`[ConstructorSquad] 💾 SSOT 커밋: ${finalPlaced.length}개 오브젝트`);
         } catch (error: any) {
             console.error(`[ConstructorSquad] ❌ SSOT 커밋 실패: ${error.message}`);
         }
