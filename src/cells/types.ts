@@ -50,10 +50,12 @@ export type SignalType =
     | 'ASSET_FOUND'       // 에셋 발견
     | 'PLACEMENT_DONE'    // 배치 완료 → 감각 분대 시작
     | 'RENDER_READY'      // 렌더링 준비 완료
-    | 'ALARM'             // 면역 경고 — 의미론적/심미적 실패만 (물리적 충돌은 ReflexArc 전결)
+    | 'ALARM'             // 시스템 경보 (배치 실패율 초과 등 — 면역 실패와 분리)
     | 'PARTIAL_REGEN'     // 부분 재생성 (severity < 0.8, 의미론적 이슈)
     | 'FULL_REPLAN'       // 전면 재설계 (severity ≥ 0.8, 전략적 실패)
     | 'APPROVED'          // 최종 승인
+    | 'VALIDATION_REQUEST' // F-011: Commander → 면역 분대 (검증 요청)
+    | 'VALIDATION_FAILED'  // F-011: 면역 → Commander (검증 실패 — ALARM과 독립)
     | 'HEARTBEAT';        // 상태 보고
 
 // ── 신호 우선순위 ──
@@ -276,6 +278,7 @@ export interface AssetsResolvedPayload extends BatchesPayload {
 }
 
 // 신호 상수 (오타 방지)
+// ⚠️ F-011 보강: 모든 시그널은 고유 문자열이어야 함 (switch 라우팅 충돌 방지)
 export const SIGNALS = {
     PLAN_COMPLETED: 'PLAN_COMPLETED',
     MANIFEST_COMPLETED: 'MANIFEST_COMPLETED',
@@ -283,12 +286,12 @@ export const SIGNALS = {
     ASSETS_RESOLVED: 'ASSETS_RESOLVED',
     PLACEMENT_DONE: 'PLACEMENT_DONE',
     ALARM: 'ALARM',
-    // MS3: 면역 분대
-    VALIDATION_REQUEST: 'APPROVED',     // Commander → 면역 분대 (검증 요청)
-    VALIDATION_PASSED: 'APPROVED',      // 면역 → Commander (통과)
-    VALIDATION_FAILED: 'ALARM',         // 면역 → Commander (실패 = ALARM)
+    // MS3: 면역 분대 — 각 시그널이 고유 문자열 (F-011 보강)
+    VALIDATION_REQUEST: 'VALIDATION_REQUEST', // Commander → 면역 분대 (검증 요청)
+    VALIDATION_PASSED: 'APPROVED',            // 면역 → Commander (통과 = 기존 APPROVED 호환)
+    VALIDATION_FAILED: 'VALIDATION_FAILED',   // 면역 → Commander (실패 — ALARM과 독립!)
     // MS3: 감각 분대
-    RENDER_READY: 'RENDER_READY',       // Commander → 감각 분대 (최종 승인 후)
-    SENSORY_DONE: 'HEARTBEAT',          // 감각 분대 → 로그 (완료 보고)
+    RENDER_READY: 'RENDER_READY',             // Commander → 감각 분대 (최종 승인 후)
+    SENSORY_DONE: 'HEARTBEAT',                // 감각 분대 → 로그 (완료 보고)
 } as const satisfies Record<string, SignalType>;
 

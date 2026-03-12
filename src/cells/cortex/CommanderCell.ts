@@ -29,7 +29,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { BaseCell } from '../BaseCell';
-import type { NeuralSignal, ScenarioData, NarrativeResult } from '../types';
+import type { NeuralSignal, ScenarioData, NarrativeResult, CellType } from '../types';
 import { SIGNALS } from '../types';
 import { IntentAnalystCell } from '../frontal/IntentAnalystCell';
 import { LoreWeaverCell } from '../frontal/LoreWeaverCell';
@@ -63,6 +63,10 @@ export class CommanderCell extends BaseCell {
     private currentNarrative: NarrativeResult | null = null;  // MS1.5: 서사적 DNA 보존
     private currentPrompt: string = '';
     private traceId: string = '';
+
+    // F-011 보강: 면역 검증에 전달할 배치 결과 (layout)
+    // ConstructorSquad가 PLACEMENT_DONE으로 보내는 데이터를 저장하여 면역 중계 시 사용
+    private currentPlacedObjects: any[] = [];
 
     // MS3: 면역 핸드쉐이크 추적
     private pendingImmuneCells: Set<string> = new Set();
@@ -169,7 +173,7 @@ export class CommanderCell extends BaseCell {
                 break;
 
             case SIGNALS.PLACEMENT_DONE:
-                this.handlePlacementDone(signal);
+                await this.handlePlacementDone(signal);
                 break;
 
             case SIGNALS.VALIDATION_PASSED:
@@ -342,8 +346,13 @@ export class CommanderCell extends BaseCell {
      * SemanticNK + AestheticMacro 2개 모두 APPROVED 수신 시 최종 승인.
      * 10초 타임아웃 시 안전장치로 자동 승인.
      */
-    private handlePlacementDone(signal: NeuralSignal): void {
+    private async handlePlacementDone(signal: NeuralSignal): Promise<void> {
         const { placedCount, placementRate, stats } = signal.payload;
+
+        // F-011 보강: 배치된 오브젝트 목록을 Commander에 저장 (면역 중계용)
+        if (signal.payload.placed) {
+            this.currentPlacedObjects = signal.payload.placed;
+        }
 
         console.log(
             `[Commander] 🏗️ 시공 완료 수신: ${placedCount}개 배치 ` +
@@ -367,15 +376,67 @@ export class CommanderCell extends BaseCell {
                 `[Commander] 🛡️ 면역 검증 대기 시작: ${Array.from(IMMUNE_CELLS).join(', ')}`
             );
 
-            // 타임아웃 안전장치: 10초 내 미응답 시 자동 승인
+            // ── F-011 보강: 면역 세포에 PLACEMENT_DONE 중계 ──
+            // 면역 세포가 검증을 시작하려면 layout+scenario 컨텍스트가 필요
+            // 명시적 면역 검증 DTO를 구성하여 개별 전송 (BROADCAST 아님)
+            const immunePayload = {
+                // 배치 결과 통계 (ConstructorSquad 원본)
+                placedCount,
+                placementRate,
+                stats: { ...stats },
+                // 면역 검증에 필요한 컨텍스트 (Commander 보유)
+                layout: {
+                    objects: this.currentPlacedObjects,
+                },
+                scenario: this.currentScenario ? {
+                    id: this.currentScenario.id,
+                    title: this.currentScenario.prompt?.slice(0, 50),
+                    description: this.currentScenario.prompt,
+                    environmentType: this.currentScenario.environment?.isOutdoor ? 'outdoor' : 'indoor',
+                    timeOfDay: this.currentScenario.environment?.time || 'day',
+                    weather: this.currentScenario.environment?.weather,
+                    mood: this.currentScenario.mood ? [this.currentScenario.mood] : [],
+                    themes: [this.currentScenario.theme || 'Fantasy'],
+                    requiredObjects: this.currentScenario.focalPoints || [],
+                    suggestedObjects: this.currentScenario.elements?.map((e: any) => e.name) || [],
+                } : null,
+                traceId: this.traceId,
+            };
+
+            // 병렬 전송: 면역 셀 간 의존성 없으므로 Promise.all 사용
+            try {
+                const relayPromises = Array.from(IMMUNE_CELLS).map(cellType =>
+                    this.transmit(cellType as CellType, SIGNALS.PLACEMENT_DONE, immunePayload)
+                        .catch(err => {
+                            console.warn(
+                                `[Commander] ⚠️ 면역 중계 실패: ${cellType} — ${(err as Error).message}`
+                            );
+                        })
+                );
+                await Promise.all(relayPromises);
+                console.log(
+                    `[Commander] 📡 면역 세포 중계 완료: ${Array.from(IMMUNE_CELLS).join(', ')}`
+                );
+            } catch (err: any) {
+                console.error(`[Commander] ❌ 면역 중계 전체 실패: ${err.message}`);
+            }
+
+            // 타임아웃 안전장치: 10초 내 미응답 시 보호 처리
+            // ⚠️ F-011 보강: 경고가 누적된 경우 단순 자동 승인이 아닌 경고 포함 승인
             this.immuneTimeoutId = setTimeout(() => {
                 if (this.pendingImmuneCells.size > 0 && !this.immuneResolved) {
                     console.warn(
                         `[Commander] ⏰ 면역 타임아웃 (${IMMUNE_TIMEOUT_MS}ms)! ` +
-                        `미응답: ${Array.from(this.pendingImmuneCells).join(', ')} → 자동 승인`
+                        `미응답: ${Array.from(this.pendingImmuneCells).join(', ')} ` +
+                        `(누적 경고: ${this.immuneWarnings.length}건)`
                     );
                     this.pendingImmuneCells.clear();
-                    this.handleFinalApproved();
+                    // 경고가 있으면 handleFinalApprovedWithWarnings, 없으면 handleFinalApproved
+                    if (this.immuneWarnings.length > 0) {
+                        this.handleFinalApprovedWithWarnings();
+                    } else {
+                        this.handleFinalApproved();
+                    }
                 }
             }, IMMUNE_TIMEOUT_MS);
         }
