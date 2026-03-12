@@ -160,7 +160,19 @@ export class ReflexArc {
             }
         }
 
-        // ── 4단계: Reject (모든 수단 소진) ──
+        // ── 4단계: TELEPORT (비국소 재탐색 — 밀집 영역 탈출) ──
+        // TELEPORT는 무작위 배치가 아니라, 원래 위치에서 점진적으로
+        // 탐색 반경을 넓혀가는 비국소 재탐색 연산자.
+        // 원본 스케일로 복원하여 시도 (SHRINK된 상태가 아닌 원래 크기).
+        const teleportScale: [number, number, number] = [...scale]; // 원본 스케일 복원
+        const teleportResult = this.tryTeleport(
+            candidatePosition, teleportScale, rotation, objectId, iterations, startTime
+        );
+        if (teleportResult) {
+            return teleportResult;
+        }
+
+        // ── 5단계: Reject (모든 수단 소진) ──
         console.warn(
             `[ReflexArc] ❌ 배치 거부: ${objectId || 'unknown'} ` +
             `pos=[${candidatePosition}] ${iterations}회 시도 (${(performance.now() - startTime).toFixed(1)}ms)`
@@ -260,5 +272,115 @@ export class ReflexArc {
             }
         }
         return max;
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // TELEPORT 오퍼레이터 — 비국소 재탐색 (밀집 영역 탈출)
+    // ══════════════════════════════════════════════════════════
+
+    /**
+     * TELEPORT 상수
+     */
+    private static readonly TELEPORT_MAX_ATTEMPTS = 12;     // 최대 TELEPORT 시도
+    private static readonly TELEPORT_DEFAULT_BOUND = 15;    // 기본 씬 바운드 (OBB 없을 때)
+    private static readonly TELEPORT_SEARCH_TIERS = [
+        { label: '근접', radiusMultiplier: 0.3 },   // 원점 근처 30% 반경
+        { label: '중간', radiusMultiplier: 0.6 },   // 원점 근처 60% 반경
+        { label: '전역', radiusMultiplier: 1.0 },   // 전체 씬 바운드
+    ] as const;
+
+    /**
+     * TELEPORT — 밀집 구역에서 비국소적으로 빈 공간을 탐색
+     *
+     * 전략:
+     * 1. 씬 바운드를 OBBCollisionManager에서 추정
+     * 2. 3단계 반경(근접 → 중간 → 전역)으로 확장하며 탐색
+     * 3. 각 단계에서 무작위 후보 위치를 생성하고 충돌 검사
+     * 4. 빈 공간을 찾으면 즉시 반환 (원본 스케일 유지)
+     *
+     * @returns ReflexResult (성공 시) 또는 null (실패 시)
+     */
+    private tryTeleport(
+        originalPosition: [number, number, number],
+        scale: [number, number, number],
+        rotation: [number, number, number],
+        objectId: string | undefined,
+        previousIterations: number,
+        startTime: number
+    ): ReflexResult | null {
+        const bounds = this.collisionManager.getSceneBounds();
+
+        // 씬 바운드 기반 탐색 범위 결정
+        const halfBound = ReflexArc.TELEPORT_DEFAULT_BOUND;
+        const sceneMin = bounds ? bounds.min : [-halfBound, 0, -halfBound] as [number, number, number];
+        const sceneMax = bounds ? bounds.max : [halfBound, halfBound, halfBound] as [number, number, number];
+
+        // 바운드를 20% 확장하여 경계 외곽도 탐색 가능하게
+        const rangeX = (sceneMax[0] - sceneMin[0]) * 1.2;
+        const rangeZ = (sceneMax[2] - sceneMin[2]) * 1.2;
+        const centerX = (sceneMax[0] + sceneMin[0]) / 2;
+        const centerZ = (sceneMax[2] + sceneMin[2]) / 2;
+
+        let teleportAttempts = 0;
+
+        for (const tier of ReflexArc.TELEPORT_SEARCH_TIERS) {
+            const attemptsPerTier = Math.ceil(
+                ReflexArc.TELEPORT_MAX_ATTEMPTS / ReflexArc.TELEPORT_SEARCH_TIERS.length
+            );
+
+            for (let i = 0; i < attemptsPerTier; i++) {
+                teleportAttempts++;
+                
+                // 각 단계의 반경에 따라 후보 위치 생성
+                // 황금 각도(Golden Angle) 기반 분포로 균일하게 탐색
+                const angle = (teleportAttempts * 2.399963) % (2 * Math.PI); // 황금 각도 ≈ 137.5°
+                const radiusFraction = (i + 1) / attemptsPerTier; // 0~1 선형 분포
+                const searchRadius = tier.radiusMultiplier * radiusFraction;
+
+                const candidateX = centerX + Math.cos(angle) * searchRadius * (rangeX / 2);
+                const candidateZ = centerZ + Math.sin(angle) * searchRadius * (rangeZ / 2);
+                // Y축은 원본 유지 (바닥면 y=0 기준)
+                const candidateY = originalPosition[1];
+
+                const testPos: [number, number, number] = [candidateX, candidateY, candidateZ];
+
+                if (this.collisionManager.canPlace(testPos, scale, rotation)) {
+                    // 빈 공간 발견! 원래 위치로부터의 거리 계산
+                    const dx = candidateX - originalPosition[0];
+                    const dz = candidateZ - originalPosition[2];
+                    const teleportDistance = Math.sqrt(dx * dx + dz * dz);
+
+                    console.log(
+                        `[ReflexArc] 🔀 TELEPORT (${tier.label}): ${objectId || 'unknown'} ` +
+                        `[${originalPosition.map(v => v.toFixed(2))}] → ` +
+                        `[${testPos.map(v => v.toFixed(2))}] ` +
+                        `거리=${teleportDistance.toFixed(2)} (${teleportAttempts}회 시도, ` +
+                        `${(performance.now() - startTime).toFixed(1)}ms)`
+                    );
+
+                    const totalIterations = previousIterations + teleportAttempts;
+                    const durationMs = performance.now() - startTime;
+
+                    return {
+                        allowed: true,
+                        originalPosition,
+                        finalPosition: testPos,
+                        finalScale: scale,
+                        action: 'TELEPORT',
+                        iterations: totalIterations,
+                        durationMs,
+                        teleportDistance,
+                        teleportAttempts,
+                    };
+                }
+            }
+        }
+
+        // 모든 TELEPORT 시도 실패
+        console.warn(
+            `[ReflexArc] 🔀 TELEPORT 실패: ${objectId || 'unknown'} ` +
+            `${teleportAttempts}회 시도 후 빈 공간 없음`
+        );
+        return null;
     }
 }

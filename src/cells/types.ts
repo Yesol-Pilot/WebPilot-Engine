@@ -220,12 +220,15 @@ export interface AssetBatchItem {
 export interface ReflexResult {
     allowed: boolean;             // 배치 가능 여부
     originalPosition: [number, number, number];
-    finalPosition: [number, number, number];   // Nudge 적용 후
+    finalPosition: [number, number, number];   // Nudge/Teleport 적용 후
     finalScale: [number, number, number];      // Shrink 적용 후
-    action: 'PASS' | 'NUDGE' | 'SHRINK' | 'REJECT';
+    action: 'PASS' | 'NUDGE' | 'SHRINK' | 'TELEPORT' | 'REJECT';
     penetrationDepth?: number;    // MTV 크기
-    iterations: number;           // Nudge/Shrink 시도 횟수
+    iterations: number;           // Nudge/Shrink/Teleport 시도 횟수
     durationMs: number;           // 처리 시간 (ms)
+    // TELEPORT 디버깅용 메타데이터
+    teleportDistance?: number;    // 원래 위치에서 이동한 거리
+    teleportAttempts?: number;    // TELEPORT 단계에서의 시도 횟수
 }
 
 // 시맨틱 스케일 정책 — 역할별 α 계수

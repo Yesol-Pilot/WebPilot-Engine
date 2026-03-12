@@ -360,6 +360,39 @@ export class OBBCollisionManager {
     }
 
     /**
+     * 현재 등록된 OBB들로 씬 바운드를 추정
+     * TELEPORT 오퍼레이터가 빈 공간을 탐색할 범위를 결정하는 데 사용
+     * @returns min/max 좌표 또는 OBB가 없으면 null
+     */
+    getSceneBounds(): { min: [number, number, number]; max: [number, number, number] } | null {
+        if (this.obbs.size === 0) return null;
+
+        let minX = Infinity, minY = Infinity, minZ = Infinity;
+        let maxX = -Infinity, maxY = -Infinity, maxZ = -Infinity;
+
+        for (const [, obb] of this.obbs) {
+            const cx = obb.center.x;
+            const cy = obb.center.y;
+            const cz = obb.center.z;
+            const hx = obb.halfExtents.x;
+            const hy = obb.halfExtents.y;
+            const hz = obb.halfExtents.z;
+
+            minX = Math.min(minX, cx - hx);
+            minY = Math.min(minY, cy - hy);
+            minZ = Math.min(minZ, cz - hz);
+            maxX = Math.max(maxX, cx + hx);
+            maxY = Math.max(maxY, cy + hy);
+            maxZ = Math.max(maxZ, cz + hz);
+        }
+
+        return {
+            min: [minX, minY, minZ],
+            max: [maxX, maxY, maxZ],
+        };
+    }
+
+    /**
      * 디버깅: 모든 OBB 정보 출력
      */
     debugPrint(): void {

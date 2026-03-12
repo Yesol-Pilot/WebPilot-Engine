@@ -6,6 +6,7 @@
  * 역할:
  * - 전체 파이프라인 오케스트레이션 (프롬프트 → 3D 씬)
  * - FSM 상태 관리: IDLE → PLANNING → PRODUCING → VALIDATING → RETRYING
+ * - VALIDATION_FAILED 수신 → 경고 누적 또는 ALARM 에스컬레이션
  * - SemanticCache를 통한 유사 프롬프트 재사용
  * - ALARM 3단계 R1 대응: AUTO_HEAL / PARTIAL_REGEN / FULL_REPLAN
  *   (물리적 충돌은 ConstructorSquad 내부 ReflexArc에서 전결 처리)
@@ -18,7 +19,8 @@
  *
  * MS3 면역 핸드쉐이크:
  * - PLACEMENT_DONE → VALIDATING (면역 세포 검증 대기)
- * - SemanticNK + AestheticMacro 2개 APPROVED 수신 시 → IDLE
+ * - SemanticNK + AestheticMacro 2개 VALIDATION_PASSED 수신 시 → IDLE
+ * - VALIDATION_FAILED 수신 시 → 경고 누적 후 승인 또는 ALARM 에스컬레이션
  * - 10초 타임아웃 시 자동 승인 (안전장치)
  *
  * 대체 대상: services/a2a/DirectorAgent.ts (272줄)
@@ -65,6 +67,10 @@ export class CommanderCell extends BaseCell {
     // MS3: 면역 핸드쉐이크 추적
     private pendingImmuneCells: Set<string> = new Set();
     private immuneTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    // F-011: 면역 검증 경고 누적 (FAIL이지만 비치명적인 경우)
+    private immuneWarnings: Array<{ source: string; severity: number; issues: any[] }> = [];
+    private immuneResolved: boolean = false;
 
     // ── 상수 ──
     private readonly MAX_RETRIES = 2;
@@ -152,7 +158,8 @@ export class CommanderCell extends BaseCell {
      *
      * - ALARM: R1 3단계 대응 (면역 세포발 ALARM 포함)
      * - PLACEMENT_DONE: 시공 완료 → VALIDATING (면역 대기)
-     * - APPROVED: 면역 핸드쉐이크 처리
+     * - VALIDATION_PASSED: 면역 핸드쉐이크 통과 처리
+     * - VALIDATION_FAILED: 면역 검증 실패 → 경고 누적 또는 ALARM 에스컬레이션
      * - HEARTBEAT: 상태 로깅
      */
     async handleSignal(signal: NeuralSignal): Promise<void> {
@@ -167,6 +174,10 @@ export class CommanderCell extends BaseCell {
 
             case SIGNALS.VALIDATION_PASSED:
                 this.handleImmuneApproval(signal);
+                break;
+
+            case SIGNALS.VALIDATION_FAILED:
+                await this.handleImmuneRejection(signal);
                 break;
 
             case 'HEARTBEAT':
@@ -347,8 +358,10 @@ export class CommanderCell extends BaseCell {
             this.state = 'VALIDATING';
             this.logState('면역 검증 대기');
 
-            // 면역 핸드쉐이크 시작: 대기 목록 초기화
+            // 면역 핸드쉐이크 시작: 대기 목록 + 경고 초기화
             this.pendingImmuneCells = new Set(IMMUNE_CELLS);
+            this.immuneWarnings = [];
+            this.immuneResolved = false;
 
             console.log(
                 `[Commander] 🛡️ 면역 검증 대기 시작: ${Array.from(IMMUNE_CELLS).join(', ')}`
@@ -356,7 +369,7 @@ export class CommanderCell extends BaseCell {
 
             // 타임아웃 안전장치: 10초 내 미응답 시 자동 승인
             this.immuneTimeoutId = setTimeout(() => {
-                if (this.pendingImmuneCells.size > 0) {
+                if (this.pendingImmuneCells.size > 0 && !this.immuneResolved) {
                     console.warn(
                         `[Commander] ⏰ 면역 타임아웃 (${IMMUNE_TIMEOUT_MS}ms)! ` +
                         `미응답: ${Array.from(this.pendingImmuneCells).join(', ')} → 자동 승인`
@@ -375,12 +388,16 @@ export class CommanderCell extends BaseCell {
      * 모든 면역 세포가 통과 시 → 최종 승인.
      */
     private handleImmuneApproval(signal: NeuralSignal): void {
-        const source = signal.payload?.source as string;
+        // 상태 가드: VALIDATING이 아니거나 이미 해결된 경우 무시
+        if (this.state !== 'VALIDATING' || this.immuneResolved) return;
 
-        if (!source || !IMMUNE_CELLS.has(source)) {
+        // 발신자 식별: signal.sender 우선, payload.source 폴백
+        const source = (signal.sender as string) || signal.payload?.source as string || 'UNKNOWN';
+
+        if (!IMMUNE_CELLS.has(source)) {
             // 면역 세포가 아닌 APPROVED → 레거시 호환 (즉시 승인)
-            console.log(`[Commander] ✅ 비면역 APPROVED 수신 (source=${source || 'unknown'})`);
-            this.handleFinalApproved();
+            console.log(`[Commander] ✅ 비면역 APPROVED 수신 (source=${source})`);
+            this.handleFinalApprovedWithWarnings();
             return;
         }
 
@@ -393,7 +410,70 @@ export class CommanderCell extends BaseCell {
 
         // 모든 면역 세포 통과 시 → 최종 승인
         if (this.pendingImmuneCells.size === 0) {
-            this.handleFinalApproved();
+            this.handleFinalApprovedWithWarnings();
+        }
+    }
+
+    // ══════════════════════════════════════════════════════════
+    // Private: VALIDATION_FAILED 처리 (F-011 신규)
+    // ══════════════════════════════════════════════════════════
+
+    /**
+     * 면역 세포 검증 실패 수신
+     *
+     * VALIDATION_FAILED는 "응답 실패"가 아니라 "검증 완료 결과가 fail"이다.
+     * 따라서 타임아웃 대기 목록에서 제거되어야 하며,
+     * 승인/경고/알람의 후속 정책만 분기한다.
+     *
+     * severity >= 0.8 → ALARM 에스컬레이션 (치명적)
+     * severity < 0.8  → 경고 누적 후 나머지 면역 셀 대기 계속
+     */
+    private async handleImmuneRejection(signal: NeuralSignal): Promise<void> {
+        // 상태 가드: VALIDATING이 아니거나 이미 해결된 경우 무시
+        if (this.state !== 'VALIDATING' || this.immuneResolved) return;
+
+        // 발신자 식별: signal.sender 우선, payload.source 폴백
+        const source = (signal.sender as string) || signal.payload?.source as string || 'UNKNOWN';
+        const severity = (signal.payload?.severity as number) || 0.5;
+        const issues = signal.payload?.issues || [];
+
+        console.warn(
+            `[Commander] 🛡️❌ 면역 검증 실패: ${source} ` +
+            `(severity=${severity.toFixed(2)}, issues=${issues.length}개)`
+        );
+
+        // 면역 셀 체크오프 (FAIL이어도 "응답"은 받았으므로 대기 목록에서 제거)
+        if (IMMUNE_CELLS.has(source)) {
+            this.pendingImmuneCells.delete(source);
+        }
+
+        // severity에 따라 분기
+        if (severity >= R1_THRESHOLD_CRITICAL) {
+            // 치명적 실패 → ALARM 에스컬레이션
+            console.error(
+                `[Commander] 🚨 면역 치명적 실패: ${source} (severity=${severity.toFixed(2)}) → ALARM 발동`
+            );
+
+            // 면역 타이머 정리 + 중복 방지
+            this.immuneResolved = true;
+            if (this.immuneTimeoutId) {
+                clearTimeout(this.immuneTimeoutId);
+                this.immuneTimeoutId = null;
+            }
+
+            await this.handleAlarm(signal);
+        } else {
+            // 비치명적 → 경고 누적 후 나머지 면역 셀 대기 계속
+            this.immuneWarnings.push({ source, severity, issues });
+            console.warn(
+                `[Commander] ⚠️ 면역 경고 누적: ${source} (누적 ${this.immuneWarnings.length}건, ` +
+                `남은 대기: ${this.pendingImmuneCells.size}개)`
+            );
+
+            // 모든 면역 셀 응답 완료 → 경고 포함 승인
+            if (this.pendingImmuneCells.size === 0) {
+                this.handleFinalApprovedWithWarnings();
+            }
         }
     }
 
@@ -473,16 +553,42 @@ export class CommanderCell extends BaseCell {
     // ══════════════════════════════════════════════════════════
 
     /**
-     * 최종 승인 — 모든 면역 세포 통과 후 호출
+     * 최종 승인 — 모든 면역 세포 통과 후 호출 (경고 없는 깨끗한 승인)
      */
     private handleFinalApproved(): void {
+        this.handleFinalApprovedWithWarnings();
+    }
+
+    /**
+     * 경고 포함 최종 승인 — VALIDATION_FAILED(비치명적) 경고를 보존
+     *
+     * immuneWarnings가 비어있으면 깨끗한 승인과 동일.
+     * 경고가 있으면 로그에 요약 출력 후 승인.
+     */
+    private handleFinalApprovedWithWarnings(): void {
+        // 중복 호출 방지
+        if (this.immuneResolved) return;
+        this.immuneResolved = true;
+
         // 타임아웃 취소
         if (this.immuneTimeoutId) {
             clearTimeout(this.immuneTimeoutId);
             this.immuneTimeoutId = null;
         }
 
-        console.log(`[Commander] ✅ 최종 승인! 면역 검증 완료 (trace: ${this.traceId})`);
+        // 경고 요약 출력
+        if (this.immuneWarnings.length > 0) {
+            console.warn(
+                `[Commander] ⚠️ 면역 검증 완료 (경고 ${this.immuneWarnings.length}건 포함):\n` +
+                this.immuneWarnings.map(w =>
+                    `  ├─ ${w.source}: severity=${w.severity.toFixed(2)}, issues=${w.issues.length}개`
+                ).join('\n') +
+                `\n  └─ trace: ${this.traceId}`
+            );
+        } else {
+            console.log(`[Commander] ✅ 최종 승인! 면역 검증 완료 (trace: ${this.traceId})`);
+        }
+
         this.state = 'IDLE';
         this.retryCount = 0;
 
