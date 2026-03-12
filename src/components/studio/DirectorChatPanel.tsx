@@ -14,7 +14,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useSceneStore } from '@/store/useSceneStore';
+import { useUnifiedStore } from '@/store/unifiedStore';
 import { messageBus } from '@/services/a2a/AgentMessageBus';
 import type { AgentMessage } from '@/services/a2a/types';
 
@@ -63,8 +63,8 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Store에서 객체 수 가져오기
-    const objectCount = useSceneStore((state) => state.objects.length);
+    // Store에서 객체 수 가져오기 — ⚡ F-012: SSOT(unifiedStore) 감시로 전환
+    const objectCount = useUnifiedStore((state) => state.aiScene.objects.length);
     const prevObjectCount = useRef(0);
 
     // 자동 스크롤

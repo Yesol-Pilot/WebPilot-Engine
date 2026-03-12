@@ -203,10 +203,12 @@ export class ConstructorSquad extends BaseCell {
             }
 
             // Commander에게 시공 완료 보고
+            // ⚡ F-012: placed 배열 포함 → Commander 면역 중계에 배치 데이터 전달
             await this.transmit('COMMANDER', SIGNALS.PLACEMENT_DONE, {
                 placedCount: placed.length,
                 placementRate,
                 stats: { ...this.stats },
+                placed,
                 traceId,
             });
         }

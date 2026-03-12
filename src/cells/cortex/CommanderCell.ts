@@ -122,9 +122,9 @@ export class CommanderCell extends BaseCell {
                 this.currentScenario = cached;
                 // 캐시 히트 시 narrative는 없음 → null로 전달
                 await this.startProductionPhase(cached, null);
-                // 파이프라인 완료 → 로딩 해제 (오브젝트가 SSOT에 커밋된 상태)
-                store.setLoading(false);
-                console.log('[Commander] ✅ 오케스트레이션 완료 (캐시 히트) → 로딩 해제');
+                // ⚡ F-012: 로딩 해제는 handleFinalApprovedWithWarnings()에서 수행
+                // startProductionPhase는 transmit 완료만 보장, PLACEMENT_DONE은 별도 이벤트
+                console.log('[Commander] ✅ 제작 파이프라인 전달 완료 (캐시 히트) → 면역 핸드쉐이크 대기');
                 return;
             }
             console.log(`[Commander] ❌ 캐시 미스`);
@@ -142,9 +142,9 @@ export class CommanderCell extends BaseCell {
             // 4. 제작 분대 시동 (narrative 포함)
             await this.startProductionPhase(scenario, narrative);
 
-            // 파이프라인 완료 → 로딩 해제 (오브젝트가 SSOT에 커밋된 상태)
-            store.setLoading(false);
-            console.log('[Commander] ✅ 오케스트레이션 완료 → 로딩 해제');
+            // ⚡ F-012: 로딩 해제는 handleFinalApprovedWithWarnings()에서 수행
+            // startProductionPhase는 transmit 완료만 보장, PLACEMENT_DONE은 별도 이벤트
+            console.log('[Commander] ✅ 제작 파이프라인 전달 완료 → 면역 핸드쉐이크 대기');
         } catch (error: any) {
             console.error(`[Commander] ❌ 오케스트레이션 실패:`, error);
             store.setError(error.message || '시나리오 생성 중 오류 발생');
