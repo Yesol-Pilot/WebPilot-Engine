@@ -34,6 +34,7 @@ export interface LLMRequest {
     userPrompt: string;
     schema?: z.ZodType<any>; // Structured Output용 Zod 스키마
     temperature?: number;
+    traceId?: string; // 파이프라인 추적용 ID (Commander → Cell → LLM 상관)
 }
 
 export interface LLMResponse<T = any> {

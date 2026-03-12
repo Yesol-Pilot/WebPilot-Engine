@@ -53,14 +53,15 @@ export class IntentAnalystCell extends BaseCell {
      * 2. conceptTags가 비어있으면 theme 기반 폴백
      * 3. 그래도 비어있으면 키워드 자체를 태그로 활용
      */
-    async analyze(prompt: string): Promise<IntentResult> {
-        console.log(`[IntentAnalyst] 🔍 의도 분석: "${prompt.slice(0, 50)}..."`);
+    async analyze(prompt: string, traceId?: string): Promise<IntentResult> {
+        const tag = traceId ? `[${traceId}]` : '';
+        console.log(`${tag} [IntentAnalyst] 🔍 의도 분석: "${prompt.slice(0, 50)}..."`);
 
         try {
-            const result = await this.callLLM(prompt);
+            const result = await this.callLLM(prompt, traceId);
             return this.enrichTags(result, prompt);
         } catch (error: any) {
-            console.warn(`[IntentAnalyst] ⚠️ LLM 호출 실패, 폴백 사용: ${error.message}`);
+            console.warn(`${tag} [IntentAnalyst] ⚠️ LLM 호출 실패, 폴백 사용: ${error.message}`);
             return this.createFallback(prompt);
         }
     }
@@ -78,7 +79,10 @@ export class IntentAnalystCell extends BaseCell {
     // Private: LLM 호출
     // ══════════════════════════════════════════════════════════
 
-    private async callLLM(prompt: string): Promise<z.infer<typeof IntentSchema>> {
+    private async callLLM(prompt: string, traceId?: string): Promise<z.infer<typeof IntentSchema>> {
+        const tag = traceId ? `[${traceId}]` : '';
+        const startTime = Date.now();
+
         const systemPrompt = `
 당신은 WebPilot Engine의 '의도 분류기(Intent Classifier)'입니다.
 사용자의 자연어 입력을 분석하여 의도를 파악하고 구조화합니다.
@@ -110,7 +114,11 @@ conceptTags 규칙:
             userPrompt: prompt,
             schema: IntentSchema,
             temperature: 0.3,
+            traceId,
         });
+
+        const elapsed = Date.now() - startTime;
+        console.log(`${tag} [IntentAnalyst] LLM 응답 수신 (${elapsed}ms)`);
 
         if (!response.structured) {
             throw new Error('LLM 구조화 응답 없음');

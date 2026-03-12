@@ -69,6 +69,7 @@ export class CommanderCell extends BaseCell {
     // ── 상수 ──
     private readonly MAX_RETRIES = 2;
     private readonly CACHE_TTL = 1000 * 60 * 60; // 1시간
+    private readonly CELL_TIMEOUT_MS = 15_000; // 셀 단위 타임아웃 (15초)
 
     // ── 의존 서비스 (지연 로딩) ──
     private scenarioCache: SemanticCache<ScenarioData> | null = null;
@@ -200,13 +201,18 @@ export class CommanderCell extends BaseCell {
         const store = getUnifiedStore();
         store.setLoading(true, '의도를 분석하고 있습니다...');
 
-        // 1단계: 의도 분석
+        // 1단계: 의도 분석 (15초 타임아웃)
         const intentCell = new IntentAnalystCell();
         let intent;
         try {
-            intent = await intentCell.analyze(prompt);
+            const intentStartTime = Date.now();
+            intent = await this.withCellTimeout(
+                () => intentCell.analyze(prompt, this.traceId),
+                'IntentAnalyst'
+            );
+            console.log(`[Commander] [${this.traceId}] 의도 분석 완료 (${Date.now() - intentStartTime}ms)`);
         } catch (e: any) {
-            console.warn(`[Commander] 의도 분석 실패, 폴백 사용: ${e.message}`);
+            console.warn(`[Commander] [${this.traceId}] 의도 분석 실패, 폴백 사용: ${e.message}`);
             intent = {
                 intent: 'create_world' as const,
                 theme: 'Fantasy',
@@ -218,14 +224,19 @@ export class CommanderCell extends BaseCell {
             await intentCell.apoptosis();
         }
 
-        // 2단계: 서사 직조
+        // 2단계: 서사 직조 (15초 타임아웃)
         store.setLoading(true, '세계관을 직조하고 있습니다...');
         const loreCell = new LoreWeaverCell();
         let narrative: NarrativeResult;
         try {
-            narrative = await loreCell.weave(prompt, intent);
+            const loreStartTime = Date.now();
+            narrative = await this.withCellTimeout(
+                () => loreCell.weave(prompt, intent),
+                'LoreWeaver'
+            );
+            console.log(`[Commander] [${this.traceId}] 서사 직조 완료 (${Date.now() - loreStartTime}ms)`);
         } catch (e: any) {
-            console.warn(`[Commander] 서사 생성 실패, 폴백 사용: ${e.message}`);
+            console.warn(`[Commander] [${this.traceId}] 서사 생성 실패, 폴백 사용: ${e.message}`);
             narrative = {
                 title: prompt.slice(0, 20),
                 theme: intent.theme || 'Fantasy',
@@ -241,14 +252,19 @@ export class CommanderCell extends BaseCell {
             await loreCell.apoptosis();
         }
 
-        // 3단계: 시나리오 설계 (Reflexion Loop 내장)
+        // 3단계: 시나리오 설계 (Reflexion Loop 내장, 15초 타임아웃)
         store.setLoading(true, '시나리오를 설계하고 있습니다...');
         const scenarioCell = new ScenarioArchitectCell();
         try {
-            const scenario = await scenarioCell.design(prompt, intent, narrative);
+            const scenarioStartTime = Date.now();
+            const scenario = await this.withCellTimeout(
+                () => scenarioCell.design(prompt, intent, narrative),
+                'ScenarioArchitect'
+            );
+            console.log(`[Commander] [${this.traceId}] 시나리오 설계 완료 (${Date.now() - scenarioStartTime}ms)`);
             return { scenario, narrative };
         } catch (e: any) {
-            console.warn(`[Commander] ⚠️ 시나리오 설계 실패, 폴백 사용: ${e.message}`);
+            console.warn(`[Commander] [${this.traceId}] ⚠️ 시나리오 설계 실패, 폴백 사용: ${e.message}`);
             return {
                 scenario: this.createFallbackScenario(prompt, intent, narrative),
                 narrative,
@@ -560,5 +576,24 @@ export class CommanderCell extends BaseCell {
 
     private generateTraceId(): string {
         return uuidv4().slice(0, 8);
+    }
+
+    /**
+     * 셀 단위 타임아웃 래퍼
+     *
+     * 각 LLM 호출 셀(IntentAnalyst, LoreWeaver, ScenarioArchitect)에
+     * 개별 15초 타임아웃을 적용합니다. 타임아웃 시 에러를 발생시켜
+     * catch 블록에서 폴백 경로로 이동합니다.
+     */
+    private withCellTimeout<T>(fn: () => Promise<T>, cellName: string): Promise<T> {
+        return Promise.race([
+            fn(),
+            new Promise<T>((_, reject) =>
+                setTimeout(
+                    () => reject(new Error(`[${this.traceId}] ${cellName} 셀 타임아웃 (${this.CELL_TIMEOUT_MS}ms)`)),
+                    this.CELL_TIMEOUT_MS
+                )
+            ),
+        ]);
     }
 }
