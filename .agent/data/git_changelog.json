@@ -1,6 +1,21 @@
 {
-  "lastUpdated": "2026-03-11T05:12:37.247Z",
+  "lastUpdated": "2026-03-11T21:00:00+09:00",
   "pushHistory": [
+    {
+      "timestamp": "2026-03-11T21:00:00+09:00",
+      "commits": [
+        {
+          "hash": "8a2eb21",
+          "message": "feat(safety): F-010 LLM 파이프라인 심층 안전장치 구현",
+          "filesChanged": 7,
+          "insertions": 1725,
+          "deletions": 1204
+        }
+      ],
+      "totalCommits": 1,
+      "summary": "[feat] LLM 안전장치 — AbortController 30초 타임아웃, 서버 프록시(/api/ai/llm), 셀 15초 타임아웃, traceId 계측, 복구 UX 3종 버튼",
+      "category": ["feat", "safety"]
+    },
     {
       "timestamp": "2026-03-11T05:12:37.247Z",
       "commits": [
