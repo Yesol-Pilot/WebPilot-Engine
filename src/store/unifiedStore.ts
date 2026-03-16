@@ -119,14 +119,24 @@ const createUnifiedSlice: StateCreator<UnifiedStore, [], [], UnifiedStore> = (se
 });
 
 /**
- * 통합 스토어 생성
+ * 글로벌 스토어 인스턴스 (Next.js HMR 및 청크분리 시 다중 인스턴스 방지용)
+ * 
+ * [Fix] Dynamic Import(Agent/Canvas)로 인한 스토어 다중화 방어
  */
-export const useUnifiedStore = create<UnifiedStore>()(
+const globalForZustand = globalThis as unknown as {
+    __UNIFIED_STORE__: import('zustand').StoreApi<UnifiedStore> & import('zustand').UseBoundStore<import('zustand').StoreApi<UnifiedStore>>;
+};
+
+export const useUnifiedStore = globalForZustand.__UNIFIED_STORE__ ?? create<UnifiedStore>()(
     devtools(
         subscribeWithSelector(createUnifiedSlice),
         { name: 'WebPilot-UnifiedStore' }
     )
 );
+
+if (process.env.NODE_ENV !== 'production') {
+    globalForZustand.__UNIFIED_STORE__ = useUnifiedStore;
+}
 
 // 레거시 호환성을 위한 별칭
 export const useLegacyGameStore = useUnifiedStore;
