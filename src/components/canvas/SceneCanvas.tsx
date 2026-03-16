@@ -34,27 +34,55 @@ export default function SceneCanvas({ children, cameraMode = 'follow' }: SceneCa
     const [contextLost, setContextLost] = useState(false);
     const glRef = useRef<WebGLRenderingContext | null>(null);
 
+    // [Phase 4] WebGL 자동 복구 상수
+    const MAX_RESTORE_RETRIES = 3;
+    const RESTORE_DELAY_MS = 2000;
+    const retryCountRef = useRef(0);
+
     // [Phase 4] Canvas 생성 콜백 - WebGL 이벤트 리스너 등록
     const handleCreated = useCallback(({ gl }: { gl: any }) => {
         glRef.current = gl.getContext();
         const canvas = gl.domElement as HTMLCanvasElement;
+        let restoreTimer: ReturnType<typeof setTimeout> | null = null;
 
-        // WebGL 컨텍스트 손실 이벤트
+        // WebGL 컨텍스트 손실 → 자동 복구 시도
         canvas.addEventListener('webglcontextlost', (event) => {
-            event.preventDefault();
-            console.error('[SceneCanvas] ⚠️ WebGL 컨텍스트 손실!');
+            event.preventDefault(); // 필수: 브라우저가 자체 복구를 시도할 수 있게 함
+            console.error(`[SceneCanvas] ⚠️ WebGL 컨텍스트 손실! (복구 시도 ${retryCountRef.current}/${MAX_RESTORE_RETRIES})`);
             setContextLost(true);
-            // [리팩토링] 자동 reload 제거 — 무한 루프 방지
-            // Context Lost → Restored → reload → 다시 Context Lost 루프 방지
+
+            // 자동 복구 시도 (최대 횟수 미만일 때)
+            if (retryCountRef.current < MAX_RESTORE_RETRIES) {
+                restoreTimer = setTimeout(() => {
+                    try {
+                        console.log(`[SceneCanvas] 🔄 forceContextRestore 시도 (${retryCountRef.current + 1}/${MAX_RESTORE_RETRIES})`);
+                        const ctx = gl.getContext();
+                        const ext = ctx?.getExtension?.('WEBGL_lose_context');
+                        if (ext) {
+                            ext.restoreContext();
+                        } else {
+                            // 확장 없으면 렌더러 자체 복구 시도
+                            (gl as any).forceContextRestore?.();
+                        }
+                        retryCountRef.current++;
+                    } catch (err) {
+                        console.warn('[SceneCanvas] ⚠️ forceContextRestore 실패:', err);
+                        retryCountRef.current = MAX_RESTORE_RETRIES;
+                    }
+                }, RESTORE_DELAY_MS);
+            } else {
+                console.warn('[SceneCanvas] ⛔ 최대 복구 시도 초과. 새로고침 필요.');
+            }
         });
 
         // WebGL 컨텍스트 복구 이벤트
         canvas.addEventListener('webglcontextrestored', () => {
             console.log('[SceneCanvas] ✅ WebGL 컨텍스트 복구 완료');
+            retryCountRef.current = 0; // 성공하면 카운터 리셋
             setContextLost(false);
         });
 
-        console.log('[SceneCanvas] 🎨 WebGL 컨텍스트 리스너 등록 완료');
+        console.log('[SceneCanvas] 🎨 WebGL 컨텍스트 리스너 등록 완료 (자동 복구 활성화)');
     }, []);
 
     return (
@@ -64,7 +92,13 @@ export default function SceneCanvas({ children, cameraMode = 'follow' }: SceneCa
                 <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80">
                     <div className="text-white text-center">
                         <div className="text-2xl mb-4">⚠️ WebGL 컨텍스트 손실</div>
-                        <div className="text-sm opacity-70">자동 복구 중... 잠시만 기다려주세요.</div>
+                        <div className="text-sm opacity-70 mb-4">자동 복구 중... 잠시만 기다려주세요.</div>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors"
+                        >
+                            🔄 수동 새로고침
+                        </button>
                     </div>
                 </div>
             )}
