@@ -61,6 +61,27 @@ const result = await VectorSearchService.search(concept);
 
 리소스 관리: "생성된 3D 자산(GLB/Texture)은 반드시 비동기적으로 로드되어야 하며, Suspense와 Fallback 컴포넌트를 사용하여 사용자 경험을 저해하지 않도록 한다."
 
+## 🔴 Zustand 스토어 싱글톤 의무 (Post-Mortem 2026-03-16)
+
+> **참고**: `.agent/data/post_mortems/2026-03-16_zustand_store_duplication.md`
+
+**Next.js Dynamic Import 환경에서 Zustand `create()` 호출이 청크마다 별도로 실행되어 스토어가 2개 이상 생성되는 치명적 버그가 발생한 바 있음.**
+
+```typescript
+// ❌ 금지: 모듈 레벨 직접 생성 → Dynamic Import 시 다중 인스턴스 생성됨
+export const useMyStore = create(...)();
+
+// ✅ 필수: globalThis 싱글톤 캐싱 패턴
+const g = globalThis as any;
+export const useMyStore = g.__MY_STORE__ ?? create(...)();
+if (process.env.NODE_ENV !== 'production') g.__MY_STORE__ = useMyStore;
+```
+
+**체크 의무**:
+1. `dynamic()`, `await import()`, `React.lazy()` 사용 시 → 해당 모듈이 전역 스토어를 참조하는지 확인
+2. 새 스토어 추가 시 → 반드시 `globalThis` 캐싱 적용
+3. "상태 업데이트했는데 UI 미반영" 증상 → 다중 인스턴스 먼저 의심
+
 ---
 
 # 에이전트 자동화 규칙 (Agent Automation Rules)
