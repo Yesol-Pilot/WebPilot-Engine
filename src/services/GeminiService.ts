@@ -97,6 +97,22 @@ export const GeminiService = {
             npcContext
         });
         return response.data;
+    },
+
+    /**
+     * Dynamically infer Theme Visual Rules for Aesthetic validation (AI-driven Dynamic Rules)
+     */
+    analyzeAestheticsRules: async (theme: string): Promise<any> => {
+        const response = await axios.post('/api/validators/theme', { theme });
+        return response.data;
+    },
+
+    /**
+     * Dynamically validate Scenario alignment and properties (AI-driven Evaluation)
+     */
+    validateScenarioDynamics: async (scenario: any, originalPrompt: string): Promise<any> => {
+        const response = await axios.post('/api/validators/scenario', { scenario, originalPrompt });
+        return response.data;
     }
 };
 

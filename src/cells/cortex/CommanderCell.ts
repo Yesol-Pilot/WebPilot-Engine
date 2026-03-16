@@ -386,7 +386,11 @@ export class CommanderCell extends BaseCell {
                 stats: { ...stats },
                 // 면역 검증에 필요한 컨텍스트 (Commander 보유)
                 layout: {
-                    objects: this.currentPlacedObjects,
+                    objects: this.currentPlacedObjects.map(obj => ({
+                        ...obj,
+                        modelUrl: obj.path || obj.modelUrl,
+                        semanticRole: obj.category || obj.semanticRole,
+                    })),
                 },
                 scenario: this.currentScenario ? {
                     id: this.currentScenario.id,

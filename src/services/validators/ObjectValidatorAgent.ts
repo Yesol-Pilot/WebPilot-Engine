@@ -193,6 +193,7 @@ export class ObjectValidatorAgent {
         }
 
         for (const obj of objects) {
+            if (!obj.modelUrl) continue;
             const objName = obj.modelUrl.toLowerCase();
 
             for (const mapping of relevantMappings) {
@@ -219,6 +220,7 @@ export class ObjectValidatorAgent {
         const modelCounts = new Map<string, number>();
 
         for (const obj of objects) {
+            if (!obj.modelUrl) continue;
             const count = (modelCounts.get(obj.modelUrl) || 0) + 1;
             modelCounts.set(obj.modelUrl, count);
         }
@@ -229,10 +231,14 @@ export class ObjectValidatorAgent {
             const ratio = count / totalObjects;
 
             if (ratio > this.maxDuplicateRatio && count > 3) {
+                const modelName = (modelUrl && typeof modelUrl === 'string') 
+                    ? modelUrl.split('/').pop() 
+                    : 'UnknownModel';
+                    
                 issues.push({
                     severity: 'minor',
                     code: ERROR_CODES.DUPLICATE_EXCESS,
-                    message: `모델 "${modelUrl.split('/').pop()}"이 과다 사용됨 (${count}개, ${(ratio * 100).toFixed(0)}%)`,
+                    message: `모델 "${modelName}"이 과다 사용됨 (${count}개, ${(ratio * 100).toFixed(0)}%)`,
                     autoFixable: false
                 });
             }
@@ -245,7 +251,7 @@ export class ObjectValidatorAgent {
         const issues: ValidationIssue[] = [];
 
         for (const obj of objects) {
-            if (!obj.semanticRole) continue;
+            if (!obj.semanticRole || !obj.modelUrl) continue;
 
             const expectedKeywords = ROLE_EXPECTATIONS[obj.semanticRole];
             if (!expectedKeywords) continue;

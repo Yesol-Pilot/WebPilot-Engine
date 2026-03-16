@@ -18,6 +18,7 @@ import {
     ValidationResult,
     ValidationIssue
 } from '@/types/ValidationTypes';
+import { GeminiService } from '../GeminiService';
 
 // ============================================================
 // 에러 코드 정의
@@ -50,32 +51,8 @@ export interface ScenarioData {
 }
 
 // ============================================================
-// 키워드 매핑
+// 시나리오 인터페이스
 // ============================================================
-
-const TIME_KEYWORDS: Record<string, string[]> = {
-    morning: ['morning', 'sunrise', 'dawn', '아침', '새벽', '일출'],
-    afternoon: ['afternoon', 'midday', 'noon', '오후', '낮', '정오'],
-    evening: ['evening', 'sunset', 'dusk', '저녁', '황혼', '일몰'],
-    night: ['night', 'midnight', 'dark', '밤', '자정', '어둠']
-};
-
-const ENVIRONMENT_KEYWORDS: Record<string, string[]> = {
-    indoor: ['room', 'hall', 'corridor', 'castle', 'house', 'interior', '실내', '방', '홀'],
-    outdoor: ['forest', 'mountain', 'field', 'garden', 'street', 'outdoor', '야외', '숲', '산'],
-    underground: ['cave', 'dungeon', 'tunnel', 'underground', 'basement', '동굴', '던전', '지하'],
-    underwater: ['ocean', 'sea', 'underwater', 'aquarium', 'coral', '바다', '수중'],
-    space: ['space', 'planet', 'galaxy', 'star', 'spaceship', '우주', '행성']
-};
-
-const MOOD_KEYWORDS: Record<string, string[]> = {
-    dark: ['dark', 'horror', 'scary', 'creepy', 'haunted', '어두운', '공포', '무서운'],
-    peaceful: ['peaceful', 'calm', 'serene', 'tranquil', 'quiet', '평화로운', '고요한'],
-    mysterious: ['mysterious', 'mystical', 'enigmatic', 'secret', '신비로운', '미스터리'],
-    epic: ['epic', 'grand', 'majestic', 'royal', 'magnificent', '장엄한', '웅장한'],
-    cozy: ['cozy', 'warm', 'comfortable', 'homely', '아늑한', '따뜻한'],
-    futuristic: ['futuristic', 'cyberpunk', 'scifi', 'neon', '미래적', '사이버펑크']
-};
 
 // ============================================================
 // ScenarioValidatorAgent 클래스
@@ -92,10 +69,10 @@ export class ScenarioValidatorAgent {
     // 메인 검증 메서드
     // ============================================================
 
-    validate(
+    async validate(
         scenario: ScenarioData,
         originalPrompt: string
-    ): ValidationResult {
+    ): Promise<ValidationResult> {
         const startTime = performance.now();
         const issues: ValidationIssue[] = [];
         const rulesApplied: string[] = [];
@@ -103,264 +80,71 @@ export class ScenarioValidatorAgent {
         console.log(`[ScenarioValidator] 검증 시작: "${scenario.title}"`);
         console.log(`  프롬프트: "${originalPrompt.slice(0, 50)}..."`);
 
-        // 1. 프롬프트-시나리오 일치도 검증
-        const promptIssues = this.checkPromptAlignment(scenario, originalPrompt);
-        issues.push(...promptIssues);
-        rulesApplied.push('promptAlignment');
-
-        // 2. 시간대 일관성 검증
-        const timeIssues = this.checkTimeConsistency(scenario, originalPrompt);
-        issues.push(...timeIssues);
-        rulesApplied.push('timeConsistency');
-
-        // 3. 환경 타입 검증
-        const envIssues = this.checkEnvironmentType(scenario, originalPrompt);
-        issues.push(...envIssues);
-        rulesApplied.push('environmentType');
-
-        // 4. 분위기 일관성 검증
-        const moodIssues = this.checkMoodConsistency(scenario, originalPrompt);
-        issues.push(...moodIssues);
-        rulesApplied.push('moodConsistency');
-
-        // 5. 테마 충돌 검사
-        const themeIssues = this.checkThemeConflicts(scenario);
-        issues.push(...themeIssues);
-        rulesApplied.push('themeConflicts');
-
-        // 6. 필수 요소 검사
-        const elementIssues = this.checkRequiredElements(scenario, originalPrompt);
-        issues.push(...elementIssues);
-        rulesApplied.push('requiredElements');
-
-        // 결과 생성
-        const processingTime = performance.now() - startTime;
-        const score = this.calculateScore(issues);
-        const status = this.determineStatus(score, issues);
-
-        const result: ValidationResult = {
-            validator: 'scenario',
-            status,
-            score,
-            issues,
-            suggestions: this.generateSuggestions(issues, originalPrompt),
-            patches: [],  // 시나리오는 Auto-Fix 불가
-            metadata: {
-                processingTime,
-                rulesApplied,
-                retryCount: 0,
-                timestamp: Date.now()
-            }
-        };
-
-        console.log(`[ScenarioValidator] 검증 완료: ${status} (${score}점)`);
-        return result;
-    }
-
-    // ============================================================
-    // 개별 검증 로직
-    // ============================================================
-
-    private checkPromptAlignment(scenario: ScenarioData, prompt: string): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-        const promptLower = prompt.toLowerCase();
-
-        // 프롬프트에서 주요 키워드 추출
-        const promptKeywords = this.extractKeywords(prompt);
-
-        // 시나리오 설명/제목에서 키워드 검색
-        const scenarioText = `${scenario.title} ${scenario.description}`.toLowerCase();
-
-        // 매칭 비율 계산
-        const matchedKeywords = promptKeywords.filter(kw => scenarioText.includes(kw));
-        const matchRatio = promptKeywords.length > 0
-            ? matchedKeywords.length / promptKeywords.length
-            : 1;
-
-        if (matchRatio < 0.5) {
-            issues.push({
-                severity: 'major',
-                code: ERROR_CODES.PROMPT_MISMATCH,
-                message: `시나리오가 프롬프트 의도를 충분히 반영하지 않음 (일치율: ${(matchRatio * 100).toFixed(0)}%)`,
-                autoFixable: false
-            });
-        } else if (matchRatio < 0.7) {
-            issues.push({
-                severity: 'minor',
-                code: ERROR_CODES.PROMPT_MISMATCH,
-                message: `시나리오 프롬프트 반영도가 다소 낮음 (일치율: ${(matchRatio * 100).toFixed(0)}%)`,
-                autoFixable: false
-            });
-        }
-
-        return issues;
-    }
-
-    private checkTimeConsistency(scenario: ScenarioData, prompt: string): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-        const promptLower = prompt.toLowerCase();
-
-        // 프롬프트에서 시간대 추론
-        let inferredTime: string | null = null;
-        for (const [time, keywords] of Object.entries(TIME_KEYWORDS)) {
-            if (keywords.some(kw => promptLower.includes(kw))) {
-                inferredTime = time;
-                break;
-            }
-        }
-
-        if (inferredTime && scenario.timeOfDay !== 'unspecified') {
-            if (inferredTime !== scenario.timeOfDay) {
+        try {
+            const validationResult = await GeminiService.validateScenarioDynamics(scenario, originalPrompt);
+            
+            // Result is { issues: [...], suggestions: [...] }
+            for (const issue of validationResult.issues || []) {
                 issues.push({
-                    severity: 'minor',
-                    code: ERROR_CODES.TIME_INCONSISTENT,
-                    message: `프롬프트 시간대(${inferredTime})와 시나리오 시간대(${scenario.timeOfDay})가 불일치`,
+                    severity: issue.severity || 'major',
+                    message: issue.message || '알 수 없는 검증 오류',
+                    code: issue.code || 'SV-XXX',
                     autoFixable: false
                 });
             }
-        }
+            const suggestions = validationResult.suggestions || [];
+            
+            rulesApplied.push('dynamicScenarioValidation');
+            
+            // 결과 생성
+            const processingTime = performance.now() - startTime;
+            const score = this.calculateScore(issues);
+            const status = this.determineStatus(score, issues);
 
-        return issues;
-    }
+            const result: ValidationResult = {
+                validator: 'scenario',
+                status,
+                score,
+                issues,
+                suggestions: suggestions,
+                patches: [],
+                metadata: {
+                    processingTime,
+                    rulesApplied,
+                    retryCount: 0,
+                    timestamp: Date.now()
+                }
+            };
 
-    private checkEnvironmentType(scenario: ScenarioData, prompt: string): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-        const promptLower = prompt.toLowerCase();
-
-        // 프롬프트에서 환경 타입 추론
-        let inferredEnv: string | null = null;
-        for (const [env, keywords] of Object.entries(ENVIRONMENT_KEYWORDS)) {
-            if (keywords.some(kw => promptLower.includes(kw))) {
-                inferredEnv = env;
-                break;
-            }
-        }
-
-        if (inferredEnv && scenario.environmentType !== 'unknown') {
-            if (inferredEnv !== scenario.environmentType) {
-                issues.push({
+            console.log(`[ScenarioValidator] 검증 완료: ${status} (${score}점)`);
+            return result;
+        } catch (e) {
+            console.error(`[ScenarioValidator] 동적 검증 에러:`, e);
+            return {
+                validator: 'scenario',
+                status: 'FAIL',
+                score: 50,
+                issues: [{
                     severity: 'major',
-                    code: ERROR_CODES.ENVIRONMENT_ERROR,
-                    message: `환경 타입 불일치: 프롬프트는 "${inferredEnv}"를 암시하나, 시나리오는 "${scenario.environmentType}"`,
+                    message: '동적 AI 검증 에러 발생',
+                    code: 'SV-999',
                     autoFixable: false
-                });
-            }
+                }],
+                suggestions: ['서버 로그를 확인하거나 AI API 호출 상태를 점검하세요.'],
+                patches: [],
+                metadata: {
+                    processingTime: performance.now() - startTime,
+                    rulesApplied: [],
+                    retryCount: 0,
+                    timestamp: Date.now()
+                }
+            };
         }
-
-        return issues;
-    }
-
-    private checkMoodConsistency(scenario: ScenarioData, prompt: string): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-        const promptLower = prompt.toLowerCase();
-
-        // 프롬프트에서 분위기 추론
-        const inferredMoods: string[] = [];
-        for (const [mood, keywords] of Object.entries(MOOD_KEYWORDS)) {
-            if (keywords.some(kw => promptLower.includes(kw))) {
-                inferredMoods.push(mood);
-            }
-        }
-
-        if (inferredMoods.length > 0 && scenario.mood.length > 0) {
-            const hasMatch = inferredMoods.some(m => scenario.mood.includes(m));
-
-            if (!hasMatch) {
-                issues.push({
-                    severity: 'minor',
-                    code: ERROR_CODES.MOOD_MISMATCH,
-                    message: `분위기 불일치: 프롬프트(${inferredMoods.join(', ')}) vs 시나리오(${scenario.mood.join(', ')})`,
-                    autoFixable: false
-                });
-            }
-        }
-
-        return issues;
-    }
-
-    private checkThemeConflicts(scenario: ScenarioData): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-
-        // 충돌하는 테마 쌍
-        const conflictingPairs = [
-            ['medieval', 'futuristic'],
-            ['cyberpunk', 'nature'],
-            ['underwater', 'space'],
-            ['horror', 'peaceful']
-        ];
-
-        for (const [themeA, themeB] of conflictingPairs) {
-            if (scenario.themes.includes(themeA) && scenario.themes.includes(themeB)) {
-                issues.push({
-                    severity: 'minor',
-                    code: ERROR_CODES.THEME_CONFLICT,
-                    message: `테마 충돌: "${themeA}"과 "${themeB}"는 함께 사용하기 어려움`,
-                    autoFixable: false
-                });
-            }
-        }
-
-        return issues;
-    }
-
-    private checkRequiredElements(scenario: ScenarioData, prompt: string): ValidationIssue[] {
-        const issues: ValidationIssue[] = [];
-        const promptLower = prompt.toLowerCase();
-
-        // 프롬프트에서 명시적으로 언급된 요소
-        const explicitRequests = this.extractExplicitRequests(prompt);
-
-        for (const request of explicitRequests) {
-            const inRequired = scenario.requiredObjects?.some(o => o.toLowerCase().includes(request));
-            const inSuggested = scenario.suggestedObjects?.some(o => o.toLowerCase().includes(request));
-
-            if (!inRequired && !inSuggested) {
-                issues.push({
-                    severity: 'major',
-                    code: ERROR_CODES.MISSING_ELEMENT,
-                    message: `프롬프트에서 요청한 "${request}"이(가) 시나리오에 포함되지 않음`,
-                    autoFixable: false
-                });
-            }
-        }
-
-        return issues;
     }
 
     // ============================================================
     // 유틸리티 메서드
     // ============================================================
-
-    private extractKeywords(text: string): string[] {
-        // 불용어 제거 및 키워드 추출
-        const stopWords = ['a', 'an', 'the', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'and', 'or'];
-        const words = text.toLowerCase()
-            .replace(/[^\w\s가-힣]/g, ' ')
-            .split(/\s+/)
-            .filter(w => w.length > 2 && !stopWords.includes(w));
-
-        return [...new Set(words)];
-    }
-
-    private extractExplicitRequests(prompt: string): string[] {
-        // "with a [X]", "[X] in the scene" 등의 패턴에서 요소 추출
-        const patterns = [
-            /with (?:a|an|the) (\w+)/gi,
-            /including (?:a|an|the) (\w+)/gi,
-            /featuring (?:a|an|the) (\w+)/gi,
-            /(\w+) in the (?:scene|room|area)/gi
-        ];
-
-        const requests: string[] = [];
-        for (const pattern of patterns) {
-            let match;
-            while ((match = pattern.exec(prompt)) !== null) {
-                requests.push(match[1].toLowerCase());
-            }
-        }
-
-        return [...new Set(requests)];
-    }
 
     private calculateScore(issues: ValidationIssue[]): number {
         let score = 100;

@@ -20,6 +20,7 @@ import {
     ValidationIssue,
     SceneObjectForValidation
 } from '@/types/ValidationTypes';
+import { GeminiService } from '../GeminiService';
 
 // ============================================================
 // 에러 코드 정의
@@ -58,7 +59,7 @@ const DEFAULT_CONFIG: AestheticsConfig = {
 };
 
 // ============================================================
-// 테마별 기대 색상/분위기
+// 테마별 기대 색상/분위기 (Dynamic AI Evaluation)
 // ============================================================
 
 interface ThemeVisuals {
@@ -69,51 +70,6 @@ interface ThemeVisuals {
     expectedMood: string[];
 }
 
-const THEME_VISUALS: ThemeVisuals[] = [
-    {
-        theme: 'medieval',
-        expectedColors: ['brown', 'gold', 'stone', 'iron', 'wood'],
-        forbiddenColors: ['neon', 'pink', 'cyan'],
-        lightingStyle: 'warm',
-        expectedMood: ['grand', 'ancient', 'noble']
-    },
-    {
-        theme: 'cyberpunk',
-        expectedColors: ['neon', 'purple', 'cyan', 'pink', 'black'],
-        forbiddenColors: ['natural', 'earthy', 'pastel'],
-        lightingStyle: 'dramatic',
-        expectedMood: ['futuristic', 'electric', 'dark']
-    },
-    {
-        theme: 'fantasy',
-        expectedColors: ['purple', 'gold', 'blue', 'emerald', 'silver'],
-        forbiddenColors: ['industrial', 'grey'],
-        lightingStyle: 'dramatic',
-        expectedMood: ['magical', 'mystical', 'enchanted']
-    },
-    {
-        theme: 'horror',
-        expectedColors: ['black', 'red', 'grey', 'dark'],
-        forbiddenColors: ['bright', 'pastel', 'cheerful'],
-        lightingStyle: 'dramatic',
-        expectedMood: ['creepy', 'dark', 'unsettling']
-    },
-    {
-        theme: 'nature',
-        expectedColors: ['green', 'brown', 'blue', 'earth'],
-        forbiddenColors: ['neon', 'artificial'],
-        lightingStyle: 'warm',
-        expectedMood: ['peaceful', 'natural', 'serene']
-    },
-    {
-        theme: 'scifi',
-        expectedColors: ['white', 'blue', 'silver', 'black'],
-        forbiddenColors: ['rustic', 'wooden'],
-        lightingStyle: 'cool',
-        expectedMood: ['futuristic', 'clean', 'high-tech']
-    }
-];
-
 // ============================================================
 // AestheticsValidatorAgent 클래스
 // ============================================================
@@ -121,10 +77,32 @@ const THEME_VISUALS: ThemeVisuals[] = [
 export class AestheticsValidatorAgent {
     private readonly id = `aesthetics-validator-${uuid().slice(0, 8)}`;
     private config: AestheticsConfig;
+    private themeRulesCache: Map<string, ThemeVisuals> = new Map();
 
     constructor(config: Partial<AestheticsConfig> = {}) {
         this.config = { ...DEFAULT_CONFIG, ...config };
         console.log(`[AestheticsValidator] 🎨 초기화: ${this.id} (VLM: ${this.config.useVLM ? 'ON' : 'OFF'})`);
+    }
+
+    private async getThemeVisuals(theme: string): Promise<ThemeVisuals> {
+        if (this.themeRulesCache.has(theme)) {
+            return this.themeRulesCache.get(theme)!;
+        }
+        try {
+            console.log(`[AestheticsValidator] 요청 중인 동적 테마 룰: ${theme}`);
+            const rules = await GeminiService.analyzeAestheticsRules(theme);
+            this.themeRulesCache.set(theme, rules);
+            return rules;
+        } catch (error) {
+            console.warn(`[AestheticsValidator] 동적 테마 룰 가져오기 실패: ${theme}`, error);
+            return {
+                theme,
+                expectedColors: [],
+                forbiddenColors: [],
+                lightingStyle: 'neutral',
+                expectedMood: []
+            };
+        }
     }
 
     // ============================================================
@@ -148,7 +126,7 @@ export class AestheticsValidatorAgent {
 
         // 1. 테마-비주얼 일관성 검사
         if (this.config.checkThemeVisuals) {
-            const themeIssues = this.checkThemeVisualConsistency(objects, context.themes);
+            const themeIssues = await this.checkThemeVisualConsistency(objects, context.themes);
             issues.push(...themeIssues);
             rulesApplied.push('themeVisuals');
         }
@@ -174,7 +152,7 @@ export class AestheticsValidatorAgent {
 
         // 5. 조명 일관성 검사
         if (this.config.checkLightingConsistency && context.lightingPreset) {
-            const lightIssues = this.checkLightingConsistency(context.themes, context.lightingPreset);
+            const lightIssues = await this.checkLightingConsistency(context.themes, context.lightingPreset);
             issues.push(...lightIssues);
             rulesApplied.push('lightingConsistency');
         }
@@ -218,16 +196,17 @@ export class AestheticsValidatorAgent {
     // 개별 검증 로직
     // ============================================================
 
-    private checkThemeVisualConsistency(
+    private async checkThemeVisualConsistency(
         objects: SceneObjectForValidation[],
         themes: string[]
-    ): ValidationIssue[] {
+    ): Promise<ValidationIssue[]> {
         const issues: ValidationIssue[] = [];
 
-        // 관련 테마 비주얼 찾기
-        const relevantVisuals = THEME_VISUALS.filter(tv =>
-            themes.some(t => t.toLowerCase().includes(tv.theme))
-        );
+        // 관련 테마 비주얼 동적 로드
+        const relevantVisuals: ThemeVisuals[] = [];
+        for (const t of themes) {
+            relevantVisuals.push(await this.getThemeVisuals(t));
+        }
 
         if (relevantVisuals.length === 0) return issues;
 
@@ -368,12 +347,13 @@ export class AestheticsValidatorAgent {
         return null;
     }
 
-    private checkLightingConsistency(themes: string[], lightingPreset: string): ValidationIssue[] {
+    private async checkLightingConsistency(themes: string[], lightingPreset: string): Promise<ValidationIssue[]> {
         const issues: ValidationIssue[] = [];
 
-        const relevantVisuals = THEME_VISUALS.filter(tv =>
-            themes.some(t => t.toLowerCase().includes(tv.theme))
-        );
+        const relevantVisuals: ThemeVisuals[] = [];
+        for (const t of themes) {
+            relevantVisuals.push(await this.getThemeVisuals(t));
+        }
 
         for (const visual of relevantVisuals) {
             const presetLower = lightingPreset.toLowerCase();

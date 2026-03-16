@@ -167,7 +167,7 @@ export class QualityGate {
         }
 
         // Scenario 검증
-        const scenarioResult = scenarioValidator.validate(
+        const scenarioResult = await scenarioValidator.validate(
             context.scenario,
             context.originalPrompt
         );
