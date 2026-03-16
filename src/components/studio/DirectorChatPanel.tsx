@@ -72,12 +72,12 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-    // 객체 수 변화 감지 - 새 객체가 추가되면 완료 메시지
+    // 객체 수 변화 감지 - PLACEMENT_DONE 시그널에서 절차를 이미 표시하므로
+    // objectCount 변화 시에는 최종 렌더링 상태만 보고 (중복 '완료' 방지)
     useEffect(() => {
         if (objectCount > 0 && objectCount !== prevObjectCount.current) {
             if (isProcessing) {
-                addMessageDirect('visual', `✅ ${objectCount}개 오브젝트 렌더링 완료!`);
-                setIsProcessing(false);
+                addMessageDirect('visual', `🎨 ${objectCount}개 오브젝트 렌더링 중...`);
             }
             prevObjectCount.current = objectCount;
         }
@@ -129,7 +129,7 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
     // 마지막 처리된 A2A 메시지 ID (중복 처리 방지)
     const processedMessageIds = useRef<Set<string>>(new Set());
 
-    // A2A 메시지 버스 구독 - 에이전트 상태 실시간 표시
+    // A2A 메시지 버스 구독 - 파이프라인 전 에이전트의 상태를 절차별로 표시
     useEffect(() => {
         const handleA2AMessage = (message: AgentMessage) => {
             // 이미 처리된 메시지 스킵
@@ -138,20 +138,64 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
             }
             processedMessageIds.current.add(message.id);
 
-            const { sender, intent, payload } = message;
+            const { sender, payload } = message;
+            // 실제 파이프라인 시그널은 payload.signal에 저장됨 (BaseCell.transmit)
+            const signal = payload?.signal as string | undefined;
 
-            // 에이전트별 메시지 표시 (실제 payload 구조에 맞게)
-            if (sender === 'DIRECTOR' && intent === 'REQUEST_ACTION') {
+            // ── 1단계: Commander → 시나리오 분석 완료 ──
+            if (sender === 'COMMANDER' && signal === 'PLAN_COMPLETED') {
+                const elementCount = payload?.scenario?.elements?.length || payload?.elementCount || 0;
+                addMessageDirect('director', `🧠 시나리오 분석 완료: ${elementCount}개 요소 도출`);
+            }
+            // ── 2단계: SpatialZoner → 공간 구역 배치 ──
+            else if (sender === 'SPATIAL_ZONER' && signal === 'MANIFEST_COMPLETED') {
+                const zoneCount = payload?.zones?.length || payload?.manifest?.length || 0;
+                addMessageDirect('architect', `📐 공간 구역 배치 완료: ${zoneCount}개 구역`);
+            }
+            // ── 3단계: PropMaster → 소품 배치 계획 ──
+            else if (sender === 'PROP_MASTER' && signal === 'BATCHES_READY') {
+                const batchCount = payload?.batches?.length || 0;
+                addMessageDirect('architect', `🎭 소품 배치 계획 완료: ${batchCount}개 배치`);
+            }
+            // ── 4단계: AssetHunter → 에셋 검색 ──
+            else if (sender === 'ASSET_HUNTER' && signal === 'ASSETS_RESOLVED') {
+                const assetCount = payload?.resolvedAssets?.length || payload?.assets?.length || 0;
+                addMessageDirect('visual', `🔍 에셋 검색 완료: ${assetCount}개 에셋 매칭`);
+            }
+            // ── 5단계: ConstructorSquad → 오브젝트 배치 완료 ──
+            else if (sender === 'CONSTRUCTOR_SQUAD' && signal === 'PLACEMENT_DONE') {
+                const placedCount = payload?.totalPlaced || payload?.objectCount || 0;
+                addMessageDirect('visual', `🏗️ 오브젝트 배치 완료: ${placedCount}개 배치됨`);
+            }
+            // ── 6단계: 면역 검증 (SemanticNK) ──
+            else if (sender === 'SEMANTIC_NK') {
+                if (signal === 'VALIDATION_PASSED') {
+                    addMessageDirect('system', `✅ 시맨틱 검증 통과`);
+                } else if (signal === 'VALIDATION_FAILED') {
+                    addMessageDirect('error', `⚠️ 시맨틱 검증 실패: ${payload?.reason || '알 수 없음'}`);
+                }
+            }
+            // ── 7단계: 면역 검증 (AestheticMacro) ──
+            else if (sender === 'AESTHETIC_MACRO') {
+                if (signal === 'VALIDATION_PASSED') {
+                    addMessageDirect('system', `✅ 미학 검증 통과`);
+                    // 모든 검증 완료 → 파이프라인 종료
+                    setIsProcessing(false);
+                } else if (signal === 'VALIDATION_FAILED') {
+                    addMessageDirect('error', `⚠️ 미학 검증 실패: ${payload?.reason || '알 수 없음'}`);
+                }
+            }
+            // ── 기존 호환: DIRECTOR/ARCHITECT/VISUAL_CORE 직접 메시지 ──
+            else if (sender === 'DIRECTOR' && payload?.scenario) {
                 const elementCount = payload?.scenario?.elements?.length || 0;
                 addMessageDirect('director', `📋 시나리오 생성 완료: ${elementCount}개 요소`);
-            } else if (sender === 'ARCHITECT' && intent === 'REQUEST_ACTION') {
-                const objectCount = payload?.layout?.objects?.length || 0;
-                addMessageDirect('architect', `📐 공간 배치 완료: ${objectCount}개 오브젝트`);
-            } else if (sender === 'VISUAL_CORE' && intent === 'REPORT_STATUS') {
-                if (payload?.status === 'RENDER_COMPLETE') {
-                    addMessageDirect('visual', `🎨 렌더링 완료: ${payload?.objectCount || 0}개 오브젝트`);
-                    setIsProcessing(false);
-                }
+            } else if (sender === 'ARCHITECT' && payload?.layout) {
+                const objCount = payload?.layout?.objects?.length || 0;
+                addMessageDirect('architect', `📐 공간 배치 완료: ${objCount}개 오브젝트`);
+            }
+            // ── 알람 시그널 (에러/경고) ──
+            else if (signal === 'ALARM') {
+                addMessageDirect('error', `⚠️ [${sender}] ${payload?.message || '알람 발생'}`);
             }
         };
 

@@ -417,7 +417,7 @@ function PreviewNode({ node, index = 999 }: { node: SceneNode; index?: number })
 function GLBModelWrapper({ node, path, index }: { node: SceneNode; path: string; index: number }) {
     // [P0 Bundle-A] GPU 마운트 게이트
     const admissionId = `preview-${node.id}`;
-    const { admitted } = useAssetAdmission(admissionId, index, true);
+    const { admitted, onLoaded, onFailed } = useAssetAdmission(admissionId, index, true);
     
     const position = (node.transform?.position || [0, 0, 0]) as [number, number, number];
     const rotation = (node.transform?.rotation || [0, 0, 0]) as [number, number, number];
@@ -450,7 +450,7 @@ function GLBModelWrapper({ node, path, index }: { node: SceneNode; path: string;
             onPointerOut={() => document.body.style.cursor = 'default'}
         >
             <Suspense fallback={<PlaceholderBox position={position} scale={scale} color="#8B5CF6" />}>
-                <GLBModel path={path} position={position} rotation={rotation} scale={scale} matcapUrl={matcapTextureUrl} />
+                <GLBModel path={path} position={position} rotation={rotation} scale={scale} matcapUrl={matcapTextureUrl} onLoaded={onLoaded} onFailed={onFailed} />
             </Suspense>
         </group>
     );
@@ -471,12 +471,14 @@ function PlaceholderBox({ position, scale, color }: { position: [number, number,
 /**
  * GLB 모델 로더 (에러 처리 포함)
  */
-function GLBModel({ path, position, rotation, scale, matcapUrl }: {
+function GLBModel({ path, position, rotation, scale, matcapUrl, onLoaded, onFailed }: {
     path: string;
     position: [number, number, number];
     rotation: [number, number, number];
     scale: [number, number, number];
     matcapUrl?: string;
+    onLoaded?: () => void;
+    onFailed?: () => void;
 }) {
     const [hasError, setHasError] = useState(false);
     const hasLoggedRef = useRef(false);  // 로그 1회 출력용
@@ -534,6 +536,7 @@ function GLBModel({ path, position, rotation, scale, matcapUrl }: {
 
     // HDR은 무조건 차단
     if (shouldBlock) {
+        onFailed?.();
         return null;
     }
 
@@ -549,19 +552,20 @@ function GLBModel({ path, position, rotation, scale, matcapUrl }: {
     }
 
     return (
-        <GLBErrorBoundary fallback={FallbackMesh} onError={() => setHasError(true)}>
-            <GLBModelInner path={finalPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapUrl} onError={() => setHasError(true)} />
+        <GLBErrorBoundary fallback={FallbackMesh} onError={() => { setHasError(true); onFailed?.(); }}>
+            <GLBModelInner path={finalPath} position={position} rotation={rotation} scale={scale} matcapUrl={matcapUrl} onError={() => { setHasError(true); onFailed?.(); }} onLoaded={onLoaded} />
         </GLBErrorBoundary>
     );
 }
 
-function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: {
+function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError, onLoaded }: {
     path: string;
     position: [number, number, number];
     rotation: [number, number, number];
     scale: [number, number, number];
     matcapUrl?: string;
     onError?: () => void;
+    onLoaded?: () => void;
 }) {
     // [2026-02-02] useSafeGLTF: Draco JS 디코더 강제 사용 (BYTES_PER_ELEMENT 에러 방지)
     const gltf = useSafeGLTF(path);
@@ -572,6 +576,16 @@ function GLBModelInner({ path, position, rotation, scale, matcapUrl, onError }: 
     const displayScene = scene;
     const { setExposure, setMetadata } = useContext(GLBMetadataContext);
     const hasLoggedRef = useRef(false);
+    const onLoadedCalledRef = useRef(false);
+
+    // [FIX] GLB 로딩 완료 → useAssetAdmission의 markLoaded() 호출
+    // 이 콜백이 없으면 inflight 슬롯이 해제되지 않아 대기 큐 에셋이 영원히 로딩되지 않음
+    useEffect(() => {
+        if (scene && onLoaded && !onLoadedCalledRef.current) {
+            onLoadedCalledRef.current = true;
+            onLoaded();
+        }
+    }, [scene, onLoaded]);
 
     // [Phase 3] Context-Aware Auto-Scaling System
     // Robust BBox (IQR 이상치 제거) + Dominant Axis 기반 스케일링
