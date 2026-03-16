@@ -128,25 +128,28 @@ export default function CreatorStudioPage() {
   }, []);
 
   // [Phase 8] Unified Store 구독 및 UI 동기화
-  const unifiedStore = useUnifiedStore();
-
+  // [FIX] store.subscribe() 직접 구독 — React 렌더링 사이클 의존성 제거
   React.useEffect(() => {
-    // [Probe] 장애 판별 로그 — SSOT 구독부
-    console.log(`[Probe] aiScene.objects = ${unifiedStore.aiScene?.objects?.length ?? 0}`);
-    // 1. 씬 데이터 동기화 (path → modelUrl 매핑 필수)
-    if (unifiedStore.aiScene?.objects) {
-      const objectCount = unifiedStore.aiScene.objects.length;
-      console.log(`[Studio] 🔄 aiScene 변경 감지: ${objectCount}개 오브젝트`);
+    let prevAiScene = useUnifiedStore.getState().aiScene;
 
-      // 빈 배열인 경우 아직 파이프라인 미완료 — setPreviewNodes 호출 방지
+    // ✅ Zustand store.subscribe(): setAIScene 호출 시 즉시 콜백 실행
+    const unsub = useUnifiedStore.subscribe((state) => {
+      const aiScene = state.aiScene;
+
+      // 참조 비교: 같은 객체이면 스킵
+      if (aiScene === prevAiScene) return;
+      prevAiScene = aiScene;
+
+      const objectCount = aiScene?.objects?.length ?? 0;
+      console.log(`[Studio-Subscribe] 🔔 aiScene 변경 감지: ${objectCount}개 오브젝트`);
+
       if (objectCount === 0) {
-        console.warn('[Studio] ⚠️ aiScene.objects가 빈 배열 — 파이프라인 미완료 상태');
+        console.warn('[Studio-Subscribe] ⚠️ aiScene.objects가 빈 배열');
         return;
       }
 
-      // [FIX] aiScene.objects는 `path` 필드 사용, previewNodes는 `modelUrl` 기대
-      // as any 캐스팅으로 인한 필드명 불일치 방지
-      const mappedNodes = unifiedStore.aiScene.objects.map((obj: any) => ({
+      // path → modelUrl 매핑
+      const mappedNodes = aiScene.objects.map((obj: any) => ({
         id: obj.id || obj.concept,
         name: obj.name || obj.description || obj.id,
         modelUrl: obj.path || obj.modelUrl || obj.file_path,
@@ -156,17 +159,20 @@ export default function CreatorStudioPage() {
         renderStyle: obj.renderStyle,
         matcapTexture: obj.matcapTexture,
       }));
-      console.log(`[Studio] ✅ ${objectCount}개 오브젝트 매핑 완료 → setPreviewNodes`);
+      console.log(`[Studio-Subscribe] ✅ ${objectCount}개 오브젝트 매핑 완료 → setPreviewNodes`);
       setPreviewNodes(mappedNodes as any);
 
-      // 레거시 호환: SceneContext도 업데이트 (PreviewCanvas가 사용)
-      if (unifiedStore.aiScene.objects.length > 0) {
-        const scenario = unifiedStore.convertAISceneToScenario();
-        if (scenario) setSceneData(scenario as any);
-      }
-    }
+      // 레거시 호환: SceneContext 업데이트
+      const scenario = state.convertAISceneToScenario();
+      if (scenario) setSceneData(scenario as any);
+    });
 
-    // 2. 로딩 상태 동기화
+    return () => unsub();
+  }, [setSceneData]);
+
+  // [Phase 8-2] 로딩 상태 구독 (기존 방식 유지)
+  const unifiedStore = useUnifiedStore();
+  React.useEffect(() => {
     if (unifiedStore.isLoading !== loading) {
       setLoading(unifiedStore.isLoading);
     }
@@ -176,7 +182,7 @@ export default function CreatorStudioPage() {
     if (unifiedStore.error && unifiedStore.error !== error) {
       setError(unifiedStore.error);
     }
-  }, [unifiedStore.aiScene, unifiedStore.isLoading, unifiedStore.loadingMessage, unifiedStore.error]);
+  }, [unifiedStore.isLoading, unifiedStore.loadingMessage, unifiedStore.error]);
   const handleEnterHogwarts = () => {
     const store = useGameStore.getState();
     const scenario = LEGACY_SCENARIOS.SortingCeremony;

@@ -190,15 +190,28 @@ export const createWorldSlice: StateCreator<WorldSlice, [], [], WorldSlice> = (s
 
     // AI 생성 씬 설정
     setAIScene: (objects) => {
+        // [디버그] 입력 검증
+        console.log(`[WorldSlice] setAIScene 호출됨: ${objects?.length ?? 'null'}개 오브젝트`);
+        if (!objects || !Array.isArray(objects)) {
+            console.error('[WorldSlice] ❌ setAIScene: objects가 유효하지 않음!', objects);
+            return;
+        }
+        if (objects.length > 0) {
+            console.log(`[WorldSlice] 첫 오브젝트: id=${objects[0].id}, path=${objects[0].path}`);
+        }
+
         set((state) => ({
             aiScene: {
                 ...state.aiScene,
                 objects,
-                isGenerated: true,
+                isGenerated: objects.length > 0,
                 generatedAt: Date.now(),
             },
         }));
-        console.log(`[WorldSlice] AI 씬 설정: ${objects.length}개 오브젝트`);
+
+        // [디버그] set 이후 검증
+        const postState = get();
+        console.log(`[WorldSlice] ✅ set 완료 — 스토어 aiScene.objects: ${postState.aiScene.objects.length}개, isGenerated: ${postState.aiScene.isGenerated}`);
     },
 
     // AI 씬 초기화

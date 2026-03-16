@@ -148,14 +148,23 @@ export class ConstructorSquad extends BaseCell {
 
         const allPlaced: PlacedObject[] = [];
 
-        // 우선순위 순서로 배치 (HIGH → NORMAL → LOW)
-        for (const batch of batches) {
-            const placed = await this.processBatch(batch, sceneDimensions);
-            allPlaced.push(...placed);
+        // [방어] try-finally: processBatch 에러 시에도 부분 결과를 SSOT에 커밋
+        try {
+            // 우선순위 순서로 배치 (HIGH → NORMAL → LOW)
+            for (const batch of batches) {
+                try {
+                    const placed = await this.processBatch(batch, sceneDimensions);
+                    allPlaced.push(...placed);
+                } catch (batchError: any) {
+                    console.error(`[ConstructorSquad] ❌ 배치 처리 실패 (${batch.batchId}):`, batchError.message);
+                    // 개별 배치 실패는 전체 시공을 중단시키지 않음
+                }
+            }
+        } finally {
+            // ✅ 에러 발생 여부에 관계없이 반드시 SSOT 커밋
+            console.log(`[ConstructorSquad] 📦 SSOT 커밋 시작 (${allPlaced.length}개 오브젝트)`);
+            this.commitToStore(allPlaced);
         }
-
-        // SSOT 커밋
-        this.commitToStore(allPlaced);
 
         const totalMs = performance.now() - startTime;
         this.stats.totalDurationMs = totalMs;
@@ -476,17 +485,40 @@ export class ConstructorSquad extends BaseCell {
      * SSOT(UnifiedStore)에 최종 결과 커밋
      */
     private commitToStore(placed: PlacedObject[]): void {
-        // [F-004 Fix] 오브젝트 수 상한 적용 — GPU 과부하 방지
-        let finalPlaced = placed;
-        if (placed.length > MAX_COMMIT_OBJECTS) {
-            console.warn(
-                `[ConstructorSquad] ⚠️ 오브젝트 ${placed.length}개 → ${MAX_COMMIT_OBJECTS}개로 제한 (GPU 보호)`
-            );
-            // 우선순위: focal > structural > ambient
-            const priority: Record<string, number> = { focal: 0, structural: 1, ambient: 2 };
-            finalPlaced = [...placed]
-                .sort((a, b) => (priority[a.category] ?? 2) - (priority[b.category] ?? 2))
-                .slice(0, MAX_COMMIT_OBJECTS);
+        // [v9.1 Fix] 동적 VRAM Throttling 
+        // 하드코딩된 MAX_COMMIT_OBJECTS(20개) 대신, 오브젝트 크기(Scale)별 가중치를 부여해 VRAM 한계를 방어합니다.
+        const MAX_VRAM_WEIGHT = 20; 
+        
+        let totalWeight = 0;
+        const throttledPlaced: PlacedObject[] = [];
+
+        // 1. 카테고리별 렌더링 중요도 정렬 (focal 최우선)
+        const priority: Record<string, number> = { focal: 0, structural: 1, ambient: 2 };
+        const sortedPlaced = [...placed].sort((a, b) => (priority[a.category] ?? 2) - (priority[b.category] ?? 2));
+
+        // 2. 가중치 기반 동적 슬라이싱 (VRAM 보호)
+        for (const obj of sortedPlaced) {
+            const maxScale = Math.max(...obj.scale);
+            let weight = 1;
+
+            if (maxScale >= 10) weight = 5;         // 초거대 빌딩/지형
+            else if (maxScale >= 5) weight = 3;     // 대형 오브젝트
+            else if (maxScale >= 2) weight = 1.5;   // 중형
+            else weight = 1;                        // 소형 프랍
+
+            if (totalWeight + weight <= MAX_VRAM_WEIGHT) {
+                totalWeight += weight;
+                throttledPlaced.push(obj);
+            } else {
+                console.warn(`[ConstructorSquad] ⚠️ VRAM 제한 컷오프: ${obj.name} (weight: ${weight}, 현재총합: ${totalWeight}/${MAX_VRAM_WEIGHT})`);
+                continue;
+            }
+        }
+
+        const finalPlaced = throttledPlaced;
+
+        if (finalPlaced.length < placed.length) {
+            console.log(`[ConstructorSquad] 🛡️ VRAM Throttling 발동: ${placed.length}개 -> ${finalPlaced.length}개로 압축 렌더링 (총 가중치: ${totalWeight})`);
         }
 
         // [Probe] 장애 판별 로그 — pre-commit
