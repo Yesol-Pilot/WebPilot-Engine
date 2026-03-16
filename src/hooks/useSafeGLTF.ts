@@ -15,7 +15,7 @@
  */
 
 import { useLoader, useThree } from '@react-three/fiber';
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
@@ -99,6 +99,11 @@ const VALIDATION_CACHE_TTL_MS = 60_000;
 interface ValidationEntry { valid: boolean; timestamp: number; }
 const validationCache = new Map<string, ValidationEntry>();
 
+// [v10.0 Fix] 외부 Promise 캐시 — Suspense 데드락 해소
+// 기존 문제: useEffect에서 HEAD fetch → Suspense throw 이전에 useEffect가 mount되지 않아 영원히 pending
+// 수정: 컴포넌트 외부에서 Promise를 관리, 실제 fetch Promise를 Suspense에 전달
+const pendingValidationPromises = new Map<string, Promise<void>>();
+
 function getCachedValidation(path: string): boolean | null {
     const entry = validationCache.get(path);
     if (!entry) return null;
@@ -111,10 +116,61 @@ function getCachedValidation(path: string): boolean | null {
 }
 
 /**
+ * [v10.0] 컴포넌트 외부에서 HEAD 검증을 수행하고 결과를 캐시에 저장
+ * Suspense throw 시 실제 fetch Promise를 전달하여 완료 시 자동 re-render
+ * 
+ * 반환값:
+ * - true/false: 검증 완료 (캐시 히트)
+ * - null: 검증 진행 중 (pendingValidationPromises에 Promise 저장됨)
+ */
+function validateAssetExternal(resolvedPath: string): boolean | null {
+    // 1) 캐시 히트 — 즉시 반환
+    const cached = getCachedValidation(resolvedPath);
+    if (cached !== null) return cached;
+
+    // 2) 이미 검증 진행 중이면 기존 Promise 재사용
+    if (pendingValidationPromises.has(resolvedPath)) {
+        return null; // 진행 중 — Suspense throw에서 기존 Promise 사용
+    }
+
+    // 3) 새 HEAD 검증 시작
+    const fetchPromise = fetch(resolvedPath, { method: 'HEAD' })
+        .then(res => {
+            if (!res.ok) {
+                console.error(`[useSafeGLTF] 🚫 에셋 404 (${res.status}): %c${resolvedPath}`, 'color: red; font-weight: bold');
+                validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
+                return;
+            }
+
+            // Content-Length 기반 VRAM 보호: 50MB 초과 GLB 차단
+            const contentLength = parseInt(res.headers.get('content-length') || '0', 10);
+            if (contentLength > 50 * 1024 * 1024) {
+                console.error(`[useSafeGLTF] 🚨 GLB 파일 크기 초과 (${(contentLength / 1024 / 1024).toFixed(1)}MB): ${resolvedPath}`);
+                validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
+                return;
+            }
+
+            validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
+        })
+        .catch(() => {
+            // Fetch 실패 (네트워크/CORS 등) — 낙관적으로 valid 처리, 하위 로더에 위임
+            validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
+        })
+        .finally(() => {
+            // Promise 완료 후 캐시에서 제거 — 다음 요청 시 cached result 사용
+            pendingValidationPromises.delete(resolvedPath);
+        });
+
+    pendingValidationPromises.set(resolvedPath, fetchPromise);
+    return null; // 진행 중
+}
+
+/**
  * useGLTF 대체 훅
  * Draco JS 디코더를 강제 사용하여 BYTES_PER_ELEMENT 에러 방지
  * [v5.0] getAssetUrl() 자동 적용 — 상대경로를 CDN URL로 변환
  * [v5.2] KTX2Loader 연결 — useThree로 렌더러를 가져와 KTX2 텍스처 로딩 지원
+ * [v10.0] HEAD 검증 Suspense 데드락 해소 — 외부 Promise 캐시 패턴
  */
 export function useSafeGLTF(path: string): GLTF {
     // [v5.0] 상대경로를 CDN URL로 자동 변환 (이미 http(s)://면 그대로 반환)
@@ -132,68 +188,26 @@ export function useSafeGLTF(path: string): GLTF {
     }, [renderer]);
 
     // [P0 Fix] Legacy GLB 블랙리스트 체크는 여기서 하지 않음
-    // 이유: Hook #2(useMemo)와 #3(useState) 사이에서 throw하면
-    // React Hook topology 불일치 → "Rendered fewer hooks than expected" 크래시
-    // 블랙리스트 차단은 PreviewNode(Shell) 레벨에서 수행 (390행)
+    // 이유: Hook 사이에서 throw하면 React Hook topology 불일치 크래시
+    // 블랙리스트 차단은 PreviewNode(Shell) 레벨에서 수행
 
-    // [Phase 6] Legacy Binary (Context Lost 주범) 사전 방어막
-    // [v9.0 Fix] TTL 기반 캐시 조회
-    const [isValid, setIsValid] = useState<boolean | null>(
-        getCachedValidation(resolvedPath)
-    );
+    // [v10.0] 외부 Promise 캐시 기반 HEAD 검증 (Suspense 데드락 해소)
+    // 기존: useEffect + useState → Suspense throw 인해 useEffect 미실행 → 영구 pending
+    // 수정: 컴포넌트 외부에서 fetch → 실제 Promise를 Suspense에 전달
+    const validationResult = validateAssetExternal(resolvedPath);
 
-    useEffect(() => {
-        if (isValid !== null) return;
-
-        let isMounted = true;
-
-        // [v5.1 Fix] R2 CDN 호환: Range 요청 대신 HEAD 요청으로 존재 확인
-        // R2/Cloudflare는 Range 헤더 미지원 시 전체 파일을 다운로드하여 VRAM 낭비
-        // HEAD 요청은 본문 없이 헤더만 확인 — Content-Type으로 GLB 유효성 판단
-        fetch(resolvedPath, { method: 'HEAD' })
-            .then(res => {
-                if (!isMounted) return;
-
-                if (!res.ok) {
-                    // 404 등 — 유효하지 않은 에셋 [P0 Bundle-A] 가시화 강화
-                    console.error(`[useSafeGLTF] 🚫 에셋 404 (${res.status}): %c${resolvedPath}`, 'color: red; font-weight: bold');
-                    validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
-                    setIsValid(false);
-                    return;
-                }
-
-                // Content-Length 기반 VRAM 보호: 50MB 초과 GLB 차단
-                const contentLength = parseInt(res.headers.get('content-length') || '0', 10);
-                if (contentLength > 50 * 1024 * 1024) {
-                    console.error(`[useSafeGLTF] 🚨 GLB 파일 크기 초과 (${(contentLength / 1024 / 1024).toFixed(1)}MB): ${resolvedPath}`);
-                    validationCache.set(resolvedPath, { valid: false, timestamp: Date.now() });
-                    setIsValid(false);
-                    return;
-                }
-
-                validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
-                setIsValid(true);
-            })
-            .catch(err => {
-                // Fetch 실패 (네트워크/CORS 등) — 하위 로더에 위임
-                if (isMounted) {
-                    validationCache.set(resolvedPath, { valid: true, timestamp: Date.now() });
-                    setIsValid(true);
-                }
-            });
-
-        return () => { isMounted = false; };
-    }, [resolvedPath, isValid]);
-
-    // R3F Suspense 규격: 아직 검증 중이면 Promise를 던져서 컴포넌트를 홀딩
-    if (isValid === null) {
-        throw new Promise(() => { }); // Pending
+    if (validationResult === null) {
+        // 검증 진행 중 — 실제 fetch Promise를 throw (완료 시 React가 자동 re-render)
+        const pending = pendingValidationPromises.get(resolvedPath);
+        if (pending) {
+            throw pending;
+        }
+        // 안전장치: Promise가 없으면 낙관적으로 통과 (이론상 도달 불가)
+        console.warn(`[useSafeGLTF] ⚠️ 검증 Promise 없음, 낙관적 통과: ${resolvedPath}`);
     }
 
     // [v9.0 Fix] 검증 실패(404/Corrupted) 시 Error throw → ErrorBoundary에서 폴백 처리
-    // 기존: 빈 Scene 반환 → ErrorBoundary 미트리거 → Tripo3D 폴백 봉쇄
-    // 수정: Error throw → AssetErrorBoundary → handleAssetError() → 생성형 폴백 점화
-    if (isValid === false) {
+    if (validationResult === false) {
         throw new Error(`[useSafeGLTF] 에셋 로드 실패 (404/Corrupted): ${resolvedPath}`);
     }
 
