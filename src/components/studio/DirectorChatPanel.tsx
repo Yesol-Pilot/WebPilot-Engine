@@ -158,14 +158,25 @@ export default function DirectorChatPanel({ directorRef, isMinimized = false, is
                 addMessageDirect('architect', `🎭 소품 배치 계획 완료: ${batchCount}개 배치`);
             }
             // ── 4단계: AssetHunter → 에셋 검색 ──
+            // payload 구조: { batches: AssetBatch[], sceneDimensions, assetResolveRate, traceId }
             else if (sender === 'ASSET_HUNTER' && signal === 'ASSETS_RESOLVED') {
-                const assetCount = payload?.resolvedAssets?.length || payload?.assets?.length || 0;
-                addMessageDirect('visual', `🔍 에셋 검색 완료: ${assetCount}개 에셋 매칭`);
+                const batches = payload?.batches || [];
+                const assetCount = Array.isArray(batches)
+                    ? batches.reduce((sum: number, b: any) => sum + (b?.items?.length || 0), 0)
+                    : 0;
+                const resolveRate = payload?.assetResolveRate != null
+                    ? `(해소율 ${(payload.assetResolveRate * 100).toFixed(0)}%)`
+                    : '';
+                addMessageDirect('visual', `🔍 에셋 검색 완료: ${assetCount}개 에셋 매칭 ${resolveRate}`);
             }
             // ── 5단계: ConstructorSquad → 오브젝트 배치 완료 ──
+            // payload 구조: { placedCount, placementRate, stats, placed, traceId }
             else if (sender === 'CONSTRUCTOR_SQUAD' && signal === 'PLACEMENT_DONE') {
-                const placedCount = payload?.totalPlaced || payload?.objectCount || 0;
-                addMessageDirect('visual', `🏗️ 오브젝트 배치 완료: ${placedCount}개 배치됨`);
+                const placedCount = payload?.placedCount || payload?.placed?.length || 0;
+                const placementRate = payload?.placementRate != null
+                    ? `(성공률 ${(payload.placementRate * 100).toFixed(0)}%)`
+                    : '';
+                addMessageDirect('visual', `🏗️ 오브젝트 배치 완료: ${placedCount}개 배치됨 ${placementRate}`);
             }
             // ── 6단계: 면역 검증 (SemanticNK) ──
             else if (sender === 'SEMANTIC_NK') {
