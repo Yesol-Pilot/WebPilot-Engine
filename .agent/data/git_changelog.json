@@ -1,6 +1,54 @@
 {
-  "lastUpdated": "2026-03-11T21:00:00+09:00",
+  "lastUpdated": "2026-03-12T18:15:00+09:00",
   "pushHistory": [
+    {
+      "timestamp": "2026-03-12T18:15:00+09:00",
+      "commits": [
+        {
+          "hash": "45027e3",
+          "message": "fix(store): globalThis 기반 싱글톤 인스턴스 적용으로 UI 미반영 버그 조치",
+          "filesChanged": 1,
+          "insertions": 12,
+          "deletions": 2
+        }
+      ],
+      "totalCommits": 1,
+      "summary": "[fix] Next.js 동적 임포트로 인한 Zustand 스토어 분할 버그 해결 (globalThis 적용)",
+      "category": ["fix"],
+      "remotes": ["github", "origin"]
+    },
+    {
+      "timestamp": "2026-03-12T17:58:00+09:00",
+      "commits": [
+        {
+          "hash": "1a070be",
+          "message": "fix(F-012): 파이프라인 정지 3계층 구조 결함 수정",
+          "filesChanged": 3,
+          "insertions": 11,
+          "deletions": 9
+        }
+      ],
+      "totalCommits": 1,
+      "summary": "[fix] F-012: orchestrate() 로딩 해제 단일화 + DirectorChatPanel useUnifiedStore 전환 + ConstructorSquad placed 배열 추가",
+      "category": ["fix"],
+      "remotes": ["github"]
+    },
+    {
+      "timestamp": "2026-03-12T13:55:00+09:00",
+      "commits": [
+        {
+          "hash": "d521785",
+          "message": "chore: F-011 이슈 분석 후 git_changelog 업데이트",
+          "filesChanged": 1,
+          "insertions": 16,
+          "deletions": 1
+        }
+      ],
+      "totalCommits": 1,
+      "summary": "[chore] F-011 이슈 리포트(에셋 로딩/배치 장애) 작성 후 changelog 동기화 — GitHub + origin 양쪽 푸시",
+      "category": ["chore"],
+      "remotes": ["github", "origin"]
+    },
     {
       "timestamp": "2026-03-11T21:00:00+09:00",
       "commits": [
