@@ -8,7 +8,6 @@ import { GeminiService } from '@/services/GeminiService';
 import { useUnifiedStore, getUnifiedStore } from '@/store/unifiedStore';
 import { useGameStore } from '@/store/gameStore'; // 레거시 호환
 import { useGameStore as useGameStore2 } from '@/store/game'; // 레거시 호환
-import { useSceneStore } from '@/store/useSceneStore'; // 레거시 호환 (단계적 제거 예정)
 import { LEGACY_SCENARIOS, DEFAULT_SCENARIO } from '@/data/scenarios';
 import { OnboardingOverlay } from '@/components/onboarding/OnboardingOverlay';
 import { Loader } from '@react-three/drei';
@@ -294,49 +293,10 @@ export default function CreatorStudioPage() {
 
       console.log('[CreatorStudio] Generating with:', { inputMode, prompt, imagePreview: !!imagePreview, useAIPipeline });
 
-      // [Phase 3] 단일 컨테이너 프롬프트 감지 - AI 우회 (정확한 모델 매칭)
-      const SINGLE_CONTAINER_KEYWORDS: Record<string, { modelUrl: string, scale: number }> = {
-        // 호그와트 환경
-        '슬리데린': { modelUrl: '/models/buildings/slytherin_dorm_room.glb', scale: 3 },
-        'slytherin': { modelUrl: '/models/buildings/slytherin_dorm_room.glb', scale: 3 },
-        '그리핀도르': { modelUrl: '/models/buildings/gryffindor_common_room.glb', scale: 3 },
-        'gryffindor': { modelUrl: '/models/buildings/gryffindor_common_room.glb', scale: 3 },
-        '덤블도어': { modelUrl: '/models/buildings/dumbledores_office.glb', scale: 3 },
-        'dumbledore': { modelUrl: '/models/buildings/dumbledores_office.glb', scale: 3 },
-        '호그와트 대강당': { modelUrl: '/models/buildings/hogwarts_grand_hall.glb', scale: 3 },
-        '대강당': { modelUrl: '/models/buildings/hogwarts_grand_hall.glb', scale: 3 },
-        'grand hall': { modelUrl: '/models/buildings/hogwarts_grand_hall.glb', scale: 3 },
-        'hogwarts hall': { modelUrl: '/models/buildings/hogwarts_grand_hall.glb', scale: 3 },
-        '마법약 교실': { modelUrl: '/models/buildings/potions_classroom.glb', scale: 3 },
-        'potions': { modelUrl: '/models/buildings/potions_classroom.glb', scale: 3 },
-        '올리밴더': { modelUrl: '/models/buildings/ollivanders_wand_shop.glb', scale: 3 },
-        'ollivander': { modelUrl: '/models/buildings/ollivanders_wand_shop.glb', scale: 3 },
-        '허니듀크': { modelUrl: '/models/buildings/honey_dukes_shop.glb', scale: 3 },
-        'honeydukes': { modelUrl: '/models/buildings/honey_dukes_shop.glb', scale: 3 },
-        '엄브릿지': { modelUrl: '/models/buildings/umbridges_office.glb', scale: 3 },
-        'umbridge': { modelUrl: '/models/buildings/umbridges_office.glb', scale: 3 },
-        '유령의 집': { modelUrl: '/models/buildings/haunted_house.glb', scale: 3 },
-        'haunted house': { modelUrl: '/models/buildings/haunted_house.glb', scale: 3 },
-      };
+      // [AI-Native] 모든 텍스트 입력은 AI Agent가 시맨틱 검색으로 처리
+      // (하드코딩 키워드 매핑 삭제 — 프로젝트 원칙: rule.md 참조)
 
-      const lowerPrompt = prompt.toLowerCase();
-      const matchedContainer = Object.entries(SINGLE_CONTAINER_KEYWORDS).find(([key]) =>
-        lowerPrompt.includes(key.toLowerCase())
-      );
-
-      // 1. 단일 컨테이너 감지 (최우선 - AI 우회)
-      /* [User Request: 하드코딩 제거] - 모든 요청을 AI Agent가 처리하도록 변경
-      if (matchedContainer && inputMode === 'text') {
-        const [key, config] = matchedContainer;
-        console.log(`[CreatorStudio] 🎯 단일 컨테이너 감지: ${key} → AI 우회`);
-
-        sceneGraph = {
-           // ... (Existing Hardcoded Logic)
-        } as unknown as any;
-        console.log('[CreatorStudio] 📊 Direct Container Load:', sceneGraph);
-      }
-      */
-      // 2. [Phase 6] Agent System (뉴로-심볼릭 파이프라인)
+      // [Phase 6] Agent System (뉴로-심볼릭 파이프라인)
       if (useAIPipeline && inputMode === 'text') {
         const { isFeatureEnabled } = await import('@/config/featureFlags');
 
