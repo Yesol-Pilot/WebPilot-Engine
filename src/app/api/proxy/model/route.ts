@@ -14,7 +14,8 @@ const ALLOWED_DOMAINS = [
     'dl.polyhaven.org',
     'models.readyplayer.me',
     'raw.githubusercontent.com',
-    'cdn.jsdelivr.net'
+    'cdn.jsdelivr.net',
+    'assets.heoyesol.kr'
 ];
 
 export async function GET(request: NextRequest) {

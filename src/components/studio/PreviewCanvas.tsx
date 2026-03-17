@@ -1107,6 +1107,14 @@ export default function PreviewCanvas({ nodes, isGenerating, isEmpty, prompt }: 
                                     environmentIntensity={glbMetadata.lighting.environmentIntensity ?? 0.5}
                                 />
                             )}
+                            {/* [Skybox 폴백] skyboxUrl이 없을 때 기본 프리셋으로 갈색 배경 방지 */}
+                            {!effectiveIsEmpty && !isGenerating && !skyboxUrl && hdriReady && (
+                                <Environment
+                                    preset="sunset"
+                                    background={true}
+                                    environmentIntensity={0.5}
+                                />
+                            )}
 
                             {/* 씬 내용 */}
                             {isGenerating ? (

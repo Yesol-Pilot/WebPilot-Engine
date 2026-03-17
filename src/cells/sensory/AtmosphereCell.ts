@@ -15,19 +15,11 @@ import { BaseCell } from '../BaseCell';
 import { NeuralSignal, SIGNALS, ScenarioData } from '../types';
 import { getUnifiedStore } from '../../store/unifiedStore';
 import ResourceDecisionService from '../../services/ai-pipeline/ResourceDecisionService';
+import SkyboxDecisionService from '../../services/ai-pipeline/SkyboxDecisionService';
 
-// TODO: 실제 프로젝트의 스카이박스 에셋 경로로 교체 필요
-// 현재는 플레이스홀더 경로 사용
-const PRESET_SKYBOXES: Record<string, string> = {
-    outdoor_day: '/assets/skybox/day.hdr',
-    outdoor_night: '/assets/skybox/night.hdr',
-    outdoor_sunset: '/assets/skybox/sunset.hdr',
-    indoor_warm: '/assets/skybox/indoor_warm.hdr',
-    indoor_cool: '/assets/skybox/indoor_cool.hdr',
-    fantasy: '/assets/skybox/fantasy.hdr',
-    horror: '/assets/skybox/horror.hdr',
-    cyberpunk: '/assets/skybox/cyberpunk.hdr',
-};
+// Polyhaven CDN 기본 폴백 HDRI (SKYBOX_LIBRARY에서 가져온 안전한 URL)
+const DEFAULT_OUTDOOR_HDRI = 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr';
+const DEFAULT_INDOOR_HDRI = 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_03_1k.hdr';
 
 export class AtmosphereCell extends BaseCell {
     constructor() {
@@ -46,41 +38,48 @@ export class AtmosphereCell extends BaseCell {
 
             this.logState(`배경 분위기 설정 시작: "${validScenario.prompt}"`);
 
-            // 1. 환경 타입 및 스카이박스 결정
-            // ResourceDecisionService의 findMatchingTheme 로직 활용 (private이므로 간접 추론 필요하지만,
-            // decideLighting을 통해 얻은 preset으로 역추적하거나, Service에 공개 메서드를 추가하는 것이 좋음.
-            // 여기서는 Service의 로직이 이미 조명 프리셋과 강하게 결합되어 있으므로, 
-            // 조명 결정 로직과 유사하게 테마를 다시 찾거나 조명 프리셋을 활용함.)
-
-            // 더 정확한 방법: ResourceDecisionService에 'decideSkybox' 추가가 이상적이나, 
-            // 현재는 조명 설정과 연동하여 결정.
-
+            // 1. 조명 설정 결정 (기존 로직 유지)
             const lightingConfig = ResourceDecisionService.decideLighting(
                 validScenario.prompt,
                 validScenario.environment.isOutdoor
             );
 
             const environmentType = validScenario.environment.isOutdoor ? 'outdoor' : 'indoor';
-            const skyboxUrl = PRESET_SKYBOXES[lightingConfig.preset] || PRESET_SKYBOXES['outdoor_day'];
 
-            // 2. SSOT 업데이트
-            const store = getUnifiedStore();
-            store.setEnvironmentType(environmentType);
+            // 2. Skybox 결정 — SkyboxDecisionService로 SKYBOX_LIBRARY 시맨틱 검색
+            let skyboxUrl: string | null = null;
 
-            if (validScenario.environment.isOutdoor) {
-                store.setSkyboxUrl(skyboxUrl);
-            } else {
-                store.setSkyboxUrl(null); // 실내는 스카이박스 제거 (또는 창문 밖 풍경으로 사용)
+            try {
+                skyboxUrl = await SkyboxDecisionService.generateSkyboxIfNeeded(validScenario.prompt);
+                
+                if (skyboxUrl) {
+                    this.logState(`✅ 시맨틱 검색으로 HDRI 발견: ${skyboxUrl}`);
+                }
+            } catch (error) {
+                console.warn('[Atmosphere] SkyboxDecisionService 실패, 폴백 사용:', error);
             }
 
-            // 3. 완료 보고
-            this.logState(`분위기 설정 완료: ${environmentType}, Skybox: ${validScenario.environment.isOutdoor ? skyboxUrl : 'OFF'}`);
+            // 3. 폴백: 시맨틱 검색 실패 시 기본 Polyhaven HDRI 사용
+            if (!skyboxUrl) {
+                skyboxUrl = validScenario.environment.isOutdoor
+                    ? DEFAULT_OUTDOOR_HDRI
+                    : DEFAULT_INDOOR_HDRI;
+                this.logState(`🔄 기본 폴백 HDRI 사용: ${skyboxUrl}`);
+            }
+
+            // 4. SSOT 업데이트 — 실내/야외 모두 skybox 설정 (갈색 배경 방지)
+            const store = getUnifiedStore();
+            store.setEnvironmentType(environmentType);
+            store.setSkyboxUrl(skyboxUrl);
+
+            // 5. 완료 보고
+            this.logState(`분위기 설정 완료: ${environmentType}, Skybox: ${skyboxUrl}`);
 
             await this.transmit('BROADCAST', SIGNALS.SENSORY_DONE, {
                 source: 'ATMOSPHERE',
                 action: 'setAtmosphere',
                 environmentType,
-                hasSkybox: validScenario.environment.isOutdoor,
+                hasSkybox: true,
                 traceId
             });
         }
