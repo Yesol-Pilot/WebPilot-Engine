@@ -25,11 +25,13 @@ import {
     createSimulationSlice,
     EditorSlice,
     createEditorSlice,
+    GameplaySlice,
+    createGameplaySlice,
     transientState,
 } from './slices';
 
 // 통합 스토어 타입
-export type UnifiedStore = WorldSlice & SimulationSlice & EditorSlice & {
+export type UnifiedStore = WorldSlice & SimulationSlice & EditorSlice & GameplaySlice & {
     // 통합 액션
     enterAIWorld: () => void;
     enterDemoMode: (fallbackScenario?: any) => void;
@@ -50,6 +52,7 @@ const createUnifiedSlice: StateCreator<UnifiedStore, [], [], UnifiedStore> = (se
     ...createWorldSlice(set, get, store),
     ...createSimulationSlice(set, get, store),
     ...createEditorSlice(set, get, store),
+    ...createGameplaySlice(set, get, store),
 
     /**
      * AI 생성 월드로 진입 (체험하기)
@@ -114,6 +117,7 @@ const createUnifiedSlice: StateCreator<UnifiedStore, [], [], UnifiedStore> = (se
         state.resetWorld();
         state.resetSimulation();
         state.resetEditor();
+        state.resetGameplay();
         console.log('[UnifiedStore] 전체 리셋 완료');
     },
 });

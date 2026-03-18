@@ -1,68 +1,58 @@
-import { create } from 'zustand';
-import { devtools, subscribeWithSelector } from 'zustand/middleware';
+/**
+ * game.ts — Facade (UnifiedStore 호환 계층)
+ * 
+ * [리팩토링] 원래 독립 스토어였으나, 이제 UnifiedStore를 감싸는 Facade.
+ * 
+ * 핵심 변경:
+ *   - transientState: SimulationSlice의 단일 인스턴스로 통일 (이중 export 해결)
+ *   - useGameStore: UnifiedStore 동일 인스턴스 참조
+ *   - TransientState 타입: re-export
+ *   - loadScenario: WorldSlice.loadScenario 위임 + nodes Record 호환
+ *   - MCP processCommand: GameplaySlice.processCommand + WorldSlice 연동
+ */
+
+import { useUnifiedStore, getUnifiedStore, transientState } from './unifiedStore';
+import type { UnifiedStore } from './unifiedStore';
 import { Scenario, SceneNode } from '../lib/schema/scene';
 import { RoomArchitecture } from '../types/schema';
 import { toast } from '../components/ui/ToastNotification';
 
-// [하드코딩 제거] `DEFAULT_FALLBACK_MODEL` 정적 변수 제거됨.
-// 에셋 로딩은 이제 `DynamicModel` 컴포넌트 내 AI 검색에 온연히 맡김.
+// ===============================================
+// Transient 상태 — 단일 인스턴스로 통일
+// ===============================================
 
-/**
- * [NSSE] Transient 상태 - 렌더 루프에서 직접 변이
- * React 리렌더링을 유발하지 않음
- */
-export interface TransientState {
-    // 카메라 상태 (매 프레임 업데이트)
-    cameraPosition: [number, number, number];
-    cameraTarget: [number, number, number];
-    cameraFov: number;
+// [FIX] 사이드이펙트 위험 6 해결: 
+// 기존 game.ts의 자체 transientState 제거 → SimulationSlice의 것으로 통일
+export type { TransientState } from './slices/SimulationSlice';
+export { transientState };
 
-    // 에이전트 상태 (NavMesh 경로 추적)
-    agentPosition: [number, number, number];
-    agentVelocity: [number, number, number];
-
-    // 성능 메트릭
-    fps: number;
-    frameTime: number;
-}
-
-// [NSSE] 전역 Transient 상태 (Zustand 외부)
-export const transientState: TransientState = {
-    cameraPosition: [0, 5, 10],
-    cameraTarget: [0, 0, 0],
-    cameraFov: 50,
-    agentPosition: [0, 0, 0],
-    agentVelocity: [0, 0, 0],
-    fps: 60,
-    frameTime: 16.67,
-};
-
+// ===============================================
+// 레거시 호환 인터페이스
+// ===============================================
 
 interface GameState {
-    // Scenario Data
+    // Scenario
     currentScenario: Scenario | null;
-    nodes: Record<string, SceneNode>; // Id -> Node map for quick access
-    architecture: RoomArchitecture | null; // [NEW] AI 생성 방 구조
-    environmentType: 'outdoor' | 'indoor' | 'unknown'; // [IAOS] 환경 타입 (AI 결정)
+    nodes: Record<string, SceneNode>;
+    architecture: RoomArchitecture | null;
+    environmentType: 'outdoor' | 'indoor' | 'unknown';
 
-    // Player State
-    inventory: string[]; // List of item IDs
+    // Player
+    inventory: string[];
     currentLocation: [number, number, number];
 
-    // UI State
+    // UI
     focusedNodeId: string | null;
-    dialogue: string | null; // Current narrative text being displayed
-    isDialogOpen: boolean; // Added
-    // [NEW] 내러티브 상태 관리
+    dialogue: string | null;
+    isDialogOpen: boolean;
     narrativeState: 'initial' | 'intro' | 'playing' | 'climax' | 'ending';
-
-    // [NEW] Global UI State
-    gameMode: 'demo' | 'custom'; // Added gameMode
+    gameMode: 'demo' | 'custom' | 'generating';
     isLoading: boolean;
     loadingMessage: string;
     error: string | null;
     errorTitle: string | null;
-    // Audio State
+
+    // Audio
     audio: {
         volume: number;
         isMuted: boolean;
@@ -71,16 +61,16 @@ interface GameState {
     };
 
     // Actions
-    setGameMode: (mode: 'demo' | 'custom') => void; // Added action
-    setEnvironmentType: (type: 'outdoor' | 'indoor' | 'unknown') => void; // [IAOS] 환경 타입 설정
+    setGameMode: (mode: 'demo' | 'custom' | 'generating') => void;
+    setEnvironmentType: (type: 'outdoor' | 'indoor' | 'unknown') => void;
     setNarrativeState: (state: 'initial' | 'intro' | 'playing' | 'climax' | 'ending') => void;
     setLoading: (isLoading: boolean, message?: string) => void;
     setError: (error: string | null, title?: string) => void;
     loadScenario: (scenario: Scenario) => void;
-    addNode: (node: SceneNode) => void; // Added
+    addNode: (node: SceneNode) => void;
     addItem: (itemId: string) => void;
     removeItem: (itemId: string) => void;
-    deleteNode: (nodeId: string) => void; // Added for pickup logic
+    deleteNode: (nodeId: string) => void;
     setFocusedNode: (nodeId: string | null) => void;
     setDialogue: (text: string | null) => void;
     setIsDialogOpen: (isOpen: boolean) => void;
@@ -91,240 +81,175 @@ interface GameState {
     playBgm: (trackId: string | null) => void;
     playSfx: (sfxId: string) => void;
 
-    // MCP Integration
+    // MCP
     pollMcpCommands: () => Promise<void>;
     processCommand: (cmd: any) => void;
 }
 
-export const useGameStore = create<GameState>()(
-    devtools(
-        (set, get) => ({
-            // Scenario Data
-            currentScenario: null,
-            nodes: {},
-            architecture: null, // [NEW]
-            environmentType: 'unknown', // [IAOS] 초기값
+// ===============================================
+// 호환 래핑 함수
+// ===============================================
 
-            inventory: [],
-            currentLocation: [0, 0, 0],
+function createGameCompatLayer(state: UnifiedStore): GameState {
+    return {
+        currentScenario: state.currentScenario,
+        nodes: state.entityMap,
+        architecture: state.architecture,
+        environmentType: state.environmentType,
 
-            focusedNodeId: null,
-            dialogue: null,
-            isDialogOpen: false,
-            narrativeState: 'initial', // [FIX] 초기값 설정 - 'ending' 상태로 시작하는 버그 방지
+        // inventory: string[] 호환 — game.ts의 원래 타입은 string[]
+        inventory: state.inventory.map((item) => item.id),
+        currentLocation: state.currentLocation,
 
-            gameMode: 'demo', // Default to demo
-            isLoading: false,
-            loadingMessage: '',
-            error: null,
-            errorTitle: null,
+        focusedNodeId: state.focusedNodeId,
+        dialogue: state.dialogue,
+        isDialogOpen: state.isDialogueOpen,
+        narrativeState: state.narrativeState,
+        gameMode: state.gameMode,
+        isLoading: state.isLoading,
+        loadingMessage: state.loadingMessage,
+        error: state.error,
+        errorTitle: state.errorTitle,
 
-            audio: {
-                volume: 0.5,
-                isMuted: false,
-                bgm: null,
-                sfx: null,
-            },
+        audio: state.audio,
 
-            setGameMode: (mode) => set({ gameMode: mode }),
-            setEnvironmentType: (type) => {
-                console.log(`[GameStore] 🌍 environmentType = ${type}`);
-                set({ environmentType: type });
-            },
-            setNarrativeState: (state) => set({ narrativeState: state }),
-            setLoading: (isLoading, message = '') => set({ isLoading, loadingMessage: message }),
-            setError: (error, title = '오류 발생') => set({ error, errorTitle: title }),
+        // Actions
+        setGameMode: state.setGameMode,
+        setEnvironmentType: state.setEnvironmentType,
+        setNarrativeState: state.setNarrativeState,
+        setLoading: state.setLoading,
+        setError: state.setError,
 
-            loadScenario: (scenario) => set((state) => {
-                const nodeMap: Record<string, SceneNode> = {};
-                scenario.nodes.forEach(node => {
-                    nodeMap[node.id] = node;
-                });
-                return {
-                    currentScenario: scenario,
-                    nodes: nodeMap,
-                    architecture: scenario.architecture || null, // [NEW] AI 생성 방 구조 저장
-                    dialogue: scenario.narrative?.intro || '', // Start with intro
-                    narrativeState: 'intro' // [FIX] Ensure narrative starts
-                };
-            }),
-
-            addNode: (node) => set((state) => ({
-                nodes: { ...state.nodes, [node.id]: node }
-            })),
-
-            addItem: (itemId) => set((state) => ({
-                inventory: [...state.inventory, itemId]
-            })),
-
-            removeItem: (itemId) => set((state) => ({
-                inventory: state.inventory.filter(id => id !== itemId)
-            })),
-
-            deleteNode: (nodeId) => set((state) => {
-                const newNodes = { ...state.nodes };
-                delete newNodes[nodeId];
-                return { nodes: newNodes };
-            }),
-
-            setFocusedNode: (nodeId) => set({ focusedNodeId: nodeId }),
-
-            setDialogue: (text) => set({ dialogue: text }),
-
-            setIsDialogOpen: (isOpen) => set({ isDialogOpen: isOpen }),
-
-            // Audio Actions
-            setVolume: (volume) => set((state) => ({ audio: { ...state.audio, volume } })),
-            toggleMute: () => set((state) => ({ audio: { ...state.audio, isMuted: !state.audio.isMuted } })),
-            playBgm: (trackId) => set((state) => ({ audio: { ...state.audio, bgm: trackId } })),
-            playSfx: (sfxId) => set((state) => ({ audio: { ...state.audio, sfx: sfxId } })),
-
-            /**
-             * MCP Integration Actions
-             */
-            pollMcpCommands: async () => {
-                try {
-                    // Start Loading only if it's an initial check or intended to block
-                    // For polling, we might not want to show global loading, maybe just a spinner in HUD
-                    // console.log('[GameStore] Polling MCP...'); 
-
-                    const res = await fetch('/api/mcp/command');
-                    if (!res.ok) return; // Silent fail on polling errors usually
-                    const commands = await res.json();
-
-                    if (commands && commands.length > 0) {
-                        commands.forEach((cmd: any) => {
-                            get().processCommand(cmd);
-                        });
-                    }
-                } catch (e) {
-                    // Polling errors are usually transient, silence specific notifications 
-                    // unless it happens repeatedly (logic omitted for brevity)
-                    console.error('[GameStore] Poll Error', e);
-                }
-            },
-
-            processCommand: (cmd: any) => {
-                console.log('[GameStore] Processing:', cmd.type, cmd.payload);
-                // We don't destructure here to avoid circular dependency if get() is tricky, 
-                // but get() is fine inside actions.
-                const state = get();
-
-                if (cmd.type === 'create_world') {
-                    get().setLoading(true, '월드를 생성하고 있습니다...');
-
-                    // [FIX] Switch to custom mode to prevent auto-loading demo
-                    get().setGameMode('custom');
-
-                    try {
-                        state.loadScenario({
-                            id: cmd.payload.id || 'mcp_generated',
-                            title: `Scenario ${cmd.payload.id}`,
-                            theme: cmd.payload.theme,
-                            description: cmd.payload.narrative_intro || cmd.payload.description || '',
-                            nodes: [],
-                            // narrative 구조 지원 (선택적)
-                            narrative: (cmd.payload.narrative || {
-                                intro: cmd.payload.narrative_intro || 'Welcome to the generated world.',
-                                climax: 'You have reached the climax.',
-                                resolution: 'The adventure ends here.'
-                            }) as any // Schema mismatch prevention
-                        } as Scenario);
-
-                        // [IAOS] AI 결정 환경 타입 저장
-                        const envType = cmd.payload.environmentType || 'unknown';
-                        get().setEnvironmentType(envType);
-                        console.log(`[GameStore] 🌍 environmentType 설정: ${envType}`);
-
-                        // Wait a bit for effect
-                        setTimeout(() => {
-                            get().setLoading(false);
-                            toast.success('새로운 월드가 생성되었습니다!');
-                        }, 1000);
-
-                    } catch (err) {
-                        console.error(err);
-                        get().setError('월드 생성 중 오류가 발생했습니다.');
-                        get().setLoading(false);
-                        toast.error('월드 생성 실패');
-                    }
-                } else if (cmd.type === 'spawn_actor') {
-                    const { id, type, name, position, description } = cmd.payload;
-                    // [하드코딩 제거 조치]
-                    // 기존 ASSET_LIBRARY 및 DEFAULT_FALLBACK_MODEL을 이용한 억지 지정 및
-                    // string 하드코딩 방식 전면 폐지.
-                    // modelUrl은 명시적으로 내려오지 않는 이상 undefined로 처리하여
-                    // DynamicModel 컴포넌트가 Vector DB 검색 (Semantic Search)을 거치도록 강제함.
-                    const modelPath = cmd.payload.modelUrl || undefined;
-
-                    state.addNode({
-                        id: id || `actor_${Date.now()}`,
-                        type: type === 'light' ? 'light' : 'static_mesh',
-                        name: name,
-                        transform: {
-                            position: (position || [0, 0, 0]) as [number, number, number],
-                            rotation: [0, 0, 0],
-                            scale: [1, 1, 1]
-                        },
-                        modelUrl: modelPath,
-                        description: description || '',
-                        affordances: [],
-                        relationships: [],
-                        childIds: []
-                    });
-                } else if (cmd.type === 'set_camera') {
-                    console.log('[Store] Camera Command:', cmd.payload);
-                    // 카메라 이벤트 발송
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('camera_command', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                } else if (cmd.type === 'play_sequence') {
-                    console.log('[Store] Play Sequence:', cmd.payload);
-                    // 시퀀스 재생 이벤트 발송
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('play_sequence', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                } else if (cmd.type === 'play_animation') {
-                    console.log('[Store] Play Animation:', cmd.payload);
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('play_animation', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                } else if (cmd.type === 'comic_effect') {
-                    console.log('[Store] Comic Effect:', cmd.payload);
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('comic_effect', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                } else if (cmd.type === 'show_bubble') {
-                    console.log('[Store] Show Bubble:', cmd.payload);
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('show_bubble', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                } else if (cmd.type === 'speak_text') {
-                    console.log('[Store] Speak Text:', cmd.payload);
-                    if (typeof window !== 'undefined') {
-                        const event = new CustomEvent('speak_text', {
-                            detail: cmd.payload
-                        });
-                        window.dispatchEvent(event);
-                    }
-                }
+        // loadScenario — WorldSlice의 loadScenario + narrative 설정
+        loadScenario: (scenario: Scenario) => {
+            const store = getUnifiedStore();
+            store.loadScenario(scenario);
+            // narrative intro 동기화 (레거시 game.ts 동작)
+            if (scenario.narrative?.intro) {
+                store.setDialogue(scenario.narrative.intro as string);
             }
-        }),
-        { name: 'WebPilot-GameStore' }
-    )
+            store.setNarrativeState('intro');
+        },
+
+        // addNode → addEntity
+        addNode: (node) => getUnifiedStore().addEntity(node),
+
+        // addItem — 레거시 string 기반 인벤토리
+        addItem: (itemId) => {
+            getUnifiedStore().addToInventory({
+                id: itemId,
+                name: itemId,
+                description: '',
+                type: 'item',
+            });
+        },
+
+        // removeItem
+        removeItem: (itemId) => getUnifiedStore().removeFromInventory(itemId),
+
+        // deleteNode → removeEntity
+        deleteNode: (nodeId) => getUnifiedStore().removeEntity(nodeId),
+
+        setFocusedNode: state.setFocusedNode,
+        setDialogue: state.setDialogue,
+        setIsDialogOpen: (isOpen: boolean) => {
+            if (isOpen) {
+                // isDialogOpen은 EditorSlice의 isDialogueOpen과 매핑
+                // 하지만 game.ts에서는 NPC 없이 다이얼로그를 열 수 있음
+                useUnifiedStore.setState({ isDialogueOpen: isOpen });
+            } else {
+                getUnifiedStore().closeDialogue();
+            }
+        },
+
+        // Audio
+        setVolume: state.setVolume,
+        toggleMute: state.toggleMute,
+        playBgm: state.playBgm,
+        playSfx: state.playSfx,
+
+        // MCP — pollMcpCommands + processCommand (확장판)
+        pollMcpCommands: state.pollMcpCommands,
+
+        // processCommand — create_world/spawn_actor 등 WorldSlice 연동
+        processCommand: (cmd: any) => {
+            console.log('[game.ts Facade] 커맨드 처리:', cmd.type);
+            const store = getUnifiedStore();
+
+            if (cmd.type === 'create_world') {
+                store.setLoading(true, '월드를 생성하고 있습니다...');
+                store.setGameMode('custom');
+
+                try {
+                    store.loadScenario({
+                        id: cmd.payload.id || 'mcp_generated',
+                        title: `Scenario ${cmd.payload.id}`,
+                        theme: cmd.payload.theme,
+                        description: cmd.payload.narrative_intro || cmd.payload.description || '',
+                        nodes: [],
+                        narrative: (cmd.payload.narrative || {
+                            intro: cmd.payload.narrative_intro || 'Welcome to the generated world.',
+                            climax: 'You have reached the climax.',
+                            resolution: 'The adventure ends here.',
+                        }) as any,
+                    } as Scenario);
+
+                    const envType = cmd.payload.environmentType || 'unknown';
+                    store.setEnvironmentType(envType);
+
+                    setTimeout(() => {
+                        store.setLoading(false);
+                        toast.success('새로운 월드가 생성되었습니다!');
+                    }, 1000);
+                } catch (err) {
+                    console.error(err);
+                    store.setError('월드 생성 중 오류가 발생했습니다.');
+                    store.setLoading(false);
+                    toast.error('월드 생성 실패');
+                }
+            } else if (cmd.type === 'spawn_actor') {
+                const { id, type, name, position, description } = cmd.payload;
+                const modelPath = cmd.payload.modelUrl || undefined;
+
+                store.addEntity({
+                    id: id || `actor_${Date.now()}`,
+                    type: type === 'light' ? 'light' : 'static_mesh',
+                    name: name,
+                    transform: {
+                        position: (position || [0, 0, 0]) as [number, number, number],
+                        rotation: [0, 0, 0],
+                        scale: [1, 1, 1],
+                    },
+                    modelUrl: modelPath,
+                    description: description || '',
+                    affordances: [],
+                    relationships: [],
+                    childIds: [],
+                });
+            } else {
+                // 기타 커맨드는 GameplaySlice에 위임
+                store.processCommand(cmd);
+            }
+        },
+    };
+}
+
+// ===============================================
+// Facade Export
+// ===============================================
+
+const facadeStore = Object.assign(
+    function useGameStoreFacade<T>(selector?: (state: GameState) => T): T {
+        if (!selector) {
+            return useUnifiedStore((unified) => createGameCompatLayer(unified)) as unknown as T;
+        }
+        return useUnifiedStore((unified) => selector(createGameCompatLayer(unified)));
+    },
+    {
+        getState: (): GameState => createGameCompatLayer(getUnifiedStore()),
+        setState: useUnifiedStore.setState,
+        subscribe: useUnifiedStore.subscribe,
+    }
 );
+
+export const useGameStore = facadeStore;

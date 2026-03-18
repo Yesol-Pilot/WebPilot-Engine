@@ -1,27 +1,28 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+/**
+ * gameStore.ts — Facade (UnifiedStore 호환 계층)
+ * 
+ * [리팩토링] 원래 독립 스토어였으나, 이제 UnifiedStore를 감싸는 Facade.
+ * 기존 import를 깨뜨리지 않으면서 단일 스토어 인스턴스를 공유.
+ * 
+ * 호환 매핑:
+ *   - scenario → currentScenario (이름 별칭)
+ *   - editor.selectedId → selectedIds[0] (단일↔배열)
+ *   - setInteraction(target) → openDialogue/closeDialogue (시그니처)
+ *   - addNode/deleteNode → addEntity/removeEntity (데이터 구조)
+ *   - GameState 타입 → UnifiedStore 기반 재정의
+ */
+
+import { useUnifiedStore, getUnifiedStore } from './unifiedStore';
+import type { UnifiedStore } from './unifiedStore';
 import { Scenario, SceneNode } from '@/types/schema';
 import { Quest } from '@/types/quest';
-import { PersistenceManager } from '@/services/PersistenceManager';
 import { InventoryItem } from '@/types/inventory';
 
-// UI 모드 타입 정의
+// ===============================================
+// 레거시 타입 호환 (PersistenceManager용)
+// ===============================================
+
 export type UIMode = 'editor' | 'game' | 'immersive';
-
-interface EditorState {
-    isEditMode: boolean;
-    selectedId: string | null;
-    transformMode: 'translate' | 'rotate' | 'scale';
-    isInputFocused: boolean;
-}
-
-interface InteractionState {
-    isDialogueOpen: boolean;
-    activeNpc: { id: string; name: string; desc: string } | null;
-    hoverText: string | null;
-    chatHistory: Record<string, { role: 'user' | 'model'; parts: string }[]>;
-    chatOptions: Record<string, any[]>;
-}
 
 export interface QuestState {
     quests: Record<string, Quest>;
@@ -29,19 +30,36 @@ export interface QuestState {
     isJournalOpen: boolean;
 }
 
+/**
+ * GameState — 레거시 호환 인터페이스
+ * 
+ * PersistenceManager, save.ts 등에서 참조하는 타입.
+ * UnifiedStore에서 필요한 부분만 추출.
+ */
 export interface GameState {
-    // Core Data
+    // Core Data 
     scenario: Scenario | null;
     currentGenre: string;
     currentGameType: string;
-    gameMode: 'demo' | 'custom'; // [NEW]
+    gameMode: 'demo' | 'custom' | 'generating';
     hasLoaded: boolean;
 
     // UI States
     uiMode: UIMode;
-    showDevUI: boolean;  // '0' 키로 토글
-    editor: EditorState;
-    interaction: InteractionState;
+    showDevUI: boolean;
+    editor: {
+        isEditMode: boolean;
+        selectedId: string | null;
+        transformMode: 'translate' | 'rotate' | 'scale';
+        isInputFocused: boolean;
+    };
+    interaction: {
+        isDialogueOpen: boolean;
+        activeNpc: { id: string; name: string; desc: string } | null;
+        hoverText: string | null;
+        chatHistory: Record<string, { role: 'user' | 'model'; parts: string }[]>;
+        chatOptions: Record<string, any[]>;
+    };
     audio: {
         volume: number;
         isMuted: boolean;
@@ -53,25 +71,23 @@ export interface GameState {
     };
     quest: QuestState;
 
-    // Game Progress State
-    inventory: InventoryItem[]; // [Changed] string[] -> InventoryItem[]
+    // Game Progress
+    inventory: InventoryItem[];
     flags: Record<string, boolean>;
 
     // Actions
     setScenario: (scenario: Scenario) => void;
     setGenre: (genre: string) => void;
     setGameType: (gameType: string) => void;
-    setGameMode: (mode: 'demo' | 'custom') => void; // [NEW]
+    setGameMode: (mode: 'demo' | 'custom') => void;
     setLoaded: (loaded: boolean) => void;
-    loadGame: () => boolean; // [New]
-    saveGame: () => void;    // [New]
-    incrementGenerationCount: () => void; // [New]
+    loadGame: () => boolean;
+    saveGame: () => void;
+    incrementGenerationCount: () => void;
 
-    // UI Mode Actions
+    // UI Actions
     setUIMode: (mode: UIMode) => void;
     toggleDevUI: () => void;
-
-    // Editor Actions
     setEditMode: (enabled: boolean) => void;
     setSelectedId: (id: string | null) => void;
     setTransformMode: (mode: 'translate' | 'rotate' | 'scale') => void;
@@ -84,7 +100,7 @@ export interface GameState {
     addChatMessage: (npcId: string, message: { role: 'user' | 'model'; parts: string }) => void;
     setChatOptions: (npcId: string, options: any[]) => void;
 
-    // Audio Actions
+    // Audio
     setVolume: (volume: number) => void;
     toggleMute: () => void;
 
@@ -95,263 +111,220 @@ export interface GameState {
     completeQuest: (questId: string) => void;
     setQuestJournalOpen: (isOpen: boolean) => void;
 
-    // Gameplay Actions
-    addToInventory: (item: InventoryItem) => void; // [Changed] Accepts object
+    // Gameplay
+    addToInventory: (item: InventoryItem) => void;
     removeFromInventory: (itemId: string) => void;
-    combineItems: (item1Id: string, item2Id: string) => boolean; // [New]
+    combineItems: (item1Id: string, item2Id: string) => boolean;
     setFlag: (key: string, value: boolean) => void;
 
-    // Data Mutation Actions
+    // Node mutations
     updateNode: (nodeId: string, updates: Partial<SceneNode>) => void;
     addNode: (node: SceneNode) => void;
     deleteNode: (nodeId: string) => void;
 }
 
-export const useGameStore = create<GameState>()(
-    devtools((set, get) => ({
-        // Initial State
-        scenario: null,
-        currentGenre: 'modern',
-        currentGameType: 'escape',
-        gameMode: 'demo' as 'demo' | 'custom', // [NEW] Distinct mode
-        hasLoaded: false,
-        inventory: [],
-        flags: {},
+// ===============================================
+// Facade 스토어 — UnifiedStore 래핑
+// ===============================================
 
-        // UI Mode (기본: 게임 모드)
-        uiMode: 'game',
-        showDevUI: false,  // '0' 키로 토글
+/**
+ * 호환 계층 래퍼
+ * 
+ * UnifiedStore의 상태를 GameState 인터페이스에 맞게 재구성.
+ * getState()에서 호출될 때 동적으로 매핑.
+ */
+function createCompatLayer(state: UnifiedStore): GameState {
+    return {
+        // === 이름 매핑 ===
+        // currentScenario → scenario (레거시 이름)
+        scenario: state.currentScenario,
+        currentGenre: state.currentGenre,
+        currentGameType: state.currentGameType,
+        gameMode: state.gameMode as 'demo' | 'custom',
+        hasLoaded: state.hasLoaded,
 
+        // === UI 모드 ===
+        uiMode: state.uiMode,
+        showDevUI: state.showDevUI,
+
+        // === 에디터 — selectedIds[0] → selectedId 매핑 ===
         editor: {
-            isEditMode: false,
-            // ...
-            selectedId: null,
-            transformMode: 'translate',
-            isInputFocused: false,
+            isEditMode: state.isEditMode,
+            selectedId: state.selectedIds.length > 0 ? state.selectedIds[0] : null,
+            transformMode: state.transformMode,
+            isInputFocused: state.isInputFocused,
         },
-        // ... (truncated)
 
-        // Environment Actions
-        setScenario: (scenario) => set({ scenario }),
-        setGenre: (genre) => set({ currentGenre: genre }),
-        setGameType: (gameType) => set({ currentGameType: gameType }),
-        setGameMode: (mode: 'demo' | 'custom') => set({ gameMode: mode }), // [NEW]
-        setLoaded: (hasLoaded) => set({ hasLoaded }),
-
+        // === 인터랙션 ===
         interaction: {
-            isDialogueOpen: false,
-            activeNpc: null,
-            hoverText: null,
-            chatHistory: {},
-            chatOptions: {},
+            isDialogueOpen: state.isDialogueOpen,
+            activeNpc: state.activeNpc,
+            hoverText: state.hoverText,
+            chatHistory: state.chatHistory,
+            chatOptions: state.chatOptions,
         },
 
-        quest: {
-            quests: {},
-            activeQuestIds: [],
-            isJournalOpen: false,
-        },
-
+        // === 오디오 ===
         audio: {
-            volume: 0.5,
-            isMuted: false,
+            volume: state.audio.volume,
+            isMuted: state.audio.isMuted,
         },
 
-        // [New] Quota Management
-        generationQuota: {
-            used: 0,
-            limit: 1, // Basic Template Limit: 1 per session
-            maxCredits: 10,
+        // === 게임플레이 상태 ===
+        generationQuota: state.generationQuota,
+        quest: state.quest,
+        inventory: state.inventory,
+        flags: state.flags,
+
+        // === 액션 래핑 ===
+
+        // scenario 설정 — loadScenario로 매핑
+        setScenario: (scenario: Scenario) => {
+            const store = getUnifiedStore();
+            store.loadScenario(scenario);
         },
+        setGenre: state.setGenre,
+        setGameType: state.setGameType,
+        setGameMode: (mode: 'demo' | 'custom') => state.setGameMode(mode),
+        setLoaded: state.setLoaded,
 
-        // [New] Quota Actions
-        incrementGenerationCount: () => set((state) => ({
-            generationQuota: {
-                ...state.generationQuota,
-                used: state.generationQuota.used + 1
-            }
-        })),
-
-        // Other Actions
+        // persistence — PersistenceManager 직접 호출
         loadGame: () => {
-            const savedData = PersistenceManager.loadGame();
-            if (savedData) {
-                set({
-                    scenario: savedData.scenario,
-                    inventory: savedData.inventory,
-                    flags: savedData.flags || {},
-                    quest: {
-                        quests: savedData.quests.quests || {},
-                        activeQuestIds: savedData.quests.activeQuestIds || [],
-                        isJournalOpen: false
-                    },
-                    hasLoaded: true
-                });
-                return true;
+            try {
+                const { PersistenceManager } = require('@/services/PersistenceManager');
+                const savedData = PersistenceManager.loadGame();
+                if (savedData) {
+                    const store = getUnifiedStore();
+                    if (savedData.scenario) store.loadScenario(savedData.scenario);
+                    // GameplaySlice 상태 복원
+                    useUnifiedStore.setState({
+                        inventory: savedData.inventory || [],
+                        flags: savedData.flags || {},
+                        quest: {
+                            quests: savedData.quests?.quests || {},
+                            activeQuestIds: savedData.quests?.activeQuestIds || [],
+                            isJournalOpen: false,
+                        },
+                        hasLoaded: true,
+                    });
+                    return true;
+                }
+            } catch (e) {
+                console.error('[gameStore Facade] loadGame 실패:', e);
             }
             return false;
         },
 
         saveGame: () => {
-            const state = get();
-            PersistenceManager.saveGame(state);
-        },
-
-        // UI Mode Actions
-        setUIMode: (uiMode) => set({ uiMode }),
-        toggleDevUI: () => set(state => ({ showDevUI: !state.showDevUI })),
-
-        setEditMode: (isEditMode) => set(state => ({
-            editor: { ...state.editor, isEditMode },
-            uiMode: isEditMode ? 'editor' : 'game'  // 모드 연동
-        })),
-        setSelectedId: (selectedId) => set(state => ({ editor: { ...state.editor, selectedId } })),
-        setTransformMode: (transformMode) => set(state => ({ editor: { ...state.editor, transformMode } })),
-        setInputFocused: (isInputFocused) => set(state => ({ editor: { ...state.editor, isInputFocused } })),
-
-        setInteraction: (target) => set(state => ({
-            interaction: { ...state.interaction, activeNpc: target, isDialogueOpen: !!target }
-        })),
-        closeDialogue: () => set(state => ({
-            interaction: { ...state.interaction, isDialogueOpen: false, activeNpc: null }
-        })),
-        setHoverText: (hoverText) => set(state => ({
-            interaction: { ...state.interaction, hoverText }
-        })),
-        addChatMessage: (npcId, message) => set(state => {
-            const currentHistory = state.interaction.chatHistory[npcId] || [];
-            return {
-                interaction: {
-                    ...state.interaction,
-                    chatHistory: {
-                        ...state.interaction.chatHistory,
-                        [npcId]: [...currentHistory, message]
-                    }
-                }
-            };
-        }),
-        setChatOptions: (npcId, options) => set(state => ({
-            interaction: {
-                ...state.interaction,
-                chatOptions: {
-                    ...state.interaction.chatOptions,
-                    [npcId]: options
-                }
-            }
-        })),
-
-        // Audio Actions
-        setVolume: (volume) => set(state => ({ audio: { ...state.audio, volume } })),
-        toggleMute: () => set(state => ({ audio: { ...state.audio, isMuted: !state.audio.isMuted } })),
-
-        // Quest Actions (Implementation)
-        registerQuest: (quest) => set(state => ({
-            quest: {
-                ...state.quest,
-                quests: { ...state.quest.quests, [quest.id]: quest }
-            }
-        })),
-        acceptQuest: (questId) => set(state => {
-            if (state.quest.activeQuestIds.includes(questId)) return {};
-            return {
-                quest: { ...state.quest, activeQuestIds: [...state.quest.activeQuestIds, questId] }
-            };
-        }),
-        updateQuestStep: (questId, stepId, isCompleted) => set(state => {
-            const quest = state.quest.quests[questId];
-            if (!quest) return {};
-
-            const updatedSteps = quest.steps.map(step =>
-                step.id === stepId ? { ...step, isCompleted } : step
-            );
-
-            // Check completion
-            const allCompleted = updatedSteps.every(s => s.isCompleted);
-            const status = allCompleted ? 'completed' : 'active';
-
-            return {
-                quest: {
-                    ...state.quest,
-                    quests: {
-                        ...state.quest.quests,
-                        [questId]: { ...quest, steps: updatedSteps, status }
-                    }
-                }
-            };
-        }),
-        completeQuest: (questId) => set(state => {
-            const quest = state.quest.quests[questId];
-            if (!quest) return {};
-            return {
-                quest: {
-                    ...state.quest,
-                    quests: {
-                        ...state.quest.quests,
-                        [questId]: { ...quest, status: 'completed' }
-                    }
-                }
-            };
-        }),
-        setQuestJournalOpen: (isJournalOpen) => set(state => ({
-            quest: { ...state.quest, isJournalOpen }
-        })),
-
-        // Gameplay Actions
-        addToInventory: (item) => set(state => ({
-            inventory: [...state.inventory, item]
-        })),
-        removeFromInventory: (itemId) => set(state => ({
-            inventory: state.inventory.filter(i => i.id !== itemId)
-        })),
-        combineItems: (item1Id, item2Id) => {
-            const state = get();
-            const item1 = state.inventory.find(i => i.id === item1Id);
-            const item2 = state.inventory.find(i => i.id === item2Id);
-
-            if (!item1 || !item2) return false;
-
-            // Check if item1 can combine with item2
-            if (item1.combinableWith?.includes(item2Id) && item1.combinationResult) {
-                // Success! Create new item (Mock: In real app, we'd need a database of items)
-                const newItem: InventoryItem = {
-                    id: item1.combinationResult,
-                    name: "Combined Item", // Placeholder
-                    description: "A newly created item.",
-                    type: 'item',
-                    icon: '✨'
-                };
-
-                // Remove ingredients, add result
-                set({
-                    inventory: [
-                        ...state.inventory.filter(i => i.id !== item1Id && i.id !== item2Id),
-                        newItem
-                    ]
+            try {
+                const { PersistenceManager } = require('@/services/PersistenceManager');
+                const store = getUnifiedStore();
+                PersistenceManager.saveGame({
+                    scenario: store.currentScenario,
+                    inventory: store.inventory,
+                    flags: store.flags,
+                    quests: store.quest,
                 });
-                return true;
+            } catch (e) {
+                console.error('[gameStore Facade] saveGame 실패:', e);
             }
-            return false;
         },
-        setFlag: (key, value) => set(state => ({
-            flags: { ...state.flags, [key]: value }
-        })),
 
-        // Data Mutation
-        updateNode: (nodeId, updates) => set(state => {
-            if (!state.scenario) return {};
-            const newNodes = state.scenario.nodes.map(n =>
-                n.id === nodeId ? { ...n, ...updates } : n
-            );
-            return { scenario: { ...state.scenario, nodes: newNodes } };
-        }),
-        addNode: (node) => set(state => {
-            if (!state.scenario) return {};
-            return { scenario: { ...state.scenario, nodes: [...state.scenario.nodes, node] } };
-        }),
-        deleteNode: (nodeId) => set(state => {
-            if (!state.scenario) return {};
-            return { scenario: { ...state.scenario, nodes: state.scenario.nodes.filter(n => n.id !== nodeId) } };
-        }),
-    }))
+        incrementGenerationCount: state.incrementGenerationCount,
+
+        // UI
+        setUIMode: state.setUIMode,
+        toggleDevUI: state.toggleDevUI,
+        setEditMode: state.setEditMode,
+
+        // selectedId → selectedIds 매핑
+        setSelectedId: (id: string | null) => {
+            if (id === null) {
+                getUnifiedStore().clearSelection();
+            } else {
+                getUnifiedStore().setSelectedIds([id]);
+            }
+        },
+
+        setTransformMode: state.setTransformMode,
+        setInputFocused: state.setInputFocused,
+
+        // setInteraction → openDialogue/closeDialogue 분기
+        setInteraction: (target) => {
+            const store = getUnifiedStore();
+            if (target) {
+                store.openDialogue(target);
+            } else {
+                store.closeDialogue();
+            }
+        },
+        closeDialogue: state.closeDialogue,
+        setHoverText: state.setHoverText,
+        addChatMessage: state.addChatMessage,
+        setChatOptions: state.setChatOptions,
+
+        // Audio
+        setVolume: state.setVolume,
+        toggleMute: state.toggleMute,
+
+        // Quest
+        registerQuest: state.registerQuest,
+        acceptQuest: state.acceptQuest,
+        updateQuestStep: state.updateQuestStep,
+        completeQuest: state.completeQuest,
+        setQuestJournalOpen: state.setQuestJournalOpen,
+
+        // Gameplay
+        addToInventory: state.addToInventory,
+        removeFromInventory: state.removeFromInventory,
+        combineItems: state.combineItems,
+        setFlag: state.setFlag,
+
+        // Node mutations → entity 매핑
+        updateNode: (nodeId, updates) => getUnifiedStore().updateEntity(nodeId, updates),
+        addNode: (node) => getUnifiedStore().addEntity(node),
+        deleteNode: (nodeId) => getUnifiedStore().removeEntity(nodeId),
+    };
+}
+
+// ===============================================
+// Facade Export — 기존 import 호환
+// ===============================================
+
+/**
+ * useGameStore — Facade
+ * 
+ * 기존 코드에서 `useGameStore(selector)` 또는 `useGameStore.getState()` 로 사용.
+ * Zustand 훅과 동일한 API 제공하되, 내부적으로 UnifiedStore 사용.
+ */
+const facadeStore = Object.assign(
+    // Hook 형태: useGameStore((state) => state.xxx)
+    function useGameStoreFacade<T>(selector?: (state: GameState) => T): T {
+        // selector가 없으면 전체 상태 반환
+        if (!selector) {
+            return useUnifiedStore((unified) => createCompatLayer(unified)) as unknown as T;
+        }
+        // selector 있으면 변환 후 적용
+        return useUnifiedStore((unified) => selector(createCompatLayer(unified)));
+    },
+    {
+        // getState() 호환
+        getState: (): GameState => createCompatLayer(getUnifiedStore()),
+
+        // setState() 호환 (제한적)
+        setState: (partial: Partial<GameState>) => {
+            const updates: any = {};
+            if ('hasLoaded' in partial) updates.hasLoaded = partial.hasLoaded;
+            if ('inventory' in partial) updates.inventory = partial.inventory;
+            if ('flags' in partial) updates.flags = partial.flags;
+            if (Object.keys(updates).length > 0) {
+                useUnifiedStore.setState(updates);
+            }
+        },
+
+        // subscribe() 호환 (패스스루)
+        subscribe: useUnifiedStore.subscribe,
+    }
 );
 
+export const useGameStore = facadeStore;

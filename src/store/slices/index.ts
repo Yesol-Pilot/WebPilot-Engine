@@ -7,3 +7,4 @@
 export * from './WorldSlice';
 export * from './SimulationSlice';
 export * from './EditorSlice';
+export * from './GameplaySlice';
