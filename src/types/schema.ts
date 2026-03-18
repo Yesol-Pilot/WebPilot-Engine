@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const SceneNodeSchema = z.object({
     id: z.string(),
     name: z.string().optional().describe("오브젝트 이름 (영어)"),
-    type: z.enum(['static_mesh', 'interactive_prop', 'light', 'spawn_point']),
+    type: z.enum(['static_mesh', 'interactive_prop', 'npc', 'light', 'spawn_point', 'trigger_zone']),
     description: z.string().describe("3D 생성 AI를 위한 프롬프트"),
     transform: z.object({
         position: z.tuple([z.number(), z.number(), z.number()]), // [x, y, z]
@@ -67,7 +67,7 @@ export const SpatialLayoutSchema = z.object({
 
 // Scenario Schema including Narrative and Scene Nodes
 export const ScenarioSchema = z.object({
-    id: z.string().optional(),
+    id: z.string(),
     title: z.string(),
     theme: z.string().describe("Skybox 생성용 스타일 프롬프트"),
     nodes: z.array(SceneNodeSchema),
@@ -75,7 +75,7 @@ export const ScenarioSchema = z.object({
         intro: z.string(),
         climax: z.string(),
         resolution: z.string(),
-    }),
+    }).optional(),
     architecture: RoomArchitectureSchema.optional(),
     skybox: z.string().nullable().optional().describe("커스텀 Skybox URL (null이면 Skybox 제거)"),
     camera: z.object({
