@@ -1,6 +1,6 @@
 import { useGameStore } from '@/store/game';
 import { useEffect, useState, Suspense } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useThree, useLoader } from '@react-three/fiber';
 import { Environment, Sky } from '@react-three/drei';
 import * as THREE from 'three';
 import { useUnifiedStore } from '@/store/unifiedStore';
@@ -21,10 +21,33 @@ const HDRI_ENV_INTENSITY = 0.6;    // HDRI IBL 기본 강도 (drei Environment �
 
 // HDRI 로더 컴포넌트
 function HDRIEnvironment({ url, envIntensity }: { url: string; envIntensity: number }) {
+    const isHDR = url.endsWith('.hdr') || url.endsWith('.exr');
+
+    if (isHDR) {
+        return (
+            <Environment
+                files={url}
+                background
+                blur={0.5}
+                environmentIntensity={envIntensity}
+            />
+        );
+    } else {
+        return <LDRImageEnvironment url={url} envIntensity={envIntensity} />;
+    }
+}
+
+// 일반 이미지(.jpg, .png)용 로더 컴포넌트
+function LDRImageEnvironment({ url, envIntensity }: { url: string; envIntensity: number }) {
+    const texture = useLoader(THREE.TextureLoader, url);
+    // 텍스처를 Equirectangular 형식 및 sRGB로 설정
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
+    
     return (
-        <Environment
-            files={url}
-            background
+        <Environment 
+            map={texture} 
+            background 
             blur={0.5}
             environmentIntensity={envIntensity}
         />
