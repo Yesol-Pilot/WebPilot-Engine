@@ -1,6 +1,19 @@
 {
   "version": "1.0",
-  "updatedAt": "2026-02-12T04:24:34.006Z",
-  "totalEntries": 0,
-  "entries": []
+  "updatedAt": "2026-03-18T04:08:42.399Z",
+  "totalEntries": 1,
+  "entries": [
+    {
+      "id": "model_1773806922399_sh2i8c",
+      "concept": "z",
+      "resourceType": "model",
+      "searchKeywords": [],
+      "role": "unknown",
+      "source": "retrieval_fallback",
+      "frequency": 1,
+      "firstSeenAt": "2026-03-18T04:08:42.399Z",
+      "lastSeenAt": "2026-03-18T04:08:42.399Z",
+      "priority": 3
+    }
+  ]
 }

@@ -76,6 +76,7 @@
     "@types/react": "^18.2.52",
     "@types/react-dom": "^18.2.18",
     "@types/uuid": "^9.0.8",
+    "@vitest/coverage-v8": "^4.1.0",
     "adm-zip": "^0.5.10",
     "axios": "^1.6.7",
     "cross-env": "^7.0.3",
