@@ -389,3 +389,14 @@ public/
 <p align="center">
   <a href="./LICENSE">MIT License</a> · © 2025-2026 Yesol Heo
 </p>
+
+---
+
+## About
+
+Built by **[Yesol Heo](https://heoyesol.kr)** as part of **[Neo Genesis](https://neogenesis.app)** ([Q139569680](https://www.wikidata.org/wiki/Q139569680)) — a 1-person AI-native operating company running 11 SBUs under one autonomous AI orchestrator. WebPilot Engine is the 3D world generator surface; the same multi-agent infrastructure powers 11 live products under [neogenesis.app](https://neogenesis.app).
+
+- 🌐 **[neogenesis.app](https://neogenesis.app)** — main site (11 live SBUs)
+- 🤗 **[neogenesislab](https://huggingface.co/neogenesislab)** — 9 open datasets (CC-BY-4.0)
+- 📚 Wikidata: **[Q139569680](https://www.wikidata.org/wiki/Q139569680)** (organization) · **[Q139569708](https://www.wikidata.org/wiki/Q139569708)** (founder)
+- 💼 GitHub: **[@Yesol-Pilot](https://github.com/Yesol-Pilot)** · Portfolio: **[heoyesol.kr](https://heoyesol.kr)**
